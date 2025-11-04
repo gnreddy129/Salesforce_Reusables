@@ -1,0 +1,12 @@
+Step 1:
+In the config.json, under the "targets" section replace the "{MS_WEBHOOK_URL}" with your Teams channel Incoming Webhook URL
+Refer to Microsoft documentation on how to create webhook - https://learn.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook?tabs=dotnet
+
+Step 2:
+(Optional)Change the Title as per your requirements
+
+Step 3:
+(Optional)If executing using CI/CD pipeline, create a variable BUILD_URL in the pipeline.
+Refer to your pipeline documentation on how to use variables in a pipeline and syntax to use a variable inside the job tasks.
+Modify the syntax accordingly in the config.json. Example: In Azure the syntax is {BUILD_URL}
+Similarly variable can be used for {MS_WEBHOOK_URL}

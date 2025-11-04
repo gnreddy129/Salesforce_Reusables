@@ -1,0 +1,35 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="144.67864200000002">
+<testsuite name="tests\features\salesforce_opportunities.feature.spec.js" timestamp="2025-11-04T11:49:42.809Z" hostname="Google Chrome" tests="3" failures="0" skipped="0" time="138.966" errors="0">
+<testcase name="Salesforce Opportunity Management › Create and Manage New Opportunities with Different Data › Example #1" classname="tests\features\salesforce_opportunities.feature.spec.js" time="45.689">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\test-results\tests-features-salesforce_-91ad2-th-Different-Data-Example-1-Google-Chrome\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Salesforce Opportunity Management › Create and Manage New Opportunities with Different Data › Example #2" classname="tests\features\salesforce_opportunities.feature.spec.js" time="42.466">
+<system-out>
+<![CDATA[Attempt 1: Refreshing inbox...
+
+[[ATTACHMENT|..\test-results\tests-features-salesforce_-1bdb5-th-Different-Data-Example-2-Google-Chrome\test-finished-1.png]]
+]]>
+</system-out>
+<system-err>
+<![CDATA[Error getting verification code:
+]]>
+</system-err>
+</testcase>
+<testcase name="Salesforce Opportunity Management › Create and Manage New Opportunities with Different Data › Example #3" classname="tests\features\salesforce_opportunities.feature.spec.js" time="50.811">
+<system-out>
+<![CDATA[Attempt 1: Refreshing inbox...
+
+[[ATTACHMENT|..\test-results\tests-features-salesforce_-40b5e-th-Different-Data-Example-3-Google-Chrome\test-finished-1.png]]
+]]>
+</system-out>
+<system-err>
+<![CDATA[Error getting verification code:
+]]>
+</system-err>
+</testcase>
+</testsuite>
+</testsuites>

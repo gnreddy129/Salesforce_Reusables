@@ -1,0 +1,42 @@
+# Variable 'BUILD_URL' was defined in the Variables tab
+# Variable 'MS_WEBHOOK_URL' was defined in the Variables tab
+jobs:
+- job: Job_1
+  displayName: Tasks
+  pool:
+    vmImage: windows-2019
+  steps:
+  - checkout: self
+    fetchDepth: 1
+  - task: Npm@1
+    displayName: npm install dependencies
+    inputs:
+      verbose: false
+  - task: Npm@1
+    displayName: npm run test
+    inputs:
+      command: custom
+      verbose: false
+      customCommand: run test -- web --project "Google Chrome"
+  - task: PublishTestResults@2
+    displayName: publish test summary
+    inputs:
+      testResultsFiles: notify-results/test-results.xml
+      mergeTestResults: true
+      failTaskOnFailedTests: true
+      failTaskOnFailureToPublishResults: true
+      failTaskOnMissingResultsFile: true
+      testRunTitle: Execution summary
+  - task: PublishPipelineArtifact@1
+    displayName: publish playwright report
+    inputs:
+      path: playwright-report
+      artifactName: playwright_html_report
+  - task: Npm@1
+    displayName: npm run notify-teams
+    condition: succeededOrFailed()
+    inputs:
+      command: custom
+      verbose: false
+      customCommand: run notify:teams
+...

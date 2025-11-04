@@ -1,0 +1,33 @@
+{
+  "name": "playwright-typescript",
+  "version": "1.0.0",
+  "description": "Playwright Accelerator",
+  "main": "",
+  "scripts": {
+    "generatebdd": "playwright-bdd-generator ./bddgenerator",
+    "bddtest": "npx bddgen && npx playwright test",
+    "test": "npx playwright test",
+    "open:uimode": "npx playwright test --ui",
+    "open:report": "npx playwright show-report",
+    "notify:teams": "npx test-results-reporter publish -c notify-results/config.json"
+  },
+  "keywords": [
+    "playwright",
+    "typescript"
+  ],
+  "author": "Mohammed Akbar Ali",
+  "license": "ISC",
+  "devDependencies": {
+    "@cucumber/cucumber": "^12.2.0",
+    "@playwright/test": "^1.56.0",
+    "@types/node": "^20.11.6",
+    "playwright-bdd": "^8.4.1"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^8.4.1",
+    "@playwright/mcp": "^0.0.32",
+    "fs": "^0.0.1-security",
+    "playwright": "^1.56.0",
+    "test-results-reporter": "^1.0.19"
+  }
+}

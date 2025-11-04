@@ -1,0 +1,1 @@
+set MS_WEBHOOK_URL=%~1 && set BUILD_URL=%~2

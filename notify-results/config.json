@@ -1,0 +1,37 @@
+{
+  "reports": [
+    {
+      "targets": [
+        {
+          "name": "teams",
+          "inputs": {
+            "url": "{MS_WEBHOOK_URL}",
+            "publish": "test-summary-slim",
+            "title": "Playwright executions summary"
+          },
+          "extensions": [
+            {
+              "name": "hyperlinks",
+              "inputs": {
+                "links": [
+                  {
+                    "text": "Pipeline logs",
+                    "url": "{BUILD_URL}"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "results": [
+        {
+          "type": "junit",
+          "files": [
+            "./notify-results/test-results.xml"
+          ]
+        }
+      ]
+    }
+  ]
+}
