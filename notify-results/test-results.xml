@@ -1,35 +1,50 @@
-<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="144.67864200000002">
-<testsuite name="tests\features\salesforce_opportunities.feature.spec.js" timestamp="2025-11-04T11:49:42.809Z" hostname="Google Chrome" tests="3" failures="0" skipped="0" time="138.966" errors="0">
-<testcase name="Salesforce Opportunity Management › Create and Manage New Opportunities with Different Data › Example #1" classname="tests\features\salesforce_opportunities.feature.spec.js" time="45.689">
-<system-out>
-<![CDATA[
-[[ATTACHMENT|..\test-results\tests-features-salesforce_-91ad2-th-Different-Data-Example-1-Google-Chrome\test-finished-1.png]]
-]]>
-</system-out>
-</testcase>
-<testcase name="Salesforce Opportunity Management › Create and Manage New Opportunities with Different Data › Example #2" classname="tests\features\salesforce_opportunities.feature.spec.js" time="42.466">
-<system-out>
-<![CDATA[Attempt 1: Refreshing inbox...
+<testsuites id="" name="" tests="1" failures="1" skipped="0" errors="0" time="9.2887">
+<testsuite name="tests\features\Service\salesforce_cases.feature.spec.js" timestamp="2025-11-06T07:53:24.349Z" hostname="Google Chrome" tests="1" failures="1" skipped="0" time="6.37" errors="0">
+<testcase name="Salesforce Case Management › Add new case › Example #1" classname="tests\features\Service\salesforce_cases.feature.spec.js" time="6.37">
+<failure message="salesforce_cases.feature.spec.js:9:9 Example #1" type="FAILURE">
+<![CDATA[  [Google Chrome] › tests\features\Service\salesforce_cases.feature.spec.js:9:9 › Salesforce Case Management › Add new case › Example #1 @mode:serial @service @cases @regression › When Search for "Cases" in app launcher 
 
-[[ATTACHMENT|..\test-results\tests-features-salesforce_-1bdb5-th-Different-Data-Example-2-Google-Chrome\test-finished-1.png]]
-]]>
-</system-out>
-<system-err>
-<![CDATA[Error getting verification code:
-]]>
-</system-err>
-</testcase>
-<testcase name="Salesforce Opportunity Management › Create and Manage New Opportunities with Different Data › Example #3" classname="tests\features\salesforce_opportunities.feature.spec.js" time="50.811">
-<system-out>
-<![CDATA[Attempt 1: Refreshing inbox...
+    Error: expect(locator).toBeVisible() failed
 
-[[ATTACHMENT|..\test-results\tests-features-salesforce_-40b5e-th-Different-Data-Example-3-Google-Chrome\test-finished-1.png]]
+    Locator: locator('//button[@title=\'App Launcher\']')
+    Expected: visible
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 20000ms
+      - waiting for locator('//button[@title=\'App Launcher\']')
+
+
+       at ..\pages\OtherFunctionality\salesforceHome.ts:97
+
+       95 |   async searchApp(appName: string) {
+       96 |     console.log("🔄 Starting app search and navigation...");
+    >  97 |     console.log(`📱 Searching for app: ${appName}`);
+          |                                                ^
+       98 |
+       99 |     // Wait for app launcher to be visible and click it
+      100 |     await expect(this.app_launcher).toBeVisible({ timeout: 20000 });
+        at SalesforceHomePage.searchApp (C:\Users\kasuvarn\OneDrive - Capgemini\Desktop\coding\Kartik Salesforce\pages\OtherFunctionality\salesforceHome.ts:97:48)
+        at Object.<anonymous> (C:\Users\kasuvarn\OneDrive - Capgemini\Desktop\coding\Kartik Salesforce\stepdef\OtherFunctionality\salesforce_homepage.ts:8:20)
+        at C:\Users\kasuvarn\OneDrive - Capgemini\Desktop\coding\Kartik Salesforce\.features-gen\tests\features\Service\salesforce_cases.feature.spec.js:11:7
+]]>
+</failure>
+<system-out>
+<![CDATA[🚀 Initializing SalesforceLogin page object
+✅ SalesforceLogin page object initialized successfully with all locators
+🔄 Starting Salesforce login process...
+📝 Login username: yeikuhozoiffa-1695@yopmail.com
+Screenshot saved
+✅ Navigated to Salesforce login page
+📋 Filling login credentials...
+✅ Login credentials submitted
+🎉 Login process completed!
+🚀 Initializing SalesforceHome page object
+✅ SalesforceHome page object initialized successfully with all locators
+🔄 Starting app search and navigation...
+📱 Searching for app: Cases
 ]]>
 </system-out>
-<system-err>
-<![CDATA[Error getting verification code:
-]]>
-</system-err>
 </testcase>
 </testsuite>
 </testsuites>

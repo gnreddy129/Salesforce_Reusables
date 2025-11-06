@@ -11,8 +11,8 @@ export const STORAGE_STATE = path.join(__dirname, "playwright/.auth/user.json");
 // require('dotenv').config();
 
 const testDir = defineBddConfig({
-  paths: ["./tests/features/*.feature"],
-  require: ["./stepdef/*.ts"],
+  paths: ["./tests/features/**/*.feature"],
+  require: ["./stepdef/**/*.ts"],
 });
 /**
  * See https://playwright.dev/docs/test-configuration.

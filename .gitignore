@@ -7,3 +7,4 @@ node_modules/
 storageState.json
 # Playwright
 /playwright/.auth/
+(?i)*report*

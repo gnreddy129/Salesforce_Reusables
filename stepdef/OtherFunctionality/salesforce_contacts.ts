@@ -1,0 +1,13 @@
+import { createBdd } from "playwright-bdd";
+import { SalesforceContactsPage } from "../../pages/OtherFunctionality/salesforceContacts";
+const { Then } = createBdd();
+
+Then(
+  "Add new contact with following details",
+  async ({ page, $testInfo }, dataTable) => {
+    const contactPage = new SalesforceContactsPage(page, $testInfo);
+    const details = dataTable.rowsHash();
+    await contactPage.addNewContact(details);
+    await contactPage.verifyContactDetails(details);
+  }
+);
