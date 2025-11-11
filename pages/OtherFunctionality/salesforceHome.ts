@@ -114,29 +114,32 @@ export class SalesforceHomePage {
 
     // Click View All to access full app directory
     await this.viewAll_link.click({ timeout: 10000 });
+    await this.page.waitForTimeout(2000);
     console.log("✅ Opened full app directory");
-
     console.log(`🔍 Locating app: ${appName}`);
+    // const spinnerVisible = await this.page
+    //   .locator('[part="spinner"]')
+    //   .first()
+    //   .isVisible();
 
-    // if (
-    //   !(await this.page
-    //     .getByRole("link", { name: appName, exact: true })
-    //     .isVisible({ timeout: 5000 }))
-    // ) {
-    //   console.log("❌ All Apps section not visible, retrying navigation...");
-    //   await this.closeIcon.click({ timeout: 10000 });
+    if (
+      await this.page
+        .getByRole("link", { name: appName, exact: true })
+        .isVisible()
+    ) {
+      console.log("❌ All Apps section not visible, retrying navigation...");
+      await this.closeIcon.click({ timeout: 10000 });
 
-    //   // Click App Launcher Again
-    //   await this.app_launcher.click({ timeout: 30000 });
-    //   console.log("✅ App launcher opened again");
+      // Click App Launcher Again
+      await this.app_launcher.click({ timeout: 30000 });
+      console.log("✅ App launcher opened again");
 
-    //   // Click View All to access full app directory
-    //   await this.viewAll_link.click({ timeout: 10000 });
-    //   console.log("✅ Opened full app directory");
+      // Click View All to access full app directory
+      await this.viewAll_link.click({ timeout: 10000 });
+      console.log("✅ Opened full app directory");
 
-    //   console.log(`🔍 Locating app: ${appName}`);
-    // }
-
+      console.log(`🔍 Locating app: ${appName}`);
+    }
     // Take end screenshot for verification
     await Helper.takeScreenshotToFile(
       this.page,

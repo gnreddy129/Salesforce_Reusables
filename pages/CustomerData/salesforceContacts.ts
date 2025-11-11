@@ -232,7 +232,7 @@ export class SalesforceContactsPage {
       this.page,
       "1-start-contact",
       this.testInfo,
-      "OtherFunctionality/salesforce-contacts/"
+      "CustomerData/salesforce-contacts/"
     );
 
     // Click New Contact
@@ -334,7 +334,7 @@ export class SalesforceContactsPage {
       this.page,
       "2-end-contact",
       this.testInfo,
-      "OtherFunctionality/salesforce-contacts/"
+      "CustomerData/salesforce-contacts/"
     );
 
     console.log("🎉 Contact creation completed!");
@@ -367,7 +367,7 @@ export class SalesforceContactsPage {
       this.page,
       "3-verification",
       this.testInfo,
-      "OtherFunctionality/salesforce-contacts/"
+      "CustomerData/salesforce-contacts/"
     );
 
     console.log("🎉 Verification completed!");

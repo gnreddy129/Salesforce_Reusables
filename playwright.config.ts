@@ -19,7 +19,7 @@ const testDir = defineBddConfig({
  */
 export default defineConfig({
   /* Un-comment below line if following TDD pattern and comment the line below that*/
-  // testDir: './tests/tdd/',
+  // testDir: './tests/tdd/'
   testDir,
   /* Run tests in files in parallel */
   fullyParallel: true,
@@ -31,7 +31,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : 2,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
-    ["html"],
+    ["html", { open: 'never' }],
     cucumberReporter("html", { outputFile: "cucumber-report/report.html" }),
     ["junit", { outputFile: "./notify-results/test-results.xml" }],
   ],
@@ -41,7 +41,7 @@ export default defineConfig({
     baseURL: "https://www.saucedemo.com",
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: "on-first-retry",
+    trace: "on",
     // storageState: "salesforce-auth.json",
     launchOptions: {
       // 1

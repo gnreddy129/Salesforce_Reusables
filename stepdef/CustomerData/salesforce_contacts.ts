@@ -1,5 +1,5 @@
 import { createBdd } from "playwright-bdd";
-import { SalesforceContactsPage } from "../../pages/OtherFunctionality/salesforceContacts";
+import { SalesforceContactsPage } from "../../pages/CustomerData/salesforceContacts";
 const { Then } = createBdd();
 
 Then(

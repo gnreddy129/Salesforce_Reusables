@@ -68,69 +68,60 @@ export default class SalesforceCasesPage {
     this.testInfo = testInfo;
 
     // Primary controls - Main UI interaction elements
-    this.newButton = this.page.getByRole("button", { name: /New/i }).first();
-    this.dialog = this.page.getByRole("dialog").first();
-    this.listbox = this.page.getByRole("listbox").first();
+    this.newButton = page.getByRole("button", { name: /New/i }).first();
+    this.dialog = page.getByRole("dialog").first();
+    this.listbox = page.getByRole("listbox").first();
 
-    // Comboboxes (scoped to dialog locator for better element isolation)
     // These handle dropdown selections for various case properties
-    this.statusCombo = this.dialog
-      .getByRole("combobox", { name: /Status/i })
-      .first();
-    this.originCombo = this.dialog
+    this.statusCombo = page.getByRole("combobox", { name: /Status/i }).first();
+    this.originCombo = page
       .getByRole("combobox", { name: /Case Origin|CaseOrigin/i })
       .first();
-    this.priorityCombo = this.dialog
+    this.priorityCombo = page
       .getByRole("combobox", { name: /Priority/i })
       .first();
-    this.typeCombo = this.dialog
-      .getByRole("combobox", { name: /Type/i })
-      .first();
-    this.reasonCombo = this.dialog
+    this.typeCombo = page.getByRole("combobox", { name: /Type/i }).first();
+    this.reasonCombo = page
       .getByRole("combobox", { name: /Case Reason|CaseReason/i })
       .first();
-    this.prodCombo = this.dialog
-      .getByRole("combobox", { name: /Product/i })
-      .first();
-    this.plCombo = this.dialog
+    this.prodCombo = page.getByRole("combobox", { name: /Product/i }).first();
+    this.plCombo = page
       .getByRole("combobox", { name: /Potential Liability/i })
       .first();
-    this.slaCombo = this.dialog
+    this.slaCombo = page
       .getByRole("combobox", { name: /SLA Violation|SLA/i })
       .first();
 
     // Text input fields - Handle various case detail inputs
-    this.engineeringReqTextbox = this.dialog.getByRole("textbox", {
+    this.engineeringReqTextbox = page.getByRole("textbox", {
       name: /Engineering Req Number/i,
     });
-    this.subjectTextbox = this.dialog.getByRole("textbox", {
+    this.subjectTextbox = page.getByRole("textbox", {
       name: /Subject/i,
     });
-    this.descriptionTextbox = this.dialog.getByRole("textbox", {
+    this.descriptionTextbox = page.getByRole("textbox", {
       name: /Description/i,
     });
-    this.internalCommentsTextbox = this.dialog.getByRole("textbox", {
+    this.internalCommentsTextbox = page.getByRole("textbox", {
       name: /Internal Comments/i,
     });
 
     // Web-to-Case information textboxes - Handle web-generated case data
-    this.webEmailTextbox = this.dialog.getByRole("textbox", {
+    this.webEmailTextbox = page.getByRole("textbox", {
       name: /Web Email/i,
     });
-    this.webCompanyTextbox = this.dialog.getByRole("textbox", {
+    this.webCompanyTextbox = page.getByRole("textbox", {
       name: /Web Company/i,
     });
-    this.webNameTextbox = this.dialog.getByRole("textbox", {
+    this.webNameTextbox = page.getByRole("textbox", {
       name: /Web Name/i,
     });
-    this.webPhoneTextbox = this.dialog.getByRole("textbox", {
+    this.webPhoneTextbox = page.getByRole("textbox", {
       name: /Web Phone/i,
     });
 
     // Action button - Save case form data
-    this.saveButton = this.dialog
-      .getByRole("button", { name: /^Save$/i })
-      .first();
+    this.saveButton = page.getByRole("button", { name: /^Save$/i }).first();
 
     console.log(
       "✅ SalesforceCases page object initialized successfully with all locators"
