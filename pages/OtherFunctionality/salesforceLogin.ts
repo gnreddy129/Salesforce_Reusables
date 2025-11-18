@@ -93,7 +93,7 @@ export class SalesforceLoginPage {
     console.log(`📝 Login username: ${data_username}`);
 
     // Navigate to Salesforce login page and perform login
-    await this.page.goto("https://login.salesforce.com/");
+    await this.page.goto("/");
     // Take start screenshot for verification
     await Helper.takeScreenshotToFile(
       this.page,
@@ -109,28 +109,28 @@ export class SalesforceLoginPage {
     await this.login_button.click();
     console.log("✅ Login credentials submitted");
 
-    // Handle verification code if prompted
-    if (await this.verificationCodeInput.isVisible()) {
-      console.log(
-        "🔐 Two-factor authentication required - retrieving verification code..."
-      );
-      const verificationCode = await this.getVerificationCode(
-        this.context,
-        testData.user2.username
-      );
+    // // Handle verification code if prompted
+    // if (await this.verificationCodeInput.isVisible()) {
+    //   console.log(
+    //     "🔐 Two-factor authentication required - retrieving verification code..."
+    //   );
+    //   const verificationCode = await this.getVerificationCode(
+    //     this.context,
+    //     testData.user2.username
+    //   );
 
-      // Enter verification code in Salesforce
-      const retry = await this.enterVerificationCode(verificationCode);
-      if (!retry) {
-        console.log("⚠️ First verification attempt failed - retrying...");
-        const newVerificationCode = await this.getVerificationCode(
-          this.context,
-          testData.user2.username
-        );
-        await this.enterVerificationCode(newVerificationCode);
-      }
-      console.log("✅ Two-factor authentication completed");
-    }
+    //   // Enter verification code in Salesforce
+    //   const retry = await this.enterVerificationCode(verificationCode);
+    //   if (!retry) {
+    //     console.log("⚠️ First verification attempt failed - retrying...");
+    //     const newVerificationCode = await this.getVerificationCode(
+    //       this.context,
+    //       testData.user2.username
+    //     );
+    //     await this.enterVerificationCode(newVerificationCode);
+    //   }
+    //   console.log("✅ Two-factor authentication completed");
+    // }
 
     console.log("🎉 Login process completed!");
   }

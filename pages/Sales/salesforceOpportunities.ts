@@ -1,8 +1,7 @@
 import { createBdd, DataTable } from "playwright-bdd";
 import { expect, type Locator, type Page, TestInfo } from "@playwright/test";
 import { Helper } from "../../utils/helper";
-const testData = require("../../testdata/userDetails.json");
-const { Given, When, Then } = createBdd();
+
 
 /**
  * SalesforceOpportunities Page Object Model
@@ -191,6 +190,7 @@ export class SalesforceOpportunitiesPage {
         .getByRole("listbox")
         .waitFor({ state: "visible", timeout: 10000 })
         .catch(() => {});
+        
       await this.dialog
         .getByRole("listbox")
         .getByRole("option", { name: details.LeadSource })

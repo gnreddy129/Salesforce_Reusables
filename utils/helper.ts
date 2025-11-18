@@ -23,7 +23,6 @@ export class Helper {
   }
 
   /**
-   * Takes a screenshot and saves it to the screenshots folder with organized structure
    *
    * @param page - Playwright Page instance
    * @param screenshotName - Name for the screenshot file (without extension)
@@ -37,26 +36,28 @@ export class Helper {
     testInfo?: TestInfo,
     subfolder?: string
   ): Promise<string> {
-    const baseDir = path.join(process.cwd(), "screenshots");
-    const screenshotDir = subfolder ? path.join(baseDir, subfolder) : baseDir;
+    const screenshotsBaseDir = path.join(process.cwd(), "screenshots");
+    const screenshotsDir = subfolder
+      ? path.join(screenshotsBaseDir, subfolder)
+      : screenshotsBaseDir;
 
-    // Ensure directory exists
-    if (!fs.existsSync(screenshotDir)) {
-      fs.mkdirSync(screenshotDir, { recursive: true });
+    if (!fs.existsSync(screenshotsDir)) {
+      fs.mkdirSync(screenshotsDir, { recursive: true });
     }
 
-    const screenshotPath = path.join(
-      screenshotDir,
-      `${screenshotName}.png`
-    );
+    const screenshotPath = path.join(screenshotsDir, `${screenshotName}.png`);
     await page.screenshot({ path: screenshotPath, fullPage: true });
 
     // Also attach to test report if testInfo is provided
     if (testInfo) {
-      await this.attachScreenshotToReport(page, screenshotName, testInfo);
+      const screenshot = fs.readFileSync(screenshotPath);
+      await testInfo.attach(screenshotName, {
+        body: screenshot,
+        contentType: "image/png",
+      });
     }
 
-    console.log(`Screenshot saved`);
+    console.log(`Screenshot saved: ${screenshotName}`);
     return screenshotPath;
   }
 }

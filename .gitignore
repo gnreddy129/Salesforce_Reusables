@@ -4,6 +4,7 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 /cucumber-report
+/cucumber-reports/
 storageState.json
 # Playwright
 /playwright/.auth/

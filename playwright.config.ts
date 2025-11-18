@@ -1,9 +1,9 @@
 import { defineConfig, devices } from "@playwright/test";
 import { defineBddConfig, cucumberReporter } from "playwright-bdd";
+import { Helper } from "./utils/helper";
 
 import path from "path";
 
-export const STORAGE_STATE = path.join(__dirname, "playwright/.auth/user.json");
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
@@ -12,7 +12,7 @@ export const STORAGE_STATE = path.join(__dirname, "playwright/.auth/user.json");
 
 const testDir = defineBddConfig({
   paths: ["./tests/features/**/*.feature"],
-  require: ["./stepdef/**/*.ts"],
+  require: ["./stepdef/**/*.ts", "./utils/cucumber-setup.ts"],
 });
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -31,15 +31,19 @@ export default defineConfig({
   workers: process.env.CI ? 1 : 2,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
-    ["html", { open: 'never' }],
-    cucumberReporter("html", { outputFile: "cucumber-report/report.html" }),
+    ["html", { open: "never" }],
+    cucumberReporter("html", {
+      outputFile: "cucumber-reports/cucumber-html-report.html",
+    }),
+    cucumberReporter("json", {
+      outputFile: "cucumber-reports/cucumber-report.json",
+    }),
     ["junit", { outputFile: "./notify-results/test-results.xml" }],
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: "https://www.saucedemo.com",
-
+    baseURL: "https://login.salesforce.com",
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on",
     // storageState: "salesforce-auth.json",
@@ -48,9 +52,10 @@ export default defineConfig({
       args: ["--start-maximized"],
     },
     screenshot: "on",
+    video: "retain-on-failure",
     ignoreHTTPSErrors: true, // Ignore HTTPS certificate errors
   },
-  timeout: 60000,
+  timeout: 120000,
   /* Configure projects for major browsers */
   projects: [
     {

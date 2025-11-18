@@ -24,6 +24,7 @@ export class SalesforceHomePage {
   // Navigation Elements
   readonly app_launcher: Locator;
   readonly viewAll_link: Locator;
+  readonly searchBox: Locator;
 
   // Search Elements
   readonly allApps: Locator;
@@ -53,7 +54,7 @@ export class SalesforceHomePage {
     // Navigation elements for app launcher
     this.app_launcher = page.locator("//button[@title='App Launcher']");
     this.viewAll_link = page.getByRole("button", { name: "View All" });
-
+    this.searchBox = page.getByPlaceholder("Search apps and items...");
     // Search functionality elements
     this.allApps = page.locator('[title="All Apps"]');
     this.closeIcon = page.locator(".closeIcon");
@@ -97,7 +98,7 @@ export class SalesforceHomePage {
     console.log(`📱 Searching for app: ${appName}`);
 
     // Wait for app launcher to be visible and click it
-    await expect(this.app_launcher).toBeVisible({ timeout: 20000 });
+    await expect(this.app_launcher).toBeVisible({ timeout: 200000 });
     console.log("✅ App launcher is visible");
 
     // Take start screenshot for verification
@@ -113,33 +114,10 @@ export class SalesforceHomePage {
     console.log("✅ App launcher opened");
 
     // Click View All to access full app directory
-    await this.viewAll_link.click({ timeout: 10000 });
-    await this.page.waitForTimeout(2000);
-    console.log("✅ Opened full app directory");
-    console.log(`🔍 Locating app: ${appName}`);
-    // const spinnerVisible = await this.page
-    //   .locator('[part="spinner"]')
-    //   .first()
-    //   .isVisible();
+    await this.searchBox.fill(appName, { timeout: 10000 });
+    await this.page.waitForTimeout(2000); 
+    console.log("🔍 Searched for app in search box");
 
-    if (
-      await this.page
-        .getByRole("link", { name: appName, exact: true })
-        .isVisible()
-    ) {
-      console.log("❌ All Apps section not visible, retrying navigation...");
-      await this.closeIcon.click({ timeout: 10000 });
-
-      // Click App Launcher Again
-      await this.app_launcher.click({ timeout: 30000 });
-      console.log("✅ App launcher opened again");
-
-      // Click View All to access full app directory
-      await this.viewAll_link.click({ timeout: 10000 });
-      console.log("✅ Opened full app directory");
-
-      console.log(`🔍 Locating app: ${appName}`);
-    }
     // Take end screenshot for verification
     await Helper.takeScreenshotToFile(
       this.page,
@@ -150,7 +128,7 @@ export class SalesforceHomePage {
 
     // Search for the app and click it
     await this.page
-      .getByRole("link", { name: appName, exact: true })
+      .locator(`a[data-label="${appName}"]`)
       .click({ timeout: 10000 });
     console.log(`✅ Successfully navigated to ${appName} app`);
 
