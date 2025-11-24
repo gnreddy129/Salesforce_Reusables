@@ -12,7 +12,7 @@ import path from "path";
 
 const testDir = defineBddConfig({
   paths: ["./tests/features/**/*.feature"],
-  require: ["./stepdef/**/*.ts", "./utils/cucumber-setup.ts"],
+  require: ["./stepdef/**/*.ts"],
 });
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -28,13 +28,10 @@ export default defineConfig({
   /* Retry on CI only */
   retries: process.env.CI ? 0 : 0,
   /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : 2,
+  workers: process.env.CI ? undefined : 1,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
     ["html", { open: "never" }],
-    cucumberReporter("html", {
-      outputFile: "cucumber-reports/cucumber-html-report.html",
-    }),
     cucumberReporter("json", {
       outputFile: "cucumber-reports/cucumber-report.json",
     }),

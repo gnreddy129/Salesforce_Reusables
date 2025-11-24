@@ -5,20 +5,16 @@
         {
           "name": "teams",
           "inputs": {
-            "url": "{MS_WEBHOOK_URL}",
-            "publish": "test-summary-slim",
-            "title": "Playwright executions summary"
+            "url": "YOUR_TEAMS_WEBHOOK_URL_HERE"
           },
           "extensions": [
             {
-              "name": "hyperlinks",
+              "name": "report-portal-analysis",
               "inputs": {
-                "links": [
-                  {
-                    "text": "Pipeline logs",
-                    "url": "{BUILD_URL}"
-                  }
-                ]
+                "url": "YOUR_REPORT_PORTAL_URL_HERE",
+                "api_key": "YOUR_API_KEY_HERE",
+                "project": "YOUR_PROJECT_NAME",
+                "launch_name": "Salesforce Automation Tests"
               }
             }
           ]
@@ -26,10 +22,8 @@
       ],
       "results": [
         {
-          "type": "junit",
-          "files": [
-            "./notify-results/test-results.xml"
-          ]
+          "type": "testng",
+          "files": ["test-results.xml"]
         }
       ]
     }

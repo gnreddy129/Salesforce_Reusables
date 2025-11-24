@@ -196,7 +196,7 @@ export default class SalesforcePriceBooksPage {
     }
 
     // Take verification screenshot
-    await Helper.takeScreenshotToFile(
+    const screenshot = await Helper.takeScreenshotToFile(
       this.page,
       "3-verification",
       this.testInfo,
@@ -204,5 +204,6 @@ export default class SalesforcePriceBooksPage {
     );
 
     console.log("🎉 Price Book verification completed!");
+    return screenshot;
   }
 }

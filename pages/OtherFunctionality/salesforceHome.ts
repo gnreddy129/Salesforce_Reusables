@@ -129,6 +129,7 @@ export class SalesforceHomePage {
     // Search for the app and click it
     await this.page
       .locator(`a[data-label="${appName}"]`)
+      .filter({hasNot: this.page.locator("img")})
       .click({ timeout: 10000 });
     console.log(`✅ Successfully navigated to ${appName} app`);
 

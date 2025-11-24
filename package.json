@@ -4,15 +4,9 @@
   "description": "Playwright Accelerator",
   "main": "",
   "scripts": {
-    "generatebdd": "playwright-bdd-generator ./bddgenerator",
-    "bddtest": "npx bddgen && npx playwright test",
     "test": "npx playwright test",
-    "test:cucumber": "npx playwright test && npm run open:cucumber-report",
-    "open:uimode": "npx playwright test --ui",
-    "open:report": "npx playwright show-report",
-    "open:cucumber-report": "start cucumber-reports/cucumber-html-report.html",
-    "open:cucumber-reports-folder": "start cucumber-reports",
-    "clean:reports": "rmdir /s /q cucumber-reports 2>nul || echo Cleaned reports",
+    "simple:report": "node cucumber.simple.report.js",
+    "open:reports": "start cucumber-reports/index.html",
     "notify:teams": "npx test-results-reporter publish -c notify-results/config.json"
   },
   "keywords": [
@@ -25,12 +19,12 @@
     "@cucumber/cucumber": "^12.2.0",
     "@playwright/test": "^1.56.0",
     "@types/node": "^20.11.6",
+    "cucumber-html-reporter": "^7.2.0",
     "playwright-bdd": "^8.4.1"
   },
   "dependencies": {
     "@faker-js/faker": "^8.4.1",
     "@playwright/mcp": "^0.0.32",
-    "fs": "^0.0.1-security",
     "playwright": "^1.56.0",
     "test-results-reporter": "^1.0.19"
   }

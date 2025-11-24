@@ -1,6 +1,6 @@
-<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="54.198017">
-<testsuite name="tests\features\Sales\salesforce_price-books.feature.spec.js" timestamp="2025-11-18T15:24:59.669Z" hostname="Google Chrome" tests="1" failures="0" skipped="0" time="47.726" errors="0">
-<testcase name="Salesforce Price Books Management › Create and Manage New Price Books with Different Data › Example #1" classname="tests\features\Sales\salesforce_price-books.feature.spec.js" time="47.726">
+<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="76.502462">
+<testsuite name="tests\features\CustomerData\salesforce_individuals.feature.spec.js" timestamp="2025-11-24T12:33:47.426Z" hostname="Google Chrome" tests="1" failures="0" skipped="0" time="69.521" errors="0">
+<testcase name="Salesforce Individual Management › Add new individual records › Example #1" classname="tests\features\CustomerData\salesforce_individuals.feature.spec.js" time="69.521">
 <system-out>
 <![CDATA[🚀 Initializing SalesforceLogin page object
 ✅ SalesforceLogin page object initialized successfully with all locators
@@ -14,41 +14,50 @@ Screenshot saved: 1-start-login
 🚀 Initializing SalesforceHome page object
 ✅ SalesforceHome page object initialized successfully with all locators
 🔄 Starting app search and navigation...
-📱 Searching for app: Price Books
+📱 Searching for app: Individuals
 ✅ App launcher is visible
 Screenshot saved: 1-start-app-search
 ✅ App launcher opened
 🔍 Searched for app in search box
 Screenshot saved: 2-end-app-navigation
-✅ Successfully navigated to Price Books app
+✅ Successfully navigated to Individuals app
 🎉 App navigation completed!
-🚀 Initializing SalesforcePriceBooks page object
-✅ SalesforcePriceBooks page object initialized successfully with all locators
-🔄 Starting price book creation process...
-📝 Price Book details: {
+🚀 Initializing SalesforceIndividuals page object
+✅ SalesforceIndividuals page object initialized successfully with all locators
+🔄 Starting individual creation process...
+📝 Individual details: {
   "Field": "Value",
-  "Price Book Name": "Standard Pricebook",
-  "Active": "true",
-  "Description": "Standard price book for test"
+  "Salutation": "Mr.",
+  "FirstName": "John",
+  "LastName": "TestIndividual",
+  "BirthDate": "01/01/1990",
+  "Individual's Age": "13 or Older",
+  "Block Geolocation Tracking": "true",
+  "Don't Process": "true",
+  "Don't Profile": "true",
+  "Don't Market": "true",
+  "Don't Track": "true",
+  "Export Individual's Data": "true",
+  "Forget this Individual": "true",
+  "OK to Store PII Data Elsewhere": "true"
 }
-Screenshot saved: 1-start-pricebook
-✅ Price Book creation dialog opened
+Screenshot saved: 1-start-individual
+✅ Individual creation form opened
 📋 Filling form fields...
-✅ Set Active status to: true
-💾 Saving the price book...
-✅ Price Book saved successfully
-Screenshot saved: 2-end-pricebook
-🎉 Price Book creation completed!
-🚀 Initializing SalesforcePriceBooks page object
-✅ SalesforcePriceBooks page object initialized successfully with all locators
-🔍 Starting price book verification...
-✅ Price Book name verification successful: Standard Pricebook
+💾 Saving the individual...
+✅ Individual saved successfully
+Screenshot saved: 2-end-individual
+🎉 Individual creation completed!
+🚀 Initializing SalesforceIndividuals page object
+✅ SalesforceIndividuals page object initialized successfully with all locators
+🔍 Starting individual verification...
+✅ Individual name verification successful: John TestIndividual
 Screenshot saved: 3-verification
-🎉 Price Book verification completed!
+🎉 Individual verification completed!
 
-[[ATTACHMENT|..\test-results\tests-features-Sales-sales-bca34-th-Different-Data-Example-1-Google-Chrome\test-finished-1.png]]
+[[ATTACHMENT|..\test-results\tests-features-CustomerDat-fb7c1-ndividual-records-Example-1-Google-Chrome\test-finished-1.png]]
 
-[[ATTACHMENT|..\test-results\tests-features-Sales-sales-bca34-th-Different-Data-Example-1-Google-Chrome\trace.zip]]
+[[ATTACHMENT|..\test-results\tests-features-CustomerDat-fb7c1-ndividual-records-Example-1-Google-Chrome\trace.zip]]
 ]]>
 </system-out>
 </testcase>
