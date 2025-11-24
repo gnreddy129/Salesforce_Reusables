@@ -1,11 +1,6 @@
 node_modules/
-/test-results/
-/playwright-report/
 /blob-report/
 /playwright/.cache/
-/cucumber-report
-/cucumber-reports/
 storageState.json
 # Playwright
 /playwright/.auth/
-(?i)*report*
