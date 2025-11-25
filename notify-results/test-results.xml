@@ -1,6 +1,6 @@
-<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="158.234957">
-<testsuite name="tests\features\Service\salesforce_quick-texts.feature.spec.js" timestamp="2025-11-25T14:28:45.670Z" hostname="Google Chrome" tests="1" failures="0" skipped="0" time="153.056" errors="0">
-<testcase name="Salesforce Quick Texts Management › Create and Manage New Quick Texts with Different Data › Example #1" classname="tests\features\Service\salesforce_quick-texts.feature.spec.js" time="153.056">
+<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="113.909723">
+<testsuite name="tests\features\Service\salesforce_problems.feature.spec.js" timestamp="2025-11-25T18:30:01.663Z" hostname="Google Chrome" tests="1" failures="0" skipped="0" time="108.559" errors="0">
+<testcase name="Create and Manage Problems in Salesforce Service Cloud › Create and Manage New Problems with Complete Details › Example #1" classname="tests\features\Service\salesforce_problems.feature.spec.js" time="108.559">
 <system-out>
 <![CDATA[🚀 Initializing SalesforceLogin page object
 ✅ SalesforceLogin page object initialized successfully with all locators
@@ -14,71 +14,80 @@ Screenshot saved: 1-start-login
 🚀 Initializing SalesforceHome page object
 ✅ SalesforceHome page object initialized successfully with all locators
 🔄 Starting app search and navigation...
-📱 Searching for app: Quick Text
+📱 Searching for app: Problems
 ✅ App launcher is visible
 Screenshot saved: 1-start-app-search
 ✅ App launcher opened
 🔍 Searched for app in search box
 Screenshot saved: 2-end-app-navigation
-✅ Successfully navigated to Quick Text app
+✅ Successfully navigated to Problems app
 🎉 App navigation completed!
-🚀 Initializing SalesforceQuickTexts page object
-✅ SalesforceQuickTexts page object initialized successfully with all locators
-📋 Step: Add new quick text with following details
-📊 Data received: {
-  "Field": "Account Description",
-  "QuickTextName": "Order Confirmation",
-  "Message": "Your order has been confirmed and will be shipped within 24 hours",
-  "Category": "Greetings",
-  "RelatedTo": "Account",
-  "IncludeInSelectedChannels": "true"
+📋 Step: Add new problem with details
+   Details: {
+  Field: [32m'Value'[39m,
+  Subject: [32m'Memory Leak in Production'[39m,
+  Description: [32m'Application memory usage constantly increasing'[39m,
+  Status: [32m'Open'[39m,
+  Urgency: [32m'Medium'[39m,
+  ParentProblem: [32m'PRB-000000001'[39m,
+  Impact: [32m'Medium'[39m,
+  Priority: [32m'High'[39m,
+  Category: [32m'Software'[39m,
+  Subcategory: [32m'MS SQL Server'[39m,
+  PriorityOverrideReason: [32m'System stability risk'[39m,
+  RootCauseSummary: [32m'Memory leak in background task'[39m,
+  ResolvedBy: [32m'test test'[39m,
+  ResolutionDate: [32m'17/11/2025'[39m,
+  ResolutionSummary: [32m'Patched memory leak in task scheduler'[39m
 }
-🔄 Starting quick text creation process...
-📝 Quick text details: {
-  "Field": "Account Description",
-  "QuickTextName": "Order Confirmation",
-  "Message": "Your order has been confirmed and will be shipped within 24 hours",
-  "Category": "Greetings",
-  "RelatedTo": "Account",
-  "IncludeInSelectedChannels": "true"
+Screenshot saved: 01-problem_creation_start
+🎯 Starting Problem creation with details: {
+  Field: [32m'Value'[39m,
+  Subject: [32m'Memory Leak in Production'[39m,
+  Description: [32m'Application memory usage constantly increasing'[39m,
+  Status: [32m'Open'[39m,
+  Urgency: [32m'Medium'[39m,
+  ParentProblem: [32m'PRB-000000001'[39m,
+  Impact: [32m'Medium'[39m,
+  Priority: [32m'High'[39m,
+  Category: [32m'Software'[39m,
+  Subcategory: [32m'MS SQL Server'[39m,
+  PriorityOverrideReason: [32m'System stability risk'[39m,
+  RootCauseSummary: [32m'Memory leak in background task'[39m,
+  ResolvedBy: [32m'test test'[39m,
+  ResolutionDate: [32m'17/11/2025'[39m,
+  ResolutionSummary: [32m'Patched memory leak in task scheduler'[39m
 }
-Screenshot saved: 1-start-quicktext
-📋 Form loaded, filling fields...
-✅ Quick Text Name filled: "Order Confirmation"
-✅ Message field filled with content
-📋 Inserting merge field...
-✅ Related To set to: "Account"
-✅ Field set to: "Account Description"
-✅ Merge field inserted
-✅ Category set to: "Greetings"
-✅ "Include in selected channels" already in desired state
-💾 Saving the quick text...
-✅ Quick text saved successfully
-Screenshot saved: 2-end-quicktext
-🎉 Quick text creation completed!
-🔍 Starting quick text verification...
-🔍 Verifying quick text name: "Order Confirmation"
-✅ Quick text found in the list
-Screenshot saved: 3-verification
-🎉 Verification completed!
-✅ Quick text creation step completed
-🚀 Initializing SalesforceQuickTexts page object
-✅ SalesforceQuickTexts page object initialized successfully with all locators
-✅ Step: Verify quick text is created successfully
-📊 Data to verify: {
-  "Field": "Value",
-  "QuickTextName": "Order Confirmation"
-}
-🔍 Starting quick text verification...
-🔍 Verifying quick text name: "Order Confirmation"
-✅ Quick text found in the list
-Screenshot saved: 3-verification
-🎉 Verification completed!
-✅ Verification step completed
+✅ Subject filled: Memory Leak in Production
+✅ Description filled: Application memory usage constantly increasing
+✅ Status set to: Open
+✅ Urgency set to: Medium
+✅ Impact set to: Medium
+✅ Priority set to: High
+✅ Parent Problem set to: PRB-000000001
+✅ Category set to: Software
+✅ Subcategory set to: MS SQL Server
+✅ Priority Override Reason filled: System stability risk
+✅ Root Cause Summary filled: Memory leak in background task
+✅ Resolved By set to: test test
+✅ Resolution Date filled: 17/11/2025
+✅ Resolution Summary filled: Patched memory leak in task scheduler
+Screenshot saved: 02-problem_form_filled
+✅ Save button clicked
+Screenshot saved: 03-problem_creation_complete
+✅ Problem created successfully
+🔍 Verifying Problem creation for: Memory Leak in Production
+✅ Problem found in list: Memory Leak in Production
+Screenshot saved: 04-problem_verification_success
+✅ Step: Verify problem exists in list
+   Subject: Memory Leak in Production
+🔍 Verifying Problem creation for: Memory Leak in Production
+✅ Problem found in list: Memory Leak in Production
+Screenshot saved: 04-problem_verification_success
 
-[[ATTACHMENT|..\test-results\tests-features-Service-sal-2fe98-th-Different-Data-Example-1-Google-Chrome\test-finished-1.png]]
+[[ATTACHMENT|..\test-results\tests-features-Service-sal-9872b--Complete-Details-Example-1-Google-Chrome\test-finished-1.png]]
 
-[[ATTACHMENT|..\test-results\tests-features-Service-sal-2fe98-th-Different-Data-Example-1-Google-Chrome\trace.zip]]
+[[ATTACHMENT|..\test-results\tests-features-Service-sal-9872b--Complete-Details-Example-1-Google-Chrome\trace.zip]]
 ]]>
 </system-out>
 </testcase>
