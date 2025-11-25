@@ -1,11 +1,11 @@
-<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="76.502462">
-<testsuite name="tests\features\CustomerData\salesforce_individuals.feature.spec.js" timestamp="2025-11-24T12:33:47.426Z" hostname="Google Chrome" tests="1" failures="0" skipped="0" time="69.521" errors="0">
-<testcase name="Salesforce Individual Management › Add new individual records › Example #1" classname="tests\features\CustomerData\salesforce_individuals.feature.spec.js" time="69.521">
+<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="158.234957">
+<testsuite name="tests\features\Service\salesforce_quick-texts.feature.spec.js" timestamp="2025-11-25T14:28:45.670Z" hostname="Google Chrome" tests="1" failures="0" skipped="0" time="153.056" errors="0">
+<testcase name="Salesforce Quick Texts Management › Create and Manage New Quick Texts with Different Data › Example #1" classname="tests\features\Service\salesforce_quick-texts.feature.spec.js" time="153.056">
 <system-out>
 <![CDATA[🚀 Initializing SalesforceLogin page object
 ✅ SalesforceLogin page object initialized successfully with all locators
 🔄 Starting Salesforce login process...
-📝 Login username: reicekigrauppoi-8940@yopmail.com
+📝 Login username: yeikuhozoiffa-1695@yopmail.com
 Screenshot saved: 1-start-login
 ✅ Navigated to Salesforce login page
 📋 Filling login credentials...
@@ -14,50 +14,71 @@ Screenshot saved: 1-start-login
 🚀 Initializing SalesforceHome page object
 ✅ SalesforceHome page object initialized successfully with all locators
 🔄 Starting app search and navigation...
-📱 Searching for app: Individuals
+📱 Searching for app: Quick Text
 ✅ App launcher is visible
 Screenshot saved: 1-start-app-search
 ✅ App launcher opened
 🔍 Searched for app in search box
 Screenshot saved: 2-end-app-navigation
-✅ Successfully navigated to Individuals app
+✅ Successfully navigated to Quick Text app
 🎉 App navigation completed!
-🚀 Initializing SalesforceIndividuals page object
-✅ SalesforceIndividuals page object initialized successfully with all locators
-🔄 Starting individual creation process...
-📝 Individual details: {
-  "Field": "Value",
-  "Salutation": "Mr.",
-  "FirstName": "John",
-  "LastName": "TestIndividual",
-  "BirthDate": "01/01/1990",
-  "Individual's Age": "13 or Older",
-  "Block Geolocation Tracking": "true",
-  "Don't Process": "true",
-  "Don't Profile": "true",
-  "Don't Market": "true",
-  "Don't Track": "true",
-  "Export Individual's Data": "true",
-  "Forget this Individual": "true",
-  "OK to Store PII Data Elsewhere": "true"
+🚀 Initializing SalesforceQuickTexts page object
+✅ SalesforceQuickTexts page object initialized successfully with all locators
+📋 Step: Add new quick text with following details
+📊 Data received: {
+  "Field": "Account Description",
+  "QuickTextName": "Order Confirmation",
+  "Message": "Your order has been confirmed and will be shipped within 24 hours",
+  "Category": "Greetings",
+  "RelatedTo": "Account",
+  "IncludeInSelectedChannels": "true"
 }
-Screenshot saved: 1-start-individual
-✅ Individual creation form opened
-📋 Filling form fields...
-💾 Saving the individual...
-✅ Individual saved successfully
-Screenshot saved: 2-end-individual
-🎉 Individual creation completed!
-🚀 Initializing SalesforceIndividuals page object
-✅ SalesforceIndividuals page object initialized successfully with all locators
-🔍 Starting individual verification...
-✅ Individual name verification successful: John TestIndividual
+🔄 Starting quick text creation process...
+📝 Quick text details: {
+  "Field": "Account Description",
+  "QuickTextName": "Order Confirmation",
+  "Message": "Your order has been confirmed and will be shipped within 24 hours",
+  "Category": "Greetings",
+  "RelatedTo": "Account",
+  "IncludeInSelectedChannels": "true"
+}
+Screenshot saved: 1-start-quicktext
+📋 Form loaded, filling fields...
+✅ Quick Text Name filled: "Order Confirmation"
+✅ Message field filled with content
+📋 Inserting merge field...
+✅ Related To set to: "Account"
+✅ Field set to: "Account Description"
+✅ Merge field inserted
+✅ Category set to: "Greetings"
+✅ "Include in selected channels" already in desired state
+💾 Saving the quick text...
+✅ Quick text saved successfully
+Screenshot saved: 2-end-quicktext
+🎉 Quick text creation completed!
+🔍 Starting quick text verification...
+🔍 Verifying quick text name: "Order Confirmation"
+✅ Quick text found in the list
 Screenshot saved: 3-verification
-🎉 Individual verification completed!
+🎉 Verification completed!
+✅ Quick text creation step completed
+🚀 Initializing SalesforceQuickTexts page object
+✅ SalesforceQuickTexts page object initialized successfully with all locators
+✅ Step: Verify quick text is created successfully
+📊 Data to verify: {
+  "Field": "Value",
+  "QuickTextName": "Order Confirmation"
+}
+🔍 Starting quick text verification...
+🔍 Verifying quick text name: "Order Confirmation"
+✅ Quick text found in the list
+Screenshot saved: 3-verification
+🎉 Verification completed!
+✅ Verification step completed
 
-[[ATTACHMENT|..\test-results\tests-features-CustomerDat-fb7c1-ndividual-records-Example-1-Google-Chrome\test-finished-1.png]]
+[[ATTACHMENT|..\test-results\tests-features-Service-sal-2fe98-th-Different-Data-Example-1-Google-Chrome\test-finished-1.png]]
 
-[[ATTACHMENT|..\test-results\tests-features-CustomerDat-fb7c1-ndividual-records-Example-1-Google-Chrome\trace.zip]]
+[[ATTACHMENT|..\test-results\tests-features-Service-sal-2fe98-th-Different-Data-Example-1-Google-Chrome\trace.zip]]
 ]]>
 </system-out>
 </testcase>
