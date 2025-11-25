@@ -140,7 +140,7 @@ export class SalesforceQuickTextsPage {
       this.page,
       "1-start-quicktext",
       this.testInfo,
-      "Service/salesforce-quick-texts/"
+      "Platform/salesforce-quick-texts/"
     );
 
     // Wait for form to be visible
@@ -222,7 +222,7 @@ export class SalesforceQuickTextsPage {
       this.page,
       "2-end-quicktext",
       this.testInfo,
-      "Service/salesforce-quick-texts/"
+      "Platform/salesforce-quick-texts/"
     );
 
     console.log("🎉 Quick text creation completed!");
@@ -266,7 +266,7 @@ export class SalesforceQuickTextsPage {
       this.page,
       "3-verification",
       this.testInfo,
-      "Service/salesforce-quick-texts/"
+      "Platform/salesforce-quick-texts/"
     );
 
     console.log("🎉 Verification completed!");

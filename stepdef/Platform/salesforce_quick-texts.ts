@@ -1,5 +1,5 @@
 import { createBdd } from "playwright-bdd";
-import SalesforceQuickTextsPage from "../../pages/Service/salesforceQuickTexts";
+import SalesforceQuickTextsPage from "../../pages/Platform/salesforceQuickTexts";
 const { Then } = createBdd();
 
 /**
