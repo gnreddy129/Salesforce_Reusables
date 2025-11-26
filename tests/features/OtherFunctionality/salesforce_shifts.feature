@@ -6,6 +6,7 @@ Feature: Salesforce Shifts Management
     Given Open a browser and login to the sales force site
     When Search for "Shifts" in app launcher
     Then Add new shift with following details
+      | Field             | Value              |
       | Start Date        | <StartDate>        |
       | Start Time        | <StartTime>        |
       | End Date          | <EndDate>          |

@@ -6,11 +6,12 @@ Feature: Salesforce Payments Management
     Given Open a browser and login to the sales force site
     When Search for "Payments" in app launcher
     Then Add new payment with following details
-      | Account                               | <Account>                             |
-      | Status                                | <Status>                              |
-      | Amount                                | <Amount>                              |
-      | Type                                  | <Type>                                |
-      | Payment Authorization                 | <PaymentAuthorization>                |
+      | Field                                 | Value                                |
+      | Account                               | <Account>                            |
+      | Status                                | <Status>                             |
+      | Amount                                | <Amount>                             |
+      | Type                                  | <Type>                               |
+      | Payment Authorization                 | <PaymentAuthorization>               |
       | Payment Group                         | <PaymentGroup>                       |
       | Payment Method                        | <PaymentMethod>                      |
       | Processing Mode                       | <ProcessingMode>                     |

@@ -6,6 +6,7 @@ Feature: Salesforce Process Exceptions Management
     Given Open a browser and login to the sales force site
     When Search for "Process Exceptions" in app launcher
     Then Add new process exception with following details
+      | Field              | Value               |
       | Category           | <Category>          |
       | Status             | <Status>            |
       | Priority           | <Priority>          |

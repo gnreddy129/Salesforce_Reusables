@@ -6,6 +6,7 @@ Feature: Salesforce Groups Management
     Given Open a browser and login to the sales force site
     When Search for "Groups" in app launcher
     Then Add new group with following details
+      | Field                       | Value                       |
       | Name                        | <Name>                      |
       | Description                 | <Description>               |
       | Information                 | <Information>               |
@@ -19,5 +20,5 @@ Feature: Salesforce Groups Management
       | Access Type | <AccessType>  |
 
     Examples:
-      | Name       | Description                 | Information          | DisableAutomaticArchiving | AccessType | AllowCustomers | BroadcastOnly |
-      | Test Group123 | A test group for automation | Automated group info | true                      | Public     | false           | true          |
+      | Name          | Description                 | Information          | DisableAutomaticArchiving | AccessType | AllowCustomers | BroadcastOnly |
+      | Test Group123 | A test group for automation | Automated group info | true                      | Public     | false          | true          |

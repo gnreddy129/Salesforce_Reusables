@@ -6,6 +6,7 @@ Feature: Salesforce Entitlements Management
     Given Open a browser and login to the sales force site
     When Search for "Entitlements" in app launcher
     Then Add new entitlement with following details
+      | Field                 | Value                 |
       | Entitlement Name      | <EntitlementName>     |
       | Type                  | <Type>                |
       | Start Date            | <StartDate>           |

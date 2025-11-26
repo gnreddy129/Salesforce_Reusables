@@ -6,6 +6,7 @@ Feature: Salesforce Operating Hours Management
     Given Open a browser and login to the sales force site
     When Search for "Operating Hours" in app launcher
     Then Add new operating hours with following details
+      | Field       | Value         |
       | Name        | <Name>        |
       | Description | <Description> |
       | Time Zone   | <TimeZone>    |

@@ -6,6 +6,7 @@ Feature: Salesforce Payment Authorization Adjustments Management
     Given Open a browser and login to the sales force site
     When Search for "Payment Authorization Adjustments" in app launcher
     Then Add new payment authorization adjustment with following details
+      | Field                           | Value                          |
       | Account                         | <Account>                      |
       | Status                          | <Status>                       |
       | Amount                          | <Amount>                       |

@@ -1,0 +1,26 @@
+Module Name,Number of Fields,Time Estimation (Minutes)
+Quick Texts,6,21
+Refunds,26,45
+Problems,14,33
+Payments,34,54
+Service Contracts,20,40
+Promotions,23,43
+Coupons,10,25
+Promotion Segments,3,20
+List Emails,2,20
+Enhanced Letterheads,4,20
+Business Brands,3,20
+Shifts,10,25
+Operating Hours,3,20
+Work Plans,4,20
+Work Plan Templates,4,20
+Work Type Groups,4,20
+Work Types,13,32
+Return Orders,16,36
+Payment Authorizations,25,44
+Payment Authorization Adjustments,21,41
+Payment Gateway Logs,17,37
+Process Exceptions,10,25
+Entitlements,12,31
+Groups,7,22
+TOTAL,24 modules,785 minutes

@@ -6,6 +6,7 @@ Feature: Salesforce Service Contracts Management
     Given Open a browser and login to the sales force site
     When Search for "Service Contracts" in app launcher
     Then Add new service contract with following details
+      | Field                 | Value              |
       | Contract Name         | <ContractName>     |
       | Start Date            | <StartDate>        |
       | End Date              | <EndDate>          |

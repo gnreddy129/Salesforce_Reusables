@@ -15,6 +15,6 @@ Feature: Salesforce Authorization Form Data Use Management
       | Name  | <Name> |
 
     Examples:
-      | Name          | AuthorizationForm       | DataUsePurpose    |
-      | GDPR Data Use | GDPR Authorization Form | GDPR |
+      | Name          | AuthorizationForm       | DataUsePurpose |
+      | GDPR Data Use | GDPR Authorization Form | GDPR           |
       # | Marketing Data Use          | Marketing Consent Form   | Analytics Purpose   |

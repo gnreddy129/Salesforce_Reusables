@@ -6,6 +6,7 @@ Feature: Salesforce Refunds Management
     Given Open a browser and login to the sales force site
     When Search for "Refunds" in app launcher
     Then Add new refund with following details
+      | Field                                 | Value                                |
       | Account                               | <Account>                            |
       | Status                                | <Status>                             |
       | Amount                                | <Amount>                             |
@@ -33,6 +34,7 @@ Feature: Salesforce Refunds Management
       | Phone                                 | <Phone>                              |
       | Audit Email                           | <AuditEmail>                         |
     Then Verify refund is created successfully
+
     Examples:
       | Account | Status    | Amount | Type       | PaymentGroup | PaymentMethod | ProcessingMode | EffectiveDate | Date       | Comments               | CancellationDate | CancellationEffectiveDate | SalesforceResultCode | CancellationSalesforceResultCode | PaymentGateway | GatewayDate | GatewayResultCode   | GatewayResultCodeDescription  | GatewayReferenceNumber | CancellationGatewayResultCode | CancellationGatewayDate | CancellationGatewayReferenceNumber | MacAddress        | IpAddress     | Phone           | AuditEmail        |
       | Testing | Processed |   1500 | Referenced |              |               | External       |    11/11/2025 | 11/11/2025 | Automation test refund |       11/11/2025 |                11/11/2025 | Success              |                                  |                |  11/11/2025 | GATEWAY-SUCCESS-001 | Refund processed successfully | GWR-REFUND-2025-001    |                               |              11/11/2025 |                                    | 00:1A:2B:3C:4D:5E | 192.168.1.100 | +1-555-789-1234 | audit@testing.com |

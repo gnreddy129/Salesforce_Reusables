@@ -6,6 +6,7 @@ Feature: Salesforce Payment Gateway Logs Management
     Given Open a browser and login to the sales force site
     When Search for "Payment Gateway Logs" in app launcher
     Then Add new payment gateway log with following details
+      | Field                           | Value                          |
       | Interaction Type                | <InteractionType>              |
       | Object Type                     | <ObjectType>                   |
       | Referenced Entity               | <ReferencedEntity>             |

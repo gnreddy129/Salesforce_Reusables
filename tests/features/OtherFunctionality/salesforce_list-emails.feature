@@ -6,6 +6,7 @@ Feature: Salesforce List Emails Management
     Given Open a browser and login to the sales force site
     When Search for "List Emails" in app launcher
     Then Send email with following details
+      | Field      | Value        |
       | Recipients | <Recipients> |
       | Subject    | <Subject>    |
     Then Verify email is sent successfully with details
@@ -13,6 +14,6 @@ Feature: Salesforce List Emails Management
       | Subject    | <Subject>    |
 
     Examples:
-      | Recipients          | Subject                   |
-      | My Unread Leads    | Q4 Marketing Campaign     |
+      | Recipients      | Subject               |
+      | My Unread Leads | Q4 Marketing Campaign |
       # | User Conference - Jun 17-19, 2002   | Holiday Sale Announcement |

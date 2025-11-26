@@ -4,7 +4,7 @@ Feature: Salesforce Leads Creation and Management
     Given Open a browser and login to the sales force site
     When Search for "Leads" in app launcher
     And I create a new lead with following details:
-      | Field Name  | Value        |
+      | Field       | Value        |
       | First Name  | <firstName>  |
       | Last Name   | <lastName>   |
       | Company     | <company>    |

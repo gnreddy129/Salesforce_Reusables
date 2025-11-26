@@ -6,6 +6,7 @@ Feature: Salesforce Promotions Management
     Given Open a browser and login to the sales force site
     When Search for "Promotions" in app launcher
     Then Add new promotion with following details
+      | Field                                            | Value                   |
       | Name                                             | <Name>                  |
       | Description                                      | <Description>           |
       | Objective                                        | <Objective>             |
@@ -32,5 +33,5 @@ Feature: Salesforce Promotions Management
     Then Verify promotion is created successfully
 
     Examples:
-      | Name              | Description                      | Objective                            | Campaign | Active | DisplayName            | CommercePromotion | QualifierCriteria | PriorityNumber | TargetCriteria | ExcludeItems | DiscountOrder   | DiscountRestriction                         | ExclusivityType | QualifyingNotRequired | ApproachingDiscount | StartDate  | StartTime | EndDate    | EndTime  | Automatic | TieredPromotion | MaxApplications |
-      | Holiday Sale 2024 | Special holiday promotion for Q4 | Increase sales during holiday season | DM Campaign to Top Customers - Nov 12-23, 2001  | true   | Holiday 2024 - 15% Off | true              | All               |              1 | All            | true        | Least Expensive | Limit by Least Expensive Qualifying Product | Global          | true                 | true                | 12/01/2024 |  12:00 AM | 12/31/2024 | 11:59 PM | true      | true           |               5 |
+      | Name              | Description                      | Objective                            | Campaign                                       | Active | DisplayName            | CommercePromotion | QualifierCriteria | PriorityNumber | TargetCriteria | ExcludeItems | DiscountOrder   | DiscountRestriction                         | ExclusivityType | QualifyingNotRequired | ApproachingDiscount | StartDate  | StartTime | EndDate    | EndTime  | Automatic | TieredPromotion | MaxApplications |
+      | Holiday Sale 2024 | Special holiday promotion for Q4 | Increase sales during holiday season | DM Campaign to Top Customers - Nov 12-23, 2001 | true   | Holiday 2024 - 15% Off | true              | All               |              1 | All            | true         | Least Expensive | Limit by Least Expensive Qualifying Product | Global          | true                  | true                | 12/01/2024 |  12:00 AM | 12/31/2024 | 11:59 PM | true      | true            |               5 |
