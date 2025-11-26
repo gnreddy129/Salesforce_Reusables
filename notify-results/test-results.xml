@@ -1,11 +1,11 @@
-<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="113.909723">
-<testsuite name="tests\features\Service\salesforce_problems.feature.spec.js" timestamp="2025-11-25T18:30:01.663Z" hostname="Google Chrome" tests="1" failures="0" skipped="0" time="108.559" errors="0">
-<testcase name="Create and Manage Problems in Salesforce Service Cloud › Create and Manage New Problems with Complete Details › Example #1" classname="tests\features\Service\salesforce_problems.feature.spec.js" time="108.559">
+<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="60.759123">
+<testsuite name="tests\features\Inventory\salesforce_inventoryResevations.feature.spec.js" timestamp="2025-11-26T11:29:26.492Z" hostname="Google Chrome" tests="1" failures="0" skipped="0" time="56.436" errors="0">
+<testcase name="Create Inventory Reservations in Salesforce › Create a new Inventory Reservations and verify it is created › Example #1" classname="tests\features\Inventory\salesforce_inventoryResevations.feature.spec.js" time="56.436">
 <system-out>
 <![CDATA[🚀 Initializing SalesforceLogin page object
 ✅ SalesforceLogin page object initialized successfully with all locators
 🔄 Starting Salesforce login process...
-📝 Login username: yeikuhozoiffa-1695@yopmail.com
+📝 Login username: m9vyt574@agentforce.com
 Screenshot saved: 1-start-login
 ✅ Navigated to Salesforce login page
 📋 Filling login credentials...
@@ -14,80 +14,37 @@ Screenshot saved: 1-start-login
 🚀 Initializing SalesforceHome page object
 ✅ SalesforceHome page object initialized successfully with all locators
 🔄 Starting app search and navigation...
-📱 Searching for app: Problems
+📱 Searching for app: Inventory Reservations
 ✅ App launcher is visible
 Screenshot saved: 1-start-app-search
 ✅ App launcher opened
 🔍 Searched for app in search box
 Screenshot saved: 2-end-app-navigation
-✅ Successfully navigated to Problems app
+✅ Successfully navigated to Inventory Reservations app
 🎉 App navigation completed!
-📋 Step: Add new problem with details
-   Details: {
-  Field: [32m'Value'[39m,
-  Subject: [32m'Memory Leak in Production'[39m,
-  Description: [32m'Application memory usage constantly increasing'[39m,
-  Status: [32m'Open'[39m,
-  Urgency: [32m'Medium'[39m,
-  ParentProblem: [32m'PRB-000000001'[39m,
-  Impact: [32m'Medium'[39m,
-  Priority: [32m'High'[39m,
-  Category: [32m'Software'[39m,
-  Subcategory: [32m'MS SQL Server'[39m,
-  PriorityOverrideReason: [32m'System stability risk'[39m,
-  RootCauseSummary: [32m'Memory leak in background task'[39m,
-  ResolvedBy: [32m'test test'[39m,
-  ResolutionDate: [32m'17/11/2025'[39m,
-  ResolutionSummary: [32m'Patched memory leak in task scheduler'[39m
-}
-Screenshot saved: 01-problem_creation_start
-🎯 Starting Problem creation with details: {
-  Field: [32m'Value'[39m,
-  Subject: [32m'Memory Leak in Production'[39m,
-  Description: [32m'Application memory usage constantly increasing'[39m,
-  Status: [32m'Open'[39m,
-  Urgency: [32m'Medium'[39m,
-  ParentProblem: [32m'PRB-000000001'[39m,
-  Impact: [32m'Medium'[39m,
-  Priority: [32m'High'[39m,
-  Category: [32m'Software'[39m,
-  Subcategory: [32m'MS SQL Server'[39m,
-  PriorityOverrideReason: [32m'System stability risk'[39m,
-  RootCauseSummary: [32m'Memory leak in background task'[39m,
-  ResolvedBy: [32m'test test'[39m,
-  ResolutionDate: [32m'17/11/2025'[39m,
-  ResolutionSummary: [32m'Patched memory leak in task scheduler'[39m
-}
-✅ Subject filled: Memory Leak in Production
-✅ Description filled: Application memory usage constantly increasing
-✅ Status set to: Open
-✅ Urgency set to: Medium
-✅ Impact set to: Medium
-✅ Priority set to: High
-✅ Parent Problem set to: PRB-000000001
-✅ Category set to: Software
-✅ Subcategory set to: MS SQL Server
-✅ Priority Override Reason filled: System stability risk
-✅ Root Cause Summary filled: Memory leak in background task
-✅ Resolved By set to: test test
-✅ Resolution Date filled: 17/11/2025
-✅ Resolution Summary filled: Patched memory leak in task scheduler
-Screenshot saved: 02-problem_form_filled
-✅ Save button clicked
-Screenshot saved: 03-problem_creation_complete
-✅ Problem created successfully
-🔍 Verifying Problem creation for: Memory Leak in Production
-✅ Problem found in list: Memory Leak in Production
-Screenshot saved: 04-problem_verification_success
-✅ Step: Verify problem exists in list
-   Subject: Memory Leak in Production
-🔍 Verifying Problem creation for: Memory Leak in Production
-✅ Problem found in list: Memory Leak in Production
-Screenshot saved: 04-problem_verification_success
+🚀 Initializing SalesforceInventoryReservations page object
+✅ SalesforceInventoryReservations page object initialized successfully with all locators
+Filling Inventory Reservation form
+Screenshot saved: 01-filling-start
+Reservation Identifier: Incident
+Reservation Duration: 120
+Reservation Date: 11/11/2023
+Reservation Time: 10:00 AM
+Async Operation in Progress: True
+Latest Operation Succeeded: True
+Screenshot saved: 02-Filling-Complete
+Screenshot saved: 03-Status
+🚀 Initializing SalesforceInventoryReservations page object
+✅ SalesforceInventoryReservations page object initialized successfully with all locators
+Verifying reservation details on detail page
+Checking page content for reservation details...
+✓ Reservation Identifier verified: Incident
+Screenshot saved: 04-Verification-Complete
+✓ All verification checks completed successfully!
 
-[[ATTACHMENT|..\test-results\tests-features-Service-sal-9872b--Complete-Details-Example-1-Google-Chrome\test-finished-1.png]]
+[[ATTACHMENT|..\test-results\tests-features-Inventory-s-6471b-ify-it-is-created-Example-1-Google-Chrome\test-finished-1.png]]
 
-[[ATTACHMENT|..\test-results\tests-features-Service-sal-9872b--Complete-Details-Example-1-Google-Chrome\trace.zip]]
+[[ATTACHMENT|..\test-results\tests-features-Inventory-s-6471b-ify-it-is-created-Example-1-Google-Chrome\trace.zip]]
 ]]>
 </system-out>
 </testcase>
