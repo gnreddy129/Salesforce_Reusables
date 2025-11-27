@@ -9,7 +9,7 @@
     "test:cucumber": "npx playwright test && npm run simple:report",
     "simple:report": "node cucumber/cucumber.simple.report.js",
     "open:report": "npx playwright show-report",
-    "open:reports": "node -e \"require('child_process').exec('start cucumber/cucumber-reports/index.html')\""
+    "open:reports": "node -e \"require('child_process').exec('start cucumber-reports/index.html')\""
   },
   "keywords": [
     "playwright",

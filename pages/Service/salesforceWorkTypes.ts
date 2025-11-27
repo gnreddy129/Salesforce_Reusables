@@ -398,7 +398,6 @@ export default class SalesforceWorkTypesPage {
 
         console.log("💾 Saving the work type...");
 
-        await this.page.pause();
         // Save the work type
         await this.saveButton.click({ timeout: 10000 });
         console.log("✅ Work type saved successfully");

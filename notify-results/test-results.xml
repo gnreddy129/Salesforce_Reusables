@@ -1,6 +1,6 @@
-<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="76.502462">
-<testsuite name="tests\features\CustomerData\salesforce_individuals.feature.spec.js" timestamp="2025-11-24T12:33:47.426Z" hostname="Google Chrome" tests="1" failures="0" skipped="0" time="69.521" errors="0">
-<testcase name="Salesforce Individual Management › Add new individual records › Example #1" classname="tests\features\CustomerData\salesforce_individuals.feature.spec.js" time="69.521">
+<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="51.14527499999999">
+<testsuite name="tests\features\Service\salesforce_change-requests.feature.spec.js" timestamp="2025-11-27T08:35:45.147Z" hostname="Google Chrome" tests="1" failures="0" skipped="0" time="47.205" errors="0">
+<testcase name="Salesforce Change Requests Management › Create a new Change Request with all required fields › Example #1" classname="tests\features\Service\salesforce_change-requests.feature.spec.js" time="47.205">
 <system-out>
 <![CDATA[🚀 Initializing SalesforceLogin page object
 ✅ SalesforceLogin page object initialized successfully with all locators
@@ -14,50 +14,73 @@ Screenshot saved: 1-start-login
 🚀 Initializing SalesforceHome page object
 ✅ SalesforceHome page object initialized successfully with all locators
 🔄 Starting app search and navigation...
-📱 Searching for app: Individuals
+📱 Searching for app: Change Requests
 ✅ App launcher is visible
 Screenshot saved: 1-start-app-search
 ✅ App launcher opened
 🔍 Searched for app in search box
 Screenshot saved: 2-end-app-navigation
-✅ Successfully navigated to Individuals app
+✅ Successfully navigated to Change Requests app
 🎉 App navigation completed!
-🚀 Initializing SalesforceIndividuals page object
-✅ SalesforceIndividuals page object initialized successfully with all locators
-🔄 Starting individual creation process...
-📝 Individual details: {
-  "Field": "Value",
-  "Salutation": "Mr.",
-  "FirstName": "John",
-  "LastName": "TestIndividual",
-  "BirthDate": "01/01/1990",
-  "Individual's Age": "13 or Older",
-  "Block Geolocation Tracking": "true",
-  "Don't Process": "true",
-  "Don't Profile": "true",
-  "Don't Market": "true",
-  "Don't Track": "true",
-  "Export Individual's Data": "true",
-  "Forget this Individual": "true",
-  "OK to Store PII Data Elsewhere": "true"
+🔄 Creating new Change Request with provided details
+🚀 Initializing SalesforceChangeRequests page object
+✅ SalesforceChangeRequests page object initialized successfully with all locators
+🔄 Creating new Change Request with details: {
+  Field: [32m'Value'[39m,
+  Subject: [32m'Critical Security Update'[39m,
+  Description: [32m'Update to address security'[39m,
+  [32m'Risk Level'[39m: [32m'High'[39m,
+  Status: [32m'Open'[39m,
+  Priority: [32m'High'[39m,
+  Impact: [32m'High'[39m,
+  [32m'Type of Change'[39m: [32m'Major'[39m,
+  [32m'Business Justification'[39m: [32m'Security Patch'[39m,
+  [32m'Impact Analysis'[39m: [32m'To mitigate security risks'[39m,
+  [32m'Remediation Plan'[39m: [32m'High impact if not applied'[39m,
+  [32m'Start Time (Estimated) Date'[39m: [32m'10/10/2025'[39m,
+  [32m'Start Time (Estimated) Time'[39m: [32m'10:00 AM'[39m,
+  [32m'End Time (Estimated) Date'[39m: [32m'11/11/2025'[39m,
+  [32m'End Time (Estimated) Time'[39m: [32m'12:00 PM'[39m,
+  Reviewer: [32m'--None--'[39m,
+  [32m'Reviewed On Date'[39m: [32m'06/06/2025'[39m,
+  [32m'Reviewed On Time'[39m: [32m'02:00 PM'[39m,
+  [32m'Final Review Notes'[39m: [32m'Approved for deployment'[39m
 }
-Screenshot saved: 1-start-individual
-✅ Individual creation form opened
-📋 Filling form fields...
-💾 Saving the individual...
-✅ Individual saved successfully
-Screenshot saved: 2-end-individual
-🎉 Individual creation completed!
-🚀 Initializing SalesforceIndividuals page object
-✅ SalesforceIndividuals page object initialized successfully with all locators
-🔍 Starting individual verification...
-✅ Individual name verification successful: John TestIndividual
-Screenshot saved: 3-verification
-🎉 Individual verification completed!
+Screenshot saved: 1-start-change-request
+✅ Clicked New button
+✅ New Change Request dialog opened
+✅ Filled Subject: Critical Security Update
+✅ Filled Description: Update to address security
+✅ Selected Risk Level: High
+✅ Selected Status: Open
+✅ Selected Priority: High
+✅ Selected Impact: High
+✅ Selected Type of Change: Major
+✅ Filled Business Justification: Security Patch
+✅ Filled Impact Analysis: To mitigate security risks
+✅ Filled Remediation Plan: High impact if not applied
+✅ Filled Start Time (Estimated) Date: 10/10/2025
+✅ Selected Start Time (Estimated) Time: 10:00 AM
+✅ Filled End Time (Estimated) Date: 11/11/2025
+✅ Selected End Time (Estimated) Time: 12:00 PM
+✅ Filled Reviewed On Date: 06/06/2025
+✅ Selected Reviewed On Time: 02:00 PM
+✅ Filled Final Review Notes: Approved for deployment
+Screenshot saved: 2-before-save-change-request
+✅ Clicked Save button
+✅ Change Request creation completed successfully
+Screenshot saved: 3-end-change-request
+🔍 Verifying Change Request creation success
+🚀 Initializing SalesforceChangeRequests page object
+✅ SalesforceChangeRequests page object initialized successfully with all locators
+🔍 Verifying Change Request creation success
+✅ Success message is visible
+Screenshot saved: 4-verification-change-request
+✅ Change Request creation verification completed successfully
 
-[[ATTACHMENT|..\test-results\tests-features-CustomerDat-fb7c1-ndividual-records-Example-1-Google-Chrome\test-finished-1.png]]
+[[ATTACHMENT|..\test-results\tests-features-Service-sal-85397-l-required-fields-Example-1-Google-Chrome\test-finished-1.png]]
 
-[[ATTACHMENT|..\test-results\tests-features-CustomerDat-fb7c1-ndividual-records-Example-1-Google-Chrome\trace.zip]]
+[[ATTACHMENT|..\test-results\tests-features-Service-sal-85397-l-required-fields-Example-1-Google-Chrome\trace.zip]]
 ]]>
 </system-out>
 </testcase>
