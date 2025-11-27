@@ -37,7 +37,7 @@ export default class SalesforceAppointmentCategoryPage {
 
   // Action Buttons
   readonly saveButton: Locator;
-
+  readonly successMessage: Locator;
   /**
    * Constructor - Initializes the SalesforceAppointmentCategory page object with all necessary locators
    *
@@ -71,7 +71,7 @@ export default class SalesforceAppointmentCategoryPage {
 
     // Action buttons - Save operations
     this.saveButton = page.getByRole("button", { name: /^Save$/i });
-
+    this.successMessage = page.locator(".toastMessage");
     console.log(
       "✅ SalesforceAppointmentCategory page object initialized successfully with all locators"
     );
@@ -194,6 +194,9 @@ export default class SalesforceAppointmentCategoryPage {
    */
   async verifyAppointmentCategory(details: { [field: string]: string }) {
     console.log("🔍 Starting category verification...");
+
+    await expect(this.successMessage).toBeVisible({ timeout: 10000 });
+    console.log("✅ Success message is visible");
 
     if (details.Name) {
       expect(await this.page.getByText(details.Name).count()).toBeGreaterThan(

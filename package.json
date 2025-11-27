@@ -4,10 +4,12 @@
   "description": "Playwright Accelerator",
   "main": "",
   "scripts": {
+    "cli": "node cli/cli-runner.js",
     "test": "npx playwright test",
-    "simple:report": "node cucumber.simple.report.js",
-    "open:reports": "start cucumber-reports/index.html",
-    "notify:teams": "npx test-results-reporter publish -c notify-results/config.json"
+    "test:cucumber": "npx playwright test && npm run simple:report",
+    "simple:report": "node cucumber/cucumber.simple.report.js",
+    "open:report": "npx playwright show-report",
+    "open:reports": "node -e \"require('child_process').exec('start cucumber/cucumber-reports/index.html')\""
   },
   "keywords": [
     "playwright",
@@ -25,6 +27,9 @@
   "dependencies": {
     "@faker-js/faker": "^8.4.1",
     "@playwright/mcp": "^0.0.32",
+    "figlet": "^1.9.4",
+    "fs": "^0.0.1-security",
+    "inquirer": "^8.2.7",
     "playwright": "^1.56.0",
     "test-results-reporter": "^1.0.19"
   }
