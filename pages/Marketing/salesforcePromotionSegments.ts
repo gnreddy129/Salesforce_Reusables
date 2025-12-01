@@ -32,7 +32,7 @@ export default class SalesforcePromotionSegmentsPage {
 
   // Action Buttons
   readonly dialogSaveButton: Locator;
-
+  readonly successMessage: Locator;
   /**
    * Constructor - Initializes the SalesforcePromotionSegments page object with all necessary locators
    *
@@ -63,6 +63,8 @@ export default class SalesforcePromotionSegmentsPage {
     this.dialogSaveButton = this.dialog.getByRole("button", {
       name: /^Save$/i,
     });
+
+    this.successMessage = page.locator(".toastMessage");
 
     console.log(
       "✅ SalesforcePromotionSegments page object initialized successfully with all locators"
@@ -162,6 +164,8 @@ export default class SalesforcePromotionSegmentsPage {
    */
   async verifyPromotionSegment(details: { [field: string]: string }) {
     console.log("🔍 Starting promotion segment verification...");
+
+    await expect(this.successMessage).toBeVisible({ timeout: 10000 });
 
     if (details.Name) {
       expect(await this.page.getByText(details.Name).count()).toBeGreaterThan(

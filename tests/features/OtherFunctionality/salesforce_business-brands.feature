@@ -10,10 +10,10 @@ Feature: Salesforce Business Brands Management
       | Org Id | <OrgId>  |
       | Parent | <Parent> |
     Then Verify business brand is created successfully with details
-      | Name   | <Name>   |
-      | Org Id | <OrgId>  |
+      | Name   | <Name>  |
+      | Org Id | <OrgId> |
 
     Examples:
-      | Name          | OrgId | Parent |
-      | Premium Brand | ORG1  | pk     |
-      # | Budget Brand  | ORG2  | pk     |
+      | Name          | OrgId | Parent           |
+      | Premium Brand | ORG1  | Business Brand A |
+      # | Budget Brand  | ORG2  | Business Brand B     |

@@ -21,6 +21,6 @@ Feature: Salesforce Opportunity Management
 
     Examples:
       | Name                  | Type                          | Stage             | Amount | CloseDate  | Private | NextStep          | Description                     |
-      | New Business Opp      | New Customer                  | Prospecting       |  50000 | 31/10/2024 | Yes     | Initial Contact   | New business opportunity test   |
+      | New Business Opp      | New Customer                  | Prospecting       |  50000 | 10/10/2024 | Yes     | Initial Contact   | New business opportunity test   |
       # | Existing Business Opp | Existing Customer - Upgrade   | Qualification     |  75000 | 30/11/2024 | No      | Follow-up Meeting | Existing account expansion test |
       # | Partner Opportunity   | Existing Customer - Downgrade | Value Proposition | 100000 | 31/12/2024 | Yes     | Partner Meeting   | Strategic partnership test      |

@@ -124,9 +124,6 @@ export default class SalesforceCommunicationSubscriptionsPage {
     await this.saveButton.click({ timeout: 10000 });
     console.log("✅ Communication subscription saved successfully");
 
-    // Wait for navigation after save
-    await this.page.waitForTimeout(2000);
-
     // Take end screenshot for verification
     await Helper.takeScreenshotToFile(
       this.page,
@@ -156,8 +153,6 @@ export default class SalesforceCommunicationSubscriptionsPage {
       "CustomerData/salesforce-communication-subscriptions/"
     );
 
-    // Wait for the page to fully load after creation
-    await this.page.waitForTimeout(3000);
     await expect(this.successMessage).toBeVisible({
       timeout: 5000,
     });

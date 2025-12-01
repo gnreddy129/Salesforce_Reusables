@@ -12,6 +12,6 @@ When('I create a new campaign with following details:', async ({ page }, dataTab
 Then('I should see the campaign created successfully', async ({ page }, dataTable: DataTable) => {
     const details = dataTable.rowsHash();
     const pageObj = new SalesforceCampaignsPage(page);
-    const success = await pageObj.verifyCampaign(details);
+    await pageObj.verifyCampaign(details);
 });
 

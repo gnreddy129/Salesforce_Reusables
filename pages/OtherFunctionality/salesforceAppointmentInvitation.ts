@@ -91,7 +91,7 @@ export default class SalesforceAppointmentInvitationPage {
 
     // Action buttons - Save operations
     this.saveButton = this.dialog
-      .getByRole("button", { name: /Save & New|Save/i })
+      .getByRole("button", { name: /Save/i })
       .first();
 
     console.log(

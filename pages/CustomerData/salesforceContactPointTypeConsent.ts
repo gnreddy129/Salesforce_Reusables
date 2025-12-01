@@ -255,10 +255,7 @@ export default class SalesforceContactPointTypeConsentPage {
     // Handle Party (required field)
     if (details.Party) {
       await this.partyInput.click();
-      await this.page
-        .getByText(details.Party)
-        .first()
-        .click();
+      await this.page.getByText(details.Party).first().click();
       console.log(`✅ Selected Party: ${details.Party}`);
     }
 
@@ -275,9 +272,7 @@ export default class SalesforceContactPointTypeConsentPage {
     if (details["Party Role Choose Object"]) {
       await this.partyRoleChooseObjectInput.click();
       await this.partyRoleChooseObjectInput
-        .getByText(details["Party Role Choose Object"],
-         { exact: true}
-        )
+        .getByText(details["Party Role Choose Object"], { exact: true })
         .click();
       console.log(
         `✅ Selected Party Role Choose Object: ${details["Party Role Choose Object"]}`
@@ -312,8 +307,8 @@ export default class SalesforceContactPointTypeConsentPage {
       await this.page
         .getByRole("option", {
           name: details["Data Use Purpose"],
-          exact: true,
         })
+        .first()
         .click();
       console.log(
         `✅ Selected Data Use Purpose: ${details["Data Use Purpose"]}`
@@ -330,15 +325,19 @@ export default class SalesforceContactPointTypeConsentPage {
 
     if (details["Effective To Time"]) {
       await this.effectiveToTimeInput.click();
-      await this.page
-        .getByRole("option", {
-          name: details["Effective To Time"],
-          exact: true,
-        })
-        .click();
+      await this.effectiveToTimeInput.fill(details["Effective To Time"]);
       console.log(
-        `✅ Selected Effective To Time: ${details["Effective To Time"]}`
+        `✅ Filled Effective To Time: ${details["Effective To Time"]}`
       );
+      // await this.page
+      //   .getByRole("option", {
+      //     name: details["Effective To Time"],
+      //     exact: true,
+      //   })
+      //   .click();
+      // console.log(
+      //   `✅ Selected Effective To Time: ${details["Effective To Time"]}`
+      // );
     }
 
     if (details["Effective From Date"]) {
@@ -350,12 +349,13 @@ export default class SalesforceContactPointTypeConsentPage {
 
     if (details["Effective From Time"]) {
       await this.effectiveFromTimeInput.click();
-      await this.page
-        .getByRole("option", {
-          name: details["Effective From Time"],
-          exact: true,
-        })
-        .click();
+      await this.effectiveFromTimeInput.fill(details["Effective From Time"]);
+      // await this.page
+      //   .getByRole("option", {
+      //     name: details["Effective From Time"],
+      //     exact: true,
+      //   })
+      //   .click();
       console.log(
         `✅ Selected Effective From Time: ${details["Effective From Time"]}`
       );
@@ -391,12 +391,15 @@ export default class SalesforceContactPointTypeConsentPage {
 
     if (details["Double Consent Capture Date Time"]) {
       await this.doubleConsentCaptureDateTimeInput.click();
-      await this.page
-        .getByRole("option", {
-          name: details["Double Consent Capture Date Time"],
-          exact: true,
-        })
-        .click();
+      await this.doubleConsentCaptureDateTimeInput.fill(
+        details["Double Consent Capture Date Time"]
+      );
+      // await this.page
+      //   .getByRole("option", {
+      //     name: details["Double Consent Capture Date Time"],
+      //     exact: true,
+      //   })
+      //   .click();
       console.log(
         `✅ Selected Double Consent Capture Date Time: ${details["Double Consent Capture Date Time"]}`
       );
@@ -411,12 +414,13 @@ export default class SalesforceContactPointTypeConsentPage {
 
     if (details["Capture Date Time"]) {
       await this.captureDateTimeInput.click();
-      await this.page
-        .getByRole("option", {
-          name: details["Capture Date Time"],
-          exact: true,
-        })
-        .click();
+      await this.captureDateTimeInput.fill(details["Capture Date Time"]);
+      // await this.page
+      //   .getByRole("option", {
+      //     name: details["Capture Date Time"],
+      //     exact: true,
+      //   })
+      //   .click();
       console.log(
         `✅ Selected Capture Date Time: ${details["Capture Date Time"]}`
       );

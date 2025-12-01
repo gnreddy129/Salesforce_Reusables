@@ -9,8 +9,8 @@ test.describe('Salesforce Promotion Segments Management', () => {
     test('Example #1', { tag: ['@mode:serial', '@promotion-segments', '@regression'] }, async ({ Given, When, Then, page }) => { 
       await Given('Open a browser and login to the sales force site', null, { page }); 
       await When('Search for "Promotion Segments" in app launcher', null, { page }); 
-      await Then('Add new promotion segment with following details', {"dataTable":{"rows":[{"cells":[{"value":"Field"},{"value":"Value"}]},{"cells":[{"value":"Name"},{"value":"Premium Q4 Promotion"}]},{"cells":[{"value":"Code"},{"value":"PREM_Q4_001"}]},{"cells":[{"value":"Status"},{"value":"Active"}]}]}}, { page }); 
-      await Then('Verify promotion segment is created successfully with details', {"dataTable":{"rows":[{"cells":[{"value":"Field"},{"value":"Value"}]},{"cells":[{"value":"Name"},{"value":"Premium Q4 Promotion"}]},{"cells":[{"value":"Code"},{"value":"PREM_Q4_001"}]},{"cells":[{"value":"Status"},{"value":"Active"}]}]}}, { page }); 
+      await Then('Add new promotion segment with following details', {"dataTable":{"rows":[{"cells":[{"value":"Field"},{"value":"Value"}]},{"cells":[{"value":"Name"},{"value":"Premium Q5 Promotion"}]},{"cells":[{"value":"Code"},{"value":"PREM_Q4_001"}]},{"cells":[{"value":"Status"},{"value":"Active"}]}]}}, { page }); 
+      await Then('Verify promotion segment is created successfully with details', {"dataTable":{"rows":[{"cells":[{"value":"Field"},{"value":"Value"}]},{"cells":[{"value":"Name"},{"value":"Premium Q5 Promotion"}]},{"cells":[{"value":"Code"},{"value":"PREM_Q4_001"}]},{"cells":[{"value":"Status"},{"value":"Active"}]}]}}, { page }); 
     });
 
   });

@@ -80,9 +80,7 @@ export default class SalesforceCategoriesPage {
     });
 
     // Action buttons - Save operations
-    this.saveButton = this.dialog
-      .getByRole("button", { name: /Save/i })
-      .first();
+    this.saveButton = this.dialog.getByRole("button", { name: "Save" }).first();
 
     console.log(
       "✅ SalesforceCategories page object initialized successfully with all locators"

@@ -9,8 +9,8 @@ test.describe('Appointment Categories Management', () => {
     test('Example #1', { tag: ['@mode:serial', '@appointment', '@regression'] }, async ({ Given, When, Then, page }) => { 
       await Given('Open a browser and login to the sales force site', null, { page }); 
       await When('Search for "Appointment Categories" in app launcher', null, { page }); 
-      await Then('Add new appointment category with following details', {"dataTable":{"rows":[{"cells":[{"value":"Field"},{"value":"Value"}]},{"cells":[{"value":"Name"},{"value":"Test Appt Cat A"}]},{"cells":[{"value":"Regular"},{"value":"Yes"}]},{"cells":[{"value":"DropIn"},{"value":"No"}]},{"cells":[{"value":"Group"},{"value":"Yes"}]}]}}, { page }); 
-      await Then('Verify appointment category is created successfully', {"dataTable":{"rows":[{"cells":[{"value":"Field"},{"value":"Value"}]},{"cells":[{"value":"Name"},{"value":"Test Appt Cat A"}]}]}}, { page }); 
+      await Then('Add new appointment category with following details', {"dataTable":{"rows":[{"cells":[{"value":"Field"},{"value":"Value"}]},{"cells":[{"value":"Name"},{"value":"Test Appt Dog A"}]},{"cells":[{"value":"Regular"},{"value":"No"}]},{"cells":[{"value":"DropIn"},{"value":"No"}]},{"cells":[{"value":"Group"},{"value":"Yes"}]}]}}, { page }); 
+      await Then('Verify appointment category is created successfully', {"dataTable":{"rows":[{"cells":[{"value":"Field"},{"value":"Value"}]},{"cells":[{"value":"Name"},{"value":"Test Appt Dog A"}]}]}}, { page }); 
     });
 
   });

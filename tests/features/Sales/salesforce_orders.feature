@@ -31,5 +31,5 @@ Feature: Salesforce Orders Management
 
     Examples:
       | ContractNumber | OrderType | AccountName | Status | OrderStartDate | CustomerAuthorizedBy | CompanyAuthorizedBy | ShippingStreet  | ShippingCity | ShippingZip | ShippingState | ShippingCountry | BillingStreet  | BillingCity | BillingZip | BillingState | BillingCountry | Description                |
-      |       00000104 | Standard  | Testing     | Draft  |     15/11/2025 | --None--             | --None--            | 123 Main Street | New York     |       10001 | NY            | USA             | 456 Oak Avenue | Los Angeles |      90210 | CA           | USA            | Standard order for testing |
+      |       00000104 | Standard  | Testing     | Draft  |     11/11/2025 | --None--             | --None--            | 123 Main Street | New York     |       10001 | NY            | United States           | 456 Oak Avenue | Los Angeles |      90210 | CA           | United States          | Standard order for testing |
       # | --None--      | ORD-002   | Express     | Testing | Active |     16/11/2024 | --None--             | --None--            |     789 Pine Rd |   789 Pine Road | Chicago      |       60601 | IL            | USA             |      321 Elm St |  321 Elm Street | Phoenix     |      85001 | AZ           | USA            | Express order processing      |

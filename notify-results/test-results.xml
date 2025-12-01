@@ -1,6 +1,46 @@
-<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="51.14527499999999">
-<testsuite name="tests\features\Service\salesforce_change-requests.feature.spec.js" timestamp="2025-11-27T08:35:45.147Z" hostname="Google Chrome" tests="1" failures="0" skipped="0" time="47.205" errors="0">
-<testcase name="Salesforce Change Requests Management › Create a new Change Request with all required fields › Example #1" classname="tests\features\Service\salesforce_change-requests.feature.spec.js" time="47.205">
+<testsuites id="" name="" tests="1" failures="1" skipped="0" errors="0" time="62.336864">
+<testsuite name="tests\features\CustomerData\salesforce_contact-point-type-consent.feature.spec.js" timestamp="2025-12-01T05:10:40.440Z" hostname="Google Chrome" tests="1" failures="1" skipped="0" time="55.362" errors="0">
+<testcase name="Salesforce Contact Point Type Consent Management › Create and Manage New Contact Point Type Consent with Different Data › Example #1" classname="tests\features\CustomerData\salesforce_contact-point-type-consent.feature.spec.js" time="55.362">
+<failure message="salesforce_contact-point-type-consent.feature.spec.js:9:9 Example #1" type="FAILURE">
+<![CDATA[  [Google Chrome] › tests\features\CustomerData\salesforce_contact-point-type-consent.feature.spec.js:9:9 › Salesforce Contact Point Type Consent Management › Create and Manage New Contact Point Type Consent with Different Data › Example #1 @customer @regression @mode:serial › Given Open a browser and login to the sales force site 
+
+    Error: Failed to get verification code after multiple attempts
+
+       at ..\pages\OtherFunctionality\salesforceLogin.ts:230
+
+      228 |           attempts++;
+      229 |           if (attempts === maxAttempts) {
+    > 230 |             throw new Error(
+          |                   ^
+      231 |               "Failed to get verification code after multiple attempts"
+      232 |             );
+      233 |           }
+        at SalesforceLoginPage.getVerificationCode (C:\Users\kasuvarn\OneDrive - Capgemini\Desktop\coding\Kartik_Salesforce\pages\OtherFunctionality\salesforceLogin.ts:230:19)
+        at SalesforceLoginPage.Login (C:\Users\kasuvarn\OneDrive - Capgemini\Desktop\coding\Kartik_Salesforce\pages\OtherFunctionality\salesforceLogin.ts:117:32)
+        at Object.<anonymous> (C:\Users\kasuvarn\OneDrive - Capgemini\Desktop\coding\Kartik_Salesforce\stepdef\OtherFunctionality\salesforce_login.ts:12:5)
+        at C:\Users\kasuvarn\OneDrive - Capgemini\Desktop\coding\Kartik_Salesforce\.features-gen\tests\features\CustomerData\salesforce_contact-point-type-consent.feature.spec.js:10:7
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\test-results\tests-features-CustomerDat-73bba-th-Different-Data-Example-1-Google-Chrome\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\tests-features-CustomerDat-73bba-th-Different-Data-Example-1-Google-Chrome\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\tests-features-CustomerDat-73bba-th-Different-Data-Example-1-Google-Chrome\video-1.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\tests-features-CustomerDat-73bba-th-Different-Data-Example-1-Google-Chrome\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\tests-features-CustomerDat-73bba-th-Different-Data-Example-1-Google-Chrome\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
 <system-out>
 <![CDATA[🚀 Initializing SalesforceLogin page object
 ✅ SalesforceLogin page object initialized successfully with all locators
@@ -10,79 +50,236 @@ Screenshot saved: 1-start-login
 ✅ Navigated to Salesforce login page
 📋 Filling login credentials...
 ✅ Login credentials submitted
-🎉 Login process completed!
-🚀 Initializing SalesforceHome page object
-✅ SalesforceHome page object initialized successfully with all locators
-🔄 Starting app search and navigation...
-📱 Searching for app: Change Requests
-✅ App launcher is visible
-Screenshot saved: 1-start-app-search
-✅ App launcher opened
-🔍 Searched for app in search box
-Screenshot saved: 2-end-app-navigation
-✅ Successfully navigated to Change Requests app
-🎉 App navigation completed!
-🔄 Creating new Change Request with provided details
-🚀 Initializing SalesforceChangeRequests page object
-✅ SalesforceChangeRequests page object initialized successfully with all locators
-🔄 Creating new Change Request with details: {
-  Field: [32m'Value'[39m,
-  Subject: [32m'Critical Security Update'[39m,
-  Description: [32m'Update to address security'[39m,
-  [32m'Risk Level'[39m: [32m'High'[39m,
-  Status: [32m'Open'[39m,
-  Priority: [32m'High'[39m,
-  Impact: [32m'High'[39m,
-  [32m'Type of Change'[39m: [32m'Major'[39m,
-  [32m'Business Justification'[39m: [32m'Security Patch'[39m,
-  [32m'Impact Analysis'[39m: [32m'To mitigate security risks'[39m,
-  [32m'Remediation Plan'[39m: [32m'High impact if not applied'[39m,
-  [32m'Start Time (Estimated) Date'[39m: [32m'10/10/2025'[39m,
-  [32m'Start Time (Estimated) Time'[39m: [32m'10:00 AM'[39m,
-  [32m'End Time (Estimated) Date'[39m: [32m'11/11/2025'[39m,
-  [32m'End Time (Estimated) Time'[39m: [32m'12:00 PM'[39m,
-  Reviewer: [32m'--None--'[39m,
-  [32m'Reviewed On Date'[39m: [32m'06/06/2025'[39m,
-  [32m'Reviewed On Time'[39m: [32m'02:00 PM'[39m,
-  [32m'Final Review Notes'[39m: [32m'Approved for deployment'[39m
-}
-Screenshot saved: 1-start-change-request
-✅ Clicked New button
-✅ New Change Request dialog opened
-✅ Filled Subject: Critical Security Update
-✅ Filled Description: Update to address security
-✅ Selected Risk Level: High
-✅ Selected Status: Open
-✅ Selected Priority: High
-✅ Selected Impact: High
-✅ Selected Type of Change: Major
-✅ Filled Business Justification: Security Patch
-✅ Filled Impact Analysis: To mitigate security risks
-✅ Filled Remediation Plan: High impact if not applied
-✅ Filled Start Time (Estimated) Date: 10/10/2025
-✅ Selected Start Time (Estimated) Time: 10:00 AM
-✅ Filled End Time (Estimated) Date: 11/11/2025
-✅ Selected End Time (Estimated) Time: 12:00 PM
-✅ Filled Reviewed On Date: 06/06/2025
-✅ Selected Reviewed On Time: 02:00 PM
-✅ Filled Final Review Notes: Approved for deployment
-Screenshot saved: 2-before-save-change-request
-✅ Clicked Save button
-✅ Change Request creation completed successfully
-Screenshot saved: 3-end-change-request
-🔍 Verifying Change Request creation success
-🚀 Initializing SalesforceChangeRequests page object
-✅ SalesforceChangeRequests page object initialized successfully with all locators
-🔍 Verifying Change Request creation success
-✅ Success message is visible
-Screenshot saved: 4-verification-change-request
-✅ Change Request creation verification completed successfully
+🔐 Two-factor authentication required - retrieving verification code...
+📧 Retrieving verification code from Yopmail...
+🚀 Initializing YopmailLocators page object
+✅ YopmailLocators page object initialized successfully with all locators
+🔄 Navigating to Yopmail service...
+✅ Successfully navigated to Yopmail
+Screenshot saved: yopmail/1-start-case.png
+🔄 Checking email inbox for: reicekigrauppoi-8940@yopmail.com
+🔄 Refreshing email inbox...
+✅ Inbox refreshed successfully
+Screenshot saved: yopmail/2-end-case.png
+✅ Email inbox accessed successfully
+🔄 Extracting verification code from email...
+⚠️ Attempt 1: Refreshing inbox...
+🔄 Refreshing email inbox...
+✅ Inbox refreshed successfully
+🔄 Extracting verification code from email...
+⚠️ Attempt 2: Refreshing inbox...
+🔄 Refreshing email inbox...
+✅ Inbox refreshed successfully
+🔄 Extracting verification code from email...
 
-[[ATTACHMENT|..\test-results\tests-features-Service-sal-85397-l-required-fields-Example-1-Google-Chrome\test-finished-1.png]]
+[[ATTACHMENT|..\test-results\tests-features-CustomerDat-73bba-th-Different-Data-Example-1-Google-Chrome\test-failed-1.png]]
 
-[[ATTACHMENT|..\test-results\tests-features-Service-sal-85397-l-required-fields-Example-1-Google-Chrome\trace.zip]]
+[[ATTACHMENT|..\test-results\tests-features-CustomerDat-73bba-th-Different-Data-Example-1-Google-Chrome\video.webm]]
+
+[[ATTACHMENT|..\test-results\tests-features-CustomerDat-73bba-th-Different-Data-Example-1-Google-Chrome\video-1.webm]]
+
+[[ATTACHMENT|..\test-results\tests-features-CustomerDat-73bba-th-Different-Data-Example-1-Google-Chrome\trace.zip]]
 ]]>
 </system-out>
+<system-err>
+<![CDATA[❌ Error getting verification code: locator.waitFor: Timeout 10000ms exceeded.
+Call log:
+[2m  - waiting for locator('#ifmail').contentFrame().locator('text=/\\d{6}/') to be visible[22m
+
+    at YopmailPage.getVerificationCode [90m(C:\Users\kasuvarn\OneDrive - Capgemini\Desktop\coding\Kartik_Salesforce\[39mpages\OtherFunctionality\yopmail.ts:125:35[90m)[39m
+    at SalesforceLoginPage.getVerificationCode [90m(C:\Users\kasuvarn\OneDrive - Capgemini\Desktop\coding\Kartik_Salesforce\[39mpages\OtherFunctionality\salesforceLogin.ts:225:30[90m)[39m
+    at SalesforceLoginPage.Login [90m(C:\Users\kasuvarn\OneDrive - Capgemini\Desktop\coding\Kartik_Salesforce\[39mpages\OtherFunctionality\salesforceLogin.ts:117:32[90m)[39m
+    at Object.<anonymous> [90m(C:\Users\kasuvarn\OneDrive - Capgemini\Desktop\coding\Kartik_Salesforce\[39mstepdef\OtherFunctionality\salesforce_login.ts:12:5[90m)[39m
+    at [90mC:\Users\kasuvarn\OneDrive - Capgemini\Desktop\coding\Kartik_Salesforce\[39m.features-gen\tests\features\CustomerData\salesforce_contact-point-type-consent.feature.spec.js:10:7 {
+  name: [32m'TimeoutError'[39m,
+  [32mSymbol(step)[39m: {
+    location: {
+      file: [32m'C:\\Users\\kasuvarn\\OneDrive - Capgemini\\Desktop\\coding\\Kartik_Salesforce\\pages\\OtherFunctionality\\yopmail.ts'[39m,
+      line: [33m125[39m,
+      column: [33m35[39m,
+      function: [32m'YopmailPage.getVerificationCode'[39m
+    },
+    category: [32m'pw:api'[39m,
+    title: [32m"Wait for selector locator('#ifmail').contentFrame().locator('text=/\\\\d{6}/')"[39m,
+    apiName: [32m'locator.waitFor'[39m,
+    params: {
+      selector: [32m'#ifmail >> internal:control=enter-frame >> text=/\\d{6}/'[39m,
+      strict: [33mtrue[39m,
+      omitReturnValue: [33mtrue[39m,
+      state: [32m'visible'[39m,
+      timeout: [33m10000[39m
+    },
+    group: [90mundefined[39m,
+    stepId: [32m'pw:api@66'[39m,
+    boxedStack: [90mundefined[39m,
+    steps: [],
+    attachmentIndices: [],
+    info: TestStepInfoImpl {
+      annotations: [],
+      _testInfo: [36m[TestInfoImpl][39m,
+      _stepId: [32m'pw:api@66'[39m,
+      _title: [32m"Wait for selector locator('#ifmail').contentFrame().locator('text=/\\\\d{6}/')"[39m,
+      _parentStep: [36m[TestStepInfoImpl][39m,
+      skip: [36m[Function (anonymous)][39m
+    },
+    complete: [36m[Function: complete][39m,
+    endWallTime: [33m1764565868404[39m,
+    error: {
+      message: [32m'TimeoutError: locator.waitFor: Timeout 10000ms exceeded.\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m"\x1B[2m  - waiting for locator('#ifmail').contentFrame().locator('text=/\\\\d{6}/') to be visible\x1B[22m\n"[39m,
+      stack: [32m'TimeoutError: locator.waitFor: Timeout 10000ms exceeded.\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m"\x1B[2m  - waiting for locator('#ifmail').contentFrame().locator('text=/\\\\d{6}/') to be visible\x1B[22m\n"[39m +
+        [32m'\n'[39m +
+        [32m'    at YopmailPage.getVerificationCode (C:\\Users\\kasuvarn\\OneDrive - Capgemini\\Desktop\\coding\\Kartik_Salesforce\\pages\\OtherFunctionality\\yopmail.ts:125:35)\n'[39m +
+        [32m'    at SalesforceLoginPage.getVerificationCode (C:\\Users\\kasuvarn\\OneDrive - Capgemini\\Desktop\\coding\\Kartik_Salesforce\\pages\\OtherFunctionality\\salesforceLogin.ts:225:30)\n'[39m +
+        [32m'    at SalesforceLoginPage.Login (C:\\Users\\kasuvarn\\OneDrive - Capgemini\\Desktop\\coding\\Kartik_Salesforce\\pages\\OtherFunctionality\\salesforceLogin.ts:117:32)\n'[39m +
+        [32m'    at Object.<anonymous> (C:\\Users\\kasuvarn\\OneDrive - Capgemini\\Desktop\\coding\\Kartik_Salesforce\\stepdef\\OtherFunctionality\\salesforce_login.ts:12:5)\n'[39m +
+        [32m'    at C:\\Users\\kasuvarn\\OneDrive - Capgemini\\Desktop\\coding\\Kartik_Salesforce\\.features-gen\\tests\\features\\CustomerData\\salesforce_contact-point-type-consent.feature.spec.js:10:7'[39m,
+      cause: [90mundefined[39m
+    }
+  }
+}
+❌ Error getting verification code: locator.waitFor: Timeout 10000ms exceeded.
+Call log:
+[2m  - waiting for locator('#ifmail').contentFrame().locator('text=/\\d{6}/') to be visible[22m
+
+    at YopmailPage.getVerificationCode [90m(C:\Users\kasuvarn\OneDrive - Capgemini\Desktop\coding\Kartik_Salesforce\[39mpages\OtherFunctionality\yopmail.ts:125:35[90m)[39m
+    at SalesforceLoginPage.getVerificationCode [90m(C:\Users\kasuvarn\OneDrive - Capgemini\Desktop\coding\Kartik_Salesforce\[39mpages\OtherFunctionality\salesforceLogin.ts:225:30[90m)[39m
+    at SalesforceLoginPage.Login [90m(C:\Users\kasuvarn\OneDrive - Capgemini\Desktop\coding\Kartik_Salesforce\[39mpages\OtherFunctionality\salesforceLogin.ts:117:32[90m)[39m
+    at Object.<anonymous> [90m(C:\Users\kasuvarn\OneDrive - Capgemini\Desktop\coding\Kartik_Salesforce\[39mstepdef\OtherFunctionality\salesforce_login.ts:12:5[90m)[39m
+    at [90mC:\Users\kasuvarn\OneDrive - Capgemini\Desktop\coding\Kartik_Salesforce\[39m.features-gen\tests\features\CustomerData\salesforce_contact-point-type-consent.feature.spec.js:10:7 {
+  name: [32m'TimeoutError'[39m,
+  [32mSymbol(step)[39m: {
+    location: {
+      file: [32m'C:\\Users\\kasuvarn\\OneDrive - Capgemini\\Desktop\\coding\\Kartik_Salesforce\\pages\\OtherFunctionality\\yopmail.ts'[39m,
+      line: [33m125[39m,
+      column: [33m35[39m,
+      function: [32m'YopmailPage.getVerificationCode'[39m
+    },
+    category: [32m'pw:api'[39m,
+    title: [32m"Wait for selector locator('#ifmail').contentFrame().locator('text=/\\\\d{6}/')"[39m,
+    apiName: [32m'locator.waitFor'[39m,
+    params: {
+      selector: [32m'#ifmail >> internal:control=enter-frame >> text=/\\d{6}/'[39m,
+      strict: [33mtrue[39m,
+      omitReturnValue: [33mtrue[39m,
+      state: [32m'visible'[39m,
+      timeout: [33m10000[39m
+    },
+    group: [90mundefined[39m,
+    stepId: [32m'pw:api@71'[39m,
+    boxedStack: [90mundefined[39m,
+    steps: [],
+    attachmentIndices: [],
+    info: TestStepInfoImpl {
+      annotations: [],
+      _testInfo: [36m[TestInfoImpl][39m,
+      _stepId: [32m'pw:api@71'[39m,
+      _title: [32m"Wait for selector locator('#ifmail').contentFrame().locator('text=/\\\\d{6}/')"[39m,
+      _parentStep: [36m[TestStepInfoImpl][39m,
+      skip: [36m[Function (anonymous)][39m
+    },
+    complete: [36m[Function: complete][39m,
+    endWallTime: [33m1764565880747[39m,
+    error: {
+      message: [32m'TimeoutError: locator.waitFor: Timeout 10000ms exceeded.\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m"\x1B[2m  - waiting for locator('#ifmail').contentFrame().locator('text=/\\\\d{6}/') to be visible\x1B[22m\n"[39m,
+      stack: [32m'TimeoutError: locator.waitFor: Timeout 10000ms exceeded.\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m"\x1B[2m  - waiting for locator('#ifmail').contentFrame().locator('text=/\\\\d{6}/') to be visible\x1B[22m\n"[39m +
+        [32m'\n'[39m +
+        [32m'    at YopmailPage.getVerificationCode (C:\\Users\\kasuvarn\\OneDrive - Capgemini\\Desktop\\coding\\Kartik_Salesforce\\pages\\OtherFunctionality\\yopmail.ts:125:35)\n'[39m +
+        [32m'    at SalesforceLoginPage.getVerificationCode (C:\\Users\\kasuvarn\\OneDrive - Capgemini\\Desktop\\coding\\Kartik_Salesforce\\pages\\OtherFunctionality\\salesforceLogin.ts:225:30)\n'[39m +
+        [32m'    at SalesforceLoginPage.Login (C:\\Users\\kasuvarn\\OneDrive - Capgemini\\Desktop\\coding\\Kartik_Salesforce\\pages\\OtherFunctionality\\salesforceLogin.ts:117:32)\n'[39m +
+        [32m'    at Object.<anonymous> (C:\\Users\\kasuvarn\\OneDrive - Capgemini\\Desktop\\coding\\Kartik_Salesforce\\stepdef\\OtherFunctionality\\salesforce_login.ts:12:5)\n'[39m +
+        [32m'    at C:\\Users\\kasuvarn\\OneDrive - Capgemini\\Desktop\\coding\\Kartik_Salesforce\\.features-gen\\tests\\features\\CustomerData\\salesforce_contact-point-type-consent.feature.spec.js:10:7'[39m,
+      cause: [90mundefined[39m
+    }
+  }
+}
+❌ Error getting verification code: locator.waitFor: Timeout 10000ms exceeded.
+Call log:
+[2m  - waiting for locator('#ifmail').contentFrame().locator('text=/\\d{6}/') to be visible[22m
+
+    at YopmailPage.getVerificationCode [90m(C:\Users\kasuvarn\OneDrive - Capgemini\Desktop\coding\Kartik_Salesforce\[39mpages\OtherFunctionality\yopmail.ts:125:35[90m)[39m
+    at SalesforceLoginPage.getVerificationCode [90m(C:\Users\kasuvarn\OneDrive - Capgemini\Desktop\coding\Kartik_Salesforce\[39mpages\OtherFunctionality\salesforceLogin.ts:225:30[90m)[39m
+    at SalesforceLoginPage.Login [90m(C:\Users\kasuvarn\OneDrive - Capgemini\Desktop\coding\Kartik_Salesforce\[39mpages\OtherFunctionality\salesforceLogin.ts:117:32[90m)[39m
+    at Object.<anonymous> [90m(C:\Users\kasuvarn\OneDrive - Capgemini\Desktop\coding\Kartik_Salesforce\[39mstepdef\OtherFunctionality\salesforce_login.ts:12:5[90m)[39m
+    at [90mC:\Users\kasuvarn\OneDrive - Capgemini\Desktop\coding\Kartik_Salesforce\[39m.features-gen\tests\features\CustomerData\salesforce_contact-point-type-consent.feature.spec.js:10:7 {
+  name: [32m'TimeoutError'[39m,
+  [32mSymbol(step)[39m: {
+    location: {
+      file: [32m'C:\\Users\\kasuvarn\\OneDrive - Capgemini\\Desktop\\coding\\Kartik_Salesforce\\pages\\OtherFunctionality\\yopmail.ts'[39m,
+      line: [33m125[39m,
+      column: [33m35[39m,
+      function: [32m'YopmailPage.getVerificationCode'[39m
+    },
+    category: [32m'pw:api'[39m,
+    title: [32m"Wait for selector locator('#ifmail').contentFrame().locator('text=/\\\\d{6}/')"[39m,
+    apiName: [32m'locator.waitFor'[39m,
+    params: {
+      selector: [32m'#ifmail >> internal:control=enter-frame >> text=/\\d{6}/'[39m,
+      strict: [33mtrue[39m,
+      omitReturnValue: [33mtrue[39m,
+      state: [32m'visible'[39m,
+      timeout: [33m10000[39m
+    },
+    group: [90mundefined[39m,
+    stepId: [32m'pw:api@76'[39m,
+    boxedStack: [90mundefined[39m,
+    steps: [],
+    attachmentIndices: [],
+    info: TestStepInfoImpl {
+      annotations: [],
+      _testInfo: [36m[TestInfoImpl][39m,
+      _stepId: [32m'pw:api@76'[39m,
+      _title: [32m"Wait for selector locator('#ifmail').contentFrame().locator('text=/\\\\d{6}/')"[39m,
+      _parentStep: [36m[TestStepInfoImpl][39m,
+      skip: [36m[Function (anonymous)][39m
+    },
+    complete: [36m[Function: complete][39m,
+    endWallTime: [33m1764565893089[39m,
+    error: {
+      message: [32m'TimeoutError: locator.waitFor: Timeout 10000ms exceeded.\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m"\x1B[2m  - waiting for locator('#ifmail').contentFrame().locator('text=/\\\\d{6}/') to be visible\x1B[22m\n"[39m,
+      stack: [32m'TimeoutError: locator.waitFor: Timeout 10000ms exceeded.\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m"\x1B[2m  - waiting for locator('#ifmail').contentFrame().locator('text=/\\\\d{6}/') to be visible\x1B[22m\n"[39m +
+        [32m'\n'[39m +
+        [32m'    at YopmailPage.getVerificationCode (C:\\Users\\kasuvarn\\OneDrive - Capgemini\\Desktop\\coding\\Kartik_Salesforce\\pages\\OtherFunctionality\\yopmail.ts:125:35)\n'[39m +
+        [32m'    at SalesforceLoginPage.getVerificationCode (C:\\Users\\kasuvarn\\OneDrive - Capgemini\\Desktop\\coding\\Kartik_Salesforce\\pages\\OtherFunctionality\\salesforceLogin.ts:225:30)\n'[39m +
+        [32m'    at SalesforceLoginPage.Login (C:\\Users\\kasuvarn\\OneDrive - Capgemini\\Desktop\\coding\\Kartik_Salesforce\\pages\\OtherFunctionality\\salesforceLogin.ts:117:32)\n'[39m +
+        [32m'    at Object.<anonymous> (C:\\Users\\kasuvarn\\OneDrive - Capgemini\\Desktop\\coding\\Kartik_Salesforce\\stepdef\\OtherFunctionality\\salesforce_login.ts:12:5)\n'[39m +
+        [32m'    at C:\\Users\\kasuvarn\\OneDrive - Capgemini\\Desktop\\coding\\Kartik_Salesforce\\.features-gen\\tests\\features\\CustomerData\\salesforce_contact-point-type-consent.feature.spec.js:10:7'[39m,
+      cause: [90mundefined[39m
+    }
+  }
+}
+❌ Error getting verification code from Yopmail: Error: Failed to get verification code after multiple attempts
+    at SalesforceLoginPage.getVerificationCode [90m(C:\Users\kasuvarn\OneDrive - Capgemini\Desktop\coding\Kartik_Salesforce\[39mpages\OtherFunctionality\salesforceLogin.ts:230:19[90m)[39m
+    at SalesforceLoginPage.Login [90m(C:\Users\kasuvarn\OneDrive - Capgemini\Desktop\coding\Kartik_Salesforce\[39mpages\OtherFunctionality\salesforceLogin.ts:117:32[90m)[39m
+    at Object.<anonymous> [90m(C:\Users\kasuvarn\OneDrive - Capgemini\Desktop\coding\Kartik_Salesforce\[39mstepdef\OtherFunctionality\salesforce_login.ts:12:5[90m)[39m
+    at [90mC:\Users\kasuvarn\OneDrive - Capgemini\Desktop\coding\Kartik_Salesforce\[39mnode_modules\[4mplaywright-bdd[24m\src\runtime\bddStepInvoker.ts:60:22
+    at TestStepInfoImpl._runStepBody [90m(C:\Users\kasuvarn\OneDrive - Capgemini\Desktop\coding\Kartik_Salesforce\[39mnode_modules\[4mplaywright[24m\lib\worker\testInfo.js:476:14[90m)[39m
+    at [90mC:\Users\kasuvarn\OneDrive - Capgemini\Desktop\coding\Kartik_Salesforce\[39mnode_modules\[4mplaywright[24m\lib\common\testType.js:244:20
+    at [90mC:\Users\kasuvarn\OneDrive - Capgemini\Desktop\coding\Kartik_Salesforce\[39mnode_modules\[4mplaywright[24m\lib\common\testType.js:242:18
+    at TestTypeImpl._step [90m(C:\Users\kasuvarn\OneDrive - Capgemini\Desktop\coding\Kartik_Salesforce\[39mnode_modules\[4mplaywright[24m\lib\common\testType.js:239:12[90m)[39m
+    at BddStepInvoker.invoke [90m(C:\Users\kasuvarn\OneDrive - Capgemini\Desktop\coding\Kartik_Salesforce\[39mnode_modules\[4mplaywright-bdd[24m\src\runtime\bddStepInvoker.ts:54:5[90m)[39m
+    at [90mC:\Users\kasuvarn\OneDrive - Capgemini\Desktop\coding\Kartik_Salesforce\[39m.features-gen\tests\features\CustomerData\salesforce_contact-point-type-consent.feature.spec.js:10:7
+    at [90mC:\Users\kasuvarn\OneDrive - Capgemini\Desktop\coding\Kartik_Salesforce\[39mnode_modules\[4mplaywright[24m\lib\worker\workerMain.js:310:9
+    at [90mC:\Users\kasuvarn\OneDrive - Capgemini\Desktop\coding\Kartik_Salesforce\[39mnode_modules\[4mplaywright[24m\lib\worker\testInfo.js:305:11
+    at TimeoutManager.withRunnable [90m(C:\Users\kasuvarn\OneDrive - Capgemini\Desktop\coding\Kartik_Salesforce\[39mnode_modules\[4mplaywright[24m\lib\worker\timeoutManager.js:67:14[90m)[39m
+    at TestInfoImpl._runWithTimeout [90m(C:\Users\kasuvarn\OneDrive - Capgemini\Desktop\coding\Kartik_Salesforce\[39mnode_modules\[4mplaywright[24m\lib\worker\testInfo.js:303:7[90m)[39m
+    at [90mC:\Users\kasuvarn\OneDrive - Capgemini\Desktop\coding\Kartik_Salesforce\[39mnode_modules\[4mplaywright[24m\lib\worker\workerMain.js:308:7
+    at WorkerMain._runTest [90m(C:\Users\kasuvarn\OneDrive - Capgemini\Desktop\coding\Kartik_Salesforce\[39mnode_modules\[4mplaywright[24m\lib\worker\workerMain.js:283:5[90m)[39m
+    at WorkerMain.runTestGroup [90m(C:\Users\kasuvarn\OneDrive - Capgemini\Desktop\coding\Kartik_Salesforce\[39mnode_modules\[4mplaywright[24m\lib\worker\workerMain.js:198:11[90m)[39m
+    at process.<anonymous> [90m(C:\Users\kasuvarn\OneDrive - Capgemini\Desktop\coding\Kartik_Salesforce\[39mnode_modules\[4mplaywright[24m\lib\common\process.js:65:22[90m)[39m
+]]>
+</system-err>
 </testcase>
 </testsuite>
 </testsuites>

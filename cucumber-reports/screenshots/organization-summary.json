@@ -1,0 +1,91 @@
+{
+  "timestamp": "2025-11-27T10:56:13.129Z",
+  "totalModules": 10,
+  "totalFeatures": 25,
+  "totalScreenshots": 278,
+  "moduleStats": {
+    "customerdata": {
+      "features": 3,
+      "screenshots": 18,
+      "featureDetails": {
+        "communication-subscriptions": 3,
+        "general": 5,
+        "individuals": 10
+      }
+    },
+    "finance": {
+      "features": 2,
+      "screenshots": 4,
+      "featureDetails": {
+        "general": 2,
+        "payments": 2
+      }
+    },
+    "inventory": {
+      "features": 3,
+      "screenshots": 23,
+      "featureDetails": {
+        "general": 4,
+        "location-groups": 15,
+        "shipping-carriers": 4
+      }
+    },
+    "location-groups": {
+      "features": 1,
+      "screenshots": 2,
+      "featureDetails": {
+        "general": 2
+      }
+    },
+    "marketing": {
+      "features": 0,
+      "screenshots": 0,
+      "featureDetails": {}
+    },
+    "otherfunctionality": {
+      "features": 9,
+      "screenshots": 135,
+      "featureDetails": {
+        "appointment-categories": 2,
+        "calendar": 5,
+        "catalog": 25,
+        "contracts": 10,
+        "files": 26,
+        "general": 37,
+        "images": 5,
+        "scorecards": 20,
+        "streaming-channels": 5
+      }
+    },
+    "platform": {
+      "features": 0,
+      "screenshots": 0,
+      "featureDetails": {}
+    },
+    "price-books": {
+      "features": 0,
+      "screenshots": 0,
+      "featureDetails": {}
+    },
+    "sales": {
+      "features": 3,
+      "screenshots": 56,
+      "featureDetails": {
+        "general": 34,
+        "price-books": 17,
+        "sellers": 5
+      }
+    },
+    "service": {
+      "features": 4,
+      "screenshots": 40,
+      "featureDetails": {
+        "cases": 10,
+        "change-requests": 12,
+        "general": 12,
+        "work-plan-templates": 6
+      }
+    }
+  },
+  "organizationEfficiency": "65.5%"
+}

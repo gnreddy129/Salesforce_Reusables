@@ -20,5 +20,5 @@ Feature: Salesforce Coupons Management
 
     Examples:
       | Code    | Promotion | Description           | Status | RedemptionLimitAllBuyers | RedemptionLimitPerBuyer | StartDate  | StartTime | EndDate    | EndTime |
-      | SAVE20  | testing   | Save 20% this summer  | Active | 100                      | 5                       | 13/11/2024 | 12:00 AM  | 25/12/2024 | 11:59 PM|
+      | SAVE40  | testing   | Save 34% this summer  | Active | 100                      | 5                       | 13/11/2024 | 12:00 AM  | 25/12/2024 | 11:59 PM|
       # | WELCOME10 | testing | 10% off for new users | Active | 500                      | 1                       | 01/01/2025 | 12:00 AM  | 06/11/2025 | 11:59 PM|

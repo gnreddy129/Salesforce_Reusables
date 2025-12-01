@@ -9,7 +9,7 @@ test.describe('Salesforce Coupons Management', () => {
     test('Example #1', { tag: ['@mode:serial', '@coupons', '@regression'] }, async ({ Given, When, Then, page }) => { 
       await Given('Open a browser and login to the sales force site', null, { page }); 
       await When('Search for "Coupons" in app launcher', null, { page }); 
-      await Then('Add new coupon with following details', {"dataTable":{"rows":[{"cells":[{"value":"Code"},{"value":"SAVE20"}]},{"cells":[{"value":"Promotion"},{"value":"testing"}]},{"cells":[{"value":"Description"},{"value":"Save 20% this summer"}]},{"cells":[{"value":"Status"},{"value":"Active"}]},{"cells":[{"value":"Redemption Limit All Buyers"},{"value":"100"}]},{"cells":[{"value":"Redemption Limit Per Buyer"},{"value":"5"}]},{"cells":[{"value":"Start Date"},{"value":"13/11/2024"}]},{"cells":[{"value":"Start Time"},{"value":"12:00 AM"}]},{"cells":[{"value":"End Date"},{"value":"25/12/2024"}]},{"cells":[{"value":"End Time"},{"value":"11:59 PM"}]}]}}, { page }); 
+      await Then('Add new coupon with following details', {"dataTable":{"rows":[{"cells":[{"value":"Code"},{"value":"SAVE40"}]},{"cells":[{"value":"Promotion"},{"value":"testing"}]},{"cells":[{"value":"Description"},{"value":"Save 34% this summer"}]},{"cells":[{"value":"Status"},{"value":"Active"}]},{"cells":[{"value":"Redemption Limit All Buyers"},{"value":"100"}]},{"cells":[{"value":"Redemption Limit Per Buyer"},{"value":"5"}]},{"cells":[{"value":"Start Date"},{"value":"13/11/2024"}]},{"cells":[{"value":"Start Time"},{"value":"12:00 AM"}]},{"cells":[{"value":"End Date"},{"value":"25/12/2024"}]},{"cells":[{"value":"End Time"},{"value":"11:59 PM"}]}]}}, { page }); 
       await Then('Verify coupon is created successfully', null, { page }); 
     });
 

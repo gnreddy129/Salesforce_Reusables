@@ -33,10 +33,10 @@ export default class SalesforceLegalEntitiesPage {
   // Legal Entities Information Fields
   readonly legalEntityNameInput: Locator;
   readonly companyNameInput: Locator;
-  readonly countryCombobox: Locator;
+  readonly countryInput: Locator;
   readonly streetInput: Locator;
   readonly cityInput: Locator;
-  readonly stateCombobox: Locator;
+  readonly stateInput: Locator;
   readonly postalCodeInput: Locator;
   readonly descriptionInput: Locator;
   readonly statusCombobox: Locator;
@@ -71,7 +71,7 @@ export default class SalesforceLegalEntitiesPage {
     this.companyNameInput = page.getByRole("textbox", {
       name: "Company Name",
     });
-    this.countryCombobox = page.getByRole("combobox", {
+    this.countryInput = page.getByRole("textbox", {
       name: "Country",
     });
     this.streetInput = page.getByRole("textbox", {
@@ -80,7 +80,7 @@ export default class SalesforceLegalEntitiesPage {
     this.cityInput = page.getByRole("textbox", {
       name: "City",
     });
-    this.stateCombobox = page.getByRole("combobox", {
+    this.stateInput = page.getByRole("textbox", {
       name: "State",
     });
     this.postalCodeInput = page.getByRole("textbox", {
@@ -191,10 +191,13 @@ export default class SalesforceLegalEntitiesPage {
       (details["Country"] && details["Country"] !== "--None--")
     ) {
       const countryValue = details.Country || details["Country"];
-      await this.countryCombobox.click({ timeout: 10000 });
-      await this.page.getByRole("option", { name: countryValue }).click({
+      await this.countryInput.fill(countryValue, {
         timeout: 10000,
       });
+      // await this.countryInput.click({ timeout: 10000 });
+      // await this.page.getByRole("option", { name: countryValue }).click({
+      //   timeout: 10000,
+      // });
       console.log(`✅ Country selected: ${countryValue}`);
     }
 
@@ -228,12 +231,15 @@ export default class SalesforceLegalEntitiesPage {
       (details["State"] && details["State"] !== "--None--")
     ) {
       const stateValue = details.State || details["State"];
-      await this.stateCombobox.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: stateValue, exact: true })
-        .click({
-          timeout: 10000,
-        });
+      await this.stateInput.fill(stateValue, {
+        timeout: 10000,
+      });
+      // await this.stateInput.click({ timeout: 10000 });
+      // await this.page
+      //   .getByRole("option", { name: stateValue, exact: true })
+      //   .click({
+      //     timeout: 10000,
+      //   });
       console.log(`✅ State selected: ${stateValue}`);
     }
 

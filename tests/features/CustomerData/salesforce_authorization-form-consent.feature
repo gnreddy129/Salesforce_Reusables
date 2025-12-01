@@ -23,5 +23,5 @@ Feature: Salesforce Authorization Form Consent Management
 
     Examples:
       | Name                | ConsentGiver | ChooseAnObject | AuthorizationFormText | ConsentCapturedSource | ConsentCapturedSourceType | Status | Date       | Time     | ContentVersion |
-      | GDPR Consent Record | John Doe     | Contact        | GDPR Auth Text        | Website Form          | Web                       | Seen   | 11/30/2025 | 12:15 AM | --None--       |
+      | GDPR Consent Record | John Doe     | Contact        | GDPR Auth Text        | Website Form          | Web                       | Seen   | 11/10/2025 | 12:15 AM | --None--       |
       # | Marketing Consent    | Jane Smith      | Lead           | Marketing Auth Text   | Email Campaign        | Email                     | Signed  | 11/29/2025 | 02:15 PM | --None--       |

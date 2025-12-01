@@ -17,5 +17,5 @@ Feature: Appointment Categories Management
 
     Examples:
       | Name            | Regular | DropIn | Group |
-      | Test Appt Cat A | Yes     | No     | Yes   |
+      | Test Appt Dog A | No     | No     | Yes   |
       # | Test Appt Cat B | No      | Yes    | No    |

@@ -9,7 +9,7 @@ test.describe('Salesforce Business Brands Management', () => {
     test('Example #1', { tag: ['@mode:serial', '@business-brands', '@regression'] }, async ({ Given, When, Then, page }) => { 
       await Given('Open a browser and login to the sales force site', null, { page }); 
       await When('Search for "Business Brands" in app launcher', null, { page }); 
-      await Then('Add new business brand with following details', {"dataTable":{"rows":[{"cells":[{"value":"Name"},{"value":"Premium Brand"}]},{"cells":[{"value":"Org Id"},{"value":"ORG1"}]},{"cells":[{"value":"Parent"},{"value":"pk"}]}]}}, { page }); 
+      await Then('Add new business brand with following details', {"dataTable":{"rows":[{"cells":[{"value":"Name"},{"value":"Premium Brand"}]},{"cells":[{"value":"Org Id"},{"value":"ORG1"}]},{"cells":[{"value":"Parent"},{"value":"Business Brand A"}]}]}}, { page }); 
       await Then('Verify business brand is created successfully with details', {"dataTable":{"rows":[{"cells":[{"value":"Name"},{"value":"Premium Brand"}]},{"cells":[{"value":"Org Id"},{"value":"ORG1"}]}]}}, { page }); 
     });
 

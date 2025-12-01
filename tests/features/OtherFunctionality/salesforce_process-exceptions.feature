@@ -24,4 +24,4 @@ Feature: Salesforce Process Exceptions Management
 
     Examples:
       | Category       | Status   | Priority | Severity | Message                   | ObjectType | AttachedTo  | Case     | ExternalReference | Description             |
-      | Order Approval | Resolved | High     | High     | Payment processing failed | Payment    | P-000000001 | 00001036 | EXT-REF-001       | Order payment exception |
+      | Order Approval | Resolved | High     | High     | Payment processing failed | Payment    | P-000000001 | 00001026 | EXT-REF-001       | Order payment exception |

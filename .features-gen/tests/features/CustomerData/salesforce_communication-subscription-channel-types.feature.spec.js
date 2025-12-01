@@ -9,7 +9,7 @@ test.describe('Salesforce Communication Subscription Channel Types Management', 
     test('Example #1', { tag: ['@mode:serial', '@customerdata', '@communication-subscription-channel-types', '@regression'] }, async ({ Given, When, Then, And, page }) => { 
       await Given('Open a browser and login to the sales force site', null, { page }); 
       await When('Search for "Communication Subscription Channel Types" in app launcher', null, { page }); 
-      await Then('Add new communication subscription channel type with following details', {"dataTable":{"rows":[{"cells":[{"value":"Field"},{"value":"Value"}]},{"cells":[{"value":"Name"},{"value":"Test Channel Type 1"}]},{"cells":[{"value":"Engagement Channel Type"},{"value":"Test Channel 1"}]},{"cells":[{"value":"Communication Subscription"},{"value":"Commutation Subscription A"}]}]}}, { page }); 
+      await Then('Add new communication subscription channel type with following details', {"dataTable":{"rows":[{"cells":[{"value":"Field"},{"value":"Value"}]},{"cells":[{"value":"Name"},{"value":"Test Channel Type 1"}]},{"cells":[{"value":"Engagement Channel Type"},{"value":"Test Channel 1"}]},{"cells":[{"value":"Communication Subscription"},{"value":"Commucation Subscription A"}]}]}}, { page }); 
       await And('Verify Communication Subscription Channel Type is created successfully with details', {"dataTable":{"rows":[{"cells":[{"value":"Field"},{"value":"Value"}]},{"cells":[{"value":"Name"},{"value":"Test Channel Type 1"}]}]}}, { page }); 
     });
 

@@ -254,8 +254,10 @@ export default class SalesforceCampaignsPage {
    * @throws Will throw an assertion error if expected field values are not found
    */
   async verifyCampaign(details: { [k: string]: string }) {
-    console.log("🔍 Starting campaign verification...");
 
+    console.log("🔍 Starting campaign verification...");
+    await expect(this.campaignCreatedMessage).toBeVisible({ timeout: 10000 });
+    await expect(this.page.locator(`.entityNameTitle`)).toBeVisible(); // check if header is visible
     // Verify campaign creation message or campaign details
     if (details.CampaignName || details["Campaign Name"]) {
       const campaignName = details.CampaignName || details["Campaign Name"];

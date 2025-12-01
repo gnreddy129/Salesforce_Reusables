@@ -6,8 +6,9 @@
   "scripts": {
     "cli": "node cli/cli-runner.js",
     "test": "npx playwright test",
-    "test:cucumber": "npx playwright test && npm run simple:report",
+    "test:cucumber": "npx cucumber-js --config cucumber/cucumber.js",
     "simple:report": "node cucumber/cucumber.simple.report.js",
+    "analyze:screenshots": "node cucumber/screenshot-analyzer.js",
     "open:report": "npx playwright show-report",
     "open:reports": "node -e \"require('child_process').exec('start cucumber-reports/index.html')\""
   },

@@ -28,5 +28,5 @@ Feature: Salesforce Return Orders Management
       | Status | <Status> |
 
     Examples:
-      | Case     | ReturnedBy | Account | Status   | Contact       | SourceLocation | DestinationLocation | ShipmentType | ShipAddress     | ShipFromCity | ShipFromZipPostalCode | ShipFromStateProvince | ShipFromCountry | ExpectedArrivalDate | ExpectedArrivalTime | Description                                              |
-      | 00001026 |            | Testing | Approved | Kartika Smith |                |                     | Standard     | 123 Main Street | New York     |                 10001 |                       |                 |          11/02/2025 |            10:00 AM | Return order for defective merchandise in good condition |
+      | Case     | ReturnedBy | Account | Status   | Contact    | SourceLocation | DestinationLocation | ShipmentType | ShipAddress     | ShipFromCity | ShipFromZipPostalCode | ShipFromStateProvince | ShipFromCountry | ExpectedArrivalDate | ExpectedArrivalTime | Description                                              |
+      | 00001026 | Test1 lab2 | Testing | Approved | John Smith |                |                     | Standard     | 123 Main Street | New York     |                 10001 |                       |                 |          11/02/2025 |            10:00 AM | Return order for defective merchandise in good condition |

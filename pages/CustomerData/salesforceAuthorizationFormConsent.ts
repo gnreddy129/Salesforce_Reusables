@@ -220,7 +220,7 @@ export default class SalesforceAuthorizationFormConsentPage {
       const authFormTextValue =
         details.AuthorizationFormText || details["Authorization Form Text"];
       await this.authorizationFormTextCombobox.click({ timeout: 10000 });
-      await this.page.getByRole("option", { name: authFormTextValue }).click({
+      await this.page.getByRole("option", { name: authFormTextValue }).first().click({
         timeout: 10000,
       });
       console.log(`✅ Authorization Form Text selected: ${authFormTextValue}`);
