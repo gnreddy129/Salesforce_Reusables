@@ -266,7 +266,7 @@ export default class SalesforcePaymentsPage {
             this.page,
             "1-start-payment",
             this.testInfo,
-            "Platform/salesforce-payments/"
+            "Finance/salesforce-payments/"
         );
 
         // Open the new payment creation dialog
@@ -723,7 +723,7 @@ export default class SalesforcePaymentsPage {
             this.page,
             "2-all-fields-filled",
             this.testInfo,
-            "Platform/salesforce-payments/"
+            "Finance/salesforce-payments/"
         );
 
         console.log("💾 Saving the payment...");
@@ -739,7 +739,7 @@ export default class SalesforcePaymentsPage {
             this.page,
             "3-after-save-success",
             this.testInfo,
-            "Platform/salesforce-payments/"
+            "Finance/salesforce-payments/"
         );
 
         await this.page.waitForTimeout(1000);
@@ -749,7 +749,7 @@ export default class SalesforcePaymentsPage {
             this.page,
             "4-payments-list",
             this.testInfo,
-            "Platform/salesforce-payments/"
+            "Finance/salesforce-payments/"
         );
 
         console.log("🎉 Payment creation completed!");
@@ -778,7 +778,7 @@ export default class SalesforcePaymentsPage {
             this.page,
             "5-final-verification",
             this.testInfo,
-            "Platform/salesforce-payments/"
+            "Finance/salesforce-payments/"
         );
 
         console.log("🎉 Verification completed!");

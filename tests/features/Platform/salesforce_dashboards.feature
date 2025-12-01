@@ -14,7 +14,7 @@ Feature: Salesforce Dashboards Management
     Then Verify dashboard is created successfully
 
     Examples:
-      | DashboardName    | Description                | Folder        |
-      | Sales            | Sales performance tracking | Sales Reports |
+      | DashboardName | Description                | Folder                          |
+      | Sales         | Sales performance tracking | Enablement Dashboard Spring '24 |
       # | Account Health   | Account status dashboard   | Accounts      |
       # | Team Performance | Team metrics overview      | Team Reports  |

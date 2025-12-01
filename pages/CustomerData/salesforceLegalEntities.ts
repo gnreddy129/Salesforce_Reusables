@@ -36,7 +36,7 @@ export default class SalesforceLegalEntitiesPage {
   readonly countryInput: Locator;
   readonly streetInput: Locator;
   readonly cityInput: Locator;
-  readonly stateInput: Locator;
+  readonly stateCombobox: Locator;
   readonly postalCodeInput: Locator;
   readonly descriptionInput: Locator;
   readonly statusCombobox: Locator;
@@ -71,7 +71,7 @@ export default class SalesforceLegalEntitiesPage {
     this.companyNameInput = page.getByRole("textbox", {
       name: "Company Name",
     });
-    this.countryInput = page.getByRole("textbox", {
+    this.countryCombobox = page.getByRole("combobox", {
       name: "Country",
     });
     this.streetInput = page.getByRole("textbox", {
@@ -80,7 +80,7 @@ export default class SalesforceLegalEntitiesPage {
     this.cityInput = page.getByRole("textbox", {
       name: "City",
     });
-    this.stateInput = page.getByRole("textbox", {
+    this.stateCombobox = page.getByRole("combobox", {
       name: "State",
     });
     this.postalCodeInput = page.getByRole("textbox", {
@@ -115,10 +115,10 @@ export default class SalesforceLegalEntitiesPage {
    * @param details.LegalEntitiesName - Legal Entities Name (text input)
    * @param details.CompanyName - Company Name (text input)
    * @param details.Address - Address (text input)
-   * @param details.Country - Country (combobox)
+   * @param details.Country - Country (text input)
    * @param details.Street - Street (text input)
    * @param details.City - City (text input)
-   * @param details.State - State (combobox)
+   * @param details.State - State (text input)
    * @param details.PostalCode - Postal Code (text input)
    * @param details.Description - Description (text input)
    * @param details.Status - Status (combobox)
@@ -185,19 +185,16 @@ export default class SalesforceLegalEntitiesPage {
       console.log(`✅ Company Name filled: ${companyNameValue}`);
     }
 
-    // Handle Country combobox
+    // Handle Country textbox
     if (
       (details.Country && details.Country !== "--None--") ||
       (details["Country"] && details["Country"] !== "--None--")
     ) {
       const countryValue = details.Country || details["Country"];
-      await this.countryInput.fill(countryValue, {
+      await this.countryCombobox.click({ timeout: 10000 });
+      await this.page.getByRole("option", { name: countryValue }).click({
         timeout: 10000,
       });
-      // await this.countryInput.click({ timeout: 10000 });
-      // await this.page.getByRole("option", { name: countryValue }).click({
-      //   timeout: 10000,
-      // });
       console.log(`✅ Country selected: ${countryValue}`);
     }
 
@@ -225,21 +222,18 @@ export default class SalesforceLegalEntitiesPage {
       console.log(`✅ City filled: ${cityValue}`);
     }
 
-    // Handle State combobox
+    // Handle State textbox
     if (
       (details.State && details.State !== "--None--") ||
       (details["State"] && details["State"] !== "--None--")
     ) {
       const stateValue = details.State || details["State"];
-      await this.stateInput.fill(stateValue, {
-        timeout: 10000,
-      });
-      // await this.stateInput.click({ timeout: 10000 });
-      // await this.page
-      //   .getByRole("option", { name: stateValue, exact: true })
-      //   .click({
-      //     timeout: 10000,
-      //   });
+      await this.stateCombobox.click({ timeout: 10000 });
+      await this.page
+        .getByRole("option", { name: stateValue, exact: true })
+        .click({
+          timeout: 10000,
+        });
       console.log(`✅ State selected: ${stateValue}`);
     }
 

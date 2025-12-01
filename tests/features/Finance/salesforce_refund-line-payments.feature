@@ -31,5 +31,5 @@ Feature: Salesforce Refund Line Payment Creation
 
     Examples:
       | Refund      | Type    | HasBeenUnapplied | Payment     | Comments                 | Amount | AssociatedAccount | AssociatedRefundLinePayment | Date       | DateTime | EffectiveDate | EffectiveDateTime | AppliedDate | AppliedDateTime | UnappliedDate | UnappliedDateTime |
-      | R-000000002 | Applied | No               | P-000000001 | Automated test comment 1 |   5000 | Testing           | --None--                    | 12/12/2024 | 10:00 AM |    10/12/2024 |          10:30 AM |  05/11/2024 |        11:00 AM | --None--      | --None--          |
+      | R-000000003 | Applied | No               | P-000000002 | Automated test comment 1 |   50 | Testing           | --None--                    | 12/12/2024 | 10:00 AM |    10/12/2024 |          10:30 AM |  05/11/2024 |        11:00 AM | --None--      | --None--          |
       # | Test Refund 002 | Debit   | Yes              | Payment-002 | Automated test comment 2 | 750.50 | Test Account 2    | RefundLinePayment-001       | 12/22/2024 |  2:00 PM |    12/22/2024 |           2:30 PM |  12/22/2024 |         3:00 PM |    12/23/2024 |           4:00 PM |

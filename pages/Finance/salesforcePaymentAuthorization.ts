@@ -166,7 +166,7 @@ export default class SalesforcePaymentAuthorization {
         console.log("📋 Payment Authorization Details:", JSON.stringify(details, null, 2));
 
         try {
-            await Helper.takeScreenshotToFile(this.page, "01-dialog-opened", this.testInfo, "Platform/salesforce-payment-authorization");
+            await Helper.takeScreenshotToFile(this.page, "01-dialog-opened", this.testInfo, "Finance/salesforce-payment-authorization");
 
             // Account (combobox, optional)
             if (details.Account) {
@@ -350,7 +350,7 @@ export default class SalesforcePaymentAuthorization {
                 console.log("✅ Audit Email filled:", details["Audit Email"]);
             }
 
-            await Helper.takeScreenshotToFile(this.page, "01-all-fields-filled", this.testInfo, "Platform/salesforce-payment-authorization");
+            await Helper.takeScreenshotToFile(this.page, "01-all-fields-filled", this.testInfo, "Finance/salesforce-payment-authorization");
 
             // Save the payment authorization
             console.log("💾 Saving the payment authorization...");
@@ -358,10 +358,10 @@ export default class SalesforcePaymentAuthorization {
             await this.page.waitForTimeout(2000);
             console.log("✅ Payment authorization saved successfully");
 
-            await Helper.takeScreenshotToFile(this.page, "02-after-save", this.testInfo, "Platform/salesforce-payment-authorization");
+            await Helper.takeScreenshotToFile(this.page, "02-after-save", this.testInfo, "Finance/salesforce-payment-authorization");
         } catch (e) {
             console.log("❌ Error in createPaymentAuthorization:", e);
-            await Helper.takeScreenshotToFile(this.page, "error-screenshot", this.testInfo, "Platform/salesforce-payment-authorization");
+            await Helper.takeScreenshotToFile(this.page, "error-screenshot", this.testInfo, "Finance/salesforce-payment-authorization");
             throw e;
         }
     }
@@ -387,7 +387,7 @@ export default class SalesforcePaymentAuthorization {
                 this.page,
                 "03-final-verification",
                 this.testInfo,
-                "Platform/salesforce-payment-authorization"
+                "Finance/salesforce-payment-authorization"
             );
 
             console.log("🎉 Verification completed!");

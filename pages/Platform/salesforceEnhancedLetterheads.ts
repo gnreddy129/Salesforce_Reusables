@@ -108,7 +108,7 @@ export default class SalesforceEnhancedLetterheadsPage {
             this.page,
             "1-start-enhanced-letterhead",
             this.testInfo,
-            "OtherFunctionality/salesforce-enhanced-letterheads/"
+            "Platform/salesforce-enhanced-letterheads/"
         );
 
         // Open the new enhanced letterhead creation dialog
@@ -186,7 +186,7 @@ export default class SalesforceEnhancedLetterheadsPage {
             this.page,
             "2-all-fields-filled",
             this.testInfo,
-            "OtherFunctionality/salesforce-enhanced-letterheads/"
+            "Platform/salesforce-enhanced-letterheads/"
         );
 
         console.log("💾 Saving the enhanced letterhead...");
@@ -202,7 +202,7 @@ export default class SalesforceEnhancedLetterheadsPage {
             this.page,
             "3-after-save-success",
             this.testInfo,
-            "OtherFunctionality/salesforce-enhanced-letterheads/"
+            "Platform/salesforce-enhanced-letterheads/"
         );
 
         await this.page.waitForTimeout(1000);
@@ -212,7 +212,7 @@ export default class SalesforceEnhancedLetterheadsPage {
             this.page,
             "4-enhanced-letterheads-list",
             this.testInfo,
-            "OtherFunctionality/salesforce-enhanced-letterheads/"
+            "Platform/salesforce-enhanced-letterheads/"
         );
 
         console.log("🎉 Enhanced letterhead creation completed!");
@@ -241,7 +241,7 @@ export default class SalesforceEnhancedLetterheadsPage {
             this.page,
             "5-final-verification",
             this.testInfo,
-            "OtherFunctionality/salesforce-enhanced-letterheads/"
+            "Platform/salesforce-enhanced-letterheads/"
         );
 
         console.log("🎉 Verification completed!");

@@ -45,40 +45,82 @@
 <![CDATA[🚀 Initializing SalesforceLogin page object
 ✅ SalesforceLogin page object initialized successfully with all locators
 🔄 Starting Salesforce login process...
-📝 Login username: reicekigrauppoi-8940@yopmail.com
+📝 Login username: yeikuhozoiffa-1695@yopmail.com
 Screenshot saved: 1-start-login
 ✅ Navigated to Salesforce login page
 📋 Filling login credentials...
 ✅ Login credentials submitted
-🔐 Two-factor authentication required - retrieving verification code...
-📧 Retrieving verification code from Yopmail...
-🚀 Initializing YopmailLocators page object
-✅ YopmailLocators page object initialized successfully with all locators
-🔄 Navigating to Yopmail service...
-✅ Successfully navigated to Yopmail
-Screenshot saved: yopmail/1-start-case.png
-🔄 Checking email inbox for: reicekigrauppoi-8940@yopmail.com
-🔄 Refreshing email inbox...
-✅ Inbox refreshed successfully
-Screenshot saved: yopmail/2-end-case.png
-✅ Email inbox accessed successfully
-🔄 Extracting verification code from email...
-⚠️ Attempt 1: Refreshing inbox...
-🔄 Refreshing email inbox...
-✅ Inbox refreshed successfully
-🔄 Extracting verification code from email...
-⚠️ Attempt 2: Refreshing inbox...
-🔄 Refreshing email inbox...
-✅ Inbox refreshed successfully
-🔄 Extracting verification code from email...
+🎉 Login process completed!
+🚀 Initializing SalesforceHome page object
+✅ SalesforceHome page object initialized successfully with all locators
+🔄 Starting app search and navigation...
+📱 Searching for app: Change Requests
+✅ App launcher is visible
+Screenshot saved: 1-start-app-search
+✅ App launcher opened
+🔍 Searched for app in search box
+Screenshot saved: 2-end-app-navigation
+✅ Successfully navigated to Change Requests app
+🎉 App navigation completed!
+🔄 Creating new Change Request with provided details
+🚀 Initializing SalesforceChangeRequests page object
+✅ SalesforceChangeRequests page object initialized successfully with all locators
+🔄 Creating new Change Request with details: {
+  Field: [32m'Value'[39m,
+  Subject: [32m'Critical Security Update'[39m,
+  Description: [32m'Update to address security'[39m,
+  [32m'Risk Level'[39m: [32m'High'[39m,
+  Status: [32m'Open'[39m,
+  Priority: [32m'High'[39m,
+  Impact: [32m'High'[39m,
+  [32m'Type of Change'[39m: [32m'Major'[39m,
+  [32m'Business Justification'[39m: [32m'Security Patch'[39m,
+  [32m'Impact Analysis'[39m: [32m'To mitigate security risks'[39m,
+  [32m'Remediation Plan'[39m: [32m'High impact if not applied'[39m,
+  [32m'Start Time (Estimated) Date'[39m: [32m'10/10/2025'[39m,
+  [32m'Start Time (Estimated) Time'[39m: [32m'10:00 AM'[39m,
+  [32m'End Time (Estimated) Date'[39m: [32m'11/11/2025'[39m,
+  [32m'End Time (Estimated) Time'[39m: [32m'12:00 PM'[39m,
+  Reviewer: [32m'--None--'[39m,
+  [32m'Reviewed On Date'[39m: [32m'06/06/2025'[39m,
+  [32m'Reviewed On Time'[39m: [32m'02:00 PM'[39m,
+  [32m'Final Review Notes'[39m: [32m'Approved for deployment'[39m
+}
+Screenshot saved: 1-start-change-request
+✅ Clicked New button
+✅ New Change Request dialog opened
+✅ Filled Subject: Critical Security Update
+✅ Filled Description: Update to address security
+✅ Selected Risk Level: High
+✅ Selected Status: Open
+✅ Selected Priority: High
+✅ Selected Impact: High
+✅ Selected Type of Change: Major
+✅ Filled Business Justification: Security Patch
+✅ Filled Impact Analysis: To mitigate security risks
+✅ Filled Remediation Plan: High impact if not applied
+✅ Filled Start Time (Estimated) Date: 10/10/2025
+✅ Selected Start Time (Estimated) Time: 10:00 AM
+✅ Filled End Time (Estimated) Date: 11/11/2025
+✅ Selected End Time (Estimated) Time: 12:00 PM
+✅ Filled Reviewed On Date: 06/06/2025
+✅ Selected Reviewed On Time: 02:00 PM
+✅ Filled Final Review Notes: Approved for deployment
+Screenshot saved: 2-before-save-change-request
+✅ Clicked Save button
+✅ Change Request creation completed successfully
+Screenshot saved: 3-end-change-request
+🔍 Verifying Change Request creation success
+🚀 Initializing SalesforceChangeRequests page object
+✅ SalesforceChangeRequests page object initialized successfully with all locators
+🔍 Verifying Change Request creation success
+✅ Success message is visible
+Screenshot saved: 4-verification-change-request
+✅ Change Request creation verification completed successfully
 
-[[ATTACHMENT|..\test-results\tests-features-CustomerDat-73bba-th-Different-Data-Example-1-Google-Chrome\test-failed-1.png]]
+[[ATTACHMENT|..\test-results\tests-features-Service-sal-85397-l-required-fields-Example-1-Google-Chrome\test-finished-1.png]]
 
-[[ATTACHMENT|..\test-results\tests-features-CustomerDat-73bba-th-Different-Data-Example-1-Google-Chrome\video.webm]]
-
-[[ATTACHMENT|..\test-results\tests-features-CustomerDat-73bba-th-Different-Data-Example-1-Google-Chrome\video-1.webm]]
-
-[[ATTACHMENT|..\test-results\tests-features-CustomerDat-73bba-th-Different-Data-Example-1-Google-Chrome\trace.zip]]
+[[ATTACHMENT|..\test-results\tests-features-Service-sal-85397-l-required-fields-Example-1-Google-Chrome\trace.zip]]
 ]]>
 </system-out>
 <system-err>

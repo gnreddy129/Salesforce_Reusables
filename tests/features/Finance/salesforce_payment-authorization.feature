@@ -1,7 +1,7 @@
 @mode:serial
 Feature: Salesforce Payment Authorizations Management
 
-  @paymentauthorization @regression
+  @paymentauthorizations @regression
   Scenario Outline: Create new Payment Authorization with different data
     Given Open a browser and login to the sales force site
     When Search for "Payment Authorizations" in app launcher

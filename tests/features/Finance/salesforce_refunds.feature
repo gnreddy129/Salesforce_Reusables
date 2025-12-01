@@ -36,3 +36,5 @@ Feature: Salesforce Refunds Management
     Examples:
       | Account | Status    | Amount | Type       | PaymentGroup | PaymentMethod | ProcessingMode | EffectiveDate | Date       | Comments               | CancellationDate | CancellationEffectiveDate | SalesforceResultCode | CancellationSalesforceResultCode | PaymentGateway | GatewayDate | GatewayResultCode   | GatewayResultCodeDescription  | GatewayReferenceNumber | CancellationGatewayResultCode | CancellationGatewayDate | CancellationGatewayReferenceNumber | MacAddress        | IpAddress     | Phone           | AuditEmail        |
       | Testing | Processed |   1500 | Referenced |              |               | External       |    11/11/2025 | 11/11/2025 | Automation test refund |       11/11/2025 |                11/11/2025 | Success              |                                  |                |  11/11/2025 | GATEWAY-SUCCESS-001 | Refund processed successfully | GWR-REFUND-2025-001    |                               |              11/11/2025 |                                    | 00:1A:2B:3C:4D:5E | 192.168.1.100 | +1-555-789-1234 | audit@testing.com |
+
+# "yeikuhozoiffa-1695@yopmail.com",

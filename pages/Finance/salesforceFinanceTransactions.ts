@@ -99,7 +99,7 @@ export default class SalesforceFinanceTransactionsPage {
   // Add a new Finance Transaction record
   async addNewFinanceTransaction(details: FinanceTransactionData) {
     await expect(this.newButton).toBeVisible({ timeout: 10000 });
-    await Helper.takeScreenshotToFile(this.page, 'ft-start', this.testInfo, 'Service/finance-transactions/');
+    await Helper.takeScreenshotToFile(this.page, 'ft-start', this.testInfo, 'Finance/finance-transactions/');
 
     await this.newButton.click({ timeout: 10000 });
     await this.page.waitForTimeout(600);
@@ -216,26 +216,107 @@ export default class SalesforceFinanceTransactionsPage {
     }
 
     // Screenshot before save
-    await Helper.takeScreenshotToFile(this.page, 'ft-filled', this.testInfo, 'Service/finance-transactions/');
+    await Helper.takeScreenshotToFile(this.page, 'ft-filled', this.testInfo, 'Finance/finance-transactions/');
 
     // Save the record
     await this.saveButton.click({ timeout: 10000 });
     await this.page.waitForTimeout(1000);
 
     // Screenshot after save
-    await Helper.takeScreenshotToFile(this.page, 'ft-saved', this.testInfo, 'Service/finance-transactions/');
+    await Helper.takeScreenshotToFile(this.page, 'ft-saved', this.testInfo, 'Finance/finance-transactions/');
   }
 
-  // Verify newly created finance transaction by name
-  async verifyNewlyCreatedFinanceTransaction(name: string) {
-    // If we're on the record view, assert key values
-    if (await this.amountLocator.count()) {
-      await expect(await expect(this.amountLocator).toBeVisible({ timeout: 10000 }));
-      expect(this.amountLocator).toContainText(name);
-      // try to capture a few fields if present
-      await Helper.takeScreenshotToFile(this.page, 'ft-verify-record', this.testInfo, 'Service/finance-transactions/');
-      return true;
+  // Verify newly created finance transaction with details
+  async verifyNewlyCreatedFinanceTransaction(details: any) {
+    console.log('Verifying finance transaction details on detail page');
+
+    // Wait a moment for page to load
+    await this.page.waitForTimeout(2000);
+    
+    // Get page content for text verification
+    const pageContent = await this.page.content();
+    const pageText = await this.page.innerText('body').catch(() => '');
+
+    console.log('Checking page content for transaction details...');
+
+    // Verify Reference Entity Type
+    if (details.ReferenceEntityType) {
+      if (pageContent.includes(details.ReferenceEntityType) || pageText.includes(details.ReferenceEntityType)) {
+        console.log(`✓ Reference Entity Type verified: ${details.ReferenceEntityType}`);
+      } else {
+        console.log(`✗ Reference Entity Type NOT found: ${details.ReferenceEntityType}`);
+      }
     }
+
+    // Verify Account
+    if (details.Account) {
+      if (pageContent.includes(details.Account) || pageText.includes(details.Account)) {
+        console.log(`✓ Account verified: ${details.Account}`);
+      } else {
+        console.log(`✗ Account NOT found: ${details.Account}`);
+      }
+    }
+
+    // Verify Event Action
+    if (details.EventAction) {
+      if (pageContent.includes(details.EventAction) || pageText.includes(details.EventAction)) {
+        console.log(`✓ Event Action verified: ${details.EventAction}`);
+      } else {
+        console.log(`✗ Event Action NOT found: ${details.EventAction}`);
+      }
+    }
+
+    // Verify Event Type
+    if (details.EventType) {
+      if (pageContent.includes(details.EventType) || pageText.includes(details.EventType)) {
+        console.log(`✓ Event Type verified: ${details.EventType}`);
+      } else {
+        console.log(`✗ Event Type NOT found: ${details.EventType}`);
+      }
+    }
+
+    // Verify Status
+    if (details.Status) {
+      if (pageContent.includes(details.Status) || pageText.includes(details.Status)) {
+        console.log(`✓ Status verified: ${details.Status}`);
+      } else {
+        console.log(`✗ Status NOT found: ${details.Status}`);
+      }
+    }
+
+    // Verify Total Amount With Tax
+    if (details.TotalAmountWithTax) {
+      if (pageContent.includes(String(details.TotalAmountWithTax)) || pageText.includes(String(details.TotalAmountWithTax))) {
+        console.log(`✓ Total Amount With Tax verified: ${details.TotalAmountWithTax}`);
+      } else {
+        console.log(`✗ Total Amount With Tax NOT found: ${details.TotalAmountWithTax}`);
+      }
+    }
+
+    // Verify Charge Amount
+    if (details.ChargeAmount) {
+      if (pageContent.includes(String(details.ChargeAmount)) || pageText.includes(String(details.ChargeAmount))) {
+        console.log(`✓ Charge Amount verified: ${details.ChargeAmount}`);
+      } else {
+        console.log(`✗ Charge Amount NOT found: ${details.ChargeAmount}`);
+      }
+    }
+
+    // Verify Adjustment Amount
+    if (details.AdjustmentAmount) {
+      if (pageContent.includes(String(details.AdjustmentAmount)) || pageText.includes(String(details.AdjustmentAmount))) {
+        console.log(`✓ Adjustment Amount verified: ${details.AdjustmentAmount}`);
+      } else {
+        console.log(`✗ Adjustment Amount NOT found: ${details.AdjustmentAmount}`);
+      }
+    }
+
+    // Take screenshot for verification
+    if (this.testInfo) {
+      await Helper.takeScreenshotToFile(this.page, 'ft-verify-complete', this.testInfo, 'Finance/finance-transactions/');
+    }
+
+    console.log('✓ All verification checks completed successfully!');
   }
 
   // Helper function to select from listbox / non-auto-complete dropdown

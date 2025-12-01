@@ -19,6 +19,6 @@ Feature: Salesforce Email Templates Management
       | Email Template Name | <EmailTemplateName> |
 
     Examples:
-      | EmailTemplateName | RelatedEntityType | Description                 | Folder                  | Letterhead | Subject    | Body                                                     |
-      | Welcome Email     | Contact           | Welcome email for new users | Public Email Templates  | --None--   | Test Email | lorem ipsum dolor sit amet, consectetur adipiscing elit. |
+      | EmailTemplateName | RelatedEntityType | Description                 | Folder                 | Letterhead | Subject    | Body                       |
+      | Welcome Email     | Contact           | Welcome email for new users | Public Email Templates |            | Test Email | lorem ipsum dolor sit amet |
       # | Follow Up Email   | Account           | Follow-up email template    | Private Email Templates | --None--   | Test Email | lorem ipsum dolor sit amet, consectetur adipiscing elit. |

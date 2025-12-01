@@ -104,7 +104,7 @@ export default class SalesforceWorkPlansPage {
             this.page,
             "1-start-work-plan",
             this.testInfo,
-            "OtherFunctionality/salesforce-work-plans/"
+            "Service/salesforce-work-plans/"
         );
 
         // Open the new work plan creation dialog
@@ -185,7 +185,7 @@ export default class SalesforceWorkPlansPage {
             this.page,
             "2-all-fields-filled",
             this.testInfo,
-            "OtherFunctionality/salesforce-work-plans/"
+            "Service/salesforce-work-plans/"
         );
 
         console.log("💾 Saving the work plan...");
@@ -201,7 +201,7 @@ export default class SalesforceWorkPlansPage {
             this.page,
             "3-after-save-success",
             this.testInfo,
-            "OtherFunctionality/salesforce-work-plans/"
+            "Service/salesforce-work-plans/"
         );
 
         await this.page.waitForTimeout(1000);
@@ -211,7 +211,7 @@ export default class SalesforceWorkPlansPage {
             this.page,
             "4-work-plans-list",
             this.testInfo,
-            "OtherFunctionality/salesforce-work-plans/"
+            "Service/salesforce-work-plans/"
         );
 
         console.log("🎉 Work plan creation completed!");
@@ -240,7 +240,7 @@ export default class SalesforceWorkPlansPage {
             this.page,
             "5-final-verification",
             this.testInfo,
-            "OtherFunctionality/salesforce-work-plans/"
+            "Service/salesforce-work-plans/"
         );
 
         console.log("🎉 Verification completed!");
