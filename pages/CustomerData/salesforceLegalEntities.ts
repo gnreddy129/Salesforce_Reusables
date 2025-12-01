@@ -33,10 +33,10 @@ export default class SalesforceLegalEntitiesPage {
   // Legal Entities Information Fields
   readonly legalEntityNameInput: Locator;
   readonly companyNameInput: Locator;
-  readonly countryCombobox: Locator;
+  readonly countryTextbox: Locator;
   readonly streetInput: Locator;
   readonly cityInput: Locator;
-  readonly stateCombobox: Locator;
+  readonly stateTextbox: Locator;
   readonly postalCodeInput: Locator;
   readonly descriptionInput: Locator;
   readonly statusCombobox: Locator;
@@ -71,7 +71,7 @@ export default class SalesforceLegalEntitiesPage {
     this.companyNameInput = page.getByRole("textbox", {
       name: "Company Name",
     });
-    this.countryCombobox = page.getByRole("combobox", {
+    this.countryTextbox = page.getByRole("textbox", {
       name: "Country",
     });
     this.streetInput = page.getByRole("textbox", {
@@ -80,7 +80,7 @@ export default class SalesforceLegalEntitiesPage {
     this.cityInput = page.getByRole("textbox", {
       name: "City",
     });
-    this.stateCombobox = page.getByRole("combobox", {
+    this.stateTextbox = page.getByRole("textbox", {
       name: "State",
     });
     this.postalCodeInput = page.getByRole("textbox", {
@@ -115,10 +115,10 @@ export default class SalesforceLegalEntitiesPage {
    * @param details.LegalEntitiesName - Legal Entities Name (text input)
    * @param details.CompanyName - Company Name (text input)
    * @param details.Address - Address (text input)
-   * @param details.Country - Country (combobox)
+   * @param details.Country - Country (text input)
    * @param details.Street - Street (text input)
    * @param details.City - City (text input)
-   * @param details.State - State (combobox)
+   * @param details.State - State (text input)
    * @param details.PostalCode - Postal Code (text input)
    * @param details.Description - Description (text input)
    * @param details.Status - Status (combobox)
@@ -185,17 +185,16 @@ export default class SalesforceLegalEntitiesPage {
       console.log(`✅ Company Name filled: ${companyNameValue}`);
     }
 
-    // Handle Country combobox
+    // Handle Country textbox
     if (
       (details.Country && details.Country !== "--None--") ||
       (details["Country"] && details["Country"] !== "--None--")
     ) {
       const countryValue = details.Country || details["Country"];
-      await this.countryCombobox.click({ timeout: 10000 });
-      await this.page.getByRole("option", { name: countryValue }).click({
+      await this.countryTextbox.fill(countryValue, {
         timeout: 10000,
       });
-      console.log(`✅ Country selected: ${countryValue}`);
+      console.log(`✅ Country filled: ${countryValue}`);
     }
 
     // Fill Street field (text input)
@@ -222,19 +221,16 @@ export default class SalesforceLegalEntitiesPage {
       console.log(`✅ City filled: ${cityValue}`);
     }
 
-    // Handle State combobox
+    // Handle State textbox
     if (
       (details.State && details.State !== "--None--") ||
       (details["State"] && details["State"] !== "--None--")
     ) {
       const stateValue = details.State || details["State"];
-      await this.stateCombobox.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: stateValue, exact: true })
-        .click({
-          timeout: 10000,
-        });
-      console.log(`✅ State selected: ${stateValue}`);
+      await this.stateTextbox.fill(stateValue, {
+        timeout: 10000,
+      });
+      console.log(`✅ State filled: ${stateValue}`);
     }
 
     // Fill Postal Code field (text input)

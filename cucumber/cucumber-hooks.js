@@ -2,19 +2,68 @@
 const { After, Before, Status } = require("@cucumber/cucumber");
 const fs = require("fs");
 const path = require("path");
+const { generateScenarioReport } = require("./cucumber.scenario.report");
 
-// Ensure screenshots directory exists
-const screenshotsDir = "./cucumber-reports/screenshots/";
-if (!fs.existsSync(screenshotsDir)) {
-  fs.mkdirSync(screenshotsDir, { recursive: true });
+// Helper function to extract module and feature from scenario URI
+function getModuleAndFeatureFromScenario(scenario) {
+  let moduleName = "otherfunctionality"; // Default
+  let featureName = "general";
+
+  if (scenario.pickle && scenario.pickle.uri) {
+    const pathParts = scenario.pickle.uri.split(/[/\\]/);
+    
+    // Extract module from the path (look for the folder name after "features")
+    const featuresIndex = pathParts.findIndex(part => part.toLowerCase() === "features");
+    if (featuresIndex !== -1 && featuresIndex + 1 < pathParts.length) {
+      moduleName = pathParts[featuresIndex + 1].toLowerCase();
+    }
+
+    // Extract feature name from filename
+    const fileName = pathParts[pathParts.length - 1];
+    if (fileName) {
+      featureName = fileName
+        .replace("salesforce_", "")
+        .replace(".feature", "")
+        .toLowerCase();
+    }
+  } else if (scenario.pickle && scenario.pickle.name) {
+    // Fallback: Extract from scenario name
+    const scenarioTitle = scenario.pickle.name.toLowerCase();
+    
+    if (scenarioTitle.includes("price book")) {
+      featureName = "price-books";
+      moduleName = "sales";
+    } else if (scenarioTitle.includes("scorecard")) {
+      featureName = "scorecards";
+      moduleName = "otherfunctionality";
+    } else if (scenarioTitle.includes("contact")) {
+      featureName = "contacts";
+      moduleName = "customerdata";
+    } else if (scenarioTitle.includes("account")) {
+      featureName = "accounts";
+      moduleName = "sales";
+    } else if (scenarioTitle.includes("report")) {
+      featureName = "reports";
+      moduleName = "otherfunctionality";
+    }
+  }
+
+  return { module: moduleName, feature: featureName };
 }
 
 const takeScreenShotOnFailure = async (world, scenario) => {
-  const screenshotPath = "./cucumber-reports/screenshots/";
+  const { module: moduleName, feature: featureName } = getModuleAndFeatureFromScenario(scenario);
+  const screenshotPath = `./cucumber-reports/screenshots/${moduleName}/${featureName}/`;
   const screenshotExtn = ".png";
   const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
   const scenarioName = scenario.pickle.name.replace(/[^a-zA-Z0-9]/g, "_");
-  const fileName = `${scenarioName}_${timestamp}${screenshotExtn}`;
+  const fileName = `${scenarioName}_failure_${timestamp}${screenshotExtn}`;
+  
+  // Ensure hierarchical directory exists
+  if (!fs.existsSync(screenshotPath)) {
+    fs.mkdirSync(screenshotPath, { recursive: true });
+  }
+  
   const fullPath = path.join(screenshotPath, fileName);
 
   try {
@@ -43,11 +92,18 @@ const takeScreenShotOnFailure = async (world, scenario) => {
 };
 
 const takeScreenShotOnSuccess = async (world, scenario) => {
-  const screenshotPath = "./cucumber-reports/screenshots/";
+  const { module: moduleName, feature: featureName } = getModuleAndFeatureFromScenario(scenario);
+  const screenshotPath = `./cucumber-reports/screenshots/${moduleName}/${featureName}/`;
   const screenshotExtn = ".png";
   const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
   const scenarioName = scenario.pickle.name.replace(/[^a-zA-Z0-9]/g, "_");
   const fileName = `${scenarioName}_success_${timestamp}${screenshotExtn}`;
+  
+  // Ensure hierarchical directory exists
+  if (!fs.existsSync(screenshotPath)) {
+    fs.mkdirSync(screenshotPath, { recursive: true });
+  }
+  
   const fullPath = path.join(screenshotPath, fileName);
 
   try {
@@ -89,6 +145,17 @@ After(async function (scenario) {
   } else {
     // Optionally take screenshot on success as well
     await takeScreenShotOnSuccess(this, scenario);
+  }
+
+  // Generate report after each scenario completion
+  console.log(`📋 Generating report for scenario: ${scenario.pickle.name}`);
+  try {
+    // Add a small delay to ensure JSON report is written
+    setTimeout(() => {
+      generateScenarioReport();
+    }, 1000);
+  } catch (error) {
+    console.error("❌ Error generating scenario report:", error.message);
   }
 
   console.log(`✅ After hook completed for: ${scenario.pickle.name}`);

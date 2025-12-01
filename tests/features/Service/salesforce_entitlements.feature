@@ -26,3 +26,9 @@ Feature: Salesforce Entitlements Management
     Examples:
       | EntitlementName | Type        | StartDate  | Account                 | EndDate    | ServiceContract | BusinessHours | AssetName | SLAPolicy | PerIncident | RemainingCases | CasesPerEntitlement |
       | Web Support ENT | Web Support | 11/10/2025 | Tech Solutions Inc 2025 | 11/10/2025 |                 |               |           |           | true        |              5 |                  10 |
+
+# Account Name
+# Service Contract
+# Business Hours
+# Asset Name
+# SLA Policy

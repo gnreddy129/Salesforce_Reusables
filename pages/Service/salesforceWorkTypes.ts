@@ -149,7 +149,7 @@ export default class SalesforceWorkTypesPage {
             this.page,
             "1-start-work-type",
             this.testInfo,
-            "OtherFunctionality/salesforce-work-types/"
+            "Service/salesforce-work-types/"
         );
 
         // Open the new work type creation dialog
@@ -393,7 +393,7 @@ export default class SalesforceWorkTypesPage {
             this.page,
             "2-all-fields-filled",
             this.testInfo,
-            "OtherFunctionality/salesforce-work-types/"
+            "Service/salesforce-work-types/"
         );
 
         console.log("💾 Saving the work type...");
@@ -409,7 +409,7 @@ export default class SalesforceWorkTypesPage {
             this.page,
             "3-after-save-success",
             this.testInfo,
-            "OtherFunctionality/salesforce-work-types/"
+            "Service/salesforce-work-types/"
         );
 
         await this.page.waitForTimeout(1000);
@@ -419,7 +419,7 @@ export default class SalesforceWorkTypesPage {
             this.page,
             "4-work-types-list",
             this.testInfo,
-            "OtherFunctionality/salesforce-work-types/"
+            "Service/salesforce-work-types/"
         );
 
         console.log("🎉 Work type creation completed!");
@@ -448,7 +448,7 @@ export default class SalesforceWorkTypesPage {
             this.page,
             "5-final-verification",
             this.testInfo,
-            "OtherFunctionality/salesforce-work-types/"
+            "Service/salesforce-work-types/"
         );
 
         console.log("🎉 Verification completed!");

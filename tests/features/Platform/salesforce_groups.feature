@@ -13,11 +13,12 @@ Feature: Salesforce Groups Management
       | Access Type                 | <AccessType>                |
       | Allow customers             | <AllowCustomers>            |
       | Broadcast Only              | <BroadcastOnly>             |
+      | image                       | <image>                     |
     Then Verify group is created successfully
       | Name        | <Name>        |
       | Description | <Description> |
       | Access Type | <AccessType>  |
 
     Examples:
-      | Name       | Description                 | Information          | DisableAutomaticArchiving | AccessType | AllowCustomers | BroadcastOnly |
-      | Test Group123 | A test group for automation | Automated group info | true                      | Public     | false           | true          |
+      | Name            | Description                 | Information          | DisableAutomaticArchiving | AccessType | AllowCustomers | BroadcastOnly | image    |
+      | Test Group12345 | A test group for automation | Automated group info | true                      | Public     | false          | true          | img1.jpg |

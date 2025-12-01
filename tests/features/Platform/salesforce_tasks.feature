@@ -15,12 +15,11 @@ Feature: Salesforce Task Management
       | Status      | <Status>      |
       | Description | <Description> |
     Then Verify task is created successfully with details
-      | Field       | Value         |
-      | Subject     | <Subject>     |
+      | Field   | Value     |
+      | Subject | <Subject> |
 
     Examples:
-      | Subject            | AssignedTo    | RelatedTo      | DueDate    | Priority | Status      | Description                   |
-      | Call     | John Smith    | Test Account 1 | 2024-12-31 | High     | Not Started | Schedule follow-up sales call |
+      | Subject | AssignedTo      | RelatedTo | DueDate    | Priority | Status      | Description                   |
+      | Call    | Test5 lab | Testing   | 10/10/2023 | High     | Not Started | Schedule follow-up sales call |
       # | Email    | Sarah Johnson | Test Account 2 | 2024-11-30 | Normal   | In Progress | Review client proposal draft  |
       # | Send Letter | Michael Brown | Test Account 3 | 2024-10-31 | Low      | Completed   | Send technical documentation  |
-

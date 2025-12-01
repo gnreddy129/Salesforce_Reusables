@@ -21,7 +21,7 @@ Then(
         await groupsPage.addNewGroup(details);
 
         // Save the form
-        await groupsPage.clickSave();
+        await groupsPage.clickSave(details);
 
         console.log('✅ Step completed: Group added');
     }

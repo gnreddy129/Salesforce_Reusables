@@ -43,9 +43,8 @@ When('Add new finance transaction with following details', async ({ page }, tabl
   await finance.addNewFinanceTransaction(data);
 });
 
-Then('Verify finance transaction is created successfully with details', async ({ page }, table: DataTable) => {
+Then('Verify finance transaction is created successfully with details', async ({ page, $testInfo }, table: DataTable) => {
   const details = table.rowsHash();
-  const finance = new SalesforceFinanceTransactionsPage(page);
-  const name = details.TransactionName || details.ShortDescription;
-  await finance.verifyNewlyCreatedFinanceTransaction(name);
+  const finance = new SalesforceFinanceTransactionsPage(page, $testInfo);
+  await finance.verifyNewlyCreatedFinanceTransaction(details);
 });

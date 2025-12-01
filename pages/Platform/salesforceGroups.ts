@@ -210,7 +210,7 @@ export default class SalesforceGroupsPage {
                 this.page,
                 '01-groups-list',
                 this.testInfo,
-                'OtherFunctionality/salesforce-groups'
+                'Platform/salesforce-groups'
             );
 
             console.log('✅ Group form filled successfully');
@@ -220,7 +220,7 @@ export default class SalesforceGroupsPage {
         }
     }
 
-    async clickSave() {
+    async clickSave(details: { [field: string]: string }) {
         console.log('💾 Clicking Save & Next button...');
         try {
             // Click Save & Next button
@@ -234,8 +234,8 @@ export default class SalesforceGroupsPage {
             // Click on Upload button to select image
             console.log('📸 Clicking Upload button to select image...');
             const uploadButton = this.page.getByRole('button', { name: 'Choose File Upload Image' }).first();
-            console.log('📁 Uploading image file: img1.jpg');
-            const imgPath = 'C:\\Users\\pradhkum\\Documents\\Pk Salesforce\\testdata\\img1.jpg';
+            console.log(`📁 Uploading image file: ${details['image']}`);
+             const imgPath = './testdata/' + details['image'];
             await this.page.locator('input[type="file"]').setInputFiles(imgPath);
             console.log('✅ Image file uploaded');
 
@@ -246,7 +246,7 @@ export default class SalesforceGroupsPage {
                 this.page,
                 '02-groups-list',
                 this.testInfo,
-                'OtherFunctionality/salesforce-groups'
+                'Platform/salesforce-groups'
             );
 
             // Click Next button
@@ -317,7 +317,7 @@ export default class SalesforceGroupsPage {
                 this.page,
                 '03-groups-list',
                 this.testInfo,
-                'OtherFunctionality/salesforce-groups'
+                'Platform/salesforce-groups'
             );
 
             console.log('🎉 Verification completed!');

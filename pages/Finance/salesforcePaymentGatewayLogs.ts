@@ -408,7 +408,7 @@ export default class SalesforcePaymentGatewayLogsPage {
                 this.page,
                 '01-final-verification',
                 this.testInfo,
-                'Platform/salesforce-payment-gateway-logs'
+                'Finance/salesforce-payment-gateway-logs'
             );
 
             console.log('✅ Payment Gateway Log form filled successfully');
@@ -459,7 +459,7 @@ export default class SalesforcePaymentGatewayLogsPage {
                 this.page,
                 '03-final-verification',
                 this.testInfo,
-                'Platform/salesforce-payment-gateway-logs'
+                'Finance/salesforce-payment-gateway-logs'
             );
 
             console.log('🎉 Verification completed!');
@@ -478,7 +478,7 @@ export default class SalesforcePaymentGatewayLogsPage {
                 this.page,
                 '02-final-verification',
                 this.testInfo,
-                'Platform/salesforce-payment-gateway-logs'
+                'Finance/salesforce-payment-gateway-logs'
             );
             console.log('✅ Save completed - dialog closed');
 

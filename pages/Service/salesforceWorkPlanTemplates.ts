@@ -104,7 +104,7 @@ export default class SalesforceWorkPlanTemplatesPage {
             this.page,
             "1-start-work-plan-template",
             this.testInfo,
-            "OtherFunctionality/salesforce-work-plan-templates/"
+            "Service/salesforce-work-plan-templates/"
         );
 
         // Open the new work plan template creation dialog
@@ -174,7 +174,7 @@ export default class SalesforceWorkPlanTemplatesPage {
             this.page,
             "2-all-fields-filled",
             this.testInfo,
-            "OtherFunctionality/salesforce-work-plan-templates/"
+            "Service/salesforce-work-plan-templates/"
         );
 
         console.log("💾 Saving the work plan template...");
@@ -190,7 +190,7 @@ export default class SalesforceWorkPlanTemplatesPage {
             this.page,
             "3-after-save-success",
             this.testInfo,
-            "OtherFunctionality/salesforce-work-plan-templates/"
+            "Service/salesforce-work-plan-templates/"
         );
 
         await this.page.waitForTimeout(1000);
@@ -200,7 +200,7 @@ export default class SalesforceWorkPlanTemplatesPage {
             this.page,
             "4-work-plan-templates-list",
             this.testInfo,
-            "OtherFunctionality/salesforce-work-plan-templates/"
+            "Service/salesforce-work-plan-templates/"
         );
 
         console.log("🎉 Work plan template creation completed!");
@@ -229,7 +229,7 @@ export default class SalesforceWorkPlanTemplatesPage {
             this.page,
             "5-final-verification",
             this.testInfo,
-            "OtherFunctionality/salesforce-work-plan-templates/"
+            "Service/salesforce-work-plan-templates/"
         );
 
         console.log("🎉 Verification completed!");

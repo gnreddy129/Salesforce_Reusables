@@ -4,16 +4,115 @@ const reporter = require("cucumber-html-reporter");
 const path = require("path");
 const fs = require("fs");
 
+// Comprehensive mapping of all Salesforce features to their modules and folders
+const FEATURE_MODULE_MAP = {
+  // CustomerData Module
+  "authorization-form-consent": { module: "customerdata", feature: "authorization-form-consent" },
+  "authorization-form-data-use": { module: "customerdata", feature: "authorization-form-data-use" },
+  "authorization-form-text": { module: "customerdata", feature: "authorization-form-text" },
+  "authorization-form": { module: "customerdata", feature: "authorization-form" },
+  "communication-subscription-channel-types": { module: "customerdata", feature: "communication-subscription-channel-types" },
+  "communication-subscriptions": { module: "customerdata", feature: "communication-subscriptions" },
+  "contact-point-consent": { module: "customerdata", feature: "contact-point-consent" },
+  "contact-requests": { module: "customerdata", feature: "contact-requests" },
+  "contacts": { module: "customerdata", feature: "contacts" },
+  "customers": { module: "customerdata", feature: "customers" },
+  "data-use-legal-basis": { module: "customerdata", feature: "data-use-legal-basis" },
+  "data-use-purpose": { module: "customerdata", feature: "data-use-purpose" },
+  "individuals": { module: "customerdata", feature: "individuals" },
+  "legal-entities": { module: "customerdata", feature: "legal-entities" },
+  "party-consent": { module: "customerdata", feature: "party-consent" },
+
+  // Sales Module
+  "accounts": { module: "sales", feature: "accounts" },
+  "leads": { module: "sales", feature: "leads" },
+  "opportunities": { module: "sales", feature: "opportunities" },
+  "orders": { module: "sales", feature: "orders" },
+  "price-books": { module: "sales", feature: "price-books" },
+  "products": { module: "sales", feature: "products" },
+  "sellers": { module: "sales", feature: "sellers" },
+
+  // OtherFunctionality Module
+  "reports": { module: "otherfunctionality", feature: "reports" },
+  "appointment-categories": { module: "otherfunctionality", feature: "appointment-categories" },
+  "appointment-invitations": { module: "otherfunctionality", feature: "appointment-invitations" },
+  "business-brands": { module: "otherfunctionality", feature: "business-brands" },
+  "calendar": { module: "otherfunctionality", feature: "calendar" },
+  "catalog": { module: "otherfunctionality", feature: "catalog" },
+  "categories": { module: "otherfunctionality", feature: "categories" },
+  "consumption-schedules": { module: "otherfunctionality", feature: "consumption-schedules" },
+  "contracts": { module: "otherfunctionality", feature: "contracts" },
+  "files": { module: "otherfunctionality", feature: "files" },
+  "images": { module: "otherfunctionality", feature: "images" },
+  "labels": { module: "otherfunctionality", feature: "labels" },
+  "list-emails": { module: "otherfunctionality", feature: "list-emails" },
+  "operating-hours": { module: "otherfunctionality", feature: "operating-hours" },
+  "process-exceptions": { module: "otherfunctionality", feature: "process-exceptions" },
+  "scorecards": { module: "otherfunctionality", feature: "scorecards" },
+  "shifts": { module: "otherfunctionality", feature: "shifts" },
+  "streaming-channels": { module: "otherfunctionality", feature: "streaming-channels" },
+
+  // Platform Module
+  "custom-libraries": { module: "platform", feature: "custom-libraries" },
+  "dashboards": { module: "platform", feature: "dashboards" },
+  "email-templates": { module: "platform", feature: "email-templates" },
+  "enhanced-letterheads": { module: "platform", feature: "enhanced-letterheads" },
+  "groups": { module: "platform", feature: "groups" },
+  "quick-texts": { module: "platform", feature: "quick-texts" },
+  "tasks": { module: "platform", feature: "tasks" },
+
+  // Finance Module
+  "alternative-payment": { module: "finance", feature: "alternative-payment" },
+  "financetransactions": { module: "finance", feature: "financetransactions" },
+  "payment-authorization-adjustments": { module: "finance", feature: "payment-authorization-adjustments" },
+  "payment-authorization": { module: "finance", feature: "payment-authorization" },
+  "payment-gateway-logs": { module: "finance", feature: "payment-gateway-logs" },
+  "payments": { module: "finance", feature: "payments" },
+  "refund-line-payments": { module: "finance", feature: "refund-line-payments" },
+  "refunds": { module: "finance", feature: "refunds" },
+
+  // Inventory Module
+  "assets": { module: "inventory", feature: "assets" },
+  "inventoryresevations": { module: "inventory", feature: "inventoryresevations" },
+  "location-groups": { module: "inventory", feature: "location-groups" },
+  "return-order": { module: "inventory", feature: "return-order" },
+  "shipping-carrier-methods": { module: "inventory", feature: "shipping-carrier-methods" },
+  "shipping-carriers": { module: "inventory", feature: "shipping-carriers" },
+
+  // Marketing Module
+  "campaign": { module: "marketing", feature: "campaign" },
+  "coupons": { module: "marketing", feature: "coupons" },
+  "engagement-channel-types": { module: "marketing", feature: "engagement-channel-types" },
+  "promotion-segments": { module: "marketing", feature: "promotion-segments" },
+  "promotions": { module: "marketing", feature: "promotions" },
+
+  // Service Module
+  "cases": { module: "service", feature: "cases" },
+  "change-requests": { module: "service", feature: "change-requests" },
+  "entitlements": { module: "service", feature: "entitlements" },
+  "incidents": { module: "service", feature: "incidents" },
+  "problems": { module: "service", feature: "problems" },
+  "service-appointments": { module: "service", feature: "service-appointments" },
+  "service-resources": { module: "service", feature: "service-resources" },
+  "service-territories": { module: "service", feature: "service-territories" },
+  "service-contracts": { module: "service", feature: "service-contracts" },
+  "work-orders": { module: "service", feature: "work-orders" },
+  "work-plan-templates": { module: "service", feature: "work-plan-templates" },
+  "work-plans": { module: "service", feature: "work-plans" },
+  "work-type-groups": { module: "service", feature: "work-type-groups" },
+  "work-types": { module: "service", feature: "work-types" }
+};
+
 // Extract module and feature details from the cucumber report JSON
 function getModuleAndFeatureFromReport(jsonPath) {
   try {
     const reportData = JSON.parse(fs.readFileSync(jsonPath, "utf8"));
     if (reportData && reportData.length > 0) {
       const firstFeature = reportData[0];
-      let moduleName = "otherfunctionality"; // Default based on current test
+      let moduleName = "otherfunctionality"; // Default
       let featureName = "general";
 
-      // Check if there's a URI field (path-based detection)
+      // Check if there's a URI field (path-based detection) - Most reliable method
       if (firstFeature.uri) {
         const pathParts = firstFeature.uri.split(/[/\\]/); // Handle both forward and back slashes
 
@@ -28,50 +127,34 @@ function getModuleAndFeatureFromReport(jsonPath) {
         // Extract simple feature name from filename
         const fileName = pathParts[pathParts.length - 1];
         if (fileName) {
-          featureName = fileName
+          const extractedFeature = fileName
             .replace("salesforce_", "")
+            .replace("salesforce-", "")
             .replace(".feature", "")
             .toLowerCase();
+
+          // Check if extracted feature exists in our comprehensive mapping
+          if (FEATURE_MODULE_MAP[extractedFeature]) {
+            return FEATURE_MODULE_MAP[extractedFeature];
+          }
+          
+          featureName = extractedFeature;
         }
       } else {
-        // Fallback: Extract from feature name/content
+        // Fallback: Extract from feature name/content using comprehensive mapping
         if (firstFeature.name) {
           const featureTitle = firstFeature.name.toLowerCase();
-
-          // Feature detection
-          if (featureTitle.includes("price book")) {
-            featureName = "price-books";
-            moduleName = "sales";
-          } else if (featureTitle.includes("scorecard")) {
-            featureName = "scorecards";
-            moduleName = "otherfunctionality";
-          } else if (featureTitle.includes("location group")) {
-            featureName = "location-groups";
-            moduleName = "inventory";
-          } else if (featureTitle.includes("streaming channel")) {
-            featureName = "streaming-channels";
-            moduleName = "otherfunctionality";
-          } else if (featureTitle.includes("image")) {
-            featureName = "images";
-            moduleName = "otherfunctionality";
-          } else if (featureTitle.includes("lead")) {
-            featureName = "leads";
-            moduleName = "sales";
-          } else if (featureTitle.includes("account")) {
-            featureName = "accounts";
-            moduleName = "sales";
-          } else if (featureTitle.includes("opportunity")) {
-            featureName = "opportunities";
-            moduleName = "sales";
-          } else if (featureTitle.includes("case")) {
-            featureName = "cases";
-            moduleName = "service";
-          } else if (featureTitle.includes("work order")) {
-            featureName = "work-orders";
-            moduleName = "service";
-          } else if (featureTitle.includes("contact")) {
-            featureName = "contacts";
-            moduleName = "customerdata";
+          
+          // Try to find matching feature from title keywords
+          for (const [featureKey, mapping] of Object.entries(FEATURE_MODULE_MAP)) {
+            const featureKeywords = featureKey.split('-');
+            const hasAllKeywords = featureKeywords.every(keyword => 
+              featureTitle.includes(keyword.replace('_', ''))
+            );
+            
+            if (hasAllKeywords) {
+              return mapping;
+            }
           }
         }
       }
@@ -84,6 +167,48 @@ function getModuleAndFeatureFromReport(jsonPath) {
     );
   }
   return { module: "general", feature: "general" };
+}
+
+// Function to organize screenshots hierarchically
+function organizeScreenshots(moduleName, featureName) {
+  const flatScreenshotsDir = "cucumber-reports/screenshots";
+  const hierarchicalScreenshotsDir = `cucumber-reports/screenshots/${moduleName}/${featureName}`;
+  
+  // Create hierarchical screenshot directory
+  if (!fs.existsSync(hierarchicalScreenshotsDir)) {
+    fs.mkdirSync(hierarchicalScreenshotsDir, { recursive: true });
+  }
+
+  // Check if there are any flat screenshots to organize
+  if (fs.existsSync(flatScreenshotsDir)) {
+    try {
+      const items = fs.readdirSync(flatScreenshotsDir);
+      items.forEach((item) => {
+        const itemPath = path.join(flatScreenshotsDir, item);
+        
+        // Only process PNG files (skip directories)
+        if (fs.statSync(itemPath).isFile() && item.endsWith('.png')) {
+          // Check if screenshot belongs to current feature
+          const lowercaseFilename = item.toLowerCase();
+          const featureKeywords = featureName.split('-');
+          const belongsToFeature = featureKeywords.some(keyword => 
+            lowercaseFilename.includes(keyword.replace('_', ''))
+          );
+          
+          if (belongsToFeature) {
+            const targetPath = path.join(hierarchicalScreenshotsDir, item);
+            // Move the screenshot to hierarchical location
+            if (!fs.existsSync(targetPath)) {
+              fs.renameSync(itemPath, targetPath);
+              console.log(`📁 Organized screenshot: ${item} → ${moduleName}/${featureName}/`);
+            }
+          }
+        }
+      });
+    } catch (error) {
+      console.log("⚠️ Error organizing screenshots:", error.message);
+    }
+  }
 }
 
 // Get module and feature details from the report
@@ -106,6 +231,9 @@ if (!fs.existsSync(featureDir)) {
   fs.mkdirSync(featureDir, { recursive: true });
 }
 
+// Organize screenshots hierarchically
+organizeScreenshots(moduleName, featureName);
+
 const now = new Date();
 const options = {
   jsonFile: "cucumber-reports/cucumber-report.json",
@@ -114,7 +242,7 @@ const options = {
   output: path.join(featureDir, "report.html"), // Hierarchical: module/feature/report.html
   reportSuiteAsScenarios: true,
   scenarioTimestamp: false, // Remove timestamps from scenarios
-  screenshotsDirectory: `cucumber-reports/screenshots/${moduleName}/`,
+  screenshotsDirectory: `cucumber-reports/screenshots/${moduleName}/${featureName}/`,
   storeScreenshots: true,
   theme: "bootstrap",
   brandTitle: `Salesforce ${moduleName.toUpperCase()} - ${featureName

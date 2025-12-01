@@ -421,7 +421,7 @@ export default class SalesforcePaymentAuthorizationAdjustmentsPage {
                 this.page,
                 '01-payment-authorization-adjustments-list',
                 this.testInfo,
-                'Platform/salesforce-payment-authorization-adjustments'
+                'Finance/salesforce-payment-authorization-adjustments'
             );
 
             console.log('✅ Payment Authorization Adjustment form filled successfully');
@@ -442,7 +442,7 @@ export default class SalesforcePaymentAuthorizationAdjustmentsPage {
                 this.page,
                 '02-payment-authorization-adjustments-list',
                 this.testInfo,
-                'Platform/salesforce-payment-authorization-adjustments'
+                'Finance/salesforce-payment-authorization-adjustments'
             );
             console.log('✅ Save completed - dialog closed');
 
@@ -514,7 +514,7 @@ export default class SalesforcePaymentAuthorizationAdjustmentsPage {
                 this.page,
                 '03-payment-authorization-adjustments-list',
                 this.testInfo,
-                'Platform/salesforce-payment-authorization-adjustments'
+                'Finance/salesforce-payment-authorization-adjustments'
             );
 
             console.log('🎉 Verification completed!');

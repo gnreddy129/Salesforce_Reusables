@@ -35,10 +35,10 @@ export default class SalesforceServiceTerritoriesPage {
   readonly parentTerritoryCombobox: Locator;
   readonly operatingHoursCombobox: Locator;
   readonly activeCheckbox: Locator;
-  readonly countryCombobox: Locator;
+  readonly countryTextbox: Locator;
   readonly addressInput: Locator;
   readonly cityInput: Locator;
-  readonly stateProvinceCombobox: Locator;
+  readonly stateProvinceTextbox: Locator;
   readonly zipPostalCodeInput: Locator;
   readonly descriptionInput: Locator;
 
@@ -78,7 +78,7 @@ export default class SalesforceServiceTerritoriesPage {
     this.activeCheckbox = page.getByRole("checkbox", {
       name: "Active",
     });
-    this.countryCombobox = page.getByRole("combobox", {
+    this.countryTextbox = page.getByRole("textbox", {
       name: "Country",
     });
     this.addressInput = page.getByRole("textbox", {
@@ -87,7 +87,7 @@ export default class SalesforceServiceTerritoriesPage {
     this.cityInput = page.getByRole("textbox", {
       name: "City",
     });
-    this.stateProvinceCombobox = page.getByRole("combobox", {
+    this.stateProvinceTextbox = page.getByRole("textbox", {
       name: "State/Province",
     });
     this.zipPostalCodeInput = page.getByRole("textbox", {
@@ -120,10 +120,10 @@ export default class SalesforceServiceTerritoriesPage {
    * @param details.ParentTerritory - Parent Territory (combobox selection from Recent Service Territories)
    * @param details.OperatingHours - Operating Hours (combobox selection from Recent Operating Hours - REQUIRED)
    * @param details.Active - Active status (checkbox - true/false)
-   * @param details.Country - Country (combobox selection from country list)
+   * @param details.Country - Country (text input)
    * @param details.Address - Address (text input)
    * @param details.City - City (text input)
-   * @param details.StateProvince - State/Province (combobox selection from state/province list)
+   * @param details.StateProvince - State/Province (text input)
    * @param details.ZipPostalCode - Zip/Postal Code (text input)
    * @param details.Description - Description (text input)
    *
@@ -233,20 +233,16 @@ export default class SalesforceServiceTerritoriesPage {
       console.log(`✅ Active status set to: ${activeValue}`);
     }
 
-    // Fill Country field (combobox)
+    // Fill Country field (textbox input)
     if (
       (details.Country && details.Country !== "--None--") ||
       (details["Country"] && details["Country"] !== "--None--")
     ) {
       const countryValue = details.Country || details["Country"];
-      await this.countryCombobox.click({ timeout: 10000 });
-
-      // Wait for dropdown and select country option
-      await this.page
-        .getByRole("option", { name: countryValue })
-        .first()
-        .click({ timeout: 5000 });
-      console.log(`✅ Country selected: ${countryValue}`);
+      await this.countryTextbox.fill(countryValue, {
+        timeout: 10000,
+      });
+      console.log(`✅ Country filled: ${countryValue}`);
     }
 
     // Fill Address field (text input)
@@ -273,22 +269,16 @@ export default class SalesforceServiceTerritoriesPage {
       console.log(`✅ City filled: ${cityValue}`);
     }
 
-    // Fill State/Province field (combobox)
+    // Fill State/Province field (textbox input)
     if (
       (details.StateProvince && details.StateProvince !== "--None--") ||
       (details["State/Province"] && details["State/Province"] !== "--None--")
     ) {
-      const stateProvinceValue =
-        details.StateProvince || details["State/Province"];
-      await this.stateProvinceCombobox.click({ timeout: 10000 });
-
-      // Wait for dropdown and select state/province option
-      await this.page
-        .getByRole("option", { name: stateProvinceValue })
-        .first()
-        .click({ timeout: 5000 });
-
-      console.log(`✅ State/Province selected: ${stateProvinceValue}`);
+      const stateProvinceValue = details.StateProvince || details["State/Province"];
+      await this.stateProvinceTextbox.fill(stateProvinceValue, {
+        timeout: 10000,
+      });
+      console.log(`✅ State/Province filled: ${stateProvinceValue}`);
     }
 
     // Fill Zip/Postal Code field (text input)

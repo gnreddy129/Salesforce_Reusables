@@ -104,7 +104,7 @@ export default class SalesforceWorkTypeGroupsPage {
             this.page,
             "1-start-work-type-group",
             this.testInfo,
-            "OtherFunctionality/salesforce-work-type-groups/"
+            "Service/salesforce-work-type-groups/"
         );
 
         // Open the new work type group creation dialog
@@ -186,7 +186,7 @@ export default class SalesforceWorkTypeGroupsPage {
             this.page,
             "2-all-fields-filled",
             this.testInfo,
-            "OtherFunctionality/salesforce-work-type-groups/"
+            "Service/salesforce-work-type-groups/"
         );
 
         console.log("💾 Saving the work type group...");
@@ -202,7 +202,7 @@ export default class SalesforceWorkTypeGroupsPage {
             this.page,
             "3-after-save-success",
             this.testInfo,
-            "OtherFunctionality/salesforce-work-type-groups/"
+            "Service/salesforce-work-type-groups/"
         );
 
         await this.page.waitForTimeout(1000);
@@ -212,7 +212,7 @@ export default class SalesforceWorkTypeGroupsPage {
             this.page,
             "4-work-type-groups-list",
             this.testInfo,
-            "OtherFunctionality/salesforce-work-type-groups/"
+            "Service/salesforce-work-type-groups/"
         );
 
         console.log("🎉 Work type group creation completed!");
@@ -241,7 +241,7 @@ export default class SalesforceWorkTypeGroupsPage {
             this.page,
             "5-final-verification",
             this.testInfo,
-            "OtherFunctionality/salesforce-work-type-groups/"
+            "Service/salesforce-work-type-groups/"
         );
 
         console.log("🎉 Verification completed!");
