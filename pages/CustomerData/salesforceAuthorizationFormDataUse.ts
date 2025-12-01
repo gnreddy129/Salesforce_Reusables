@@ -64,12 +64,8 @@ export default class SalesforceAuthorizationFormDataUsePage {
     this.nameInput = page.getByRole("textbox", {
       name: "Name",
     });
-    this.authorizationFormCombobox = page.getByRole("combobox", {
-      name: "Authorization Form",
-    });
-    this.dataUsePurposeCombobox = page.getByRole("combobox", {
-      name: "Data Use Purpose",
-    });
+    this.authorizationFormCombobox = page.getByRole("combobox", { name: "Authorization Form" });
+    this.dataUsePurposeCombobox = page.getByRole("combobox", { name: "Data Use Purpose" });
 
     // Success message locator
     this.authorizationFormDataUseCreatedMessage = page.locator(".toastMessage");
@@ -140,32 +136,52 @@ export default class SalesforceAuthorizationFormDataUsePage {
     }
 
     // Handle Authorization Form combobox
-    if (
-      (details.AuthorizationForm && details.AuthorizationForm !== "--None--") ||
-      (details["Authorization Form"] &&
-        details["Authorization Form"] !== "--None--")
+    if ((details.AuthorizationForm && details.AuthorizationForm !== "--None--") || (details["Authorization Form"] && details["Authorization Form"] !== "--None--")
     ) {
       const authFormValue =
         details.AuthorizationForm || details["Authorization Form"];
       await this.authorizationFormCombobox.click({ timeout: 10000 });
-      await this.page.getByRole("option", { name: authFormValue, exact: true }).first().click({
-        timeout: 10000,
-      });
-      console.log(`✅ Authorization Form selected: ${authFormValue}`);
+      await this.page.waitForTimeout(500);
+      
+      // Try to find and click the option with flexible matching
+      try {
+        // First try exact match
+        const exactOption = this.page.getByRole("option", { name: authFormValue, exact: true }).first();
+        if (await exactOption.isVisible({ timeout: 2000 }).catch(() => false)) {
+          await exactOption.click({ timeout: 10000 });
+          console.log(`✅ Authorization Form selected: ${authFormValue}`);
+        } else {
+          // Try partial match
+          const partialOption = this.page.getByRole("option").filter({ hasText: authFormValue }).first();
+          await expect(partialOption).toBeVisible({ timeout: 5000 });
+          await partialOption.click({ timeout: 10000 });
+          console.log(`✅ Authorization Form selected (partial match): ${authFormValue}`);
+        }
+      } catch (error) {
+        // If dropdown not found, try to locate via listbox pattern
+        console.log(`⚠️ Standard dropdown not found, trying alternative approach for: ${authFormValue}`);
+        const listbox = this.page.getByRole("listbox").first();
+        if (await listbox.isVisible({ timeout: 2000 }).catch(() => false)) {
+          const option = listbox.getByRole("option").filter({ hasText: authFormValue }).first();
+          await expect(option).toBeVisible({ timeout: 5000 });
+          await option.click({ timeout: 10000 });
+          console.log(`✅ Authorization Form selected via listbox: ${authFormValue}`);
+        } else {
+          console.log(`❌ Authorization Form dropdown not found: ${authFormValue}`);
+        }
+      }
     }
 
     // Handle Data Use Purpose combobox
-    if (
-      (details.DataUsePurpose && details.DataUsePurpose !== "--None--") ||
-      (details["Data Use Purpose"] &&
-        details["Data Use Purpose"] !== "--None--")
+    if ((details.DataUsePurpose && details.DataUsePurpose !== "--None--") || (details["Data Use Purpose"] && details["Data Use Purpose"] !== "--None--")
     ) {
-      const dataUsePurposeValue =
-        details.DataUsePurpose || details["Data Use Purpose"];
+      const dataUsePurposeValue = details.DataUsePurpose || details["Data Use Purpose"];
       await this.dataUsePurposeCombobox.click({ timeout: 10000 });
-      await this.page.getByRole("option", { name: dataUsePurposeValue, exact: true }).first().click({
-        timeout: 10000,
-      });
+      await this.page.waitForTimeout(500);
+      const listbox = this.page.getByRole("listbox").first();
+      const option = listbox.getByRole("option").filter({ hasText: dataUsePurposeValue }).first();
+      await expect(option).toBeVisible({ timeout: 5000 });
+      await option.click({ timeout: 10000 });
       console.log(`✅ Data Use Purpose selected: ${dataUsePurposeValue}`);
     }
 

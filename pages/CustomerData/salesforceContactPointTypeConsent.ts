@@ -5,7 +5,20 @@ import { Helper } from "../../utils/helper";
  * SalesforceContactPointTypeConsent Page Object Model
  *
  * This class provides automation capabilities for Salesforce Contact Point Type Consent management functionality.
- * It handles contact point type consent creation, form interactions, and verification processes with robust
+ * It handles contact point type consent creation, form interac    // Handle Capture Contact Point Type
+    if (details["Capture Contact Point Type"]) {
+      await this.captureContactPointTypeInput.click();
+      await this.page
+        .getByRole("option", {
+          name: details["Capture Contact Point Type"],
+          exact: true,
+        })
+        .first()
+        .click();
+      console.log(
+        `✅ Selected Capture Contact Point Type: ${details["Capture Contact Point Type"]}`
+      );
+    }rification processes with robust
  * locator strategies and timeout configurations for reliable test execution.
  *
  * Features:
@@ -167,22 +180,23 @@ export default class SalesforceContactPointTypeConsentPage {
     this.doubleConsentCaptureDateParent = page.getByRole("group", {
       name: "Double Consent Capture Date",
     });
-    this.doubleConsentCaptureDateDateInput =
-      this.doubleConsentCaptureDateParent.getByRole("textbox", {
-        name: "Date",
-      });
-    this.doubleConsentCaptureDateTimeInput =
-      this.doubleConsentCaptureDateParent.getByRole("combobox", {
-        name: "Time",
-      });
+    this.doubleConsentCaptureDateDateInput = this.doubleConsentCaptureDateParent.getByRole("textbox", { name: "Date", }).first();
+    this.doubleConsentCaptureDateTimeInput = this.doubleConsentCaptureDateParent.getByRole("combobox", { name: "Time", }).first();
 
     this.captureDateParent = page.getByRole("group", {
       name: "Capture Date",
+      exact: true,
     });
-    this.captureDateDateInput = this.captureDateParent.getByRole("textbox", {
+    this.captureDateDateInput = page.getByRole("group", {
+      name: "Capture Date",
+      exact: true,
+    }).getByRole("textbox", {
       name: "Date",
     });
-    this.captureDateTimeInput = this.captureDateParent.getByRole("combobox", {
+    this.captureDateTimeInput = page.getByRole("group", {
+      name: "Capture Date",
+      exact: true,
+    }).getByRole("combobox", {
       name: "Time",
     });
 
@@ -246,6 +260,7 @@ export default class SalesforceContactPointTypeConsentPage {
           name: details["Contact Point Type"],
           exact: true,
         })
+        .first()
         .click();
       console.log(
         `✅ Selected Contact Point Type: ${details["Contact Point Type"]}`
@@ -264,6 +279,7 @@ export default class SalesforceContactPointTypeConsentPage {
       await this.businessBrandInput.click();
       await this.page
         .getByRole("option", { name: details["Business Brand"], exact: true })
+        .first()
         .click();
       console.log(`✅ Selected Business Brand: ${details["Business Brand"]}`);
     }
@@ -283,6 +299,7 @@ export default class SalesforceContactPointTypeConsentPage {
       await this.partyRoleInput.click();
       await this.page
         .getByRole("option", { name: details["Party Role"], exact: true })
+        .first()
         .click();
       console.log(`✅ Selected Party Role: ${details["Party Role"]}`);
     }
@@ -295,6 +312,7 @@ export default class SalesforceContactPointTypeConsentPage {
           name: details["Privacy Consent Status"],
           exact: true,
         })
+        .first()
         .click();
       console.log(
         `✅ Selected Privacy Consent Status: ${details["Privacy Consent Status"]}`
@@ -369,6 +387,7 @@ export default class SalesforceContactPointTypeConsentPage {
           name: details["Capture Contact Point Type"],
           exact: true,
         })
+        .first()
         .click();
       console.log(
         `✅ Selected Capture Contact Point Type: ${details["Capture Contact Point Type"]}`

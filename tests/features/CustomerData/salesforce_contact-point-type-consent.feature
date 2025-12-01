@@ -7,6 +7,7 @@ Feature: Salesforce Contact Point Type Consent Management
     Then Add new Contact Point Type Consent with following details
       | Field                            | Value                          |
       | Name                             | <Name>                         |
+      | Party                            | <Party>                        |
       | Contact Point Type               | <ContactPointType>             |
       | Data Use Purpose                 | <DataUsePurpose>               |
       | Privacy Consent Status           | <PrivacyConsentStatus>         |
@@ -27,6 +28,5 @@ Feature: Salesforce Contact Point Type Consent Management
       | Name  | <Name> |
 
     Examples:
-      | Name                       | ContactPointType | DataUsePurpose | PrivacyConsentStatus | PartyRoleChooseObject | PartyRole | BusinessBrand | EffectiveFromDate | EffectiveFromTime | EffectiveToDate | EffectiveToTime | CaptureSource | CaptureDateDate | CaptureDateTime | DoubleConsentCaptureDateDate | DoubleConsentCaptureDateTime |
-      | Email Consent Type Example | Email            | GDPR           | Opt In               | Customer              | John Doe  | ABC Brand     |        10/10/2024 |          10:30 AM |      11/11/2025 |        10:30 AM | Website Form  |      07/10/2024 |        10:30 AM |                   12/05/2024 |                     10:30 AM |
-      # | Phone Consent Type Example            | Marketing Phone  | Advertising    | Opt Out              | Lead                  | Jane Smith | XYZ Brand     |        11/30/2024 |          02:15 PM |      12/31/2025 |        02:15 PM | Mobile App    |      08/15/2024 |        02:15 PM |                   01/10/2025 |                     02:15 PM |
+      | Name                       | ContactPointType | Party    | DataUsePurpose | PrivacyConsentStatus | PartyRoleChooseObject | PartyRole | BusinessBrand | EffectiveFromDate | EffectiveFromTime | EffectiveToDate | EffectiveToTime | CaptureSource | CaptureDateDate | CaptureDateTime | DoubleConsentCaptureDateDate | DoubleConsentCaptureDateTime |
+      | Email Consent Type Example | Email            | John Doe | GDPR           | Opt In               | Customer              | John Doe  | ABC Brand     |        10/10/2024 |          10:30 AM |      11/11/2025 |        10:30 AM | Website Form  |      07/10/2024 |        10:30 AM |                   12/05/2024 |                     10:30 AM |

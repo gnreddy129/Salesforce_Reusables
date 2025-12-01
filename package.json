@@ -6,6 +6,7 @@
   "scripts": {
     "cli": "node cli/cli-runner.js",
     "test": "npx playwright test",
+    "open:dashboard": "node cucumber/open-dashboard.js",
     "test:cucumber": "npx cucumber-js --config cucumber/cucumber.js",
     "simple:report": "node cucumber/cucumber.simple.report.js",
     "analyze:screenshots": "node cucumber/screenshot-analyzer.js",
