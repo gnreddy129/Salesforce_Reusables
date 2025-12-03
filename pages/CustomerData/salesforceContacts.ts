@@ -21,8 +21,8 @@ import { Helper } from "../../utils/helper";
 export class SalesforceContactsPage {
   readonly page: Page;
   private testInfo?: TestInfo;
+  
   // Primary Action Buttons
-  readonly newContactButton: Locator;
   readonly saveButton: Locator;
 
   // Personal Information Fields
@@ -83,10 +83,6 @@ export class SalesforceContactsPage {
     this.page = page;
     this.testInfo = testInfo;
 
-    // Primary action buttons - Contact creation and saving
-    this.newContactButton = page.locator(
-      'div[title="New"] button, button:has-text("New")'
-    );
     this.saveButton = page.getByRole("button", { name: "Save", exact: true });
 
     // Personal information dropdown fields
@@ -226,7 +222,6 @@ export class SalesforceContactsPage {
   async addNewContact(details: { [key: string]: string }) {
     console.log("🔄 Starting contact creation process...");
     console.log("📝 Contact details:", JSON.stringify(details, null, 2));
-    await expect(this.newContactButton).toBeVisible({ timeout: 10000 });
     // Take start screenshot for verification
     await Helper.takeScreenshotToFile(
       this.page,
@@ -234,10 +229,6 @@ export class SalesforceContactsPage {
       this.testInfo,
       "CustomerData/salesforce-contacts/"
     );
-
-    // Click New Contact
-    await this.newContactButton.click({ timeout: 10000 });
-    console.log("✅ Contact creation dialog opened");
 
     console.log("📋 Filling form fields...");
 

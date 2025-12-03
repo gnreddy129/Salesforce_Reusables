@@ -1,6 +1,6 @@
-<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="56.435186">
-<testsuite name="tests\features\CustomerData\salesforce_authorization-form-data-use.feature.spec.js" timestamp="2025-12-01T10:31:36.636Z" hostname="Google Chrome" tests="1" failures="0" skipped="0" time="51.561" errors="0">
-<testcase name="Salesforce Authorization Form Data Use Management › Create and Manage New Authorization Form Data Use with Different Data › Example #1" classname="tests\features\CustomerData\salesforce_authorization-form-data-use.feature.spec.js" time="51.561">
+<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="51.589377999999996">
+<testsuite name="tests\features\IntegrationTest\accounts_opportunities.feature.spec.js" timestamp="2025-12-03T09:06:33.410Z" hostname="Google Chrome" tests="1" failures="0" skipped="0" time="46.691" errors="0">
+<testcase name="Create account module then click on first account on list and add opportunities on it. › Create a new business account with complete details › Example #1" classname="tests\features\IntegrationTest\accounts_opportunities.feature.spec.js" time="46.691">
 <system-out>
 <![CDATA[🚀 Initializing SalesforceLogin page object
 ✅ SalesforceLogin page object initialized successfully with all locators
@@ -23,12 +23,8 @@ Screenshot saved: yopmail/1-start-case.png
 Screenshot saved: yopmail/2-end-case.png
 ✅ Email inbox accessed successfully
 🔄 Extracting verification code from email...
-⚠️ Attempt 1: Refreshing inbox...
-🔄 Refreshing email inbox...
-✅ Inbox refreshed successfully
-🔄 Extracting verification code from email...
 Screenshot saved: yopmail/3-verification.png
-🎉 Verification code extracted successfully: 602157
+🎉 Verification code extracted successfully: 547793
 ✅ Verification code retrieved successfully
 🔐 Entering verification code...
 Screenshot saved: 2-end-login
@@ -38,107 +34,72 @@ Screenshot saved: 2-end-login
 🚀 Initializing SalesforceHome page object
 ✅ SalesforceHome page object initialized successfully with all locators
 🔄 Starting app search and navigation...
-📱 Searching for app: Authorization Form Data Use
+📱 Searching for app: Accounts
 ✅ App launcher is visible
 Screenshot saved: 1-start-app-search
 ✅ App launcher opened
 🔍 Searched for app in search box
 Screenshot saved: 2-end-app-navigation
-✅ Successfully navigated to Authorization Form Data Use app
+✅ Successfully navigated to Accounts app
 🎉 App navigation completed!
-🚀 Initializing SalesforceAuthorizationFormDataUse page object
-✅ SalesforceAuthorizationFormDataUse page object initialized successfully with all locators
-🔄 Starting authorization form data use creation process...
-📝 Authorization Form Data Use details: {
-  "Field": "Value",
-  "Name": "GDPR Data Use",
-  "Authorization Form": "Test",
-  "Data Use Purpose": "Test"
+🚀 Initializing SalesforceHome page object
+✅ SalesforceHome page object initialized successfully with all locators
+🔄 Starting New Page creation process...
+Screenshot saved: 1-start-opportunity
+✅ Opportunity creation dialog opened
+🚀 Initializing SalesforceAccounts page object
+✅ SalesforceAccounts page object initialized successfully with all locators
+🔄 Starting account creation process...
+📝 Account details: {
+  "Field Name": "Value",
+  "Account Name": "Tech Solutions Inc 2025",
+  "Phone": "555-0123",
+  "Industry": "Technology",
+  "Type": "Technology Partner",
+  "Website": "www.techsol2025.com",
+  "Employees": "500",
+  "Description": "A leading technology company specializing in enterprise solutions",
+  "Rating": "Hot",
+  "Account Site": "Headquarters",
+  "Account Number": "ACC2025",
+  "Annual Revenue": "5000000"
 }
-Screenshot saved: 1-start-authorization-form-data-use
-✅ Authorization Form Data Use creation form opened
-✅ Authorization Form Data Use form fields are now visible
+Screenshot saved: 1-start-account
 📋 Filling form fields...
-✅ Name filled: GDPR Data Use
-✅ Authorization Form selected: Test
-✅ Data Use Purpose selected: Test
-💾 Saving the authorization form data use...
-✅ Authorization Form Data Use saved successfully
-Screenshot saved: 2-end-authorization-form-data-use
-🎉 Authorization Form Data Use creation completed!
-🚀 Initializing SalesforceAuthorizationFormDataUse page object
-✅ SalesforceAuthorizationFormDataUse page object initialized successfully with all locators
-🔍 Starting authorization form data use verification...
+💾 Saving the account...
+✅ Account saved successfully
+Screenshot saved: 2-end-account
+🎉 Account creation completed!
+🚀 Initializing SalesforceAccounts page object
+✅ SalesforceAccounts page object initialized successfully with all locators
+🔍 Starting account verification...
+✅ Account name verification successful: Tech Solutions Inc 2025
 Screenshot saved: 3-verification
-🎉 Authorization Form Data Use verification completed!
+🎉 Account verification completed!
+🚀 Initializing SalesforceOpportunities page object
+✅ SalesforceOpportunities page object initialized successfully with all locators
+📋 Filling form fields...
+📝 Opportunity details: {
+  "Field": "Value",
+  "Name": "New Business Opp",
+  "Type": "New Customer",
+  "Stage": "Prospecting",
+  "Amount": "50000",
+  "CloseDate": "10/10/2024",
+  "Private": "Yes",
+  "NextStep": "Initial Contact",
+  "Description": "New business opportunity test"
+}
+💾 Saving the opportunity...
+✅ Opportunity saved successfully
+Screenshot saved: 2-end-opportunity
+🎉 Opportunity creation completed!
 
-[[ATTACHMENT|..\test-results\tests-features-CustomerDat-0f02c-th-Different-Data-Example-1-Google-Chrome\test-finished-1.png]]
+[[ATTACHMENT|..\test-results\tests-features-Integration-1dd21--complete-details-Example-1-Google-Chrome\test-finished-1.png]]
 
-[[ATTACHMENT|..\test-results\tests-features-CustomerDat-0f02c-th-Different-Data-Example-1-Google-Chrome\trace.zip]]
+[[ATTACHMENT|..\test-results\tests-features-Integration-1dd21--complete-details-Example-1-Google-Chrome\trace.zip]]
 ]]>
 </system-out>
-<system-err>
-<![CDATA[❌ Error getting verification code: locator.waitFor: Timeout 10000ms exceeded.
-Call log:
-[2m  - waiting for locator('#ifmail').contentFrame().locator('text=/\\d{6}/') to be visible[22m
-
-    at YopmailPage.getVerificationCode [90m(C:\Users\pradhkum\Documents\Pk_salesforce\Salesforce_Reusables\[39mpages\OtherFunctionality\yopmail.ts:125:35[90m)[39m
-    at SalesforceLoginPage.getVerificationCode [90m(C:\Users\pradhkum\Documents\Pk_salesforce\Salesforce_Reusables\[39mpages\OtherFunctionality\salesforceLogin.ts:225:30[90m)[39m
-    at SalesforceLoginPage.Login [90m(C:\Users\pradhkum\Documents\Pk_salesforce\Salesforce_Reusables\[39mpages\OtherFunctionality\salesforceLogin.ts:117:32[90m)[39m
-    at Object.<anonymous> [90m(C:\Users\pradhkum\Documents\Pk_salesforce\Salesforce_Reusables\[39mstepdef\OtherFunctionality\salesforce_login.ts:12:5[90m)[39m
-    at [90mC:\Users\pradhkum\Documents\Pk_salesforce\Salesforce_Reusables\[39m.features-gen\tests\features\CustomerData\salesforce_authorization-form-data-use.feature.spec.js:10:7 {
-  name: [32m'TimeoutError'[39m,
-  [[32mSymbol(step)[39m]: {
-    location: {
-      file: [32m'C:\\Users\\pradhkum\\Documents\\Pk_salesforce\\Salesforce_Reusables\\pages\\OtherFunctionality\\yopmail.ts'[39m,
-      line: [33m125[39m,
-      column: [33m35[39m,
-      function: [32m'YopmailPage.getVerificationCode'[39m
-    },
-    category: [32m'pw:api'[39m,
-    title: [32m"Wait for selector locator('#ifmail').contentFrame().locator('text=/\\\\d{6}/')"[39m,
-    apiName: [32m'locator.waitFor'[39m,
-    params: {
-      selector: [32m'#ifmail >> internal:control=enter-frame >> text=/\\d{6}/'[39m,
-      strict: [33mtrue[39m,
-      omitReturnValue: [33mtrue[39m,
-      state: [32m'visible'[39m,
-      timeout: [33m10000[39m
-    },
-    group: [90mundefined[39m,
-    stepId: [32m'pw:api@66'[39m,
-    boxedStack: [90mundefined[39m,
-    steps: [],
-    attachmentIndices: [],
-    info: TestStepInfoImpl {
-      annotations: [],
-      _testInfo: [36m[TestInfoImpl][39m,
-      _stepId: [32m'pw:api@66'[39m,
-      _title: [32m"Wait for selector locator('#ifmail').contentFrame().locator('text=/\\\\d{6}/')"[39m,
-      _parentStep: [36m[TestStepInfoImpl][39m,
-      skip: [36m[Function (anonymous)][39m
-    },
-    complete: [36m[Function: complete][39m,
-    endWallTime: [33m1764585124975[39m,
-    error: {
-      message: [32m'TimeoutError: locator.waitFor: Timeout 10000ms exceeded.\n'[39m +
-        [32m'Call log:\n'[39m +
-        [32m"\x1B[2m  - waiting for locator('#ifmail').contentFrame().locator('text=/\\\\d{6}/') to be visible\x1B[22m\n"[39m,
-      stack: [32m'TimeoutError: locator.waitFor: Timeout 10000ms exceeded.\n'[39m +
-        [32m'Call log:\n'[39m +
-        [32m"\x1B[2m  - waiting for locator('#ifmail').contentFrame().locator('text=/\\\\d{6}/') to be visible\x1B[22m\n"[39m +
-        [32m'\n'[39m +
-        [32m'    at YopmailPage.getVerificationCode (C:\\Users\\pradhkum\\Documents\\Pk_salesforce\\Salesforce_Reusables\\pages\\OtherFunctionality\\yopmail.ts:125:35)\n'[39m +
-        [32m'    at SalesforceLoginPage.getVerificationCode (C:\\Users\\pradhkum\\Documents\\Pk_salesforce\\Salesforce_Reusables\\pages\\OtherFunctionality\\salesforceLogin.ts:225:30)\n'[39m +
-        [32m'    at SalesforceLoginPage.Login (C:\\Users\\pradhkum\\Documents\\Pk_salesforce\\Salesforce_Reusables\\pages\\OtherFunctionality\\salesforceLogin.ts:117:32)\n'[39m +
-        [32m'    at Object.<anonymous> (C:\\Users\\pradhkum\\Documents\\Pk_salesforce\\Salesforce_Reusables\\stepdef\\OtherFunctionality\\salesforce_login.ts:12:5)\n'[39m +
-        [32m'    at C:\\Users\\pradhkum\\Documents\\Pk_salesforce\\Salesforce_Reusables\\.features-gen\\tests\\features\\CustomerData\\salesforce_authorization-form-data-use.feature.spec.js:10:7'[39m,
-      cause: [90mundefined[39m
-    }
-  }
-}
-]]>
-</system-err>
 </testcase>
 </testsuite>
 </testsuites>

@@ -2,7 +2,7 @@ import { createBdd } from 'playwright-bdd';
 import  SalesforceAccountsPage  from '../../pages/Sales/salesforceAccounts';
 const { When, Then } = createBdd();
 
-When('I create a new account with following details:', async ({ page }, table) => {
+When('Fill Accounts fields with following details:', async ({ page }, table) => {
     const details = table.rowsHash();
     const pageObj = new SalesforceAccountsPage(page);
     await pageObj.addNewAccount(details);

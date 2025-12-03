@@ -61,7 +61,6 @@ export class SalesforceOpportunitiesPage {
     this.testInfo = testInfo;
 
     // Primary action buttons - Opportunity creation and saving
-    this.newOpportunityButton = page.getByRole("button", { name: "New" });
     this.saveButton = page.getByRole("button", { name: "Save", exact: true });
 
     // Dialog-specific elements for better isolation
@@ -127,23 +126,8 @@ export class SalesforceOpportunitiesPage {
    * });
    */
   async addNewOpportunity(details: { [key: string]: string }) {
-    console.log("🔄 Starting opportunity creation process...");
-    console.log("📝 Opportunity details:", JSON.stringify(details, null, 2));
-
-    // Take start screenshot for verification
-    await Helper.takeScreenshotToFile(
-      this.page,
-      "1-start-opportunity",
-      this.testInfo,
-      "Sales/salesforce-opportunities/"
-    );
-
-    // Click New button and wait for dialog to appear
-    await this.newOpportunityButton.click({ timeout: 10000 });
-    await this.dialog.waitFor({ state: "visible", timeout: 8000 });
-    console.log("✅ Opportunity creation dialog opened");
-
     console.log("📋 Filling form fields...");
+    console.log("📝 Opportunity details:", JSON.stringify(details, null, 2));
 
     // Fill in basic information scoped to the dialog
     await this.dialog
@@ -163,7 +147,7 @@ export class SalesforceOpportunitiesPage {
       await this.dialog
         .getByRole("listbox")
         .waitFor({ state: "visible", timeout: 10000 })
-        .catch(() => {});
+        .catch(() => { });
       await this.dialog
         .getByRole("listbox")
         .getByRole("option", { name: details.Type })
@@ -176,7 +160,7 @@ export class SalesforceOpportunitiesPage {
       await this.dialog
         .getByRole("listbox")
         .waitFor({ state: "visible", timeout: 10000 })
-        .catch(() => {});
+        .catch(() => { });
       await this.dialog
         .getByRole("listbox")
         .getByRole("option", { name: details.Stage })
@@ -189,8 +173,8 @@ export class SalesforceOpportunitiesPage {
       await this.dialog
         .getByRole("listbox")
         .waitFor({ state: "visible", timeout: 10000 })
-        .catch(() => {});
-        
+        .catch(() => { });
+
       await this.dialog
         .getByRole("listbox")
         .getByRole("option", { name: details.LeadSource })

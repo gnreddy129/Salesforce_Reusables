@@ -3,7 +3,7 @@ import { SalesforceContactsPage } from "../../pages/CustomerData/salesforceConta
 const { Then } = createBdd();
 
 Then(
-  "Add new contact with following details",
+  "Fill Contacts fields with following details:",
   async ({ page, $testInfo }, dataTable) => {
     const contactPage = new SalesforceContactsPage(page, $testInfo);
     const details = dataTable.rowsHash();

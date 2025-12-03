@@ -3,7 +3,8 @@ Feature: Salesforce Leads Creation and Management
   Scenario Outline: Create new leads with different test data
     Given Open a browser and login to the sales force site
     When Search for "Leads" in app launcher
-    And I create a new lead with following details:
+    Then Click on "New" button of "Leads"
+    And Fill all fields of lead with following details:
       | Field Name  | Value        |
       | First Name  | <firstName>  |
       | Last Name   | <lastName>   |
@@ -19,4 +20,3 @@ Feature: Salesforce Leads Creation and Management
     Examples:
       | firstName | lastName | company       | email                     | phone      | leadStatus           | industry   | leadName   |
       | Johnny    | Deep     | Tech Corp Ltd | johnny.smith@techcorp.com | 9876543210 | Open - Not Contacted | Technology | John Smith |
-    # | Sarah     | Johnson   | Health Care Inc| sarah.j@healthcare.com  | 8765432109 | Working - Contacted   | Healthcare | Sarah Johnson |

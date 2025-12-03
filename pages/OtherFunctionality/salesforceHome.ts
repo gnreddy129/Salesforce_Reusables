@@ -1,6 +1,6 @@
 import { expect, type Locator, type Page, TestInfo } from "@playwright/test";
 import { Helper } from "../../utils/helper";
-
+import path from 'path'
 /**
  * SalesforceHome Page Object Model
  *
@@ -94,6 +94,8 @@ export class SalesforceHomePage {
    * await homePage.searchApp("Marketing");
    */
   async searchApp(appName: string) {
+    const authFile = path.join(__dirname, '../playwright/.auth/user.json');
+    await this.page.context().storageState({ path: authFile });
     console.log("🔄 Starting app search and navigation...");
     console.log(`📱 Searching for app: ${appName}`);
 
@@ -115,7 +117,7 @@ export class SalesforceHomePage {
 
     // Click View All to access full app directory
     await this.searchBox.fill(appName, { timeout: 10000 });
-    await this.page.waitForTimeout(2000); 
+    await this.page.waitForTimeout(2000);
     console.log("🔍 Searched for app in search box");
 
     // Take end screenshot for verification
@@ -129,10 +131,30 @@ export class SalesforceHomePage {
     // Search for the app and click it
     await this.page
       .locator(`a[data-label="${appName}"]`)
-      .filter({hasNot: this.page.locator("img")})
+      .filter({ hasNot: this.page.locator("img") })
       .click({ timeout: 10000 });
     console.log(`✅ Successfully navigated to ${appName} app`);
 
     console.log("🎉 App navigation completed!");
+  }
+
+
+  async clickNewButton(buttonName: string, appName: string) {
+    console.log("🔄 Starting New Page creation process...");
+
+    // Take start screenshot for verification
+    await Helper.takeScreenshotToFile(
+      this.page,
+      "1-start-opportunity",
+      this.testInfo,
+      "OtherFunctionality/salesforce-home/"
+    );
+
+    // Click New button and wait for dialog to appear
+    let newButton = this.page.getByRole("button", { name: /New|Create/i });
+    let dialog = this.page.getByRole('dialog');
+    await newButton.click({ timeout: 10000 });
+    await expect(dialog.getByText("New").first()).toBeVisible();
+    console.log("✅ Opportunity creation dialog opened");
   }
 }

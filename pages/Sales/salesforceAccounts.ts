@@ -24,7 +24,6 @@ export default class SalesforceAccountsPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newAccountButton: Locator;
   readonly dialog: Locator;
   readonly saveButton: Locator;
 
@@ -62,7 +61,6 @@ export default class SalesforceAccountsPage {
     this.testInfo = testInfo;
 
     // Primary controls - Main UI interaction elements
-    this.newAccountButton = page.getByRole("button", { name: /New/i }).first();
     this.dialog = page.getByRole("dialog").first();
     this.saveButton = this.dialog
       .getByRole("button", { name: /^Save$/i })
@@ -131,8 +129,6 @@ export default class SalesforceAccountsPage {
     console.log("🔄 Starting account creation process...");
     console.log("📝 Account details:", JSON.stringify(details, null, 2));
 
-    await expect(this.newAccountButton).toBeVisible({ timeout: 10000 });
-
     // Take start screenshot for verification
     await Helper.takeScreenshotToFile(
       this.page,
@@ -140,10 +136,6 @@ export default class SalesforceAccountsPage {
       this.testInfo,
       "Sales/salesforce-accounts/"
     );
-
-    // Click New Account
-    await this.newAccountButton.click({ timeout: 10000 });
-    console.log("✅ Account creation dialog opened");
 
     console.log("📋 Filling form fields...");
 

@@ -5,7 +5,8 @@ Feature: Salesforce Contact Management
   Scenario Outline: Create and Manage New Contacts with Different Data
     Given Open a browser and login to the sales force site
     When Search for "Contacts" in app launcher
-    Then Add new contact with following details
+    Then Click on "New" button of "Contacts"
+    Then Fill Contacts fields with following details:
       | Field          | Value            |
       | Salutation     | <Salutation>     |
       | FirstName      | <FirstName>      |

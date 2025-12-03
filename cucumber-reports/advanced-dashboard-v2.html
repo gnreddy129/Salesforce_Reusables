@@ -897,152 +897,115 @@
       let allFeatures = [];
       let currentFilter = "all";
       let searchQuery = "";
+      let moduleStructure = {};
 
-      // Complete module structure from index.html
-      const moduleStructure = {
+      // Base module display config (icons and colors for known modules)
+      const baseModuleConfig = {
         customerdata: {
           name: "Customer Data",
           icon: "fa-users",
           color: "#6366f1",
-          features: [
-            "authorization-form",
-            "authorization-form-consent",
-            "authorization-form-data-use",
-            "authorization-form-text",
-            "communication-subscription-channel-types",
-            "communication-subscriptions",
-            "contact-point-type-consent",
-            "contact-requests",
-            "contacts",
-            "customers",
-            "data-use-legal-basis",
-            "data-use-purpose",
-            "individuals",
-            "legal-entities",
-            "party-consent",
-          ],
         },
-        finance: {
-          name: "Finance",
-          icon: "fa-dollar-sign",
-          color: "#10b981",
-          features: [
-            "alternative-payment",
-            "financetransactions",
-            "payment-authorization",
-            "payment-authorization-adjustments",
-            "payment-gateway-logs",
-            "payments",
-            "refund-line-payments",
-            "refunds",
-          ],
-        },
-        general: {
-          name: "General",
-          icon: "fa-globe",
-          color: "#64748b",
-          features: ["general"],
-        },
-        inventory: {
-          name: "Inventory",
-          icon: "fa-boxes",
-          color: "#f59e0b",
-          features: [
-            "assets",
-            "inventoryresevations",
-            "location-groups",
-            "return-order",
-            "shipping-carrier-methods",
-            "shipping-carriers",
-          ],
-        },
-        marketing: {
-          name: "Marketing",
-          icon: "fa-bullhorn",
-          color: "#ec4899",
-          features: [
-            "campaign",
-            "coupons",
-            "engagement-channel-types",
-            "promotion-segments",
-            "promotions",
-          ],
-        },
+        finance: { name: "Finance", icon: "fa-dollar-sign", color: "#10b981" },
+        general: { name: "General", icon: "fa-globe", color: "#64748b" },
+        inventory: { name: "Inventory", icon: "fa-boxes", color: "#f59e0b" },
+        marketing: { name: "Marketing", icon: "fa-bullhorn", color: "#ec4899" },
         otherfunctionality: {
           name: "Other Functionality",
           icon: "fa-cog",
           color: "#8b5cf6",
-          features: [
-            "appointment-categories",
-            "appointment-invitations",
-            "business-brands",
-            "calendar",
-            "catalog",
-            "categories",
-            "consumption-schedules",
-            "contracts",
-            "files",
-            "images",
-            "labels",
-            "list-emails",
-            "operating-hours",
-            "process-exceptions",
-            "scorecards",
-            "shifts",
-            "streaming-channels",
-            "work-step-templates",
-          ],
         },
-        platform: {
-          name: "Platform",
-          icon: "fa-server",
-          color: "#14b8a6",
-          features: [
-            "custom-libraries",
-            "dashboards",
-            "email-templates",
-            "enhanced_letterheads",
-            "groups",
-            "quick-texts",
-            "tasks",
-          ],
-        },
-        sales: {
-          name: "Sales",
-          icon: "fa-chart-line",
-          color: "#3b82f6",
-          features: [
-            "accounts",
-            "leads",
-            "opportunities",
-            "orders",
-            "price-books",
-            "products",
-            "sellers",
-          ],
-        },
-        service: {
-          name: "Service",
-          icon: "fa-headset",
-          color: "#f97316",
-          features: [
-            "cases",
-            "change-requests",
-            "entitlements",
-            "incidents",
-            "problems",
-            "service-appointments",
-            "service-resources",
-            "service-territories",
-            "service_contracts",
-            "work-orders",
-            "work-plan-templates",
-            "work-plans",
-            "work-type-groups",
-            "work-types",
-          ],
-        },
+        platform: { name: "Platform", icon: "fa-server", color: "#14b8a6" },
+        sales: { name: "Sales", icon: "fa-chart-line", color: "#3b82f6" },
+        service: { name: "Service", icon: "fa-headset", color: "#f97316" },
       };
+
+      // Dynamic module config - will be built from available folders
+      let moduleConfig = {};
+
+      // Default config for unknown modules
+      const defaultModuleConfig = { icon: "fa-folder", color: "#6b7280" };
+
+      // Format module name from folder name
+      function formatModuleName(folderName) {
+        // Check if we have a predefined name
+        if (moduleConfig[folderName]) {
+          return moduleConfig[folderName].name;
+        }
+        // Otherwise, format the folder name
+        return folderName
+          .split(/[-_]/)
+          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(" ");
+      }
+
+      // Build dynamic module config from discovered modules
+      function buildModuleConfig(discoveredModules) {
+        const moduleKeys = new Set();
+
+        // Get unique module keys from discovered modules
+        discoveredModules.forEach(({ moduleKey }) => {
+          moduleKeys.add(moduleKey);
+        });
+
+        // Build config for each discovered module
+        moduleKeys.forEach((moduleKey) => {
+          if (baseModuleConfig[moduleKey]) {
+            // Use predefined config
+            moduleConfig[moduleKey] = baseModuleConfig[moduleKey];
+          } else {
+            // Generate config for unknown modules
+            const colors = [
+              "#3b82f6",
+              "#10b981",
+              "#f59e0b",
+              "#ef4444",
+              "#8b5cf6",
+              "#06b6d4",
+              "#84cc16",
+              "#f97316",
+              "#ec4899",
+              "#64748b",
+            ];
+            const icons = [
+              "fa-cube",
+              "fa-cogs",
+              "fa-layer-group",
+              "fa-puzzle-piece",
+              "fa-tools",
+              "fa-project-diagram",
+              "fa-sitemap",
+              "fa-code-branch",
+            ];
+
+            const colorIndex =
+              Array.from(moduleKeys).indexOf(moduleKey) % colors.length;
+            const iconIndex =
+              Array.from(moduleKeys).indexOf(moduleKey) % icons.length;
+
+            moduleConfig[moduleKey] = {
+              name: formatModuleName(moduleKey),
+              icon: icons[iconIndex],
+              color: colors[colorIndex],
+            };
+          }
+        });
+
+        console.log(
+          `Built module config for ${moduleKeys.size} modules:`,
+          moduleConfig
+        );
+      }
+
+      // Get module config (icon, color)
+      function getModuleConfig(moduleKey) {
+        return (
+          moduleConfig[moduleKey] || {
+            ...defaultModuleConfig,
+            name: formatModuleName(moduleKey),
+          }
+        );
+      }
 
       // Initialize
       async function init() {
@@ -1088,29 +1051,54 @@
         updateDataBadge(false, 0);
       }
 
-      // Load all reports by fetching each report.html
+      // Load all reports by discovering modules and features dynamically
       async function loadAllReports() {
         allFeatures = [];
+        moduleStructure = {};
+        moduleConfig = {}; // Reset dynamic config
+
+        // First, discover all modules by fetching the directory listing
+        // We'll try to fetch report.html from potential paths
+        const discoveredModules = await discoverModules();
+
+        if (discoveredModules.length === 0) {
+          throw new Error("Cannot discover modules");
+        }
+
+        // Build dynamic module configuration based on discovered modules
+        buildModuleConfig(discoveredModules);
+
         const fetchPromises = [];
         let successCount = 0;
         let failCount = 0;
 
-        for (const [moduleKey, moduleConfig] of Object.entries(
-          moduleStructure
-        )) {
-          for (const feature of moduleConfig.features) {
-            const reportPath = `${moduleKey}/${feature}/report.html`;
-            fetchPromises.push(
-              fetchReportData(reportPath, moduleKey, feature, moduleConfig.name)
-                .then(() => successCount++)
-                .catch(() => failCount++)
-            );
+        for (const { moduleKey, feature } of discoveredModules) {
+          const config = getModuleConfig(moduleKey);
+          const reportPath = `${moduleKey}/${feature}/report.html`;
+
+          // Build moduleStructure dynamically
+          if (!moduleStructure[moduleKey]) {
+            moduleStructure[moduleKey] = {
+              name: config.name,
+              icon: config.icon,
+              color: config.color,
+              features: [],
+            };
           }
+          if (!moduleStructure[moduleKey].features.includes(feature)) {
+            moduleStructure[moduleKey].features.push(feature);
+          }
+
+          fetchPromises.push(
+            fetchReportData(reportPath, moduleKey, feature, config.name)
+              .then(() => successCount++)
+              .catch(() => failCount++)
+          );
         }
 
         // Add timeout to prevent infinite loading
         const timeoutPromise = new Promise((_, reject) =>
-          setTimeout(() => reject(new Error("Timeout")), 10000)
+          setTimeout(() => reject(new Error("Timeout")), 15000)
         );
 
         try {
@@ -1129,6 +1117,133 @@
           updateDataBadge(false, 0);
           updateDashboard();
         }
+      }
+
+      // Discover modules and features by scanning available folders
+      async function discoverModules() {
+        const discovered = [];
+
+        // Method 1: Try to parse index.html to find all report links
+        try {
+          const response = await fetch("index.html");
+          if (response.ok) {
+            const html = await response.text();
+
+            // Parse the index.html to find all report links
+            // Look for links like: href="customerdata/contacts/report.html"
+            const linkMatches = html.matchAll(
+              /href="([^"]+)\/([^"]+)\/report\.html"/g
+            );
+
+            for (const match of linkMatches) {
+              const moduleKey = match[1].toLowerCase();
+              const feature = match[2].toLowerCase();
+
+              // Skip non-module folders
+              if (
+                moduleKey === "screenshots" ||
+                moduleKey === "data" ||
+                moduleKey === "trace" ||
+                moduleKey.includes(".")
+              ) {
+                continue;
+              }
+
+              discovered.push({ moduleKey, feature });
+            }
+
+            if (discovered.length > 0) {
+              console.log(
+                `Discovered ${discovered.length} feature reports from index.html`
+              );
+              return discovered;
+            }
+          }
+        } catch (error) {
+          console.log("Could not fetch index.html:", error.message);
+        }
+
+        // Method 2: Try common folder structure - check known folders first
+        const commonFolders = [
+          "customerdata",
+          "finance",
+          "general",
+          "inventory",
+          "marketing",
+          "otherfunctionality",
+          "platform",
+          "sales",
+          "service",
+        ];
+
+        for (const moduleKey of commonFolders) {
+          // Try to find features within this module
+          const testFeatures = [
+            "general",
+            "accounts",
+            "contacts",
+            "cases",
+            "assets",
+            "campaign",
+            "leads",
+            "opportunities",
+            "products",
+          ];
+
+          for (const feature of testFeatures) {
+            try {
+              const response = await fetch(
+                `${moduleKey}/${feature}/report.html`,
+                { method: "HEAD", timeout: 2000 }
+              );
+              if (response.ok) {
+                discovered.push({ moduleKey, feature });
+              }
+            } catch (e) {
+              // Ignore individual feature fetch errors
+            }
+          }
+        }
+
+        // Method 3: If still nothing found, try to discover by attempting to fetch folder structures
+        if (discovered.length === 0) {
+          console.log("Attempting fallback discovery method...");
+
+          // Try some variations of module names that might exist
+          const potentialModules = [
+            "admin",
+            "automation",
+            "business",
+            "compliance",
+            "crm",
+            "integration",
+            "mobile",
+            "portal",
+            "reports",
+            "workflow",
+          ];
+
+          for (const moduleKey of potentialModules) {
+            const testFeatures = ["general", "basic", "main"];
+
+            for (const feature of testFeatures) {
+              try {
+                const response = await fetch(
+                  `${moduleKey}/${feature}/report.html`,
+                  { method: "HEAD", timeout: 1000 }
+                );
+                if (response.ok) {
+                  discovered.push({ moduleKey, feature });
+                }
+              } catch (e) {
+                // Ignore errors
+              }
+            }
+          }
+        }
+
+        console.log(`Discovered ${discovered.length} feature reports`);
+        return discovered;
       }
 
       // Fetch and parse individual report.html
@@ -1295,11 +1410,7 @@
 
         container.innerHTML = sortedModules
           .map(([moduleKey, data]) => {
-            const config = moduleStructure[moduleKey] || {
-              name: moduleKey,
-              icon: "fa-folder",
-              color: "#6b7280",
-            };
+            const config = getModuleConfig(moduleKey);
             const innerModuleCount = data.features.length;
             const passRate =
               data.total > 0 ? Math.round((data.passed / data.total) * 100) : 0;
@@ -1466,9 +1577,7 @@
         // Generate rows for each feature
         container.innerHTML = filtered
           .map((feature) => {
-            const config = moduleStructure[feature.module] || {
-              name: feature.module,
-            };
+            const config = getModuleConfig(feature.module);
             const status =
               feature.failed > 0
                 ? "failed"

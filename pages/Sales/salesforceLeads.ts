@@ -25,7 +25,6 @@ export default class SalesforceLeadsPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newLeadButton: Locator;
   readonly dialog: Locator;
   readonly saveButton: Locator;
 
@@ -61,7 +60,6 @@ export default class SalesforceLeadsPage {
     this.testInfo = testInfo;
 
     // Primary controls - Main UI interaction elements
-    this.newLeadButton = page.getByRole("button", { name: /New/i }).first();
     this.saveButton = page.getByRole("button", { name: /^Save$/i }).first();
 
     // Initialize form field locators
@@ -111,8 +109,6 @@ export default class SalesforceLeadsPage {
     console.log("🔄 Starting lead creation process...");
     console.log("📝 Lead details:", JSON.stringify(details, null, 2));
 
-    await expect(this.newLeadButton).toBeVisible({ timeout: 10000 });
-
     // Take start screenshot for verification
     await Helper.takeScreenshotToFile(
       this.page,
@@ -120,10 +116,6 @@ export default class SalesforceLeadsPage {
       this.testInfo,
       "Sales/salesforce-leads/"
     );
-
-    // Click New Lead
-    await this.newLeadButton.click({ timeout: 10000 });
-    console.log("✅ Lead creation dialog opened");
 
     console.log("📋 Filling form fields...");
 
