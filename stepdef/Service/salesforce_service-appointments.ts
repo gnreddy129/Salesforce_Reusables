@@ -4,12 +4,9 @@ import SalesforceServiceAppointmentsPage from "../../pages/Service/salesforceSer
 const { Given, When, Then } = createBdd();
 
 Then(
-  "Add new service appointment with following details",
+  "Fill Service Appointments fields with following details:",
   async ({ page, $testInfo }, dataTable: DataTable) => {
-    const serviceAppointments = new SalesforceServiceAppointmentsPage(
-      page,
-      $testInfo
-    );
+    const serviceAppointments = new SalesforceServiceAppointmentsPage(page, $testInfo);
     await serviceAppointments.addNewServiceAppointment(dataTable.rowsHash());
   }
 );

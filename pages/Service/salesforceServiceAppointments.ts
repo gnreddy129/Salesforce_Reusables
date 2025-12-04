@@ -25,7 +25,6 @@ export default class SalesforceServiceAppointmentsPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newServiceAppointmentButton: Locator;
   readonly saveButton: Locator;
   readonly saveAndNewButton: Locator;
   readonly cancelButton: Locator;
@@ -120,9 +119,6 @@ export default class SalesforceServiceAppointmentsPage {
     this.testInfo = testInfo;
 
     // Primary controls - Main UI interaction elements
-    this.newServiceAppointmentButton = page.getByRole("button", {
-      name: "New",
-    });
     this.saveButton = page.getByRole("button", { name: "Save", exact: true });
     this.saveAndNewButton = page.getByRole("button", { name: "Save & New" });
     this.cancelButton = page.getByRole("button", { name: "Cancel" });
@@ -295,10 +291,6 @@ export default class SalesforceServiceAppointmentsPage {
       JSON.stringify(details, null, 2)
     );
 
-    await expect(this.newServiceAppointmentButton).toBeVisible({
-      timeout: 10000,
-    });
-
     // Take start screenshot for verification
     await Helper.takeScreenshotToFile(
       this.page,
@@ -306,10 +298,6 @@ export default class SalesforceServiceAppointmentsPage {
       this.testInfo,
       "Service/salesforce-service-appointments/"
     );
-
-    // Click New Service Appointment
-    await this.newServiceAppointmentButton.click({ timeout: 10000 });
-    console.log("✅ Service appointment creation form opened");
 
     // Wait for form to be fully loaded
     await this.statusCombobox.waitFor({ state: "visible", timeout: 10000 });

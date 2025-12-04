@@ -25,7 +25,6 @@ export default class SalesforceContractsPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newContractButton: Locator;
   readonly saveButton: Locator;
   readonly saveAndNewButton: Locator;
   readonly cancelButton: Locator;
@@ -75,7 +74,6 @@ export default class SalesforceContractsPage {
     this.testInfo = testInfo;
 
     // Primary controls - Main UI interaction elements
-    this.newContractButton = page.getByRole("button", { name: "New" });
     this.saveButton = page.getByRole("button", { name: "Save", exact: true });
     this.saveAndNewButton = page.getByRole("button", { name: "Save & New" });
     this.cancelButton = page.getByRole("button", { name: "Cancel" });
@@ -185,8 +183,6 @@ export default class SalesforceContractsPage {
     console.log("🔄 Starting contract creation process...");
     console.log("📝 Contract details:", JSON.stringify(details, null, 2));
 
-    await expect(this.newContractButton).toBeVisible({ timeout: 10000 });
-
     // Take start screenshot for verification
     await Helper.takeScreenshotToFile(
       this.page,
@@ -194,10 +190,6 @@ export default class SalesforceContractsPage {
       this.testInfo,
       "OtherFunctionality/salesforce-contracts/"
     );
-
-    // Click New Contract
-    await this.newContractButton.click({ timeout: 10000 });
-    console.log("✅ Contract creation form opened");
 
     // Wait for form to be fully loaded
     await this.statusCombobox.waitFor({ state: "visible", timeout: 10000 });

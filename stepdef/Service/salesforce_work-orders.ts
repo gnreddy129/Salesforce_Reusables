@@ -4,7 +4,7 @@ import SalesforceWorkOrdersPage from "../../pages/Service/salesforceWorkOrders";
 const { Given, When, Then } = createBdd();
 
 Then(
-  "Add new work order with following details",
+  "Fill Work Orders fields with following details:",
   async ({ page, $testInfo }, dataTable: DataTable) => {
     const workOrders = new SalesforceWorkOrdersPage(page, $testInfo);
     await workOrders.addNewWorkOrder(dataTable.rowsHash());

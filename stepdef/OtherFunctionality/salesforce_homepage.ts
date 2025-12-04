@@ -12,3 +12,8 @@ Then("Click on {string} button of {string}", async ({ page, $testInfo }, buttonN
   let salesforce = new SalesforceHomePage(page, $testInfo);
   await salesforce.clickNewButton(buttonName, appName);
 });
+
+Then("Click on Save button of {string}", async ({ page, $testInfo }, appName) => {
+  let salesforce = new SalesforceHomePage(page, $testInfo);
+  await salesforce.clickSaveButton(appName);
+});

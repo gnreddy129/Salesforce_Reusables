@@ -63,20 +63,13 @@ export default class SalesforceLeadsPage {
     this.saveButton = page.getByRole("button", { name: /^Save$/i }).first();
 
     // Initialize form field locators
-    this.firstNameInput = page.locator("[name=firstName]");
-    this.lastNameInput = page.locator("[name=lastName]");
-    this.companyInput = page.locator("[name=Company]");
-    this.emailInput = page.locator("[name=Email]");
-    this.phoneInput = page.locator("[name=Phone]");
-
-    this.statusCombo = page.getByRole("combobox", {
-      name: /Lead Status/i,
-      exact: true,
-    });
-    this.industryCombo = page.getByRole("combobox", {
-      name: /Industry/i,
-      exact: true,
-    });
+    this.firstNameInput = page.getByRole("textbox", { name: /First Name/i });
+    this.lastNameInput = page.getByRole("textbox", { name: /Last Name/i });
+    this.companyInput = page.getByRole("textbox", { name: /Company/i });
+    this.emailInput = page.getByRole("textbox", { name: /Email/i });
+    this.phoneInput = page.getByRole("textbox", { name: /Phone/i });
+    this.statusCombo = page.getByRole("combobox", { name: /Lead Status/i, exact: true, });
+    this.industryCombo = page.getByRole("combobox", { name: /Industry/i, exact: true, });
 
     // Success message locator
     this.leadCreatedMessage = page.locator(".toastMessage");

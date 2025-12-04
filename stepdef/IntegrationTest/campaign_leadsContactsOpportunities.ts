@@ -5,12 +5,17 @@ let integrations: Integrations;
 
 Then("I click new opportunities in campaign page", async ({ page }) => {
     integrations = new Integrations(page);
-    await integrations.clickOnNewOrderOpportunity();
+    await integrations.clickOnNewCampaignOpportunity();
 });
 
 Then("I click Add Leads in campaign page", async ({ page }) => {
     integrations = new Integrations(page);
     await integrations.clickOnAddNewLeads();
+});
+
+Then("Click on Next then Submit button", async ({ page }) => {
+    integrations = new Integrations(page);
+    await integrations.savingCreatedleadsOrContacts();
 });
 
 Then("I click Add Contacts in campaign page", async ({ page }) => {

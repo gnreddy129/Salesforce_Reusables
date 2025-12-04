@@ -4,7 +4,7 @@ import SalesforceOrdersPage from "../../pages/Sales/salesforceOrders";
 const { Given, When, Then } = createBdd();
 
 Then(
-  "Add new order with following details",
+  "Fill Orders fields with following details:",
   async ({ page, $testInfo }, dataTable) => {
     const details = dataTable.rowsHash();
     const ordersPage = new SalesforceOrdersPage(page, $testInfo);

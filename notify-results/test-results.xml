@@ -1,11 +1,11 @@
-<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="51.589377999999996">
-<testsuite name="tests\features\IntegrationTest\accounts_opportunities.feature.spec.js" timestamp="2025-12-03T09:06:33.410Z" hostname="Google Chrome" tests="1" failures="0" skipped="0" time="46.691" errors="0">
-<testcase name="Create account module then click on first account on list and add opportunities on it. › Create a new business account with complete details › Example #1" classname="tests\features\IntegrationTest\accounts_opportunities.feature.spec.js" time="46.691">
+<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="61.773339">
+<testsuite name="tests\features\IntegrationTest\order_contractsAccount.feature.spec.js" timestamp="2025-12-04T07:10:32.724Z" hostname="Google Chrome" tests="1" failures="0" skipped="0" time="57.69" errors="0">
+<testcase name="Salesforce Orders Management › Create a new order with different data sets › Example #1" classname="tests\features\IntegrationTest\order_contractsAccount.feature.spec.js" time="57.69">
 <system-out>
 <![CDATA[🚀 Initializing SalesforceLogin page object
 ✅ SalesforceLogin page object initialized successfully with all locators
 🔄 Starting Salesforce login process...
-📝 Login username: yeikuhozoiffa-1695@yopmail.com
+📝 Login username: reicekigrauppoi-8940@yopmail.com
 Screenshot saved: 1-start-login
 ✅ Navigated to Salesforce login page
 📋 Filling login credentials...
@@ -17,14 +17,14 @@ Screenshot saved: 1-start-login
 🔄 Navigating to Yopmail service...
 ✅ Successfully navigated to Yopmail
 Screenshot saved: yopmail/1-start-case.png
-🔄 Checking email inbox for: yeikuhozoiffa-1695@yopmail.com
+🔄 Checking email inbox for: reicekigrauppoi-8940@yopmail.com
 🔄 Refreshing email inbox...
 ✅ Inbox refreshed successfully
 Screenshot saved: yopmail/2-end-case.png
 ✅ Email inbox accessed successfully
 🔄 Extracting verification code from email...
 Screenshot saved: yopmail/3-verification.png
-🎉 Verification code extracted successfully: 547793
+🎉 Verification code extracted successfully: 201162
 ✅ Verification code retrieved successfully
 🔐 Entering verification code...
 Screenshot saved: 2-end-login
@@ -34,25 +34,63 @@ Screenshot saved: 2-end-login
 🚀 Initializing SalesforceHome page object
 ✅ SalesforceHome page object initialized successfully with all locators
 🔄 Starting app search and navigation...
-📱 Searching for app: Accounts
+📱 Searching for app: Orders
 ✅ App launcher is visible
 Screenshot saved: 1-start-app-search
 ✅ App launcher opened
 🔍 Searched for app in search box
 Screenshot saved: 2-end-app-navigation
-✅ Successfully navigated to Accounts app
+✅ Successfully navigated to Orders app
 🎉 App navigation completed!
 🚀 Initializing SalesforceHome page object
 ✅ SalesforceHome page object initialized successfully with all locators
-🔄 Starting New Page creation process...
+🔄 Starting New Page creation process of Orders...
 Screenshot saved: 1-start-opportunity
-✅ Opportunity creation dialog opened
+✅ Orders creation dialog opened
+🚀 Initializing SalesforceOrders page object
+✅ SalesforceOrders page object initialized successfully with all locators
+🔄 Starting order creation process...
+📝 Order details: {
+  "Field": "Value",
+  "Order Number": "<OrderNumber>",
+  "Status": "Draft",
+  "Order Start Date": "11/11/2025",
+  "Customer Authorized By": "",
+  "Company Authorized By": "",
+  "Shipping Street": "123 Main Street",
+  "Shipping City": "New York",
+  "Shipping Zip": "10001",
+  "Shipping State": "NY",
+  "Shipping Country": "United States",
+  "Billing Street": "123 Main St",
+  "Billing City": "New York",
+  "Billing Zip": "10001",
+  "Billing State": "NY",
+  "Billing Country": "USA",
+  "Description": "Annual service contract"
+}
+Screenshot saved: 1-start-order
+📋 Filling form fields...
+✅ Status selected: Draft
+✅ Order Start Date filled: 11/11/2025
+✅ Shipping Street filled: 123 Main Street
+✅ Shipping City filled: New York
+✅ Shipping Zip filled: 10001
+✅ Shipping State filled: NY
+✅ Shipping Country filled: United States
+✅ Billing Street filled: 123 Main St
+✅ Billing City filled: New York
+✅ Billing Zip filled: 10001
+✅ Billing State filled: NY
+✅ Billing Country filled: USA
+✅ Description filled: Annual service contract
+🎉 Order creation completed!
 🚀 Initializing SalesforceAccounts page object
 ✅ SalesforceAccounts page object initialized successfully with all locators
 🔄 Starting account creation process...
 📝 Account details: {
   "Field Name": "Value",
-  "Account Name": "Tech Solutions Inc 2025",
+  "Account Name": "Testing",
   "Phone": "555-0123",
   "Industry": "Technology",
   "Type": "Technology Partner",
@@ -70,34 +108,69 @@ Screenshot saved: 1-start-account
 ✅ Account saved successfully
 Screenshot saved: 2-end-account
 🎉 Account creation completed!
-🚀 Initializing SalesforceAccounts page object
-✅ SalesforceAccounts page object initialized successfully with all locators
-🔍 Starting account verification...
-✅ Account name verification successful: Tech Solutions Inc 2025
-Screenshot saved: 3-verification
-🎉 Account verification completed!
-🚀 Initializing SalesforceOpportunities page object
-✅ SalesforceOpportunities page object initialized successfully with all locators
-📋 Filling form fields...
-📝 Opportunity details: {
+🚀 Initializing SalesforceContracts page object
+✅ SalesforceContracts page object initialized successfully with all locators
+🔄 Starting contract creation process...
+📝 Contract details: {
   "Field": "Value",
-  "Name": "New Business Opp",
-  "Type": "New Customer",
-  "Stage": "Prospecting",
-  "Amount": "50000",
-  "CloseDate": "10/10/2024",
-  "Private": "Yes",
-  "NextStep": "Initial Contact",
-  "Description": "New business opportunity test"
+  "Status": "Draft",
+  "Contract Start Date": "15/12/2024",
+  "Account Name": "Testing",
+  "Contract Term": "12",
+  "Customer Signed By": "",
+  "Owner Expiration Notice": "15 Days",
+  "Customer Signed Title": "Sales Manager",
+  "Company Signed By": "",
+  "Customer Signed Date": "10/12/2024",
+  "Company Signed Date": "12/12/2024",
+  "Price Book": "",
+  "Billing Street": "456 Oak Avenue",
+  "Billing City": "Los Angeles",
+  "Billing Zip": "90210",
+  "Billing State": "CA",
+  "Billing Country": "United States",
+  "Special Terms": "Standard contract terms apply",
+  "Description": "Standard order for testing"
 }
-💾 Saving the opportunity...
-✅ Opportunity saved successfully
-Screenshot saved: 2-end-opportunity
-🎉 Opportunity creation completed!
+Screenshot saved: 1-start-contract
+📋 Filling form fields...
+✅ Status selected: Draft
+✅ Contract Start Date filled: 15/12/2024
+🔄 Attempting to select account: Testing
+✅ Account combobox clicked
+✅ Account selected: Testing
+✅ Contract Term filled: 12
+✅ Owner Expiration Notice selected: 15 Days
+✅ Customer Signed Title filled: Sales Manager
+✅ Customer Signed Date filled: 10/12/2024
+✅ Company Signed Date filled: 12/12/2024
+✅ Billing Street filled: 456 Oak Avenue
+✅ Billing City filled: Los Angeles
+✅ Billing Zip filled: 90210
+✅ Billing State filled: CA
+✅ Billing Country filled: United States
+✅ Special Terms filled: Standard contract terms apply
+✅ Description filled: Standard order for testing
+💾 Saving the contract...
+✅ Contract saved successfully
+Screenshot saved: 2-end-contract
+🎉 Contract creation completed!
+🚀 Initializing SalesforceHome page object
+✅ SalesforceHome page object initialized successfully with all locators
+💾 Saving the order...
+✅ Order saved successfully
+🚀 Initializing SalesforceOrders page object
+✅ SalesforceOrders page object initialized successfully with all locators
+Screenshot saved: 2-verification
+🔍 Starting order verification...
+✅ Order creation message verified
+✅ Order account name verification successful: Testing
+Screenshot saved: 3-verification
+🎉 Order verification completed!
 
-[[ATTACHMENT|..\test-results\tests-features-Integration-1dd21--complete-details-Example-1-Google-Chrome\test-finished-1.png]]
+[[ATTACHMENT|..\test-results\tests-features-Integration-7a81b-fferent-data-sets-Example-1-Google-Chrome\test-finished-1.png]]
 
-[[ATTACHMENT|..\test-results\tests-features-Integration-1dd21--complete-details-Example-1-Google-Chrome\trace.zip]]
+[[ATTACHMENT|..\test-results\tests-features-Integration-7a81b-fferent-data-sets-Example-1-Google-Chrome\trace.zip]]
 ]]>
 </system-out>
 </testcase>

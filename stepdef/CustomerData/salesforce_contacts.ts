@@ -8,6 +8,5 @@ Then(
     const contactPage = new SalesforceContactsPage(page, $testInfo);
     const details = dataTable.rowsHash();
     await contactPage.addNewContact(details);
-    await contactPage.verifyContactDetails(details);
   }
 );

@@ -8,58 +8,101 @@ export default class Integrations {
     readonly newOpportunities: Locator;
     readonly newContacts: Locator;
 
-    readonly newOrderOpportunity: Locator;
+    readonly newCampaignOpportunity: Locator;
     readonly addLeads: Locator;
     readonly searchLeads: Locator;
-    readonly addNewLeads: Locator;
-    readonly addContacts: Locator;
+    readonly addNewLeadsLocator: Locator;
+    readonly addContactsLocator: Locator;
     readonly serchContacts: Locator;
-    readonly addNewContacts: Locator;
+    readonly addNewContactsLocator: Locator;
+    readonly nextButton: Locator;
+    readonly submitButton: Locator;
 
     readonly newContract: Locator;
     readonly newAccount: Locator;
+
+    readonly newServiceAppointment: Locator;
+    readonly contractCombobox: Locator;
+    readonly accountCombobox: Locator;
 
     constructor(page: Page, testInfo?: TestInfo) {
         this.page = page;
         this.testInfo = testInfo;
 
         this.list = page.locator("lst-list-view-manager-header");
-        this.newOpportunities = this.list.filter({ hasText: "Opportunities" }).getByRole('button', { name: "New" });
+        this.newOpportunities = this.list.filter({ hasText: /Opportunities/i }).getByRole('button', { name: /New/i });
 
-        this.newOrderOpportunity = this.page.getByRole('button', { name: 'New', exact: true });
+        this.newCampaignOpportunity = this.page.getByRole('button', { name: 'New', exact: true });
         this.addLeads = this.page.getByRole('button', { name: 'Add Leads' });
         this.searchLeads = this.page.getByRole('combobox', { name: 'Search <Entity> Search <' });
-        this.addNewLeads = this.page.getByRole('option', { name: "New Lead" });
+        this.addNewLeadsLocator = this.page.getByRole('option', { name: "New Lead" });
 
-        this.addContacts = this.page.getByRole('button', { name: 'Add Contacts' });
+        this.addContactsLocator = this.page.getByRole('button', { name: 'Add Contacts' });
         this.serchContacts = this.page.getByRole('combobox', { name: 'Search <Entity> Search <' })
-        this.addNewContacts = this.page.getByRole('option', { name: "New Contact" })
+        this.addNewContactsLocator = this.page.getByRole('option', { name: "New Contact" })
+
+        this.nextButton = this.page.getByRole('button', { name: /Next/i });
+        this.submitButton = this.page.getByRole('button', { name: /Submit/i });
+
+        this.newServiceAppointment = this.list.filter({ hasText: /Service Appointments/i }).getByRole('button', { name: /New/i });
+
+        this.contractCombobox = page.getByRole("combobox", { name: /^Contract Number/i });
+        this.accountCombobox = page.getByRole("combobox", { name: /^Account Name/i });
     }
 
     async clickOnNewOpportunity() {
         await this.newOpportunities.click();
     }
 
-    async clickOnNewOrderOpportunity() {
-        await this.newOrderOpportunity.click();
+    async clickOnNewCampaignOpportunity() {
+        await this.newCampaignOpportunity.click();
     }
 
     async clickOnAddNewLeads() {
-        await this.addLeads.click();
+        await this.addLeads.click({ timeout: 10000 });
+        await this.page.waitForTimeout(2000);
         await this.searchLeads.click();
+        await this.page.waitForTimeout(1000);
         await this.searchLeads.click();
-        await expect(this.addNewLeads).toBeVisible({ timeout: 10000 });
-        await this.addNewLeads.click({ timeout: 10000 });
-        await this.page.waitForTimeout(3000);
+        await this.page.waitForTimeout(2000);
+        await expect(this.addNewLeadsLocator).toBeVisible({ timeout: 10000 });
+        await this.addNewLeadsLocator.click({ timeout: 10000 });
+        await this.page.waitForTimeout(2000);
     }
 
     async clickOnAddNewContacts() {
-        await this.addContacts.click();
+        await this.addContactsLocator.click();
+        await this.page.waitForTimeout(2000);
         await this.serchContacts.click();
+        await this.page.waitForTimeout(1000);
         await this.serchContacts.click();
-        await expect(this.addNewContacts).toBeVisible({ timeout: 1000 });
-        await this.addNewContacts.click();
+        await expect(this.addNewContactsLocator).toBeVisible({ timeout: 10000 });
+        await this.addNewContactsLocator.click();
+        await this.page.waitForTimeout(2000);
+    }
+
+    async savingCreatedleadsOrContacts() {
+        await this.nextButton.first().click();
+        await this.submitButton.first().click();
+        console.log("Lead or Contact Adding done");
+    }
+
+    async addNewServiceAppointment() {
+        await this.page.mouse.wheel(0, 1200);
+        await this.page.waitForTimeout(3000);
+        await expect(this.newServiceAppointment).toBeVisible({ timeout: 10000 });
+        await this.newServiceAppointment.click({ timeout: 10000 });
+    }
+
+    async clickOnCreateNewContracts() {
+        await this.contractCombobox.click({ timeout: 10000 });
+        await this.page.getByRole("option", { name: "New Contract" }).first().click({ timeout: 10000 });
         await this.page.waitForTimeout(3000);
     }
 
+    async clickOnCreateNewAccounts() {
+        await this.accountCombobox.click({ timeout: 10000 });
+        await this.page.getByRole("option", { name: "New Account" }).first().click({ timeout: 10000 });
+        await this.page.waitForTimeout(3000);
+    }
 }

@@ -26,7 +26,6 @@ export default class SalesforceWorkOrdersPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newWorkOrderButton: Locator;
   readonly saveButton: Locator;
   readonly saveAndNewButton: Locator;
   readonly cancelButton: Locator;
@@ -63,9 +62,6 @@ export default class SalesforceWorkOrdersPage {
     this.testInfo = testInfo;
 
     // Primary controls - Main UI interaction elements
-    this.newWorkOrderButton = page.getByRole("button", {
-      name: "New",
-    });
     this.saveButton = page.getByRole("button", { name: "Save", exact: true });
     this.saveAndNewButton = page.getByRole("button", { name: "Save & New" });
     this.cancelButton = page.getByRole("button", { name: "Cancel" });
@@ -116,10 +112,6 @@ export default class SalesforceWorkOrdersPage {
     console.log("🔄 Starting work order creation process...");
     console.log("📝 Work order details:", JSON.stringify(details, null, 2));
 
-    await expect(this.newWorkOrderButton).toBeVisible({
-      timeout: 10000,
-    });
-
     // Take start screenshot for verification
     await Helper.takeScreenshotToFile(
       this.page,
@@ -127,10 +119,6 @@ export default class SalesforceWorkOrdersPage {
       this.testInfo,
       "Service/salesforce-work-orders/"
     );
-
-    // Click New Work Order
-    await this.newWorkOrderButton.click({ timeout: 10000 });
-    console.log("✅ Work order creation form opened");
 
     // Wait for form to be fully loaded
     await this.statusCombobox.waitFor({ state: "visible", timeout: 10000 });
@@ -190,6 +178,7 @@ export default class SalesforceWorkOrdersPage {
     // Fill Asset field
     if (details.Asset && details.Asset !== "--None--") {
       await this.assetCombobox.click({ timeout: 10000 });
+      await this.assetCombobox.fill(details.Asset, { timeout: 10000 });
       await this.page
         .getByRole("option", { name: details.Asset })
         .first()

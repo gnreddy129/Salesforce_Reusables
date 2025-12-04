@@ -5,7 +5,8 @@ Feature: Salesforce Work Orders Management
   Scenario Outline: Create and Manage New Work Orders with Comprehensive Data
     Given Open a browser and login to the sales force site
     When Search for "Work Orders" in app launcher
-    Then Add new work order with following details
+    Then Click on "New" button of "Work Orders"
+    Then Fill Work Orders fields with following details:
       | Field           | Value             |
       | Status          | <Status>          |
       | Priority        | <Priority>        |
@@ -25,4 +26,3 @@ Feature: Salesforce Work Orders Management
     Examples:
       | Status | Priority | ParentWorkOrder | Contact    | Account | Asset    | Case     | Entitlement | ServiceContract | Description                                   | Subject                 |
       | New    | Medium   | --None--        | John Smith | Testing | --None-- | --None-- | --None--    | --None--        | HVAC system maintenance required for building | HVAC System Maintenance |
-      # | New    | High     | --None--        | --None-- | Testing | --None-- | --None-- | --None--    | --None--        | Emergency repair for critical equipment failure | Emergency Equipment Repair |

@@ -25,8 +25,6 @@ export default class SalesforceOrdersPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newOrderButton: Locator;
-  readonly saveButton: Locator;
   readonly saveAndNewButton: Locator;
   readonly cancelButton: Locator;
 
@@ -75,8 +73,6 @@ export default class SalesforceOrdersPage {
     this.testInfo = testInfo;
 
     // Primary controls - Main UI interaction elements
-    this.newOrderButton = page.getByRole("button", { name: "New" });
-    this.saveButton = page.getByRole("button", { name: "Save", exact: true });
     this.saveAndNewButton = page.getByRole("button", { name: "Save & New" });
     this.cancelButton = page.getByRole("button", { name: "Cancel" });
 
@@ -180,8 +176,6 @@ export default class SalesforceOrdersPage {
     console.log("🔄 Starting order creation process...");
     console.log("📝 Order details:", JSON.stringify(details, null, 2));
 
-    await expect(this.newOrderButton).toBeVisible({ timeout: 10000 });
-
     // Take start screenshot for verification
     await Helper.takeScreenshotToFile(
       this.page,
@@ -189,10 +183,6 @@ export default class SalesforceOrdersPage {
       this.testInfo,
       "Sales/salesforce-orders/"
     );
-
-    // Click New Order
-    await this.newOrderButton.click({ timeout: 10000 });
-    console.log("✅ Order creation form opened");
 
     // Wait for form to be fully loaded
     await this.statusCombobox.waitFor({ state: "visible", timeout: 10000 });
@@ -416,23 +406,6 @@ export default class SalesforceOrdersPage {
       console.log(`✅ Description filled: ${details.Description}`);
     }
 
-    console.log("💾 Saving the order...");
-
-    // Save the order
-    await this.saveButton.click({ timeout: 10000 });
-    console.log("✅ Order saved successfully");
-
-    // Wait for navigation after save
-    await this.page.waitForTimeout(2000);
-
-    // Take end screenshot for verification
-    await Helper.takeScreenshotToFile(
-      this.page,
-      "2-end-order",
-      this.testInfo,
-      "Sales/salesforce-orders/"
-    );
-
     console.log("🎉 Order creation completed!");
   }
 
@@ -448,9 +421,15 @@ export default class SalesforceOrdersPage {
    * @param details.OrderNumber - Order number to verify
    */
   async verifyOrder(details: { [k: string]: string }) {
+    await Helper.takeScreenshotToFile(
+      this.page,
+      "2-verification",
+      this.testInfo,
+      "Sales/salesforce-orders/"
+    );
     console.log("🔍 Starting order verification...");
 
-    await expect(this.orderCreatedMessage).toContainText("was created", {
+    await expect(this.orderCreatedMessage.first()).toContainText("was created", {
       timeout: 10000,
     });
     console.log("✅ Order creation message verified");

@@ -5,7 +5,8 @@ Feature: Salesforce Orders Management
   Scenario Outline: Create a new order with different data sets
     Given Open a browser and login to the sales force site
     When Search for "Orders" in app launcher
-    Then Add new order with following details
+    Then Click on "New" button of "Orders"
+    Then Fill Orders fields with following details:
       | Field                  | Value                  |
       | Contract Number        | <ContractNumber>       |
       | Order Number           | <OrderNumber>          |

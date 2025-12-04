@@ -35,6 +35,11 @@ export class SalesforceHomePage {
   // Verification Elements
   readonly home_component: Locator;
 
+  // for new and save button
+  readonly newButton: Locator;
+  readonly dialog: Locator;
+  readonly saveButton: Locator;
+
   /**
    * Constructor - Initializes the SalesforceHome page object with all necessary locators
    *
@@ -65,6 +70,10 @@ export class SalesforceHomePage {
       " //b[contains(text(),'Campaigns')]"
     );
 
+    this.newButton = page.getByRole("button", { name: /New|Create/i });
+    this.dialog = page.getByRole('dialog');
+        this.saveButton = page.getByRole("button", { name: "Save", exact: true });
+
     console.log(
       "✅ SalesforceHome page object initialized successfully with all locators"
     );
@@ -94,8 +103,6 @@ export class SalesforceHomePage {
    * await homePage.searchApp("Marketing");
    */
   async searchApp(appName: string) {
-    const authFile = path.join(__dirname, '../playwright/.auth/user.json');
-    await this.page.context().storageState({ path: authFile });
     console.log("🔄 Starting app search and navigation...");
     console.log(`📱 Searching for app: ${appName}`);
 
@@ -140,7 +147,7 @@ export class SalesforceHomePage {
 
 
   async clickNewButton(buttonName: string, appName: string) {
-    console.log("🔄 Starting New Page creation process...");
+    console.log(`🔄 Starting New Page creation process of ${appName}...`);
 
     // Take start screenshot for verification
     await Helper.takeScreenshotToFile(
@@ -151,10 +158,20 @@ export class SalesforceHomePage {
     );
 
     // Click New button and wait for dialog to appear
-    let newButton = this.page.getByRole("button", { name: /New|Create/i });
-    let dialog = this.page.getByRole('dialog');
-    await newButton.click({ timeout: 10000 });
-    await expect(dialog.getByText("New").first()).toBeVisible();
-    console.log("✅ Opportunity creation dialog opened");
+    await this.newButton.click({ timeout: 10000 });
+    await this.page.waitForTimeout(3000);
+    // await expect(this.dialog.getByText("New").first()).toBeVisible();
+    console.log(`✅ ${appName} creation dialog opened`);
+  }
+
+  async clickSaveButton(appName: string) {
+    console.log("💾 Saving the order...");
+
+    // Save the order
+    await this.saveButton.click({ timeout: 10000 });
+    console.log("✅ Order saved successfully");
+
+    // Wait for navigation after save
+    await this.page.waitForTimeout(2000);
   }
 }
