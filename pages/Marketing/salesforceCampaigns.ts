@@ -67,7 +67,7 @@ export default class SalesforceCampaignsPage {
     this.newCampaignButton = page.getByRole("button", { name: /New/i }).first();
     this.dialog = page.getByRole("dialog").first();
     this.saveButton = this.dialog
-      .getByRole("button", { name: /^Save$/i })
+      .getByRole("button", { name: "Save", exact: true })
       .first();
 
     // Initialize form field locators

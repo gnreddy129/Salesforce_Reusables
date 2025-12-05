@@ -34,5 +34,5 @@ Feature: Create account module then click on first account on list and add oppor
       | Description | <Description> |
 
     Examples:
-      | accountName             | phone    | industry   | type               | website             | employees | description                                                       | rating | accountSite  | accountNumber | revenue | Name             | Type         | Stage       | Amount | CloseDate  | Private | NextStep        | Description                   |
-      | Tech Solutions Inc 2025 | 555-0123 | Technology | Technology Partner | www.techsol2025.com |       500 | A leading technology company specializing in enterprise solutions | Hot    | Headquarters | ACC2025       | 5000000 | New Business Opp | New Customer | Prospecting |  50000 | 10/10/2024 | Yes     | Initial Contact | New business opportunity test |
+      | accountName | phone    | industry   | type               | website             | employees | description                                                       | rating | accountSite  | accountNumber | revenue | Name             | Type         | Stage       | Amount | CloseDate  | Private | NextStep        | Description                   |
+      | Testing     | 555-0123 | Technology | Technology Partner | www.techsol2025.com |       500 | A leading technology company specializing in enterprise solutions | Hot    | Headquarters | ACC2025       | 5000000 | New Business Opp | New Customer | Prospecting |  50000 | 10/10/2024 | Yes     | Initial Contact | New business opportunity test |

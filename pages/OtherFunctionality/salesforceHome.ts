@@ -72,7 +72,7 @@ export class SalesforceHomePage {
 
     this.newButton = page.getByRole("button", { name: /New|Create/i });
     this.dialog = page.getByRole('dialog');
-        this.saveButton = page.getByRole("button", { name: "Save", exact: true });
+    this.saveButton = page.getByRole("button", { name: "Save", exact: true });
 
     console.log(
       "✅ SalesforceHome page object initialized successfully with all locators"
@@ -173,5 +173,11 @@ export class SalesforceHomePage {
 
     // Wait for navigation after save
     await this.page.waitForTimeout(2000);
+  }
+
+  async verifyOTPbyMailosaur(username: string, password: string) {
+    await this.page.goto("https://mailosaur.com/app/login");
+    await this.page.getByRole('textbox', { name: "Email address" }).fill(username, { timeout: 10000 });
+    await this.page.getByRole('button', { name: "Continue" }).click({ timeout: 10000 });
   }
 }

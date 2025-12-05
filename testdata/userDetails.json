@@ -1,7 +1,12 @@
 {
-  "user2": {
-    "email" : "yeikuhozoiffa-1695@yopmail.com",
-    "username": "yeikuhozoiffa-1695@yopmail.com",
+  "login": {
+    "email": "demo12qwert@gmail.com",
+    "username": "breakfast-bush786@agentforce.com",
     "password": "Password123$"
+  },
+  "mailosure": {
+    "API_KEY": "q2LAcc0Um0nOqbIfP1W0lwejUVXoe0q8",
+    "SERVER_ID": "l4xgwx7y",
+    "email": "breakfast-bush@l4xgwx7y.mailosaur.net"
   }
 }

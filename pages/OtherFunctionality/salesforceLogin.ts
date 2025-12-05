@@ -2,7 +2,8 @@ import { expect, type Locator, type Page, TestInfo } from "@playwright/test";
 import { Helper } from "../../utils/helper";
 const testData = require("../../testdata/userDetails.json");
 import YopmailPage from "./yopmail";
-
+const MailosaurClient = require("mailosaur");
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"; // to disable ssl certificate
 /**
  * SalesforceLogin Page Object Model
  *
@@ -13,7 +14,7 @@ import YopmailPage from "./yopmail";
  * Features:
  * - Standard username/password login
  * - Two-factor authentication support with email verification
- * - Verification code retrieval from Yopmail
+ * - Verification code retrieval from Yopmail and Mailosaur
  * - Login error validation
  * - Retry mechanisms for verification code failures
  *
@@ -79,6 +80,7 @@ export class SalesforceLoginPage {
    *
    * @param data_username - Salesforce username/email
    * @param data_password - Salesforce password
+   * @param useMailosaur - Optional: Use Mailosaur for verification instead of Yopmail
    *
    * @throws Will throw an error if:
    * - Login credentials are invalid
@@ -87,10 +89,18 @@ export class SalesforceLoginPage {
    *
    * @example
    * await loginPage.Login("user@example.com", "password123");
+   * await loginPage.Login("salesforcecode-q28t@force.com", "Salesforce123$$$", true); // Use Mailosaur
    */
-  async Login(data_username: string, data_password: string) {
+  async Login(
+    data_username: string,
+    data_password: string,
+    useMailosaur: boolean = false
+  ) {
     console.log("🔄 Starting Salesforce login process...");
     console.log(`📝 Login username: ${data_username}`);
+    console.log(
+      `🔧 Verification method: ${useMailosaur ? "Mailosaur" : "Yopmail"}`
+    );
 
     // Navigate to Salesforce login page and perform login
     await this.page.goto("/");
@@ -109,6 +119,33 @@ export class SalesforceLoginPage {
     await this.login_button.click();
     console.log("✅ Login credentials submitted");
 
+    // Choose verification method based on parameter
+    if (useMailosaur) {
+      await this.mailosaurVerification();
+    } else {
+      await this.yopmailVerification();
+    }
+    console.log("🎉 Login process completed!");
+  }
+
+  async mailosureAPIVerification() {
+    console.log("Retrieving verification code from Mailosaur via API...");
+    // Setup the API client
+    console.log("credentials", testData.mailosure.API_KEY , testData.mailosure.SERVER_ID, testData.mailosure.email);
+    const mailosaur = new MailosaurClient(testData.mailosure.API_KEY);
+
+    // Search for the message
+    const message = await mailosaur.messages.get(testData.mailosure.SERVER_ID, {
+      sentTo: testData.mailosure.email,
+    });
+    console.log("Message retrieved:", message.subject);
+    const code = message.text.codes[0].value;
+    console.log(`🔐 Retrieved code: ${code}`);
+    await mailosaur.messages.deleteAll(testData.mailosure.SERVER_ID);
+    return code;
+  }
+
+  async yopmailVerification() {
     // Handle verification code if prompted
     if (await this.verificationCodeInput.isVisible()) {
       console.log(
@@ -116,7 +153,7 @@ export class SalesforceLoginPage {
       );
       const verificationCode = await this.getVerificationCode(
         this.context,
-        testData.user2.email
+        testData.login.email
       );
 
       // Enter verification code in Salesforce
@@ -125,16 +162,37 @@ export class SalesforceLoginPage {
         console.log("⚠️ First verification attempt failed - retrying...");
         const newVerificationCode = await this.getVerificationCode(
           this.context,
-          testData.user2.email
+          testData.login.email
         );
         await this.enterVerificationCode(newVerificationCode);
       }
       console.log("✅ Two-factor authentication completed");
     }
-
-    console.log("🎉 Login process completed!");
   }
 
+  async mailosaurVerification() {
+    // Handle verification code if prompted
+    if (await this.verificationCodeInput.isVisible()) {
+      console.log(
+        "🔐 Two-factor authentication required - retrieving verification code from Mailosaur..."
+      );
+      // const verificationCode = await this.getVerificationCodeFromMailosaur(
+      //   this.context,
+      //   testData.login
+      // );
+
+      const verificationCode = await this.mailosureAPIVerification();
+
+      // Enter verification code in Salesforce
+      const retry = await this.enterVerificationCode(verificationCode);
+      if (!retry) {
+        console.log("⚠️ First verification attempt failed - retrying...");
+        const newVerificationCode = await this.mailosureAPIVerification();
+        await this.enterVerificationCode(newVerificationCode);
+      }
+      console.log("✅ Two-factor authentication completed");
+    }
+  }
   /**
    * Enters verification code for two-factor authentication
    *
