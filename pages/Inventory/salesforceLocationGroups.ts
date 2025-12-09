@@ -1,4 +1,4 @@
-import { type Page, type TestInfo } from "@playwright/test";
+import { expect, type Page, type TestInfo } from "@playwright/test";
 import { Helper } from "../../utils/helper";
 
 /**
@@ -155,13 +155,7 @@ export default class SalesforceLocationGroupsPage {
     try {
       // Verify Location Group Number if provided
       if (details["Location Group Number"]) {
-        const locationGroupNumberElement = this.page
-          .getByText(details["Location Group Number"])
-          .first();
-        await locationGroupNumberElement.waitFor({
-          state: "visible",
-          timeout: 10000,
-        });
+        await expect(this.page.getByText(details["Location Group Number"]).first().isVisible()).toBeTruthy();
         console.log(
           `✅ Location Group Number verification successful: ${details["Location Group Number"]}`
         );

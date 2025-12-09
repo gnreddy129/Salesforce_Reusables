@@ -49,6 +49,14 @@ export default class SalesforceContractsPage {
   readonly billingStreetInput: Locator;
   readonly billingCityInput: Locator;
   readonly billingZipInput: Locator;
+
+  // Dynamic Fields - Billing Country and State (can be textbox or combobox)
+  readonly billingCountryTextbox: Locator;
+  readonly billingCountryCombobox: Locator;
+  readonly billingStateTextbox: Locator;
+  readonly billingStateCombobox: Locator;
+
+  // Backup locators
   readonly billingStateInput: Locator;
   readonly billingCountryInput: Locator;
 
@@ -128,6 +136,14 @@ export default class SalesforceContractsPage {
     this.billingZipInput = page.getByRole("textbox", {
       name: "Billing Zip/Postal Code",
     });
+
+    // Dynamic Fields - Initialize dual locators for Billing Country and State
+    this.billingCountryTextbox = page.getByRole("textbox", { name: /Billing Country/i });
+    this.billingCountryCombobox = page.getByRole("combobox", { name: /Billing Country/i });
+    this.billingStateTextbox = page.getByRole("textbox", { name: /Billing State/i });
+    this.billingStateCombobox = page.getByRole("combobox", { name: /Billing State/i });
+
+    // Backup locators
     this.billingStateInput = page.getByRole("textbox", {
       name: "Billing State/Province",
     });
@@ -385,23 +401,37 @@ export default class SalesforceContractsPage {
       console.log(`✅ Billing Zip filled: ${billingZip}`);
     }
 
-    if (
-      (details.BillingState && details.BillingState !== "--None--") ||
-      (details["Billing State"] && details["Billing State"] !== "--None--")
-    ) {
-      const billingState = details.BillingState || details["Billing State"];
-      await this.billingStateInput.fill(billingState, { timeout: 10000 });
-      console.log(`✅ Billing State filled: ${billingState}`);
-    }
-
+    // Fill Billing Country FIRST (must be done before State)
     if (
       (details.BillingCountry && details.BillingCountry !== "--None--") ||
       (details["Billing Country"] && details["Billing Country"] !== "--None--")
     ) {
       const billingCountry =
         details.BillingCountry || details["Billing Country"];
-      await this.billingCountryInput.fill(billingCountry, { timeout: 10000 });
-      console.log(`✅ Billing Country filled: ${billingCountry}`);
+      console.log("🌍 Handling Billing Country field (textbox/combobox)...");
+      await Helper.fillDynamicField(
+        this.page,
+        this.billingCountryTextbox,
+        this.billingCountryCombobox,
+        "Billing Country",
+        billingCountry
+      );
+    }
+
+    // Then fill Billing State
+    if (
+      (details.BillingState && details.BillingState !== "--None--") ||
+      (details["Billing State"] && details["Billing State"] !== "--None--")
+    ) {
+      const billingState = details.BillingState || details["Billing State"];
+      console.log("🏘️ Handling Billing State field (textbox/combobox)...");
+      await Helper.fillDynamicField(
+        this.page,
+        this.billingStateTextbox,
+        this.billingStateCombobox,
+        "Billing State",
+        billingState
+      );
     }
 
     // Fill Description Information fields

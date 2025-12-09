@@ -6,10 +6,10 @@ test.describe('Salesforce Authorization Form Management', () => {
 
   test.describe('Create and Manage New Authorization Form with Different Data', () => {
 
-    test('Example #1', { tag: ['@mode:serial', '@customer', '@regression'] }, async ({ Given, When, Then, page }) => { 
+    test('Example #1', { tag: ['@mode:serial', '@customer', '@regression', '@salesforce_authorization-form1'] }, async ({ Given, When, Then, page }) => { 
       await Given('Open a browser and login to the sales force site', null, { page }); 
       await When('Search for "Authorization Form" in app launcher', null, { page }); 
-      await Then('Add new Authorization Form with following details', {"dataTable":{"rows":[{"cells":[{"value":"Field"},{"value":"Value"}]},{"cells":[{"value":"Name"},{"value":"GDPR Authorization Form"}]},{"cells":[{"value":"Revision Number"},{"value":"1.0"}]},{"cells":[{"value":"Effective From Date"},{"value":"30/11/2025"}]},{"cells":[{"value":"Effective To Date"},{"value":"31/12/2024"}]},{"cells":[{"value":"Default Auth Form Text"},{"value":"--None--"}]},{"cells":[{"value":"Is Signature Required"},{"value":"true"}]}]}}, { page }); 
+      await Then('Add new Authorization Form with following details', {"dataTable":{"rows":[{"cells":[{"value":"Field"},{"value":"Value"}]},{"cells":[{"value":"Name"},{"value":"GDPR Authorization Form"}]},{"cells":[{"value":"Revision Number"},{"value":"1.0"}]},{"cells":[{"value":"Effective From Date"},{"value":"10/11/2025"}]},{"cells":[{"value":"Effective To Date"},{"value":"11/12/2024"}]},{"cells":[{"value":"Default Auth Form Text"},{"value":""}]},{"cells":[{"value":"Is Signature Required"},{"value":"true"}]}]}}, { page }); 
       await Then('Verify Authorization Form is created successfully with details', {"dataTable":{"rows":[{"cells":[{"value":"Field"},{"value":"Value"}]},{"cells":[{"value":"Name"},{"value":"GDPR Authorization Form"}]}]}}, { page }); 
     });
 
@@ -26,5 +26,5 @@ test.use({
 });
 
 const bddFileData = [ // bdd-data-start
-  {"pwTestLine":9,"pickleLine":22,"tags":["@mode:serial","@customer","@regression"],"steps":[{"pwStepLine":10,"gherkinStepLine":6,"keywordType":"Context","textWithKeyword":"Given Open a browser and login to the sales force site","stepMatchArguments":[]},{"pwStepLine":11,"gherkinStepLine":7,"keywordType":"Action","textWithKeyword":"When Search for \"Authorization Form\" in app launcher","stepMatchArguments":[{"group":{"start":11,"value":"\"Authorization Form\"","children":[{"start":12,"value":"Authorization Form","children":[{"children":[]}]},{"children":[{"children":[]}]}]},"parameterTypeName":"string"}]},{"pwStepLine":12,"gherkinStepLine":8,"keywordType":"Outcome","textWithKeyword":"Then Add new Authorization Form with following details","stepMatchArguments":[]},{"pwStepLine":13,"gherkinStepLine":16,"keywordType":"Outcome","textWithKeyword":"Then Verify Authorization Form is created successfully with details","stepMatchArguments":[]}]},
+  {"pwTestLine":9,"pickleLine":22,"tags":["@mode:serial","@customer","@regression","@salesforce_authorization-form1"],"steps":[{"pwStepLine":10,"gherkinStepLine":6,"keywordType":"Context","textWithKeyword":"Given Open a browser and login to the sales force site","stepMatchArguments":[]},{"pwStepLine":11,"gherkinStepLine":7,"keywordType":"Action","textWithKeyword":"When Search for \"Authorization Form\" in app launcher","stepMatchArguments":[{"group":{"start":11,"value":"\"Authorization Form\"","children":[{"start":12,"value":"Authorization Form","children":[{"children":[]}]},{"children":[{"children":[]}]}]},"parameterTypeName":"string"}]},{"pwStepLine":12,"gherkinStepLine":8,"keywordType":"Outcome","textWithKeyword":"Then Add new Authorization Form with following details","stepMatchArguments":[]},{"pwStepLine":13,"gherkinStepLine":16,"keywordType":"Outcome","textWithKeyword":"Then Verify Authorization Form is created successfully with details","stepMatchArguments":[]}]},
 ]; // bdd-data-end

@@ -13,6 +13,5 @@ Feature: Salesforce Catalogue Management
       | Name  | <Name> |
 
     Examples:
-      | Name             |
-      | Sample Item A    |
-      # | Sample Service B |
+      | Name          |
+      | Sample Item A |

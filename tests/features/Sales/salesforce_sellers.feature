@@ -19,8 +19,5 @@ Feature: Salesforce Sellers Management
       | Name  | <Name> |
 
     Examples:
-      | Party    | Name          | Seller Type | Seller Tier | Sales Amount | Active To Date | Active From Date |
-      | John Doe | Test Seller 1 | Reseller    | Gold        |        10000 |     12/03/2025 |       01/01/2025 |
-      # | Test Party 2  | Test Seller 2| Corporate   | Tier 2      | 20000        | 12/31/2025     | 01/01/2025       |
-
-# yeikuhozoiffa-1695@yopmail.com",
+      | Party      | Name          | Seller Type | Seller Tier | Sales Amount | Active To Date | Active From Date |
+      | John Smith | Test Seller 1 | Reseller    | Gold        |        10000 |     12/03/2025 |       01/01/2025 |

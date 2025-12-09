@@ -19,5 +19,5 @@ Feature: Salesforce Shifts Management
     Then Verify shift is created successfully
 
     Examples:
-      | StartDate  | StartTime | EndDate    | EndTime  | Status    | WorkTypeGroup | ServiceTerritory | ServiceResource | TimeSlotType | Label         |
-      | 10/12/2024 |  09:00 AM | 11/12/2024 | 05:00 PM | Published | Testing       |                  | testing         | Normal       | Holiday Shift |
+      | StartDate  | StartTime | EndDate    | EndTime  | Status    | WorkTypeGroup | ServiceTerritory    | ServiceResource | TimeSlotType | Label         |
+      | 10/12/2024 |  09:00 AM | 11/12/2024 | 05:00 PM | Published | Testing       | Service Territory A | testing         | Normal       | Holiday Shift |

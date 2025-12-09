@@ -18,5 +18,4 @@ Feature: Salesforce Customer Management
 
     Examples:
       | Party               | Name                   | CustomerStatusType | TotalLifeTimeValue |
-      | John TestIndividual | Customer for John Test | Active             |              50000 |
-      # | Add New Individual   | New Customer Test         | Inactive           | 25000              |
+      | John Smith | Customer for John Test | Active             |              50000 |

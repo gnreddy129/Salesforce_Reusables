@@ -46,13 +46,27 @@ export default class SalesforceServiceContractsPage {
   readonly billingStreetTextarea: Locator;
   readonly billingCityTextbox: Locator;
   readonly billingZipTextbox: Locator;
-  readonly billingStateTextbox: Locator;
-  readonly billingCountryTextbox: Locator;
+
+  // Dynamic Fields - Billing Country and State (can be textbox or combobox)
+  readonly billingCountryTextbox_static: Locator;
+  readonly billingCountryCombobox: Locator;
+  readonly billingStateTextbox_static: Locator;
+  readonly billingStateCombobox: Locator;
 
   // Shipping Address Fields
   readonly shippingStreetTextarea: Locator;
   readonly shippingCityTextbox: Locator;
   readonly shippingZipTextbox: Locator;
+
+  // Dynamic Fields - Shipping Country and State (can be textbox or combobox)
+  readonly shippingCountryTextbox_static: Locator;
+  readonly shippingCountryCombobox: Locator;
+  readonly shippingStateTextbox_static: Locator;
+  readonly shippingStateCombobox: Locator;
+
+  // Keep original textbox references for backward compatibility
+  readonly billingStateTextbox: Locator;
+  readonly billingCountryTextbox: Locator;
   readonly shippingStateTextbox: Locator;
   readonly shippingCountryTextbox: Locator;
 
@@ -133,13 +147,15 @@ export default class SalesforceServiceContractsPage {
       name: /^Billing Zip$/i,
     });
 
-    this.billingStateTextbox = this.dialog.getByRole("textbox", {
-      name: /^Billing State$/i,
-    });
+    // Dynamic Fields - Initialize dual locators for Billing Country and State
+    this.billingCountryTextbox_static = this.dialog.getByRole("textbox", { name: /Billing Country/i });
+    this.billingCountryCombobox = this.dialog.getByRole("combobox", { name: /Billing Country/i });
+    this.billingStateTextbox_static = this.dialog.getByRole("textbox", { name: /Billing State/i });
+    this.billingStateCombobox = this.dialog.getByRole("combobox", { name: /Billing State/i });
 
-    this.billingCountryTextbox = this.dialog.getByRole("textbox", {
-      name: /^Billing Country$/i,
-    });
+    // Keep original references for backward compatibility
+    this.billingCountryTextbox = this.billingCountryTextbox_static;
+    this.billingStateTextbox = this.billingStateTextbox_static;
 
     // Shipping Address Fields
     this.shippingStreetTextarea = this.dialog.getByRole("textbox", {
@@ -154,13 +170,15 @@ export default class SalesforceServiceContractsPage {
       name: /^Shipping Zip$/i,
     });
 
-    this.shippingStateTextbox = this.dialog.getByRole("textbox", {
-      name: /^Shipping State$/i,
-    });
+    // Dynamic Fields - Initialize dual locators for Shipping Country and State
+    this.shippingCountryTextbox_static = this.dialog.getByRole("textbox", { name: /Shipping Country/i });
+    this.shippingCountryCombobox = this.dialog.getByRole("combobox", { name: /Shipping Country/i });
+    this.shippingStateTextbox_static = this.dialog.getByRole("textbox", { name: /Shipping State/i });
+    this.shippingStateCombobox = this.dialog.getByRole("combobox", { name: /Shipping State/i });
 
-    this.shippingCountryTextbox = this.dialog.getByRole("textbox", {
-      name: /^Shipping Country$/i,
-    });
+    // Keep original references for backward compatibility
+    this.shippingCountryTextbox = this.shippingCountryTextbox_static;
+    this.shippingStateTextbox = this.shippingStateTextbox_static;
 
     // Action Buttons
     this.saveButton = this.dialog.getByRole("button", {
@@ -356,16 +374,30 @@ export default class SalesforceServiceContractsPage {
       console.log("✅ Billing Zip filled:", billingZip);
     }
 
-    if (details.BillingState || details["Billing State"]) {
-      const billingState = details.BillingState || details["Billing State"];
-      await this.billingStateTextbox.fill(billingState, { timeout: 10000 });
-      console.log("✅ Billing State filled:", billingState);
-    }
-
+    // Fill Billing Country FIRST (must be done before State)
     if (details.BillingCountry || details["Billing Country"]) {
       const billingCountry = details.BillingCountry || details["Billing Country"];
-      await this.billingCountryTextbox.fill(billingCountry, { timeout: 10000 });
-      console.log("✅ Billing Country filled:", billingCountry);
+      console.log("🌍 Handling Billing Country field (textbox/combobox)...");
+      await Helper.fillDynamicField(
+        this.page,
+        this.billingCountryTextbox_static,
+        this.billingCountryCombobox,
+        "Billing Country",
+        billingCountry
+      );
+    }
+
+    // Then fill Billing State
+    if (details.BillingState || details["Billing State"]) {
+      const billingState = details.BillingState || details["Billing State"];
+      console.log("🏘️ Handling Billing State field (textbox/combobox)...");
+      await Helper.fillDynamicField(
+        this.page,
+        this.billingStateTextbox_static,
+        this.billingStateCombobox,
+        "Billing State",
+        billingState
+      );
     }
 
     // Shipping Address Fields
@@ -387,16 +419,30 @@ export default class SalesforceServiceContractsPage {
       console.log("✅ Shipping Zip filled:", shippingZip);
     }
 
-    if (details.ShippingState || details["Shipping State"]) {
-      const shippingState = details.ShippingState || details["Shipping State"];
-      await this.shippingStateTextbox.fill(shippingState, { timeout: 10000 });
-      console.log("✅ Shipping State filled:", shippingState);
-    }
-
+    // Fill Shipping Country FIRST (must be done before State)
     if (details.ShippingCountry || details["Shipping Country"]) {
       const shippingCountry = details.ShippingCountry || details["Shipping Country"];
-      await this.shippingCountryTextbox.fill(shippingCountry, { timeout: 10000 });
-      console.log("✅ Shipping Country filled:", shippingCountry);
+      console.log("🌍 Handling Shipping Country field (textbox/combobox)...");
+      await Helper.fillDynamicField(
+        this.page,
+        this.shippingCountryTextbox_static,
+        this.shippingCountryCombobox,
+        "Shipping Country",
+        shippingCountry
+      );
+    }
+
+    // Then fill Shipping State
+    if (details.ShippingState || details["Shipping State"]) {
+      const shippingState = details.ShippingState || details["Shipping State"];
+      console.log("🏘️ Handling Shipping State field (textbox/combobox)...");
+      await Helper.fillDynamicField(
+        this.page,
+        this.shippingStateTextbox_static,
+        this.shippingStateCombobox,
+        "Shipping State",
+        shippingState
+      );
     }
 
     // Take screenshot AFTER all fields are filled

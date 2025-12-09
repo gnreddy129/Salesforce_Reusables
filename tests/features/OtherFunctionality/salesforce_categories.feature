@@ -18,6 +18,5 @@ Feature: Salesforce Category Management
       | Name  | <Name> |
 
     Examples:
-      | Name       | Catalog       | ShowMenu | ParentCategory | Description         | SortOrder |
-      | Test Cat A | Sample Item A | true     | --None--       | Auto-created test A |         1 |
-      # | Test Cat B | Sample Item B | false    | --None--       | Auto-created test B |         2 |
+      | Name       | Catalog | ShowMenu | ParentCategory | Description         | SortOrder |
+      | Test Cat A | Testing | true     |                | Auto-created test A |         1 |

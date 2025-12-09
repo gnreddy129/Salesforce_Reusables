@@ -29,7 +29,7 @@ export default class SalesforceDashboardsPage {
   // Dashboard Configuration Fields
   readonly dashboardNameInput: Locator;
   readonly dashboardDescriptionInput: Locator;
-  readonly folderDropdown: Locator;
+  readonly selectFolder: Locator;
 
   // Dashboard Components
   readonly addComponentButton: Locator;
@@ -79,14 +79,15 @@ export default class SalesforceDashboardsPage {
     this.searchDashboardInput = page.getByPlaceholder("Search dashboards...");
 
     // Dashboard configuration fields - Handle dashboard metadata within iframe
-    const frameLocator = page.frameLocator("iframe");
+    // Use attribute selector to target the specific dashboard iframe (sfxdash-*)
+    const frameLocator = page.frameLocator('iframe[name*="sfxdash"]');
     this.dashboardNameInput = frameLocator.getByRole("textbox", {
       name: "*Name",
     });
     this.dashboardDescriptionInput = frameLocator.getByRole("textbox", {
       name: "Description",
     });
-    this.folderDropdown = frameLocator.getByRole("button", {
+    this.selectFolder = frameLocator.getByRole("button", {
       name: "Select Folder",
     });
     this.addComponentButton = frameLocator.getByRole("button", {
@@ -176,11 +177,11 @@ export default class SalesforceDashboardsPage {
     // Set dashboard name for verification
     SalesforceDashboardsPage.dashboardName = details.DashboardName;
 
-    // Wait for the iframe to be ready
-    const frameLocator = this.page.frameLocator("iframe");
+    // Wait for the dashboard iframe to be ready (use attribute selector to target correct iframe)
+    const frameLocator = this.page.frameLocator('iframe[name*="sfxdash"]');
     await frameLocator
       .getByRole("textbox", { name: "*Name" })
-      .waitFor({ timeout: 10000 });
+      .waitFor({ timeout: 30000 });
 
     console.log("📋 Filling form fields...");
 
@@ -196,11 +197,25 @@ export default class SalesforceDashboardsPage {
       });
     }
 
+    // if (details.Folder) {
+    //   // Select Folder - Choose the folder to save the dashboard in
+    //   await this.selectFolder.click({ timeout: 10000 });
+    //   await this.page.getByText(details.Folder).first().click({ timeout: 10000 });
+    //   await this.page.getByRole('button', { name: 'Select Folder' }).click({ timeout: 10000 });
+    // }
+
+    await this.page.waitForTimeout(2000);
     console.log("💾 Saving the dashboard...");
 
     // Save the dashboard - Submit all entered information
     await this.createButton.click({ timeout: 10000 });
+    console.log("✅ Dashboard Created successfully");
+
+    await this.saveButton.click({ timeout: 10000 });
     console.log("✅ Dashboard saved successfully");
+
+    await this.doneButton.click({ timeout: 10000 });
+    console.log("✅ Dashboard creation completed successfully");
 
     // Take end screenshot for verification
     await Helper.takeScreenshotToFile(

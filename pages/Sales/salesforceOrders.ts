@@ -42,15 +42,23 @@ export default class SalesforceOrdersPage {
   readonly shippingStreetInput: Locator;
   readonly shippingCityInput: Locator;
   readonly shippingZipInput: Locator;
-  readonly shippingStateInput: Locator;
-  readonly shippingCountryInput: Locator;
+
+  // Dynamic Fields - Shipping Country and State (can be textbox or combobox)
+  readonly shippingCountryTextbox: Locator;
+  readonly shippingCountryCombobox: Locator;
+  readonly shippingStateTextbox: Locator;
+  readonly shippingStateCombobox: Locator;
 
   // Billing Address Fields
   readonly billingStreetInput: Locator;
   readonly billingCityInput: Locator;
   readonly billingZipInput: Locator;
-  readonly billingStateInput: Locator;
-  readonly billingCountryInput: Locator;
+
+  // Dynamic Fields - Billing Country and State (can be textbox or combobox)
+  readonly billingCountryTextbox: Locator;
+  readonly billingCountryCombobox: Locator;
+  readonly billingStateTextbox: Locator;
+  readonly billingStateCombobox: Locator;
 
   // Description Fields
   readonly descriptionInput: Locator;
@@ -108,12 +116,12 @@ export default class SalesforceOrdersPage {
     this.shippingZipInput = page.getByRole("textbox", {
       name: "Shipping Zip/Postal Code",
     });
-    this.shippingStateInput = page.getByRole("textbox", {
-      name: "Shipping State/Province",
-    });
-    this.shippingCountryInput = page.getByRole("textbox", {
-      name: "Shipping Country",
-    });
+
+    // Dynamic Fields - Initialize dual locators for Shipping Country and State
+    this.shippingCountryTextbox = page.getByRole("textbox", { name: /Shipping Country/i });
+    this.shippingCountryCombobox = page.getByRole("combobox", { name: /Shipping Country/i });
+    this.shippingStateTextbox = page.getByRole("textbox", { name: /Shipping State/i });
+    this.shippingStateCombobox = page.getByRole("combobox", { name: /Shipping State/i });
 
     // Billing Address field locators
     this.billingStreetInput = page.getByRole("textbox", { name: "Billing Street" });
@@ -121,12 +129,12 @@ export default class SalesforceOrdersPage {
     this.billingZipInput = page.getByRole("textbox", {
       name: "Billing Zip/Postal Code",
     });
-    this.billingStateInput = page.getByRole("textbox", {
-      name: "Billing State/Province",
-    });
-    this.billingCountryInput = page.getByRole("textbox", {
-      name: "Billing Country",
-    });
+
+    // Dynamic Fields - Initialize dual locators for Billing Country and State
+    this.billingCountryTextbox = page.getByRole("textbox", { name: /Billing Country/i });
+    this.billingCountryCombobox = page.getByRole("combobox", { name: /Billing Country/i });
+    this.billingStateTextbox = page.getByRole("textbox", { name: /Billing State/i });
+    this.billingStateCombobox = page.getByRole("combobox", { name: /Billing State/i });
 
     // Description field locator
     this.descriptionInput = page.getByRole("textbox", { name: "Description" });
@@ -334,15 +342,7 @@ export default class SalesforceOrdersPage {
       console.log(`✅ Shipping Zip filled: ${shippingZip}`);
     }
 
-    if (
-      (details.ShippingState && details.ShippingState !== "--None--") ||
-      (details["Shipping State"] && details["Shipping State"] !== "--None--")
-    ) {
-      const shippingState = details.ShippingState || details["Shipping State"];
-      await this.shippingStateInput.fill(shippingState, { timeout: 10000 });
-      console.log(`✅ Shipping State filled: ${shippingState}`);
-    }
-
+    // Fill Shipping Country FIRST (must be done before State)
     if (
       (details.ShippingCountry && details.ShippingCountry !== "--None--") ||
       (details["Shipping Country"] &&
@@ -350,8 +350,30 @@ export default class SalesforceOrdersPage {
     ) {
       const shippingCountry =
         details.ShippingCountry || details["Shipping Country"];
-      await this.shippingCountryInput.fill(shippingCountry, { timeout: 10000 });
-      console.log(`✅ Shipping Country filled: ${shippingCountry}`);
+      console.log("🌍 Handling Shipping Country field (textbox/combobox)...");
+      await Helper.fillDynamicField(
+        this.page,
+        this.shippingCountryTextbox,
+        this.shippingCountryCombobox,
+        "Shipping Country",
+        shippingCountry
+      );
+    }
+
+    // Then fill Shipping State
+    if (
+      (details.ShippingState && details.ShippingState !== "--None--") ||
+      (details["Shipping State"] && details["Shipping State"] !== "--None--")
+    ) {
+      const shippingState = details.ShippingState || details["Shipping State"];
+      console.log("🏘️ Handling Shipping State field (textbox/combobox)...");
+      await Helper.fillDynamicField(
+        this.page,
+        this.shippingStateTextbox,
+        this.shippingStateCombobox,
+        "Shipping State",
+        shippingState
+      );
     }
 
     if (
@@ -381,23 +403,37 @@ export default class SalesforceOrdersPage {
       console.log(`✅ Billing Zip filled: ${billingZip}`);
     }
 
-    if (
-      (details.BillingState && details.BillingState !== "--None--") ||
-      (details["Billing State"] && details["Billing State"] !== "--None--")
-    ) {
-      const billingState = details.BillingState || details["Billing State"];
-      await this.billingStateInput.fill(billingState, { timeout: 10000 });
-      console.log(`✅ Billing State filled: ${billingState}`);
-    }
-
+    // Fill Billing Country FIRST (must be done before State)
     if (
       (details.BillingCountry && details.BillingCountry !== "--None--") ||
       (details["Billing Country"] && details["Billing Country"] !== "--None--")
     ) {
       const billingCountry =
         details.BillingCountry || details["Billing Country"];
-      await this.billingCountryInput.fill(billingCountry, { timeout: 10000 });
-      console.log(`✅ Billing Country filled: ${billingCountry}`);
+      console.log("🌍 Handling Billing Country field (textbox/combobox)...");
+      await Helper.fillDynamicField(
+        this.page,
+        this.billingCountryTextbox,
+        this.billingCountryCombobox,
+        "Billing Country",
+        billingCountry
+      );
+    }
+
+    // Then fill Billing State
+    if (
+      (details.BillingState && details.BillingState !== "--None--") ||
+      (details["Billing State"] && details["Billing State"] !== "--None--")
+    ) {
+      const billingState = details.BillingState || details["Billing State"];
+      console.log("🏘️ Handling Billing State field (textbox/combobox)...");
+      await Helper.fillDynamicField(
+        this.page,
+        this.billingStateTextbox,
+        this.billingStateCombobox,
+        "Billing State",
+        billingState
+      );
     }
 
     // Fill Description field

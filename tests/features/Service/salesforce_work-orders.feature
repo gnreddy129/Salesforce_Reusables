@@ -24,5 +24,5 @@ Feature: Salesforce Work Orders Management
       | Account | <Account> |
 
     Examples:
-      | Status | Priority | ParentWorkOrder | Contact    | Account | Asset    | Case     | Entitlement | ServiceContract | Description                                   | Subject                 |
-      | New    | Medium   | --None--        | John Smith | Testing | --None-- | --None-- | --None--    | --None--        | HVAC system maintenance required for building | HVAC System Maintenance |
+      | Status | Priority | ParentWorkOrder | Contact    | Account | Asset | Case | Entitlement | ServiceContract | Description                                   | Subject                 |
+      | New    | Medium   |                 | John Smith | Testing |       |      |             |                 | HVAC system maintenance required for building | HVAC System Maintenance |

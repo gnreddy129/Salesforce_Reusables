@@ -241,7 +241,7 @@ export default class SalesforceRefundsPage {
         console.log(`🔍 Filling Account: ${refundDetails["Account"]}`);
         await this.accountCombobox.click();
         await this.page
-          .getByRole("option", { name: new RegExp(refundDetails["Account"], "i") })
+          .getByRole("option", { name: new RegExp(refundDetails["Account"], "i") }).first()
           .click();
         console.log("✅ Account filled");
       }
@@ -251,7 +251,7 @@ export default class SalesforceRefundsPage {
         console.log(`🔍 Filling Status: ${refundDetails["Status"]}`);
         await this.statusCombobox.click();
         await this.page
-          .getByRole("option", { name: new RegExp(refundDetails["Status"], "i") })
+          .getByRole("option", { name: new RegExp(refundDetails["Status"], "i") }).first()
           .click();
         console.log("✅ Status filled");
       }

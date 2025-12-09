@@ -42,6 +42,14 @@ export default class SalesforceAlternativePaymentPage {
   readonly companyNameInput: Locator;
   readonly streetInput: Locator;
   readonly cityInput: Locator;
+
+  // Dynamic Fields - Country and State (can be textbox or combobox)
+  readonly countryTextbox: Locator;
+  readonly countryCombobox: Locator;
+  readonly stateTextbox: Locator;
+  readonly stateCombobox: Locator;
+
+  // Backup locators
   readonly stateInput: Locator;
   readonly countryInput: Locator;
   readonly postalCodeInput: Locator;
@@ -92,6 +100,14 @@ export default class SalesforceAlternativePaymentPage {
     this.companyNameInput = this.dialog.getByLabel("Company Name");
     this.streetInput = this.dialog.getByLabel("Street");
     this.cityInput = this.dialog.getByLabel("City");
+
+    // Dynamic Fields - Initialize dual locators for Country and State
+    this.countryTextbox = this.dialog.getByRole("textbox", { name: /Country/i });
+    this.countryCombobox = this.dialog.getByRole("combobox", { name: /Country/i });
+    this.stateTextbox = this.dialog.getByRole("textbox", { name: /State/i });
+    this.stateCombobox = this.dialog.getByRole("combobox", { name: /State/i });
+
+    // Backup locators
     this.stateInput = this.dialog.getByLabel("State");
     this.countryInput = this.dialog.getByLabel("Country");
     this.postalCodeInput = this.dialog.getByLabel("Postal Code");
@@ -245,12 +261,28 @@ export default class SalesforceAlternativePaymentPage {
       await this.cityInput.fill(details.City, { timeout: 10000 });
     }
 
-    if (details.State) {
-      await this.stateInput.fill(details.State, { timeout: 10000 });
+    // Fill Country FIRST (must be done before State)
+    if (details.Country) {
+      console.log("🌍 Handling Country field (textbox/combobox)...");
+      await Helper.fillDynamicField(
+        this.page,
+        this.countryTextbox,
+        this.countryCombobox,
+        "Country",
+        details.Country
+      );
     }
 
-    if (details.Country) {
-      await this.countryInput.fill(details.Country, { timeout: 10000 });
+    // Then fill State
+    if (details.State) {
+      console.log("🏘️ Handling State field (textbox/combobox)...");
+      await Helper.fillDynamicField(
+        this.page,
+        this.stateTextbox,
+        this.stateCombobox,
+        "State",
+        details.State
+      );
     }
 
     if (details.PostalCode || details["Postal Code"]) {

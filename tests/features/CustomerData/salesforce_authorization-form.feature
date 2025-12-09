@@ -1,7 +1,7 @@
 @mode:serial
 Feature: Salesforce Authorization Form Management
 
-  @customer @regression
+  @customer @regression @salesforce_authorization-form1
   Scenario Outline: Create and Manage New Authorization Form with Different Data
     Given Open a browser and login to the sales force site
     When Search for "Authorization Form" in app launcher
@@ -19,5 +19,4 @@ Feature: Salesforce Authorization Form Management
 
     Examples:
       | Name                    | RevisionNumber | EffectiveFromDate | EffectiveToDate | DefaultAuthFormText | IsSignatureRequired |
-      | GDPR Authorization Form |            1.0 |        30/11/2025 |      31/12/2024 | --None--            | true                |
-      # | Marketing Consent Form  | 2.1            | 29/10/2025        | 31/05/2025      | Marketing Authorization | false            |
+      | GDPR Authorization Form |            1.0 |        10/11/2025 |      11/12/2024 |                     | true                |

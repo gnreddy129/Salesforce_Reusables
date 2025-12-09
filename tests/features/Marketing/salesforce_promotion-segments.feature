@@ -19,4 +19,3 @@ Feature: Salesforce Promotion Segments Management
     Examples:
       | Name                          | Code           | Status |
       | Premium Q5 Promotion          | PREM_Q4_001    | Active |
-      # | Summer Discount Bundle        | SUM_DISC_001   | Active |

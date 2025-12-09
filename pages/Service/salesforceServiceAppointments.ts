@@ -83,6 +83,14 @@ export default class SalesforceServiceAppointmentsPage {
   readonly streetInput: Locator;
   readonly cityInput: Locator;
   readonly zipPostalCodeInput: Locator;
+
+  // Dynamic Fields - Country and State (can be textbox or combobox)
+  readonly countryTextbox: Locator;
+  readonly countryCombobox: Locator;
+  readonly stateProvinceTextbox: Locator;
+  readonly stateProvinceCombobox: Locator;
+
+  // Backup locators
   readonly stateProvinceInput: Locator;
   readonly countryInput: Locator;
   readonly latitudeInput: Locator;
@@ -235,6 +243,22 @@ export default class SalesforceServiceAppointmentsPage {
     this.zipPostalCodeInput = page
       .getByRole("group", { name: "Address" })
       .getByRole("textbox", { name: "Zip/Postal Code" });
+
+    // Dynamic Fields - Initialize dual locators for Country and State
+    this.countryTextbox = page
+      .getByRole("group", { name: "Address" })
+      .getByRole("textbox", { name: /Country/i });
+    this.countryCombobox = page
+      .getByRole("group", { name: "Address" })
+      .getByRole("combobox", { name: /Country/i });
+    this.stateProvinceTextbox = page
+      .getByRole("group", { name: "Address" })
+      .getByRole("textbox", { name: /State/i });
+    this.stateProvinceCombobox = page
+      .getByRole("group", { name: "Address" })
+      .getByRole("combobox", { name: /State/i });
+
+    // Backup locators
     this.stateProvinceInput = page
       .getByRole("group", { name: "Address" })
       .getByRole("textbox", { name: "State/Province" });
@@ -632,18 +656,32 @@ export default class SalesforceServiceAppointmentsPage {
       console.log(`✅ Zip/Postal Code filled: ${zipPostalCode}`);
     }
 
+    // Fill Country FIRST (must be done before State)
+    if (details.Country && details.Country !== "--None--") {
+      console.log("🌍 Handling Country field (textbox/combobox)...");
+      await Helper.fillDynamicField(
+        this.page,
+        this.countryTextbox,
+        this.countryCombobox,
+        "Country",
+        details.Country
+      );
+    }
+
+    // Then fill State/Province
     if (
       (details.StateProvince && details.StateProvince !== "--None--") ||
       (details["State/Province"] && details["State/Province"] !== "--None--")
     ) {
       const stateProvince = details.StateProvince || details["State/Province"];
-      await this.stateProvinceInput.fill(stateProvince, { timeout: 10000 });
-      console.log(`✅ State/Province filled: ${stateProvince}`);
-    }
-
-    if (details.Country && details.Country !== "--None--") {
-      await this.countryInput.fill(details.Country, { timeout: 10000 });
-      console.log(`✅ Country filled: ${details.Country}`);
+      console.log("🏘️ Handling State/Province field (textbox/combobox)...");
+      await Helper.fillDynamicField(
+        this.page,
+        this.stateProvinceTextbox,
+        this.stateProvinceCombobox,
+        "State/Province",
+        stateProvince
+      );
     }
 
     // Fill Contact Information fields

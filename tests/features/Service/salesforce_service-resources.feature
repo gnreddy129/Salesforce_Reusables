@@ -17,6 +17,5 @@ Feature: Salesforce Service Resources Management
       | Name  | <Name> |
 
     Examples:
-      | Name                   | Active | User      | ResourceType | Description                  |
-      | Technical Support Lead | true   | Test5 lab | Technician   | Lead technical support agent |
-      # | Customer Service Rep   | false  | Jane Doe         | Agent        | Customer service representative |
+      | Name                   | Active | User            | ResourceType | Description                  |
+      | Technical Support Lead | true   | Salesforce demo | Technician   | Lead technical support agent |

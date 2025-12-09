@@ -16,4 +16,3 @@ Feature: Salesforce Business Brands Management
     Examples:
       | Name          | OrgId | Parent           |
       | Premium Brand | ORG1  | Business Brand A |
-      # | Budget Brand  | ORG2  | Business Brand B     |

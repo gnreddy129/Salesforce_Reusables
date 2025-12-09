@@ -37,6 +37,12 @@ export default class SalesforceLeadsPage {
   readonly statusCombo: Locator;
   readonly industryCombo: Locator;
 
+  // Dynamic Fields - Country and State (can be textbox or combobox)
+  readonly countryTextbox: Locator;
+  readonly countryCombobox: Locator;
+  readonly stateTextbox: Locator;
+  readonly stateCombobox: Locator;
+
   // Additional UI elements
   readonly appLauncher: Locator;
   readonly viewAllButton: Locator;
@@ -70,6 +76,12 @@ export default class SalesforceLeadsPage {
     this.phoneInput = page.getByRole("textbox", { name: /Phone/i });
     this.statusCombo = page.getByRole("combobox", { name: /Lead Status/i, exact: true, });
     this.industryCombo = page.getByRole("combobox", { name: /Industry/i, exact: true, });
+
+    // Dynamic Fields - Initialize dual locators for Country and State
+    this.countryTextbox = page.getByRole("textbox", { name: /Country/i });
+    this.countryCombobox = page.getByRole("combobox", { name: /Country/i });
+    this.stateTextbox = page.getByRole("textbox", { name: /State/i });
+    this.stateCombobox = page.getByRole("combobox", { name: /State/i });
 
     // Success message locator
     this.leadCreatedMessage = page.locator(".toastMessage");
@@ -149,6 +161,30 @@ export default class SalesforceLeadsPage {
       await this.page
         .getByRole("option", { name: details.Industry, exact: true })
         .click({ timeout: 10000 });
+    }
+
+    // Fill Country FIRST (must be done before State)
+    if (details.Country) {
+      console.log("🌍 Handling Country field (textbox/combobox)...");
+      await Helper.fillDynamicField(
+        this.page,
+        this.countryTextbox,
+        this.countryCombobox,
+        "Country",
+        details.Country
+      );
+    }
+
+    // Then fill State
+    if (details.State) {
+      console.log("🏘️ Handling State field (textbox/combobox)...");
+      await Helper.fillDynamicField(
+        this.page,
+        this.stateTextbox,
+        this.stateCombobox,
+        "State",
+        details.State
+      );
     }
 
     console.log("💾 Saving the lead...");

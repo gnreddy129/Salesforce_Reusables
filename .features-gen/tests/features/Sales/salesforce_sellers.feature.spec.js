@@ -9,7 +9,7 @@ test.describe('Salesforce Sellers Management', () => {
     test('Example #1', { tag: ['@mode:serial', '@sales', '@sellers', '@regression'] }, async ({ Given, When, Then, And, page }) => { 
       await Given('Open a browser and login to the sales force site', null, { page }); 
       await When('Search for "Sellers" in app launcher', null, { page }); 
-      await Then('Add new seller with following details', {"dataTable":{"rows":[{"cells":[{"value":"Field"},{"value":"Value"}]},{"cells":[{"value":"Party"},{"value":"John Doe"}]},{"cells":[{"value":"Name"},{"value":"Test Seller 1"}]},{"cells":[{"value":"Seller Type"},{"value":"Reseller"}]},{"cells":[{"value":"Seller Tier"},{"value":"Gold"}]},{"cells":[{"value":"Sales Amount"},{"value":"10000"}]},{"cells":[{"value":"Active To Date"},{"value":"12/03/2025"}]},{"cells":[{"value":"Active From Date"},{"value":"01/01/2025"}]}]}}, { page }); 
+      await Then('Add new seller with following details', {"dataTable":{"rows":[{"cells":[{"value":"Field"},{"value":"Value"}]},{"cells":[{"value":"Party"},{"value":"John Smith"}]},{"cells":[{"value":"Name"},{"value":"Test Seller 1"}]},{"cells":[{"value":"Seller Type"},{"value":"Reseller"}]},{"cells":[{"value":"Seller Tier"},{"value":"Gold"}]},{"cells":[{"value":"Sales Amount"},{"value":"10000"}]},{"cells":[{"value":"Active To Date"},{"value":"12/03/2025"}]},{"cells":[{"value":"Active From Date"},{"value":"01/01/2025"}]}]}}, { page }); 
       await And('Verify Seller is created successfully with details', {"dataTable":{"rows":[{"cells":[{"value":"Field"},{"value":"Value"}]},{"cells":[{"value":"Name"},{"value":"Test Seller 1"}]}]}}, { page }); 
     });
 

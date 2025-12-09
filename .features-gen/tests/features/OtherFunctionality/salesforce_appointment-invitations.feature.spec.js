@@ -9,8 +9,8 @@ test.describe('Appointment Invitations', () => {
     test('Example #1', { tag: ['@mode:serial', '@appointment', '@regression'] }, async ({ Given, When, Then, page }) => { 
       await Given('Open a browser and login to the sales force site', null, { page }); 
       await When('Search for "Appointment Invitations" in app launcher', null, { page }); 
-      await Then('Add new appointment invitation with following details', {"dataTable":{"rows":[{"cells":[{"value":"Field"},{"value":"Value"}]},{"cells":[{"value":"BookingStartDate"},{"value":"28/10/2025"}]},{"cells":[{"value":"BookingEndDate"},{"value":"28/11/2025"}]},{"cells":[{"value":"URLExpirationDate"},{"value":"30/12/2025"}]},{"cells":[{"value":"Active"},{"value":"true"}]},{"cells":[{"value":"AppointmentTopic"},{"value":"Work Item A"}]},{"cells":[{"value":"ServiceTerritory"},{"value":"Service Territory A"}]}]}}, { page }); 
-      await Then('Verify appointment invitation is created successfully with details', {"dataTable":{"rows":[{"cells":[{"value":"Field"},{"value":"Value"}]},{"cells":[{"value":"BookingStartDate"},{"value":"28/10/2025"}]}]}}, { page }); 
+      await Then('Add new appointment invitation with following details', {"dataTable":{"rows":[{"cells":[{"value":"Field"},{"value":"Value"}]},{"cells":[{"value":"BookingStartDate"},{"value":"10/10/2025"}]},{"cells":[{"value":"BookingEndDate"},{"value":"11/11/2025"}]},{"cells":[{"value":"URLExpirationDate"},{"value":"11/12/2025"}]},{"cells":[{"value":"Active"},{"value":"true"}]},{"cells":[{"value":"AppointmentTopic"},{"value":"Work Item A"}]},{"cells":[{"value":"ServiceTerritory"},{"value":"Service Territory A"}]}]}}, { page }); 
+      await Then('Verify appointment invitation is created successfully with details', {"dataTable":{"rows":[{"cells":[{"value":"Field"},{"value":"Value"}]},{"cells":[{"value":"BookingStartDate"},{"value":"10/10/2025"}]}]}}, { page }); 
     });
 
   });

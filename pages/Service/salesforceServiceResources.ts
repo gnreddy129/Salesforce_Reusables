@@ -177,7 +177,7 @@ export default class SalesforceServiceResourcesPage {
     ) {
       const userValue = details.User || details["User"];
       await this.userCombobox.click({ timeout: 10000 });
-      await this.page.getByText(userValue).first().click({ timeout: 10000 });
+      await this.page.getByRole("option", { name: userValue }).first().click({ timeout: 10000 });
       console.log(`✅ User selected: ${userValue}`);
     }
 
@@ -190,7 +190,7 @@ export default class SalesforceServiceResourcesPage {
         details.ResourceType || details["Resource Type"];
       await this.resourceTypeCombobox.click({ timeout: 10000 });
       await this.page
-        .getByText(resourceTypeValue)
+        .getByRole("option", { name: resourceTypeValue })
         .first()
         .click({ timeout: 10000 });
       console.log(`✅ Resource Type selected: ${resourceTypeValue}`);

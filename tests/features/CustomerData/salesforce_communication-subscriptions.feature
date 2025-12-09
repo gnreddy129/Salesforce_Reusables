@@ -15,4 +15,3 @@ Feature: Salesforce Communication Subscriptions Management
     Examples:
       | Name               |
       | Monthly Newsletter |
-      # | Product Updates    |

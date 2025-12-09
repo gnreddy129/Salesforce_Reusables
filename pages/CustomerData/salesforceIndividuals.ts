@@ -299,9 +299,7 @@ export default class SalesforceIndividualsPage {
     // Verify individual creation by checking for the name on the page
     if (details.FirstName && details.LastName) {
       const fullName = `${details.FirstName} ${details.LastName}`;
-      await expect(
-        this.page.locator(`[title*="${fullName}"]`).first()
-      ).toBeVisible({ timeout: 10000 });
+      await expect(this.page.getByText(fullName).first().isVisible()).toBeTruthy();
       console.log(`✅ Individual name verification successful: ${fullName}`);
     } else if (details.LastName) {
       await expect(

@@ -24,6 +24,5 @@ Feature: Salesforce Calendar Event Creation
       | Subject | <Subject> |
 
     Examples:
-      | Subject | Location        | StartDate    | StartTime | EndDate      | EndTime  | Name     | RelatedTo | AllDayEvent | Description                 |
-      | Meeting | Conference Room | 21-Nov-2025 |  10:00 AM | 22-Nov-2025 | 11:00 AM | John Doe | Testing   | false       | Weekly team standup meeting |
-      # | Client Call  | Office          | 22-Dec-2024 |   2:00 PM | 22-Dec-2024 |  3:00 PM | Jane Smith | Client ABC   | false       | Important client discussion |
+      | Subject | Location        | StartDate   | StartTime | EndDate      | EndTime  | Name     | RelatedTo | AllDayEvent | Description                 |
+      | Meeting | Conference Room | Dec 3, 2025 |  10:00 AM | Dec 10, 2025 | 11:00 AM | John Doe | Testing   | false       | Weekly team standup meeting |

@@ -5,6 +5,7 @@ Feature: Salesforce Contract Management
   Scenario Outline: Create and Manage New Contracts with Different Data
     Given Open a browser and login to the sales force site
     When Search for "Contracts" in app launcher
+    Then Click on "New" button of "Accounts"
     Then Add new contract with following details
       | Field                   | Value                   |
       | Status                  | <Status>                |
@@ -30,6 +31,5 @@ Feature: Salesforce Contract Management
       | Account Name | <AccountName> |
 
     Examples:
-      | Status | ContractStartDate | AccountName | ContractTerm | CustomerSignedBy | OwnerExpirationNotice | CustomerSignedTitle | CompanySignedBy | CustomerSignedDate | CompanySignedDate | PriceBook | BillingStreet | BillingCity | BillingZip | BillingState | BillingCountry | SpecialTerms                  | Description             |
-      | Draft  |        15/12/2024 | Testing     |           12 | --None--         |               15 Days | Sales Manager       | --None--        |         10/12/2024 |        12/12/2024 | --None--  |   123 Main St | New York    |      10001 | NY           | USA            | Standard contract terms apply | Annual service contract |
-      # | Draft  |        01/01/2025 | Tech Solutions Inc 2025 |           24 | Sarah Johnson    |               30 Days | VP Sales            | Mike Brown      |         25/12/2024 |        30/12/2024 | Premium Price Book  | 456 Business Ave | Los Angeles |      90210 | CA           | USA            | Premium support included      | Two-year enterprise agreement  |
+      | Status | ContractStartDate | AccountName | ContractTerm | CustomerSignedBy | OwnerExpirationNotice | CustomerSignedTitle | CompanySignedBy | CustomerSignedDate | CompanySignedDate | PriceBook | BillingStreet | BillingCity | BillingZip | BillingState    | BillingCountry | SpecialTerms                  | Description             |
+      | Draft  |        12/12/2024 | Testing     |           12 |                  |               15 Days | Sales Manager       |                 |         10/12/2024 |        12/12/2024 |           |   123 Main St | New York    |      10001 | South Australia | Australia      | Standard contract terms apply | Annual service contract |

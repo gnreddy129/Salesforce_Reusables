@@ -35,10 +35,15 @@ export default class SalesforceServiceTerritoriesPage {
   readonly parentTerritoryCombobox: Locator;
   readonly operatingHoursCombobox: Locator;
   readonly activeCheckbox: Locator;
+
+  // Dynamic Fields - Country and State (can be textbox or combobox)
   readonly countryTextbox: Locator;
+  readonly countryCombobox: Locator;
+  readonly stateProvinceTextbox: Locator;
+  readonly stateProvinceCombobox: Locator;
+
   readonly addressInput: Locator;
   readonly cityInput: Locator;
-  readonly stateProvinceTextbox: Locator;
   readonly zipPostalCodeInput: Locator;
   readonly descriptionInput: Locator;
 
@@ -78,17 +83,26 @@ export default class SalesforceServiceTerritoriesPage {
     this.activeCheckbox = page.getByRole("checkbox", {
       name: "Active",
     });
+
+    // Dynamic Fields - Initialize dual locators for Country and State
     this.countryTextbox = page.getByRole("textbox", {
       name: "Country",
     });
+    this.countryCombobox = page.getByRole("combobox", {
+      name: "Country",
+    });
+    this.stateProvinceTextbox = page.getByRole("textbox", {
+      name: "State/Province",
+    });
+    this.stateProvinceCombobox = page.getByRole("combobox", {
+      name: "State/Province",
+    });
+
     this.addressInput = page.getByRole("textbox", {
       name: "Address",
     });
     this.cityInput = page.getByRole("textbox", {
       name: "City",
-    });
-    this.stateProvinceTextbox = page.getByRole("textbox", {
-      name: "State/Province",
     });
     this.zipPostalCodeInput = page.getByRole("textbox", {
       name: "Zip/Postal Code",
@@ -233,16 +247,20 @@ export default class SalesforceServiceTerritoriesPage {
       console.log(`✅ Active status set to: ${activeValue}`);
     }
 
-    // Fill Country field (textbox input)
+    // Fill Country field (textbox/combobox input)
     if (
       (details.Country && details.Country !== "--None--") ||
       (details["Country"] && details["Country"] !== "--None--")
     ) {
       const countryValue = details.Country || details["Country"];
-      await this.countryTextbox.fill(countryValue, {
-        timeout: 10000,
-      });
-      console.log(`✅ Country filled: ${countryValue}`);
+      console.log("🌍 Handling Country field (textbox/combobox)...");
+      await Helper.fillDynamicField(
+        this.page,
+        this.countryTextbox,
+        this.countryCombobox,
+        "Country",
+        countryValue
+      );
     }
 
     // Fill Address field (text input)
@@ -269,16 +287,20 @@ export default class SalesforceServiceTerritoriesPage {
       console.log(`✅ City filled: ${cityValue}`);
     }
 
-    // Fill State/Province field (textbox input)
+    // Fill State/Province field (textbox/combobox input)
     if (
       (details.StateProvince && details.StateProvince !== "--None--") ||
       (details["State/Province"] && details["State/Province"] !== "--None--")
     ) {
       const stateProvinceValue = details.StateProvince || details["State/Province"];
-      await this.stateProvinceTextbox.fill(stateProvinceValue, {
-        timeout: 10000,
-      });
-      console.log(`✅ State/Province filled: ${stateProvinceValue}`);
+      console.log("🏘️ Handling State/Province field (textbox/combobox)...");
+      await Helper.fillDynamicField(
+        this.page,
+        this.stateProvinceTextbox,
+        this.stateProvinceCombobox,
+        "State/Province",
+        stateProvinceValue
+      );
     }
 
     // Fill Zip/Postal Code field (text input)

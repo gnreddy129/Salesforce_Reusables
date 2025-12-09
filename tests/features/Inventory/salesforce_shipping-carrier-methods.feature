@@ -18,6 +18,5 @@ Feature: Salesforce Shipping Carrier Methods Management
       | Name  | <Name> |
 
     Examples:
-      | Name              | ShippingCarrier | ExternalReference | MinimumTransitTime | MaximumTransitTime | TransitTimeUnit |
-      | Express Delivery  | Test Carrier 1    | FEDEX-EXP-001     |                  1 |                  2 | Days            |
-      # | Standard Shipping | UPS Ground      | UPS-STD-002       |                  3 |                  5 | Days            |
+      | Name             | ShippingCarrier | ExternalReference | MinimumTransitTime | MaximumTransitTime | TransitTimeUnit |
+      | Express Delivery | Test Carrier 1  | FEDEX-EXP-001     |                  1 |                  2 | Days            |

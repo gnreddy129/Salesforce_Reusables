@@ -9,7 +9,7 @@ test.describe('Salesforce Category Management', () => {
     test('Example #1', { tag: ['@mode:serial', '@categories', '@regression'] }, async ({ Given, When, Then, page }) => { 
       await Given('Open a browser and login to the sales force site', null, { page }); 
       await When('Search for "Categories" in app launcher', null, { page }); 
-      await Then('Add new category with following details', {"dataTable":{"rows":[{"cells":[{"value":"Field"},{"value":"Value"}]},{"cells":[{"value":"Name"},{"value":"Test Cat A"}]},{"cells":[{"value":"Catalog"},{"value":"Sample Item A"}]},{"cells":[{"value":"ShowMenu"},{"value":"true"}]},{"cells":[{"value":"ParentCategory"},{"value":"--None--"}]},{"cells":[{"value":"Description"},{"value":"Auto-created test A"}]},{"cells":[{"value":"SortOrder"},{"value":"1"}]}]}}, { page }); 
+      await Then('Add new category with following details', {"dataTable":{"rows":[{"cells":[{"value":"Field"},{"value":"Value"}]},{"cells":[{"value":"Name"},{"value":"Test Cat A"}]},{"cells":[{"value":"Catalog"},{"value":"Testing"}]},{"cells":[{"value":"ShowMenu"},{"value":"true"}]},{"cells":[{"value":"ParentCategory"},{"value":""}]},{"cells":[{"value":"Description"},{"value":"Auto-created test A"}]},{"cells":[{"value":"SortOrder"},{"value":"1"}]}]}}, { page }); 
       await Then('Verify category is created successfully with details', {"dataTable":{"rows":[{"cells":[{"value":"Field"},{"value":"Value"}]},{"cells":[{"value":"Name"},{"value":"Test Cat A"}]}]}}, { page }); 
     });
 

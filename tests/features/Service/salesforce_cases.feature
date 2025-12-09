@@ -30,5 +30,3 @@ Feature: Salesforce Case Management
     Examples:
       | Status  | CaseOrigin | Priority | Type       | CaseReason   | Product | PotentialLiability | SLA | EngineeringReqNumber | Subject          | Description                | InternalComments    | WebEmail               | WebCompany       | WebName     | WebPhone    |
       | New     | Phone      | Medium   | Mechanical | Installation | GC1040  | No                 | Yes |                12345 | AutoTest Case 01 | Created by automation test | For internal review | test.user@example.com  | TestCompany Ltd. | Test User   | +1-555-0100 |
-      # | Working | Email      | High     | Electrical | Performance  | GC3020  | Yes                | No  |                67890 | AutoTest Case 02 | Second automation test     | Urgent case         | test.user2@example.com | TestCompany Ltd. | Test User 2 | +1-555-0101 |
-

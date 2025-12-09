@@ -279,7 +279,7 @@ export default class SalesforceSellersPage {
     const sellerName = details.Name;
     if (sellerName) {
       // Wait for page to load after creation
-      await this.page.waitForTimeout(3000);
+      await this.page.waitForTimeout(5000);
 
       // Look for the seller name in the page
       const sellerLocator = this.page.getByText(sellerName).first();

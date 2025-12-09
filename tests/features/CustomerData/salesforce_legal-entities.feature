@@ -23,4 +23,3 @@ Feature: Salesforce Legal Entities Management
     Examples:
       | EntityName     | CompanyName     | Country       | Street          | City     | State    | PostalCode | Description       | Status |
       | ABC Corp Legal | ABC Corporation | United States | 123 Business St | New York | New York |      10001 | Main legal entity | Active |
-      # | XYZ Ltd Legal       | XYZ Limited      | United Kingdom| 456 Commerce Ave | London      | England    | SW1A 1AA   | UK subsidiary legal entity| Active |

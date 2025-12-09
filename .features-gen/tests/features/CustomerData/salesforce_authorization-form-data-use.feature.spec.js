@@ -9,7 +9,7 @@ test.describe('Salesforce Authorization Form Data Use Management', () => {
     test('Example #1', { tag: ['@mode:serial', '@customer', '@regression'] }, async ({ Given, When, Then, page }) => { 
       await Given('Open a browser and login to the sales force site', null, { page }); 
       await When('Search for "Authorization Form Data Use" in app launcher', null, { page }); 
-      await Then('Add new Authorization Form Data Use with following details', {"dataTable":{"rows":[{"cells":[{"value":"Field"},{"value":"Value"}]},{"cells":[{"value":"Name"},{"value":"GDPR Data Use"}]},{"cells":[{"value":"Authorization Form"},{"value":"Test"}]},{"cells":[{"value":"Data Use Purpose"},{"value":"Test"}]}]}}, { page }); 
+      await Then('Add new Authorization Form Data Use with following details', {"dataTable":{"rows":[{"cells":[{"value":"Field"},{"value":"Value"}]},{"cells":[{"value":"Name"},{"value":"GDPR Data Use"}]},{"cells":[{"value":"Authorization Form"},{"value":"Testing"}]},{"cells":[{"value":"Data Use Purpose"},{"value":"Testing"}]}]}}, { page }); 
       await Then('Verify Authorization Form Data Use is created successfully with details', {"dataTable":{"rows":[{"cells":[{"value":"Field"},{"value":"Value"}]},{"cells":[{"value":"Name"},{"value":"GDPR Data Use"}]}]}}, { page }); 
     });
 

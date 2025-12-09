@@ -18,6 +18,5 @@ Feature: Salesforce Authorization Form Text Management
       | Name  | <Name> |
 
     Examples:
-      | Name           | SummaryAuthFormText       | FullAuthFormUrl               | Locale        | ContentDocument | AuthorizationForm       |
-      | GDPR Auth Text | GDPR consent summary text | https://example.com/gdpr-form | Hindi (India) | --None--        | GDPR Authorization Form |
-      # | Marketing Consent Text | Marketing authorization text | https://example.com/marketing  | Spanish | Marketing Document  | Marketing Consent Form  |
+      | Name           | SummaryAuthFormText       | FullAuthFormUrl               | Locale        | ContentDocument | AuthorizationForm |
+      | GDPR Auth Text | GDPR consent summary text | https://example.com/gdpr-form | Hindi (India) |                 | Testing           |

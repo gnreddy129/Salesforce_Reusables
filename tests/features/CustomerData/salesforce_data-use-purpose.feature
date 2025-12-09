@@ -18,4 +18,3 @@ Feature: Salesforce Data Use Purpose Management
     Examples:
       | Name | Description                 | LegalBasis | CanDataSubjectOptOut |
       | GDPR | Purpose for GDPR compliance | Test       | true                 |
-      # | Marketing Consent | Consent for marketing communications | GDPR Consent   | false                    |

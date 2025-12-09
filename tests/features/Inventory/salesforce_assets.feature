@@ -25,6 +25,5 @@ Feature: Asset Management in Salesforce
       | Asset Name | <assetName> |
 
     Examples:
-      | assetName    | accountName    | contact    | serialNumber | competitorAsset | installDate | purchaseDate | status  | usageEndDate | quantity | price | description                                     |
-      | Test Asset 1 | Test Account 1 | John Smith | SN001        | true            |  30/10/2025 |   30/10/2025 | Shipped |   30/10/2026 |        1 |  1000 | Enterprise hardware asset for customer tracking |
-    #   | Demo Asset 2 | Demo Account 2 | auto    | SN002        | false           |  11/01/2025 |   11/01/2025 | Installed |   11/01/2026 |        1 |  2000 | Demo software licenses for training purposes    |
+      | assetName    | accountName | contact | serialNumber | competitorAsset | installDate | purchaseDate | status  | usageEndDate | quantity | price | description                                     |
+      | Test Asset 1 | Testing     |         | SN001        | true            |  10/10/2025 |   10/10/2025 | Shipped |   10/10/2026 |        1 |  1000 | Enterprise hardware asset for customer tracking |

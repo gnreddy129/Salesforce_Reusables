@@ -9,7 +9,7 @@ test.describe('Salesforce Authorization Form Text Management', () => {
     test('Example #1', { tag: ['@mode:serial', '@customer', '@regression'] }, async ({ Given, When, Then, page }) => { 
       await Given('Open a browser and login to the sales force site', null, { page }); 
       await When('Search for "Authorization Form Text" in app launcher', null, { page }); 
-      await Then('Add new Authorization Form Text with following details', {"dataTable":{"rows":[{"cells":[{"value":"Field"},{"value":"Value"}]},{"cells":[{"value":"Name"},{"value":"GDPR Auth Text"}]},{"cells":[{"value":"Summary Auth Form Text"},{"value":"GDPR consent summary text"}]},{"cells":[{"value":"Full Authorization Form Url"},{"value":"https://example.com/gdpr-form"}]},{"cells":[{"value":"Locale"},{"value":"Hindi (India)"}]},{"cells":[{"value":"Content Document"},{"value":"--None--"}]},{"cells":[{"value":"Authorization Form"},{"value":"GDPR Authorization Form"}]}]}}, { page }); 
+      await Then('Add new Authorization Form Text with following details', {"dataTable":{"rows":[{"cells":[{"value":"Field"},{"value":"Value"}]},{"cells":[{"value":"Name"},{"value":"GDPR Auth Text"}]},{"cells":[{"value":"Summary Auth Form Text"},{"value":"GDPR consent summary text"}]},{"cells":[{"value":"Full Authorization Form Url"},{"value":"https://example.com/gdpr-form"}]},{"cells":[{"value":"Locale"},{"value":"Hindi (India)"}]},{"cells":[{"value":"Content Document"},{"value":""}]},{"cells":[{"value":"Authorization Form"},{"value":"Testing"}]}]}}, { page }); 
       await Then('Verify Authorization Form Text is created successfully with details', {"dataTable":{"rows":[{"cells":[{"value":"Field"},{"value":"Value"}]},{"cells":[{"value":"Name"},{"value":"GDPR Auth Text"}]}]}}, { page }); 
     });
 

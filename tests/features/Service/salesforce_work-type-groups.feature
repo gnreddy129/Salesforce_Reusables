@@ -15,5 +15,3 @@ Feature: Salesforce Work Type Groups Management
     Examples:
       | WorkTypeGroupName          | Description                                    | GroupType | Active |
       | Field Service Team         | Work type group for field service operations   | Capacity  | true   |
-    #   | Technical Support Group    | Technical support team work type group         | Capacity  | true   |
-    #   | Development Team           | Software development work type group           | Capacity  | false  |

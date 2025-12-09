@@ -27,6 +27,5 @@ Feature: Salesforce Party Consent Management
       | Name  | <Name> |
 
     Examples:
-      | Name               | Party    | BusinessBrand | ChooseAnObject | PartyRole  | PrivacyConsentStatus | Action  | ConsentCapturedContactPointType | ConsentCapturedSource | EffectiveFrom | EffectiveTo | DoubleConsentCaptureDate | DoubleConsentCaptureTime | ConsentCapturedDate | ConsentCapturedTime |
+      | Name               | Party    | BusinessBrand | ChooseAnObject | PartyRole | PrivacyConsentStatus | Action  | ConsentCapturedContactPointType | ConsentCapturedSource | EffectiveFrom | EffectiveTo | DoubleConsentCaptureDate | DoubleConsentCaptureTime | ConsentCapturedDate | ConsentCapturedTime |
       | GDPR Party Consent | John Doe | ABC Brand     | Customer       | John Doe  | Seen                 | Segment | Email                           | Website Form          |    10/10/2024 |  11/11/2025 |               12/05/2024 |                 10:30 AM |          07/10/2024 |            10:30 AM |
-      # | Marketing Consent  | Jane Smith| XYZ Brand     | Lead           | Prospect  | Not Seen             | Target | Phone                           | Email Campaign        | 11/30/2024 | 02:15 PM |

@@ -23,4 +23,3 @@ Feature: Salesforce Consumption Schedule Creation
     Examples:
       | ConsumptionScheduleName | Active | Description               | RatingMethod | BillingTerm | Type | BillingTermUnit |
       | Test Schedule 001       | false  | Automated test schedule 1 | Tier         |          12 | Slab | Month           |
-      # | Test Schedule 002          | false  | Automated test schedule 2        | Slab          | 6           | Overage   | Year            |

@@ -19,5 +19,4 @@ Feature: Appointment Invitations
 
     Examples:
       | BookingStartDate | BookingEndDate | URLExpirationDate | Active | AppointmentTopic | ServiceTerritory    |
-      |       28/10/2025 |     28/11/2025 |        30/12/2025 | true   | Work Item A      | Service Territory A |
-      # |       29/11/2025 |     29/12/2025 |        30/12/2025 | false  | Work Item A      | Service Territory A |
+      |       10/10/2025 |     11/11/2025 |        11/12/2025 | true   | Work Item A      | Service Territory A |

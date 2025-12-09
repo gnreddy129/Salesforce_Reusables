@@ -18,4 +18,3 @@ Feature: Salesforce Custom Libraries Management
     Examples:
       | Name           | Description              | Content Type | Active |
       | Test Library 1 | Test custom library data | String       | true   |
-      # | Demo Library 2  | Demo custom library data    | URL          | false  |

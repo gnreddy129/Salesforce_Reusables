@@ -9,8 +9,8 @@ test.describe('Salesforce Customer Management', () => {
     test('Example #1', { tag: ['@mode:serial', '@customer', '@customers', '@regression'] }, async ({ Given, When, Then, page }) => { 
       await Given('Open a browser and login to the sales force site', null, { page }); 
       await When('Search for "Customers" in app launcher', null, { page }); 
-      await Then('Add new customer with following details', {"dataTable":{"rows":[{"cells":[{"value":"Field"},{"value":"Value"}]},{"cells":[{"value":"Party"},{"value":"John TestIndividual"}]},{"cells":[{"value":"Name"},{"value":"Customer for John Test"}]},{"cells":[{"value":"Customer Status Type"},{"value":"Active"}]},{"cells":[{"value":"Total Life Time Value"},{"value":"50000"}]}]}}, { page }); 
-      await Then('Verify customer is created successfully with details', {"dataTable":{"rows":[{"cells":[{"value":"Field"},{"value":"Value"}]},{"cells":[{"value":"Name"},{"value":"Customer for John Test"}]},{"cells":[{"value":"Party"},{"value":"John TestIndividual"}]}]}}, { page }); 
+      await Then('Add new customer with following details', {"dataTable":{"rows":[{"cells":[{"value":"Field"},{"value":"Value"}]},{"cells":[{"value":"Party"},{"value":"John Smith"}]},{"cells":[{"value":"Name"},{"value":"Customer for John Test"}]},{"cells":[{"value":"Customer Status Type"},{"value":"Active"}]},{"cells":[{"value":"Total Life Time Value"},{"value":"50000"}]}]}}, { page }); 
+      await Then('Verify customer is created successfully with details', {"dataTable":{"rows":[{"cells":[{"value":"Field"},{"value":"Value"}]},{"cells":[{"value":"Name"},{"value":"Customer for John Test"}]},{"cells":[{"value":"Party"},{"value":"John Smith"}]}]}}, { page }); 
     });
 
   });

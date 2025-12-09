@@ -16,5 +16,3 @@ Feature: Salesforce Dashboards Management
     Examples:
       | DashboardName | Description                | Folder                          |
       | Sales         | Sales performance tracking | Enablement Dashboard Spring '24 |
-      # | Account Health   | Account status dashboard   | Accounts      |
-      # | Team Performance | Team metrics overview      | Team Reports  |

@@ -28,7 +28,6 @@ export default class SalesforceAppointmentCategoryPage {
 
   // Category Configuration Fields
   readonly nameTextbox: Locator;
-  readonly descriptionTextbox: Locator;
 
   // Category Type Checkboxes
   readonly regularCheckbox: Locator;
@@ -59,9 +58,6 @@ export default class SalesforceAppointmentCategoryPage {
     // Category configuration fields - Handle category metadata
     this.nameTextbox = page.getByRole("textbox", {
       name: /Name|Category Name/i,
-    });
-    this.descriptionTextbox = page.getByRole("textbox", {
-      name: /Description/i,
     });
 
     // Category type checkboxes - Handle category types
@@ -132,13 +128,6 @@ export default class SalesforceAppointmentCategoryPage {
       await dialog
         .getByRole("textbox", { name: /Name|Category Name/i })
         .fill(details.Name, { timeout: 10000 });
-    }
-
-    // Category Description - Detailed explanation of category purpose
-    if (details.Description) {
-      await dialog
-        .getByRole("textbox", { name: /Description/i })
-        .fill(details.Description, { timeout: 10000 });
     }
 
     // Category types configuration

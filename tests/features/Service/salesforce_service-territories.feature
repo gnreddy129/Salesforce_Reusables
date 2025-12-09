@@ -22,6 +22,5 @@ Feature: Salesforce Service Territories Management
       | Name  | <Name> |
 
     Examples:
-      | Name                 | ParentTerritory     | OperatingHours   | Active | Country       | Address         | City     | StateProvince | ZipPostalCode | Description                                |
-      | North Region Service | --None-- | Operating Hour A | true   | United States | 123 Main Street | New York | New York      |         10001 | Primary service territory for north region |
-      # | South Region Service  | North Region    | Extended Hours    | false  | Canada        | 456 Elm Avenue        | Toronto     | Ontario       | M5V 3A8       | Secondary service territory for south region |
+      | Name                 | ParentTerritory     | OperatingHours    | Active | Country   | Address         | City     | StateProvince   | ZipPostalCode | Description                                |
+      | North Region Service | Service Territory A | Operating Hours A | true   | Australia | 123 Main Street | New York | South Australia |         10001 | Primary service territory for north region |

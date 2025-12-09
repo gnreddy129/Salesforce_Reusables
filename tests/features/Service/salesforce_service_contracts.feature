@@ -29,5 +29,5 @@ Feature: Salesforce Service Contracts Management
     Then Verify service contract is created successfully
 
     Examples:
-      | ContractName | StartDate  | EndDate    | TermMonths | Description                      | SpecialTerms         | AccountName             | ContactName   | ShippingHandling | Tax | BillingStreet   | BillingCity | BillingZip | BillingState | BillingCountry | ShippingStreet | ShippingCity | ShippingZip | ShippingState | ShippingCountry |
-      | SC-001-AUTO  | 31/12/2024 | 31/12/2025 |         12 | Automation test service contract | Standard terms apply | Tech Solutions Inc 2025 | Kartika Smith |               50 |  10 | 123 Test Street | New York    |      10001 | NY           | United States  |  456 Ship Lane | Los Angeles  |       90001 | CA            | United States   |
+      | ContractName | StartDate  | EndDate    | TermMonths | Description                      | SpecialTerms         | AccountName | ContactName | ShippingHandling | Tax | BillingStreet   | BillingCity | BillingZip | BillingState    | BillingCountry | ShippingStreet | ShippingCity | ShippingZip | ShippingState | ShippingCountry |
+      | SC-001-AUTO  | 10/12/2024 | 11/12/2025 |         12 | Automation test service contract | Standard terms apply | Testing     |             |               50 |  10 | 123 Test Street | New York    |      10001 | South Australia | Australia      |  456 Ship Lane | Los Angeles  |       90001 |               | Australia       |

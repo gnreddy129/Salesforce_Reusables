@@ -16,5 +16,4 @@ Feature: Salesforce Communication Subscription Channel Types Management
 
     Examples:
       | Name                | Engagement Channel Type | Communication Subscription |
-      | Test Channel Type 1 | Test Channel 1          | Commucation Subscription A|
-      # | Demo Channel Type 2   | SMS                     | Promotions                 |
+      | Test Channel Type 1 | Testing                 | Testing                    |

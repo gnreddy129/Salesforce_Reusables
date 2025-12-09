@@ -9,7 +9,7 @@ test.describe('Salesforce Service Resources Management', () => {
     test('Example #1', { tag: ['@mode:serial', '@service', '@regression'] }, async ({ Given, When, Then, page }) => { 
       await Given('Open a browser and login to the sales force site', null, { page }); 
       await When('Search for "Service Resources" in app launcher', null, { page }); 
-      await Then('Add new Service Resource with following details', {"dataTable":{"rows":[{"cells":[{"value":"Field"},{"value":"Value"}]},{"cells":[{"value":"Name"},{"value":"Technical Support Lead"}]},{"cells":[{"value":"Active"},{"value":"true"}]},{"cells":[{"value":"User"},{"value":"Test5 lab"}]},{"cells":[{"value":"Resource Type"},{"value":"Technician"}]},{"cells":[{"value":"Description"},{"value":"Lead technical support agent"}]}]}}, { page }); 
+      await Then('Add new Service Resource with following details', {"dataTable":{"rows":[{"cells":[{"value":"Field"},{"value":"Value"}]},{"cells":[{"value":"Name"},{"value":"Technical Support Lead"}]},{"cells":[{"value":"Active"},{"value":"true"}]},{"cells":[{"value":"User"},{"value":"Salesforce demo"}]},{"cells":[{"value":"Resource Type"},{"value":"Technician"}]},{"cells":[{"value":"Description"},{"value":"Lead technical support agent"}]}]}}, { page }); 
       await Then('Verify Service Resource is created successfully with details', {"dataTable":{"rows":[{"cells":[{"value":"Field"},{"value":"Value"}]},{"cells":[{"value":"Name"},{"value":"Technical Support Lead"}]}]}}, { page }); 
     });
 

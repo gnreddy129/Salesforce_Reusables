@@ -9,7 +9,7 @@ test.describe('Salesforce Shifts Management', () => {
     test('Example #1', { tag: ['@mode:serial', '@shifts', '@regression'] }, async ({ Given, When, Then, page }) => { 
       await Given('Open a browser and login to the sales force site', null, { page }); 
       await When('Search for "Shifts" in app launcher', null, { page }); 
-      await Then('Add new shift with following details', {"dataTable":{"rows":[{"cells":[{"value":"Start Date"},{"value":"10/12/2024"}]},{"cells":[{"value":"Start Time"},{"value":"09:00 AM"}]},{"cells":[{"value":"End Date"},{"value":"11/12/2024"}]},{"cells":[{"value":"End Time"},{"value":"05:00 PM"}]},{"cells":[{"value":"Status"},{"value":"Published"}]},{"cells":[{"value":"Work Type Group"},{"value":"Testing"}]},{"cells":[{"value":"Service Territory"},{"value":""}]},{"cells":[{"value":"Service Resource"},{"value":"testing"}]},{"cells":[{"value":"Time Slot Type"},{"value":"Normal"}]},{"cells":[{"value":"Label"},{"value":"Holiday Shift"}]}]}}, { page }); 
+      await Then('Add new shift with following details', {"dataTable":{"rows":[{"cells":[{"value":"Start Date"},{"value":"10/12/2024"}]},{"cells":[{"value":"Start Time"},{"value":"09:00 AM"}]},{"cells":[{"value":"End Date"},{"value":"11/12/2024"}]},{"cells":[{"value":"End Time"},{"value":"05:00 PM"}]},{"cells":[{"value":"Status"},{"value":"Published"}]},{"cells":[{"value":"Work Type Group"},{"value":"Testing"}]},{"cells":[{"value":"Service Territory"},{"value":"Service Territory A"}]},{"cells":[{"value":"Service Resource"},{"value":"testing"}]},{"cells":[{"value":"Time Slot Type"},{"value":"Normal"}]},{"cells":[{"value":"Label"},{"value":"Holiday Shift"}]}]}}, { page }); 
       await Then('Verify shift is created successfully', null, { page }); 
     });
 

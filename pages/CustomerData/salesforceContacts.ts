@@ -54,15 +54,23 @@ export class SalesforceContactsPage {
   readonly mailingStreet: Locator;
   readonly mailingCity: Locator;
   readonly mailingState: Locator;
+  readonly mailingStateTextbox: Locator;
+  readonly mailingStateCombobox: Locator;
   readonly mailingZip: Locator;
   readonly mailingCountry: Locator;
+  readonly mailingCountryTextbox: Locator;
+  readonly mailingCountryCombobox: Locator;
 
   // Other Address Fields
   readonly otherStreet: Locator;
   readonly otherCity: Locator;
   readonly otherState: Locator;
+  readonly otherStateTextbox: Locator;
+  readonly otherStateCombobox: Locator;
   readonly otherZip: Locator;
   readonly otherCountry: Locator;
+  readonly otherCountryTextbox: Locator;
+  readonly otherCountryCombobox: Locator;
 
   // Additional Fields
   readonly description: Locator;
@@ -115,16 +123,24 @@ export class SalesforceContactsPage {
     // Mailing address fields
     this.mailingStreet = page.getByRole("textbox", { name: /Mailing Street/i });
     this.mailingCity = page.getByRole("textbox", { name: /Mailing City/i });
-    this.mailingState = page.getByRole("textbox", { name: /Mailing State/i });
+    this.mailingStateTextbox = page.getByRole("textbox", { name: /Mailing State/i });
+    this.mailingStateCombobox = page.getByRole("combobox", { name: /Mailing State/i });
+    this.mailingState = this.mailingStateTextbox; // Default to textbox
     this.mailingZip = page.getByRole("textbox", { name: /Mailing Zip/i });
-    this.mailingCountry = page.getByRole("textbox", { name: /Mailing Country/i });
+    this.mailingCountryTextbox = page.getByRole("textbox", { name: /Mailing Country/i });
+    this.mailingCountryCombobox = page.getByRole("combobox", { name: /Mailing Country/i });
+    this.mailingCountry = this.mailingCountryTextbox; // Default to textbox
 
     // Other address fields
     this.otherStreet = page.getByRole("textbox", { name: /Other Street/i });
     this.otherCity = page.getByRole("textbox", { name: /Other City/i });
-    this.otherState = page.getByRole("textbox", { name: /Other State/i });
+    this.otherStateTextbox = page.getByRole("textbox", { name: /Other State/i });
+    this.otherStateCombobox = page.getByRole("combobox", { name: /Other State/i });
+    this.otherState = this.otherStateTextbox; // Default to textbox
     this.otherZip = page.getByRole("textbox", { name: /Other Zip/i });
-    this.otherCountry = page.getByRole("textbox", { name: /Other Country/i });
+    this.otherCountryTextbox = page.getByRole("textbox", { name: /Other Country/i });
+    this.otherCountryCombobox = page.getByRole("combobox", { name: /Other Country/i });
+    this.otherCountry = this.otherCountryTextbox; // Default to textbox
 
     // Additional fields
     this.description = page.getByRole("textbox", { name: "Description", exact: true }).first();
@@ -133,6 +149,108 @@ export class SalesforceContactsPage {
     console.log(
       "✅ SalesforceContacts page object initialized successfully with all locators"
     );
+  }
+
+  /**
+   * Helper method to fill dynamic fields that can be either textbox or combobox
+   * Detects the field type and fills accordingly
+   * 
+   * @param textboxLocator - Locator for textbox variant of the field
+   * @param comboboxLocator - Locator for combobox variant of the field
+   * @param fieldName - Name of the field for logging
+   * @param value - Value to fill/select (EXACT match required)
+   */
+  private async fillDynamicField(
+    textboxLocator: Locator,
+    comboboxLocator: Locator,
+    fieldName: string,
+    value: string
+  ): Promise<void> {
+    try {
+      // Check if combobox is visible and enabled
+      const comboboxVisible = await comboboxLocator.isVisible({ timeout: 2000 }).catch(() => false);
+      
+      if (comboboxVisible) {
+        console.log(`🔽 ${fieldName} is a combobox, selecting from dropdown...`);
+        await comboboxLocator.click({ timeout: 10000 });
+        await this.page.waitForTimeout(1000);
+
+        try {
+          // The combobox is read-only, so we need to type to filter options
+          // Type the value to filter dropdown options
+          console.log(`📝 Typing "${value}" to filter and select exact match...`);
+          await comboboxLocator.type(value, { delay: 100 });
+          await this.page.waitForTimeout(1500);
+
+          // IMPORTANT: Look for EXACT match only - using text normalization
+          const exactMatchOption = this.page.locator(
+            `[role="option"]`
+          ).filter({ 
+            hasText: new RegExp(`^${value}$`, 'i') 
+          }).first();
+          
+          const exactMatchVisible = await exactMatchOption.isVisible({ timeout: 5000 }).catch(() => false);
+          
+          if (exactMatchVisible) {
+            await exactMatchOption.click({ timeout: 5000, force: true });
+            console.log(`✅ ${fieldName} selected with EXACT match:`, value);
+            return;
+          }
+
+          // If exact match not found, throw error and try fallback
+          throw new Error(`Exact match not found for "${value}"`);
+          
+        } catch (e) {
+          console.log(`⏱️ Exact match not found, attempting keyboard navigation for ${fieldName}...`);
+          try {
+            // Clear previous attempt
+            await comboboxLocator.clear({ timeout: 2000 }).catch(() => {});
+            await this.page.waitForTimeout(500);
+            
+            // Try again with fresh typing
+            await comboboxLocator.type(value, { delay: 100 });
+            await this.page.waitForTimeout(1500);
+            
+            // Use keyboard to navigate and select
+            await this.page.keyboard.press("ArrowDown");
+            await this.page.waitForTimeout(500);
+            await this.page.keyboard.press("Enter");
+            console.log(`✅ ${fieldName} selected via keyboard navigation:`, value);
+          } catch (e2) {
+            console.log(`❌ Failed to select exact match for ${fieldName}:`, value);
+            throw new Error(`Could not select exact value "${value}" for field "${fieldName}". Available options may differ.`);
+          }
+        }
+      } else {
+        // Use textbox
+        console.log(`📝 ${fieldName} is a textbox, filling value...`);
+        await textboxLocator.fill(value, { timeout: 10000 });
+        console.log(`✅ ${fieldName} filled:`, value);
+      }
+    } catch (error) {
+      console.log(`⚠️ Error filling ${fieldName}, attempting textbox as fallback:`, error);
+      try {
+        await textboxLocator.fill(value, { timeout: 10000 });
+        console.log(`✅ ${fieldName} filled via textbox fallback:`, value);
+      } catch (fallbackError) {
+        console.log(`❌ Failed to fill ${fieldName}:`, fallbackError);
+        throw fallbackError;
+      }
+    }
+  }
+
+  /**
+   * Helper method to check if a field is a combobox
+   * 
+   * @param comboboxLocator - Locator for the combobox
+   * @returns true if the field is visible as a combobox, false otherwise
+   */
+  private async isCombobox(comboboxLocator: Locator): Promise<boolean> {
+    try {
+      return await comboboxLocator.isVisible({ timeout: 2000 });
+    } catch {
+      return false;
+    }
   }
 
   /**
@@ -321,19 +439,42 @@ export class SalesforceContactsPage {
     if (details.MailingStreet)
       await this.mailingStreet.fill(details.MailingStreet, { timeout: 10000 });
     if (details.MailingCity) await this.mailingCity.fill(details.MailingCity, { timeout: 10000 });
-    if (details.MailingState)
-      await this.mailingState.fill(details.MailingState, { timeout: 10000 });
-    if (details.MailingZip) await this.mailingZip.fill(details.MailingZip, { timeout: 10000 });
+    // IMPORTANT: Fill Country BEFORE State (country selection may affect available state options)
     if (details.MailingCountry)
-      await this.mailingCountry.fill(details.MailingCountry, { timeout: 10000 });
+      await this.fillDynamicField(
+        this.mailingCountryTextbox,
+        this.mailingCountryCombobox,
+        "Mailing Country",
+        details.MailingCountry
+      );
+    if (details.MailingState)
+      await this.fillDynamicField(
+        this.mailingStateTextbox,
+        this.mailingStateCombobox,
+        "Mailing State",
+        details.MailingState
+      );
+    if (details.MailingZip) await this.mailingZip.fill(details.MailingZip, { timeout: 10000 });
 
     // Other Address
     if (details.OtherStreet) await this.otherStreet.fill(details.OtherStreet, { timeout: 10000 });
     if (details.OtherCity) await this.otherCity.fill(details.OtherCity, { timeout: 10000 });
-    if (details.OtherState) await this.otherState.fill(details.OtherState, { timeout: 10000 });
-    if (details.OtherZip) await this.otherZip.fill(details.OtherZip, { timeout: 10000 });
+    // IMPORTANT: Fill Country BEFORE State (country selection may affect available state options)
     if (details.OtherCountry)
-      await this.otherCountry.fill(details.OtherCountry, { timeout: 10000 });
+      await this.fillDynamicField(
+        this.otherCountryTextbox,
+        this.otherCountryCombobox,
+        "Other Country",
+        details.OtherCountry
+      );
+    if (details.OtherState)
+      await this.fillDynamicField(
+        this.otherStateTextbox,
+        this.otherStateCombobox,
+        "Other State",
+        details.OtherState
+      );
+    if (details.OtherZip) await this.otherZip.fill(details.OtherZip, { timeout: 10000 });
 
     // Description
     if (details.Description) await this.description.fill(details.Description, { timeout: 10000 });

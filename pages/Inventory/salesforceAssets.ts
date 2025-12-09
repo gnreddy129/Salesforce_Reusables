@@ -137,16 +137,11 @@ export default class SalesforceAssetsPage {
     }
 
     // Handle account lookup
-    if (details.Account) {
+    if (details['Account Name']) {
       console.log("🔍 Handling Account lookup...");
       await this.accountLookup.click({ timeout: 10000 });
-      // Wait for the dropdown to be visible and get all available accounts
-      const accountsList = this.page.getByRole("listbox").locator("li");
-      await accountsList.first().waitFor({ state: "visible", timeout: 5000 });
-
-      // Get all available accounts and select the first one
-      const firstAccount = accountsList.last();
-      await firstAccount.click({ timeout: 10000 });
+      const accountlist = this.page.getByRole("listbox").locator("li");
+      await accountlist.filter({ hasText: details['Account Name'] }).first().click();
       console.log("✅ Account selected");
     }
 
@@ -157,7 +152,7 @@ export default class SalesforceAssetsPage {
       // Wait for the dropdown and select first available contact
       try {
         const contactsList = this.page.getByRole("listbox").locator("li");
-        await contactsList.filter({ hasText: details.Contact }).click();
+        await contactsList.filter({ hasText: details.Contact }).first().click();
         console.log("✅ Contact selected");
       } catch (error) {
         console.log("No contacts available or error selecting contact:", error);

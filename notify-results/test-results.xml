@@ -1,46 +1,6 @@
-<testsuites id="" name="" tests="1" failures="1" skipped="0" errors="0" time="11.011271">
-<testsuite name="tests\features\IntegrationTest\accounts_opportunities.feature.spec.js" timestamp="2025-12-05T05:42:04.163Z" hostname="Google Chrome" tests="1" failures="1" skipped="0" time="8.408" errors="0">
-<testcase name="Create account module then click on first account on list and add opportunities on it. › Create a new business account with complete details › Example #1" classname="tests\features\IntegrationTest\accounts_opportunities.feature.spec.js" time="8.408">
-<failure message="accounts_opportunities.feature.spec.js:8:9 Example #1" type="FAILURE">
-<![CDATA[  [Google Chrome] › tests\features\IntegrationTest\accounts_opportunities.feature.spec.js:8:9 › Create account module then click on first account on list and add opportunities on it. › Create a new business account with complete details › Example #1 @account-opportunities › When Search for "Accounts" in app launcher 
-
-    Error: expect(locator).toBeVisible() failed
-
-    Locator: locator('//button[@title=\'App Launcher\']')
-    Expected: visible
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeVisible" with timeout 200000ms
-      - waiting for locator('//button[@title=\'App Launcher\']')
-
-
-       at ..\pages\OtherFunctionality\salesforceHome.ts:110
-
-      108 |
-      109 |     // Wait for app launcher to be visible and click it
-    > 110 |     await expect(this.app_launcher).toBeVisible({ timeout: 200000 });
-          |                                     ^
-      111 |     console.log("✅ App launcher is visible");
-      112 |
-      113 |     // Take start screenshot for verification
-        at SalesforceHomePage.searchApp (C:\Users\pradhkum\Documents\Pk_salesforce\Salesforce_Reusables\pages\OtherFunctionality\salesforceHome.ts:110:37)
-        at Object.<anonymous> (C:\Users\pradhkum\Documents\Pk_salesforce\Salesforce_Reusables\stepdef\OtherFunctionality\salesforce_homepage.ts:8:20)
-        at C:\Users\pradhkum\Documents\Pk_salesforce\Salesforce_Reusables\.features-gen\tests\features\IntegrationTest\accounts_opportunities.feature.spec.js:10:7
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ..\test-results\tests-features-Integration-1dd21--complete-details-Example-1-Google-Chrome\video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
-    ..\test-results\tests-features-Integration-1dd21--complete-details-Example-1-Google-Chrome\trace.zip
-    Usage:
-
-        npx playwright show-trace ..\test-results\tests-features-Integration-1dd21--complete-details-Example-1-Google-Chrome\trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-]]>
-</failure>
+<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="53.193807">
+<testsuite name="tests\features\Platform\salesforce_dashboards.feature.spec.js" timestamp="2025-12-09T03:45:51.221Z" hostname="Google Chrome" tests="1" failures="0" skipped="0" time="48.45" errors="0">
+<testcase name="Salesforce Dashboards Management › Create and Manage Dashboards with Different Components › Example #1" classname="tests\features\Platform\salesforce_dashboards.feature.spec.js" time="48.45">
 <system-out>
 <![CDATA[🚀 Initializing SalesforceLogin page object
 ✅ SalesforceLogin page object initialized successfully with all locators
@@ -51,17 +11,65 @@ Screenshot saved: 1-start-login
 ✅ Navigated to Salesforce login page
 📋 Filling login credentials...
 ✅ Login credentials submitted
+🔐 Two-factor authentication required - retrieving verification code from Mailosaur...
+Retrieving verification code from Mailosaur via API...
+credentials q2LAcc0Um0nOqbIfP1W0lwejUVXoe0q8 l4xgwx7y breakfast-bush@l4xgwx7y.mailosaur.net
+Message retrieved: Verify your identity in Salesforce
+🔐 Retrieved code: 445599
+🔐 Entering verification code...
+Screenshot saved: 2-end-login
+✅ Verification code entered successfully
+✅ Two-factor authentication completed
 🎉 Login process completed!
 🚀 Initializing SalesforceHome page object
 ✅ SalesforceHome page object initialized successfully with all locators
 🔄 Starting app search and navigation...
-📱 Searching for app: Accounts
+📱 Searching for app: Dashboards
+✅ App launcher is visible
+Screenshot saved: 1-start-app-search
+✅ App launcher opened
+🔍 Searched for app in search box
+Screenshot saved: 2-end-app-navigation
+✅ Successfully navigated to Dashboards app
+🎉 App navigation completed!
+🚀 Initializing SalesforceDashboards page object
+✅ SalesforceDashboards page object initialized successfully with all locators
+🔄 Starting dashboard creation process...
+📝 Dashboard details: {
+  "Field": "Value",
+  "DashboardName": "Sales",
+  "Description": "Sales performance tracking",
+  "Folder": "Enablement Dashboard Spring '24"
+}
+Screenshot saved: 1-start-dashboard
+✅ Dashboard creation dialog opened
+📋 Filling form fields...
+💾 Saving the dashboard...
+✅ Dashboard Created successfully
+✅ Dashboard saved successfully
+✅ Dashboard creation completed successfully
+Screenshot saved: 2-end-dashboard
+🎉 Dashboard creation completed!
+🚀 Initializing SalesforceDashboards page object
+✅ SalesforceDashboards page object initialized successfully with all locators
+🚀 Initializing SalesforceDashboards page object
+✅ SalesforceDashboards page object initialized successfully with all locators
+🔍 Starting dashboard verification...
+Screenshot saved: 3-verification
+📊 Verifying dashboard: Sales
+✅ Dashboard successfully verified in interface
+🎉 Verification completed!
 
-[[ATTACHMENT|..\test-results\tests-features-Integration-1dd21--complete-details-Example-1-Google-Chrome\video.webm]]
+[[ATTACHMENT|..\test-results\tests-features-Platform-sa-6e30d-ferent-Components-Example-1-Google-Chrome\test-finished-1.png]]
 
-[[ATTACHMENT|..\test-results\tests-features-Integration-1dd21--complete-details-Example-1-Google-Chrome\trace.zip]]
+[[ATTACHMENT|..\test-results\tests-features-Platform-sa-6e30d-ferent-Components-Example-1-Google-Chrome\trace.zip]]
 ]]>
 </system-out>
+<system-err>
+<![CDATA[(node:13400) Warning: Setting the NODE_TLS_REJECT_UNAUTHORIZED environment variable to '0' makes TLS connections and HTTPS requests insecure by disabling certificate verification.
+(Use `node --trace-warnings ...` to show where the warning was created)
+]]>
+</system-err>
 </testcase>
 </testsuite>
 </testsuites>

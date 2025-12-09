@@ -17,4 +17,3 @@ Feature: Salesforce Data Use Legal Basis Management
     Examples:
       | Name         | Source           | Description                     |
       | GDPR Consent | Customer Website | Legal basis for GDPR compliance |
-      # | Marketing Consent       | Email Subscription   | Consent for marketing communications     |

@@ -15,5 +15,3 @@ Feature: Salesforce Work Plan Templates Management
     Examples:
       | Name                       | Active | RelativeExecutionOrder | Description                                           |
       | Standard Implementation    | true   | 1                      | Standard implementation template for new projects     |
-    #   | Agile Development Template | true   | 2                      | Agile development methodology template                |
-    #   | Support Template           | false  | 3                      | Support and maintenance template (inactive)           |

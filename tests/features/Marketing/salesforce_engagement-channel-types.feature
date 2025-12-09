@@ -18,4 +18,3 @@ Feature: Salesforce Engagement Channel Types Management
     Examples:
       | Name           | Contact Point Type | Active | Usage Type           |
       | Test Channel 1 | Person              | true   | Salesforce Scheduler |
-      # | Demo Channel 2  | SMS                | false  | Salesforce Scheduler  |

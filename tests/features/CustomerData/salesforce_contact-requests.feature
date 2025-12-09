@@ -21,4 +21,3 @@ Feature: Salesforce Contact Requests Management
     Examples:
       | RequestedBy | RelatedTo | PreferredChannel | PreferredPhoneNumber | RequestStatus | RequestReason | RequestDescription          |
       | John Smith  | Testing   | Phone            |      +1-555-987-6543 | Attempted     | Case          | Question about case charges |
-      # | Jhon Smith  | Tech Solutions Inc 2025 | Phone            |      +1-555-123-4567 | New           | Account       | Need help with account configuration |

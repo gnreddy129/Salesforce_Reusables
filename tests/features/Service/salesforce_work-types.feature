@@ -22,7 +22,5 @@ Feature: Salesforce Work Types Management
     Then Verify work type is created successfully
 
     Examples:
-      | WorkTypeName        | Description                      | OperatingHours | EstimatedDuration | DurationType | BlockTimeBeforeAppointment | BlockTimeBeforeUnit | BlockTimeAfterAppointment | BlockTimeAfterUnit | TimeframeStart | TimeFrameStartUnit | TimeframeEnd | TimeFrameEndUnit |
+      | WorkTypeName        | Description                      | OperatingHours    | EstimatedDuration | DurationType | BlockTimeBeforeAppointment | BlockTimeBeforeUnit | BlockTimeAfterAppointment | BlockTimeAfterUnit | TimeframeStart | TimeFrameStartUnit | TimeframeEnd | TimeFrameEndUnit |
       | Field Service Visit | Standard field service work type | Operating Hours A |                60 | Minutes      |                         15 | Hour(s)             |                        30 | Hour(s)            |              1 | Hour(s)            |           24 | Hour(s)          |
-    #   | Preventive Maintenance  | Preventive maintenance work type       | Operating Hours A| 120                | Minutes      | 30                         | Hour(s)             | 60                        | Hour(s)            | 2              | Hour(s)            | 48           | Hour(s)          |
-    #   | Emergency Response      | Emergency response work type           | Operating Hours A| 45                 | Minutes      | 5                          | Hour(s)             | 15                        | Hour(s)            | 0              | Hour(s)            | 8            | Hour(s)          |

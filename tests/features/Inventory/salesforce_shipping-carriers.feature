@@ -16,4 +16,3 @@ Feature: Salesforce Shipping Carriers Management
     Examples:
       | Name           | ExternalReference |
       | Test Carrier 1 | EXT-001           |
-      # | Demo Carrier 2 | EXT-002           |

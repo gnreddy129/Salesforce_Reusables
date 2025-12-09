@@ -28,5 +28,5 @@ Feature: Salesforce Contact Point Type Consent Management
       | Name  | <Name> |
 
     Examples:
-      | Name                       | ContactPointType | Party    | DataUsePurpose | PrivacyConsentStatus | PartyRoleChooseObject | PartyRole | BusinessBrand | EffectiveFromDate | EffectiveFromTime | EffectiveToDate | EffectiveToTime | CaptureSource | CaptureDateDate | CaptureDateTime | DoubleConsentCaptureDateDate | DoubleConsentCaptureDateTime |
-      | Email Consent Type Example | Email            | John Doe | GDPR           | Opt In               | Customer              | John Doe  | ABC Brand     |        10/10/2024 |          10:30 AM |      11/11/2025 |        10:30 AM | Website Form  |      07/10/2024 |        10:30 AM |                   12/05/2024 |                     10:30 AM |
+      | Name                       | ContactPointType | Party      | DataUsePurpose | PrivacyConsentStatus | PartyRoleChooseObject | PartyRole | BusinessBrand    | EffectiveFromDate | EffectiveFromTime | EffectiveToDate | EffectiveToTime | CaptureSource | CaptureDateDate | CaptureDateTime | DoubleConsentCaptureDateDate | DoubleConsentCaptureDateTime |
+      | Email Consent Type Example | Email            | John Smith | Testing        | Opt In               | Customer              | John Doe  | Business Brand A |        10/10/2024 |          10:30 AM |      11/11/2025 |        10:30 AM | Website Form  |      07/10/2024 |        10:30 AM |                   12/05/2024 |                     10:30 AM |
