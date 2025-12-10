@@ -360,7 +360,10 @@ export class SalesforceContactsPage {
     if (details.Mobile) await this.mobile.fill(details.Mobile, { timeout: 10000 });
     if (details.OtherPhone) await this.otherPhone.fill(details.OtherPhone, { timeout: 10000 });
     if (details.Fax) await this.fax.fill(details.Fax, { timeout: 10000 });
-    if (details.Email) await this.email.fill(details.Email, { timeout: 10000 });
+    if (details.Email) {
+      let uniqueEmail = 'test' + Date.now() + details.Email;
+      await this.email.fill(uniqueEmail, { timeout: 10000 });
+    }
 
     // Assistant Information
     if (details.Assistant) await this.assistant.fill(details.Assistant, { timeout: 10000 });
