@@ -1,4 +1,4 @@
-import { expect, type Page, type TestInfo } from "@playwright/test";
+import { expect, type Page, type TestInfo, Locator } from "@playwright/test";
 import { Helper } from "../../utils/helper";
 
 /**
@@ -22,13 +22,12 @@ export default class SalesforceLocationGroupsPage {
   readonly testInfo: TestInfo;
 
   // Locators for Location Groups form elements
-  readonly locationGroupNumberField: any;
-  readonly descriptionField: any;
-  readonly externalReferenceField: any;
-  readonly syncWithOciCheckbox: any;
-  readonly enabledCheckbox: any;
-  readonly saveButton: any;
-  readonly newButton: any;
+  readonly locationGroupNumberField: Locator;
+  readonly descriptionField: Locator;
+  readonly externalReferenceField: Locator;
+  readonly syncWithOciCheckbox: Locator;
+  readonly enabledCheckbox: Locator;
+  readonly saveButton: Locator;
 
   constructor(page: Page, testInfo: TestInfo) {
     this.page = page;
@@ -47,7 +46,6 @@ export default class SalesforceLocationGroupsPage {
     });
     this.enabledCheckbox = page.getByRole("checkbox", { name: /enabled/i });
     this.saveButton = page.getByRole("button", { name: "Save", exact: true });
-    this.newButton = page.getByRole("button", { name: /new/i });
 
     console.log("🚀 Initializing SalesforceLocationGroups page object");
     console.log(
@@ -71,10 +69,6 @@ export default class SalesforceLocationGroupsPage {
         this.testInfo,
         "Inventory/"
       );
-
-      // Click New button to open creation dialog
-      await this.newButton.click();
-      console.log("✅ Location Group creation dialog opened");
 
       console.log("📋 Filling form fields...");
 
@@ -127,7 +121,7 @@ export default class SalesforceLocationGroupsPage {
       }
 
       console.log("💾 Saving the location group...");
-      await this.saveButton.click();
+      await this.saveButton.click({ timeout: 10000 });
       console.log("✅ Location Group saved successfully");
 
       // Take final screenshot
@@ -152,27 +146,16 @@ export default class SalesforceLocationGroupsPage {
   async verifyLocationGroupCreation(details: Record<string, string>) {
     console.log("🔍 Starting location group verification...");
 
-    try {
-      // Verify Location Group Number if provided
-      if (details["Location Group Number"]) {
-        await expect(this.page.getByText(details["Location Group Number"]).first().isVisible()).toBeTruthy();
-        console.log(
-          `✅ Location Group Number verification successful: ${details["Location Group Number"]}`
-        );
-      }
-
-      // Take verification screenshot
-      await Helper.takeScreenshotToFile(
+    const lgn = details["Location Group Number"];
+    await this.page.getByText(lgn).count().then(count => {
+      if (count === 0) throw new Error(`Location Group Number "${lgn}" not found on the page.`);
+    });
+    await Helper.takeScreenshotToFile(
         this.page,
-        "3-verification",
+        "3-end-locationgroup",
         this.testInfo,
         "Inventory/"
       );
-
-      console.log("🎉 Location Group verification completed!");
-    } catch (error) {
-      console.error("❌ Error during location group verification:", error);
-      throw error;
-    }
+    console.log("🎉 Location Group verification completed!");
   }
 }

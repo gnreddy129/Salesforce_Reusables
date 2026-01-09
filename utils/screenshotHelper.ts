@@ -5,7 +5,7 @@ import { Helper } from "./helper";
  * Takes a screenshot after each step for cucumber reporting
  * @param page - Playwright Page instance
  * @param testInfo - Playwright TestInfo
- * @param stepName - Name of the step (CREATE, VERIFY, etc.)
+ * @param stepName
  * @param moduleName - Name of the module (price-books, contacts, etc.)
  */
 export async function takeStepScreenshot(

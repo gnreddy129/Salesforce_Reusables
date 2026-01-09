@@ -24,7 +24,6 @@ export default class SalesforceOperatingHoursPage {
     private testInfo?: TestInfo;
 
     // Primary UI Controls
-    readonly newButton: Locator;
     readonly dialog: Locator;
 
     // Operating Hours Configuration Fields
@@ -34,9 +33,15 @@ export default class SalesforceOperatingHoursPage {
 
     // Row Management
     readonly addRowButton: Locator;
+    readonly dayDropdown: Locator;
+    readonly startTimeCombobox: Locator;
+    readonly endTimeCombobox: Locator;
+    readonly workTypeGroupCombobox: Locator;
 
     // Action Buttons
     readonly saveButton: Locator;
+
+    readonly allOptionsLocator: Locator;
 
     /**
      * Constructor - Initializes the SalesforceOperatingHours page object with all necessary locators
@@ -51,10 +56,6 @@ export default class SalesforceOperatingHoursPage {
         console.log("🚀 Initializing SalesforceOperatingHours page object");
         this.page = page;
         this.testInfo = testInfo;
-
-        // Primary controls - Main UI interaction elements
-        this.newButton = page.getByRole("button", { name: /New|Create/i }).first();
-
         // Dialog elements - Handle operating hours creation
         this.dialog = this.page.getByRole("dialog").first();
 
@@ -76,14 +77,42 @@ export default class SalesforceOperatingHoursPage {
             name: /Add Row|Add/i,
         }).first();
 
+        // Row Dropdown/Combobox Fields
+        this.dayDropdown = page.getByRole("combobox", {
+            name: /^Day/i,
+        }).last();
+
+        this.startTimeCombobox = page.getByRole("combobox", {
+            name: /Start Time/i
+        }).last();
+
+        this.endTimeCombobox = page.getByRole("combobox", {
+            name: /End Time/i
+        }).last();
+
+        this.workTypeGroupCombobox = page.getByRole("combobox", {
+            name: /Work Type Group/i,
+        }).last();
+
         // Action Buttons
         this.saveButton = this.dialog.getByRole("button", {
             name: /^Save$/i,
         });
+        this.allOptionsLocator = page.getByRole("option");
 
         console.log(
             "✅ SalesforceOperatingHours page object initialized successfully with all locators"
         );
+    }
+
+    /**
+     * Creates a locator for a specific option by text
+     * This is a helper method for dynamic option selection
+     * @param text - The text content of the option to find
+     * @returns Locator for the matching option
+     */
+    private getOptionByText(text: string): Locator {
+        return this.allOptionsLocator.filter({ hasText: text }).first();
     }
 
     /**
@@ -102,8 +131,6 @@ export default class SalesforceOperatingHoursPage {
         console.log("🔄 Starting operating hours creation process...");
         console.log("📋 Operating hours details:", JSON.stringify(details, null, 2));
 
-        // Wait for the new button to be visible and take start screenshot
-        await expect(this.newButton).toBeVisible({ timeout: 10000 });
         await Helper.takeScreenshotToFile(
             this.page,
             "1-start-operating-hours",
@@ -111,8 +138,6 @@ export default class SalesforceOperatingHoursPage {
             "OtherFunctionality/salesforce-operating-hours/"
         );
 
-        // Open the new operating hours creation dialog
-        await this.newButton.click({ timeout: 10000 });
         console.log("✅ Operating hours creation dialog opened");
 
         await this.dialog.waitFor({ state: "visible", timeout: 10000 });
@@ -147,26 +172,13 @@ export default class SalesforceOperatingHoursPage {
 
         // Time Zone (Dropdown) - Required
         if (details.TimeZone || details["Time Zone"]) {
-            const timeZone = details.TimeZone || details["Time Zone"];
             console.log("🔽 Selecting Time Zone from dropdown...");
             await this.timeZoneDropdown.click({ timeout: 10000 });
             await this.page.waitForTimeout(1000);
-
             try {
-                const optionRole = this.page.locator(`[role="option"]:has-text("${timeZone}")`).first();
-                await optionRole.click({ timeout: 5000, force: true });
-                console.log("✅ Time Zone selected:", timeZone);
+                await this.allOptionsLocator.nth(1).click({ timeout: 10000 });
             } catch (e) {
-                try {
-                    await this.timeZoneDropdown.fill(timeZone, { timeout: 5000 });
-                    await this.page.waitForTimeout(500);
-                    await this.page.keyboard.press("ArrowDown");
-                    await this.page.waitForTimeout(300);
-                    await this.page.keyboard.press("Enter");
-                    console.log("✅ Time Zone selected via type and keyboard");
-                } catch (e2) {
-                    console.log("❌ Failed to select Time Zone:", e2);
-                }
+                console.log("❌ Failed to select Time Zone:", e);
             }
         }
     }
@@ -199,13 +211,9 @@ export default class SalesforceOperatingHoursPage {
         if (row.Day) {
             console.log("🔽 Selecting Day from dropdown...");
             try {
-                const dayDropdown = this.page.getByRole("combobox", {
-                    name: /^Day/i,
-                }).last();
-                await dayDropdown.click({ timeout: 5000 });
+                await this.dayDropdown.click({ timeout: 5000 });
                 await this.page.waitForTimeout(800);
-                const dayOption = this.page.locator(`[role="option"]:has-text("${row.Day}")`).first();
-                await dayOption.click({ timeout: 5000, force: true });
+                await this.getOptionByText(row.Day).click({ timeout: 5000, force: true });
                 console.log("✅ Day selected:", row.Day);
             } catch (e) {
                 console.log("❌ Failed to select Day:", e);
@@ -217,17 +225,15 @@ export default class SalesforceOperatingHoursPage {
             const startTime = row.StartTime || row["Start Time"];
             console.log("⏰ Selecting Start Time...");
             try {
-                const startTimeCombobox = this.page.getByRole("combobox", { name: /Start Time/i }).last();
-                await startTimeCombobox.click({ timeout: 5000 });
+                await this.startTimeCombobox.click({ timeout: 5000 });
                 await this.page.waitForTimeout(1000);
 
                 try {
-                    const startTimeOption = this.page.locator(`[role="option"]:has-text("${startTime}")`).first();
-                    await startTimeOption.click({ timeout: 5000, force: true });
+                    await this.getOptionByText(startTime).click({ timeout: 5000, force: true });
                     console.log("✅ Start Time selected:", startTime);
                 } catch (e) {
                     // Fallback: use keyboard navigation
-                    await startTimeCombobox.fill(startTime, { timeout: 5000 });
+                    await this.startTimeCombobox.fill(startTime, { timeout: 5000 });
                     await this.page.waitForTimeout(500);
                     await this.page.keyboard.press("ArrowDown");
                     await this.page.waitForTimeout(300);
@@ -244,17 +250,15 @@ export default class SalesforceOperatingHoursPage {
             const endTime = row.EndTime || row["End Time"];
             console.log("⏰ Selecting End Time...");
             try {
-                const endTimeCombobox = this.page.getByRole("combobox", { name: /End Time/i }).last();
-                await endTimeCombobox.click({ timeout: 5000 });
+                await this.endTimeCombobox.click({ timeout: 5000 });
                 await this.page.waitForTimeout(1000);
 
                 try {
-                    const endTimeOption = this.page.locator(`[role="option"]:has-text("${endTime}")`).first();
-                    await endTimeOption.click({ timeout: 5000, force: true });
+                    await this.getOptionByText(endTime).click({ timeout: 5000, force: true });
                     console.log("✅ End Time selected:", endTime);
                 } catch (e) {
                     // Fallback: use keyboard navigation
-                    await endTimeCombobox.fill(endTime, { timeout: 5000 });
+                    await this.endTimeCombobox.fill(endTime, { timeout: 5000 });
                     await this.page.waitForTimeout(500);
                     await this.page.keyboard.press("ArrowDown");
                     await this.page.waitForTimeout(300);
@@ -271,13 +275,9 @@ export default class SalesforceOperatingHoursPage {
             const workTypeGroup = row.WorkTypeGroup || row["Work Type Group"];
             console.log("🔽 Selecting Work Type Group from combobox...");
             try {
-                const workTypeGroupCombobox = this.page.getByRole("combobox", {
-                    name: /Work Type Group/i,
-                }).last();
-                await workTypeGroupCombobox.click({ timeout: 5000 });
+                await this.workTypeGroupCombobox.click({ timeout: 5000 });
                 await this.page.waitForTimeout(800);
-                const workTypeGroupOption = this.page.locator(`[role="option"]:has-text("${workTypeGroup}")`).first();
-                await workTypeGroupOption.click({ timeout: 5000, force: true });
+                await this.getOptionByText(workTypeGroup).click({ timeout: 5000, force: true });
                 console.log("✅ Work Type Group selected:", workTypeGroup);
             } catch (e) {
                 console.log("❌ Failed to select Work Type Group:", e);
@@ -293,7 +293,6 @@ export default class SalesforceOperatingHoursPage {
         );
 
         console.log("🎉 Operating hours row addition completed!");
-
         console.log("💾 Saving the operating hours...");
 
         // Save the operating hours

@@ -5,6 +5,7 @@ Feature: Salesforce Promotions Management
   Scenario Outline: Add new promotion
     Given Open a browser and login to the sales force site
     When Search for "Promotions" in app launcher
+    Then Click on "New" button of "Promotions"
     Then Add new promotion with following details
       | Name                                             | <Name>                  |
       | Description                                      | <Description>           |

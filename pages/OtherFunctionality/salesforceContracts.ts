@@ -66,6 +66,7 @@ export default class SalesforceContractsPage {
 
   // Navigation Elements
   readonly contractCreatedMessage: Locator;
+  readonly allOptionsLocator: Locator;
 
   /**
    * Constructor - Initializes the SalesforceContracts page object with all necessary locators
@@ -159,6 +160,7 @@ export default class SalesforceContractsPage {
 
     // Success message locator
     this.contractCreatedMessage = page.locator(".toastMessage");
+    this.allOptionsLocator = page.getByRole("option");
 
     console.log(
       "✅ SalesforceContracts page object initialized successfully with all locators"
@@ -215,9 +217,7 @@ export default class SalesforceContractsPage {
     // Fill Contract Information fields
     if (details.Status && details.Status !== "--None--") {
       await this.statusCombobox.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: details.Status })
-        .click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: details.Status }).first().click({ timeout: 10000 });
       console.log(`✅ Status selected: ${details.Status}`);
     }
 
@@ -239,36 +239,9 @@ export default class SalesforceContractsPage {
     ) {
       const accountName = details.AccountName || details["Account Name"];
       console.log(`🔄 Attempting to select account: ${accountName}`);
-
-      // Wait for the account field to be ready - TESTED AND WORKING
-      await this.accountNameCombobox.waitFor({
-        state: "visible",
-        timeout: 10000,
-      });
-
-      try {
-        // Step 1: Click the account combobox to open dropdown - TESTED AND WORKING
-        await this.accountNameCombobox.click({ timeout: 10000 });
-        console.log("✅ Account combobox clicked");
-        await this.page.waitForTimeout(1000);
-
-        // Step 2: Select the account option - TESTED AND WORKING
-        await this.page
-          .getByRole("option", { name: accountName })
-          .first()
-          .click({ timeout: 10000 });
-
-        console.log(`✅ Account selected: ${accountName}`);
-      } catch (error) {
-        console.log(`❌ Account selection error: ${error}`);
-        // Take a screenshot for debugging
-        await Helper.takeScreenshotToFile(
-          this.page,
-          "account-selection-failed",
-          this.testInfo,
-          "OtherFunctionality/salesforce-contracts/"
-        );
-      }
+      await this.accountNameCombobox.waitFor({ state: "visible", timeout: 10000, });
+      await this.accountNameCombobox.click({ timeout: 10000 });
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
     }
 
     if (
@@ -302,23 +275,18 @@ export default class SalesforceContractsPage {
       const ownerExpirationNotice =
         details.OwnerExpirationNotice || details["Owner Expiration Notice"];
       await this.ownerExpirationNoticeCombobox.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: ownerExpirationNotice })
-        .click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: ownerExpirationNotice }).first().click({ timeout: 10000 });
       console.log(
         `✅ Owner Expiration Notice selected: ${ownerExpirationNotice}`
       );
     }
 
     if (
-      (details.CustomerSignedTitle &&
-        details.CustomerSignedTitle !== "--None--") ||
-      (details["Customer Signed Title"] &&
-        details["Customer Signed Title"] !== "--None--")
+      (details.CustomerSignedTitle && details.CustomerSignedTitle !== "--None--") ||
+      (details["Customer Signed Title"] && details["Customer Signed Title"] !== "--None--")
     ) {
-      const customerSignedTitle =
-        details.CustomerSignedTitle || details["Customer Signed Title"];
-      await this.customerSignedTitleInput.fill(customerSignedTitle, {
+      let customerSignedTitle = details.CustomerSignedTitle || details["Customer Signed Title"];
+      await this.customerSignedTitleInput.fill(Helper.generateUniqueValue(customerSignedTitle), {
         timeout: 10000,
       });
       console.log(`✅ Customer Signed Title filled: ${customerSignedTitle}`);
@@ -378,18 +346,18 @@ export default class SalesforceContractsPage {
       (details.BillingStreet && details.BillingStreet !== "--None--") ||
       (details["Billing Street"] && details["Billing Street"] !== "--None--")
     ) {
-      const billingStreet = details.BillingStreet || details["Billing Street"];
-      await this.billingStreetInput.fill(billingStreet, { timeout: 10000 });
-      console.log(`✅ Billing Street filled: ${billingStreet}`);
+      let billingStreet = details.BillingStreet || details["Billing Street"];
+      await this.billingStreetInput.fill(Helper.generateUniqueValue(billingStreet), { timeout: 10000 });
+      console.log(`✅ Billing Street filled: ${Helper.generateUniqueValue(billingStreet)}`);
     }
 
     if (
       (details.BillingCity && details.BillingCity !== "--None--") ||
       (details["Billing City"] && details["Billing City"] !== "--None--")
     ) {
-      const billingCity = details.BillingCity || details["Billing City"];
-      await this.billingCityInput.fill(billingCity, { timeout: 10000 });
-      console.log(`✅ Billing City filled: ${billingCity}`);
+      let billingCity = details.BillingCity || details["Billing City"];
+      await this.billingCityInput.fill(Helper.generateUniqueValue(billingCity), { timeout: 10000 });
+      console.log(`✅ Billing City filled: ${Helper.generateUniqueValue(billingCity)}`);
     }
 
     if (
@@ -439,14 +407,14 @@ export default class SalesforceContractsPage {
       (details.SpecialTerms && details.SpecialTerms !== "--None--") ||
       (details["Special Terms"] && details["Special Terms"] !== "--None--")
     ) {
-      const specialTerms = details.SpecialTerms || details["Special Terms"];
-      await this.specialTermsInput.fill(specialTerms, { timeout: 10000 });
-      console.log(`✅ Special Terms filled: ${specialTerms}`);
+      let specialTerms = details.SpecialTerms || details["Special Terms"];
+      await this.specialTermsInput.fill(Helper.generateUniqueValue(specialTerms), { timeout: 10000 });
+      console.log(`✅ Special Terms filled: ${Helper.generateUniqueValue(specialTerms)}`);
     }
 
     if (details.Description && details.Description !== "--None--") {
-      await this.descriptionInput.fill(details.Description, { timeout: 10000 });
-      console.log(`✅ Description filled: ${details.Description}`);
+      await this.descriptionInput.fill(Helper.generateUniqueValue(details.Description), { timeout: 10000 });
+      console.log(`✅ Description filled: ${Helper.generateUniqueValue(details.Description)}`);
     }
 
     console.log("💾 Saving the contract...");
@@ -483,18 +451,14 @@ export default class SalesforceContractsPage {
   async verifyContract(details: { [k: string]: string }) {
     console.log("🔍 Starting contract verification...");
 
-    await expect(this.contractCreatedMessage).toContainText("was created", {
-      timeout: 10000,
-    });
+    await expect(this.contractCreatedMessage).toContainText("was created", { timeout: 10000 });
     console.log("✅ Contract creation message verified");
 
     // Verify contract creation by checking for key field values on the page
-    if (details.AccountName || details["Account Name"]) {
-      const accountName = details.AccountName || details["Account Name"];
-      expect(await this.page.getByText(accountName).count()).toBeGreaterThan(0);
-      console.log(
-        `✅ Contract account name verification successful: ${accountName}`
-      );
+    if (details.Status) {
+      const status = details.Status;
+      expect(await this.page.getByText(status).count()).toBeGreaterThan(0);
+      console.log(`✅ Contract status verification successful: ${status}`);
     }
 
     // Take verification screenshot

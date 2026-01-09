@@ -25,7 +25,6 @@ export default class SalesforceScorecardsPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newButton: Locator;
   readonly saveButton: Locator;
   readonly saveAndNewButton: Locator;
   readonly cancelButton: Locator;
@@ -36,6 +35,7 @@ export default class SalesforceScorecardsPage {
 
   // Navigation Elements
   readonly scorecardCreatedMessage: Locator;
+  readonly primaryFieldWithCardLocator: Locator;
 
   /**
    * Constructor - Initializes the SalesforceScoreCards page object with all necessary locators
@@ -52,7 +52,6 @@ export default class SalesforceScorecardsPage {
     this.testInfo = testInfo;
 
     // Primary UI Controls
-    this.newButton = page.getByRole("button", { name: "New" });
     this.saveButton = page.getByRole("button", { name: "Save", exact: true });
     this.saveAndNewButton = page.getByRole("button", {
       name: "Save & New",
@@ -75,6 +74,9 @@ export default class SalesforceScorecardsPage {
 
     // Navigation Elements
     this.scorecardCreatedMessage = page.locator(".toastMessage");
+
+    // Primary field locator with scorecard name filter
+    this.primaryFieldWithCardLocator = page.locator(`[slot="primaryField"]`);
 
     console.log(
       "✅ SalesforceScoreCards page object initialized successfully with all locators"
@@ -108,8 +110,6 @@ export default class SalesforceScorecardsPage {
       JSON.stringify(details, null, 2)
     );
 
-    await expect(this.newButton).toBeVisible({ timeout: 10000 });
-
     // Take start screenshot for verification
     if (this.testInfo) {
       await Helper.takeScreenshotToFile(
@@ -121,7 +121,6 @@ export default class SalesforceScorecardsPage {
     }
 
     // Click New Scorecard
-    await this.newButton.click({ timeout: 10000 });
     console.log("✅ Scorecard creation form opened");
 
     // Wait for the form dialog to be fully loaded
@@ -132,9 +131,7 @@ export default class SalesforceScorecardsPage {
 
     // Fill Name field (text input)
     if (details.Name) {
-      await this.nameInput.fill(details.Name, {
-        timeout: 10000,
-      });
+      await this.nameInput.fill(details.Name, { timeout: 10000, });
       console.log(`✅ Name filled: ${details.Name}`);
     }
 
@@ -202,7 +199,7 @@ export default class SalesforceScorecardsPage {
     // Check if the scorecard name appears in the interface
     const scorecardName = details.Name;
     if (scorecardName) {
-      await expect(this.page.locator(`[slot="primaryField"]`).filter({ hasText: scorecardName }).first()).toBeVisible({ timeout: 10000 });
+      await expect(this.primaryFieldWithCardLocator.filter({ hasText: scorecardName }).first()).toBeVisible({ timeout: 10000 });
       console.log(`✅ Scorecard name verification successful: ${scorecardName}`);
     }
 

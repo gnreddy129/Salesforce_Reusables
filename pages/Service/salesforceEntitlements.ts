@@ -1,4 +1,4 @@
-import { Page, TestInfo } from '@playwright/test';
+import { Page, TestInfo, Locator } from '@playwright/test';
 import { Helper } from '../../utils/helper';
 
 /**
@@ -25,56 +25,54 @@ export default class SalesforceEntitlementsPage {
     private testInfo?: TestInfo;
 
     // Dialog locator
-    readonly dialog = () => this.page.getByRole('dialog').first();
+    readonly dialog: Locator;
 
     // Locators - Entitlement Fields
-    readonly entitlementNameField = () =>
-        this.page.getByRole('textbox', { name: /^Entitlement Name$/i }).first();
-
-    readonly typeCombobox = () =>
-        this.page.getByRole('combobox', { name: /^Type$/i }).first();
-
-    readonly startDateField = () =>
-        this.page.getByRole('textbox', { name: /^Start Date$/i }).first();
-
-    readonly accountCombobox = () =>
-        this.page.getByRole('combobox', { name: /^Account Name$/i }).first();
-
-    readonly endDateField = () =>
-        this.page.getByRole('textbox', { name: /^End Date$/i }).first();
-
-    readonly serviceContractCombobox = () =>
-        this.page.getByRole('combobox', { name: /^Service Contract$/i }).first();
-
-    readonly businessHoursCombobox = () =>
-        this.page.getByRole('combobox', { name: /^Business Hours$/i }).first();
-
-    readonly assetNameCombobox = () =>
-        this.page.getByRole('combobox', { name: /^Asset Name$/i }).first();
-
-    readonly slapolicyCombobox = () =>
-        this.page.getByRole('combobox', { name: /^SLA Policy$/i }).first();
-
-    readonly perIncidentCheckbox = () =>
-        this.page.getByText("Per Incident").first();
-
-    readonly remainingCasesSpinbutton = () =>
-        this.page.getByRole('spinbutton', { name: /^Remaining Cases$/i }).first();
-
-    readonly casesPerEntitlementSpinbutton = () =>
-        this.page.getByRole('spinbutton', { name: /^Cases Per Entitlement$/i }).first();
+    readonly entitlementNameField: Locator;
+    readonly typeCombobox: Locator;
+    readonly startDateField: Locator;
+    readonly accountCombobox: Locator;
+    readonly endDateField: Locator;
+    readonly serviceContractCombobox: Locator;
+    readonly businessHoursCombobox: Locator;
+    readonly assetNameCombobox: Locator;
+    readonly slapolicyCombobox: Locator;
+    readonly perIncidentCheckbox: Locator;
+    readonly remainingCasesSpinbutton: Locator;
+    readonly casesPerEntitlementSpinbutton: Locator;
 
     // Button Locators
-    readonly saveButton = () => this.page.getByRole('button', { name: /^Save$/i });
-    readonly saveNewButton = () =>
-        this.page.getByRole('button', { name: /^Save & New$/i });
-    readonly cancelButton = () =>
-        this.page.getByRole('button', { name: /^Cancel$/i });
+    readonly saveButton: Locator;
+    readonly saveNewButton: Locator;
+    readonly cancelButton: Locator;
+    readonly allOptionsLocator: Locator;
 
     constructor(page: Page, testInfo?: TestInfo) {
         this.page = page;
         this.testInfo = testInfo;
         console.log('🚀 Initializing SalesforceEntitlements page object');
+        
+        this.dialog = page.getByRole('dialog').first();
+
+        // Entitlement Fields
+        this.entitlementNameField = page.getByRole('textbox', { name: /^Entitlement Name$/i }).first();
+        this.typeCombobox = page.getByRole('combobox', { name: /^Type$/i }).first();
+        this.startDateField = page.getByRole('textbox', { name: /^Start Date$/i }).first();
+        this.accountCombobox = page.getByRole('combobox', { name: /^Account Name$/i }).first();
+        this.endDateField = page.getByRole('textbox', { name: /^End Date$/i }).first();
+        this.serviceContractCombobox = page.getByRole('combobox', { name: /^Service Contract$/i }).first();
+        this.businessHoursCombobox = page.getByRole('combobox', { name: /^Business Hours$/i }).first();
+        this.assetNameCombobox = page.getByRole('combobox', { name: /^Asset Name$/i }).first();
+        this.slapolicyCombobox = page.getByRole('combobox', { name: /^SLA Policy$/i }).first();
+        this.perIncidentCheckbox = page.getByText("Per Incident").first();
+        this.remainingCasesSpinbutton = page.getByRole('spinbutton', { name: /^Remaining Cases$/i }).first();
+        this.casesPerEntitlementSpinbutton = page.getByRole('spinbutton', { name: /^Cases Per Entitlement$/i }).first();
+
+        // Button Locators
+        this.saveButton = page.getByRole('button', { name: /^Save$/i });
+        this.saveNewButton = page.getByRole('button', { name: /^Save & New$/i });
+        this.cancelButton = page.getByRole('button', { name: /^Cancel$/i });
+    this.allOptionsLocator = page.getByRole("option");
     }
 
     /**
@@ -100,7 +98,7 @@ export default class SalesforceEntitlementsPage {
             if (entitlementName) {
                 console.log('📝 Filling Entitlement Name...');
                 try {
-                    await this.entitlementNameField().fill(entitlementName, { timeout: 10000 });
+                    await this.entitlementNameField.fill(entitlementName, { timeout: 10000 });
                     console.log('✅ Entitlement Name filled:', entitlementName);
                 } catch (e) {
                     console.log('❌ Failed to fill Entitlement Name:', e);
@@ -111,12 +109,9 @@ export default class SalesforceEntitlementsPage {
             const type = details.Type || details.type;
             if (type) {
                 console.log('🔽 Selecting Type from combobox...');
-                await this.typeCombobox().click({ timeout: 10000 });
+                await this.typeCombobox.click({ timeout: 10000 });
                 await this.page.waitForTimeout(1000);
-
-                const optionRole = this.page.getByRole('option', { name: type }).first();
-                await optionRole.waitFor({ state: 'visible', timeout: 5000 });
-                await optionRole.click({ timeout: 5000 });
+                await this.allOptionsLocator.filter({ hasText: type }).first().click({ timeout: 10000 });
                 console.log('✅ Type selected:', type);
             }
 
@@ -125,7 +120,7 @@ export default class SalesforceEntitlementsPage {
             if (startDate) {
                 console.log('📅 Filling Start Date...');
                 try {
-                    await this.startDateField().fill(startDate, { timeout: 10000 });
+                    await this.startDateField.fill(startDate, { timeout: 10000 });
                     console.log('✅ Start Date filled:', startDate);
                 } catch (e) {
                     console.log('❌ Failed to fill Start Date:', e);
@@ -137,16 +132,13 @@ export default class SalesforceEntitlementsPage {
             if (account) {
                 console.log('🔽 Selecting Account from combobox...');
                 try {
-                    const accountCombo = this.accountCombobox();
+                    const accountCombo = this.accountCombobox;
                     const isVisible = await accountCombo.isVisible().catch(() => false);
 
                     if (isVisible) {
                         await accountCombo.click({ timeout: 10000 });
                         await this.page.waitForTimeout(1000);
-
-                        const optionRole = this.page.getByRole('option', { name: account }).first();
-                        await optionRole.waitFor({ state: 'visible', timeout: 5000 });
-                        await optionRole.click({ timeout: 5000 });
+                        await this.allOptionsLocator.first().click({ timeout: 10000 });
                         console.log('✅ Account selected:', account);
                     } else {
                         console.log('⚠️ Account combobox not visible on form, skipping');
@@ -162,7 +154,7 @@ export default class SalesforceEntitlementsPage {
             if (endDate) {
                 console.log('📅 Filling End Date...');
                 try {
-                    const endDateField = this.endDateField();
+                    const endDateField = this.endDateField;
                     const isVisible = await endDateField.isVisible().catch(() => false);
 
                     if (isVisible) {
@@ -181,16 +173,13 @@ export default class SalesforceEntitlementsPage {
             if (serviceContract) {
                 console.log('🔽 Selecting Service Contract from combobox...');
                 try {
-                    const scCombo = this.serviceContractCombobox();
+                    const scCombo = this.serviceContractCombobox;
                     const isVisible = await scCombo.isVisible().catch(() => false);
 
                     if (isVisible) {
                         await scCombo.click({ timeout: 10000 });
                         await this.page.waitForTimeout(1000);
-
-                        const optionRole = this.page.getByRole('option', { name: serviceContract }).first();
-                        await optionRole.waitFor({ state: 'visible', timeout: 5000 });
-                        await optionRole.click({ timeout: 5000 });
+                        await this.allOptionsLocator.first().click({ timeout: 10000 });
                         console.log('✅ Service Contract selected:', serviceContract);
                     } else {
                         console.log('⚠️ Service Contract combobox not visible on form, skipping');
@@ -205,16 +194,13 @@ export default class SalesforceEntitlementsPage {
             if (businessHours) {
                 console.log('🔽 Selecting Business Hours from combobox...');
                 try {
-                    const bhCombo = this.businessHoursCombobox();
+                    const bhCombo = this.businessHoursCombobox;
                     const isVisible = await bhCombo.isVisible().catch(() => false);
 
                     if (isVisible) {
                         await bhCombo.click({ timeout: 10000 });
                         await this.page.waitForTimeout(1000);
-
-                        const optionRole = this.page.getByRole('option', { name: businessHours }).first();
-                        await optionRole.waitFor({ state: 'visible', timeout: 5000 });
-                        await optionRole.click({ timeout: 5000 });
+                        await this.allOptionsLocator.first().click({ timeout: 10000 });
                         console.log('✅ Business Hours selected:', businessHours);
                     } else {
                         console.log('⚠️ Business Hours combobox not visible on form, skipping');
@@ -229,16 +215,13 @@ export default class SalesforceEntitlementsPage {
             if (assetName) {
                 console.log('🔽 Selecting Asset Name from combobox...');
                 try {
-                    const anCombo = this.assetNameCombobox();
+                    const anCombo = this.assetNameCombobox;
                     const isVisible = await anCombo.isVisible().catch(() => false);
 
                     if (isVisible) {
                         await anCombo.click({ timeout: 10000 });
                         await this.page.waitForTimeout(1000);
-
-                        const optionRole = this.page.getByRole('option', { name: assetName }).first();
-                        await optionRole.waitFor({ state: 'visible', timeout: 5000 });
-                        await optionRole.click({ timeout: 5000 });
+                        await this.allOptionsLocator.first().click({ timeout: 10000 });
                         console.log('✅ Asset Name selected:', assetName);
                     } else {
                         console.log('⚠️ Asset Name combobox not visible on form, skipping');
@@ -253,16 +236,13 @@ export default class SalesforceEntitlementsPage {
             if (slaPolicy) {
                 console.log('🔽 Selecting SLA Policy from combobox...');
                 try {
-                    const slpCombo = this.slapolicyCombobox();
+                    const slpCombo = this.slapolicyCombobox;
                     const isVisible = await slpCombo.isVisible().catch(() => false);
 
                     if (isVisible) {
                         await slpCombo.click({ timeout: 10000 });
                         await this.page.waitForTimeout(1000);
-
-                        const optionRole = this.page.getByRole('option', { name: slaPolicy }).first();
-                        await optionRole.waitFor({ state: 'visible', timeout: 5000 });
-                        await optionRole.click({ timeout: 5000 });
+                        await this.allOptionsLocator.first().click({ timeout: 10000 });
                         console.log('✅ SLA Policy selected:', slaPolicy);
                     } else {
                         console.log('⚠️ SLA Policy combobox not visible on form, skipping');
@@ -277,9 +257,9 @@ export default class SalesforceEntitlementsPage {
             if (perIncident && perIncident.toLowerCase() === 'true') {
                 console.log('☑️ Checking Per Incident checkbox...');
                 try {
-                    const isChecked = await this.perIncidentCheckbox().isChecked();
+                    const isChecked = await this.perIncidentCheckbox.isChecked();
                     if (!isChecked) {
-                        await this.perIncidentCheckbox().click({ timeout: 10000 });
+                        await this.perIncidentCheckbox.click({ timeout: 10000 });
                         console.log('✅ Per Incident checkbox checked');
                     } else {
                         console.log('✅ Per Incident checkbox already checked');
@@ -294,7 +274,7 @@ export default class SalesforceEntitlementsPage {
             if (remainingCases) {
                 console.log('🔢 Filling Remaining Cases spinbutton...');
                 try {
-                    const rcSpinbutton = this.remainingCasesSpinbutton();
+                    const rcSpinbutton = this.remainingCasesSpinbutton;
                     const isVisible = await rcSpinbutton.isVisible().catch(() => false);
 
                     if (isVisible) {
@@ -313,7 +293,7 @@ export default class SalesforceEntitlementsPage {
             if (casesPerEntitlement) {
                 console.log('🔢 Filling Cases Per Entitlement spinbutton...');
                 try {
-                    const cpeSpinbutton = this.casesPerEntitlementSpinbutton();
+                    const cpeSpinbutton = this.casesPerEntitlementSpinbutton;
                     const isVisible = await cpeSpinbutton.isVisible().catch(() => false);
 
                     if (isVisible) {
@@ -343,7 +323,7 @@ export default class SalesforceEntitlementsPage {
     async clickSave() {
         console.log('💾 Clicking Save button...');
         try {
-            await this.saveButton().click({ timeout: 10000 });
+            await this.saveButton.click({ timeout: 10000 });
             console.log('⏳ Waiting for save to complete...');
 
             // Wait a moment for the save to process
@@ -364,13 +344,13 @@ export default class SalesforceEntitlementsPage {
 
     async clickSaveNew() {
         console.log('💾 Clicking Save & New button...');
-        await this.saveNewButton().click();
+        await this.saveNewButton.click({ timeout: 10000 });
         await this.page.waitForTimeout(2000);
     }
 
     async clickCancel() {
         console.log('❌ Clicking Cancel button...');
-        await this.cancelButton().click();
+        await this.cancelButton.click({ timeout: 10000 });
         await this.page.waitForTimeout(1000);
     }
 
@@ -424,3 +404,4 @@ export default class SalesforceEntitlementsPage {
         }
     }
 }
+

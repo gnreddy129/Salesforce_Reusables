@@ -34,6 +34,7 @@ export class SalesforceLoginPage {
   // Verification Elements
   readonly home_component: Locator;
   readonly errormessage: Locator;
+  readonly emcErrorLocator: Locator;
 
   // Context for multi-page operations
   readonly context: any;
@@ -59,6 +60,7 @@ export class SalesforceLoginPage {
     // Verification and error elements
     this.errormessage = page.locator("(//*[@class='loginError'])[2]");
     this.verificationCodeInput = page.locator("#emc");
+    this.emcErrorLocator = page.locator("#emc-error");
 
     // Context for handling multiple pages (Yopmail integration)
     this.context = page.context();
@@ -116,7 +118,7 @@ export class SalesforceLoginPage {
     console.log("📋 Filling login credentials...");
     await this.username.fill(data_username);
     await this.password.fill(data_password);
-    await this.login_button.click();
+    await this.login_button.click({ timeout: 10000 });
     console.log("✅ Login credentials submitted");
 
     // Choose verification method based on parameter
@@ -218,7 +220,7 @@ export class SalesforceLoginPage {
     );
 
     await this.verificationCodeInput.press("Enter");
-    if (await this.page.locator("#emc-error").isVisible()) {
+    if (await this.emcErrorLocator.isVisible()) {
       console.log("❌ Verification code entry failed");
       return false;
     }

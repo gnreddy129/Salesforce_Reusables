@@ -23,7 +23,6 @@ export default class SalesforceWorkTypesPage {
     private testInfo?: TestInfo;
 
     // Primary UI Controls
-    readonly newButton: Locator;
     readonly dialog: Locator;
 
     // Work Type Configuration Fields
@@ -43,6 +42,7 @@ export default class SalesforceWorkTypesPage {
 
     // Action Buttons
     readonly saveButton: Locator;
+    readonly allOptionsLocator: Locator;
 
     /**
      * Constructor - Initializes the SalesforceWorkTypes page object with all necessary locators
@@ -57,9 +57,6 @@ export default class SalesforceWorkTypesPage {
         console.log("🚀 Initializing SalesforceWorkTypes page object");
         this.page = page;
         this.testInfo = testInfo;
-
-        // Primary controls - Main UI interaction elements
-        this.newButton = page.getByRole("button", { name: /New|Create/i }).first();
 
         // Dialog elements - Handle work type creation
         this.dialog = this.page.getByRole("dialog").first();
@@ -121,6 +118,7 @@ export default class SalesforceWorkTypesPage {
         this.saveButton = this.dialog.getByRole("button", {
             name: /^Save$/i,
         });
+        this.allOptionsLocator = page.getByRole("option");
 
         console.log(
             "✅ SalesforceWorkTypes page object initialized successfully with all locators"
@@ -144,7 +142,6 @@ export default class SalesforceWorkTypesPage {
         console.log("📋 Work type details:", JSON.stringify(details, null, 2));
 
         // Wait for the new button to be visible and take start screenshot
-        await expect(this.newButton).toBeVisible({ timeout: 10000 });
         await Helper.takeScreenshotToFile(
             this.page,
             "1-start-work-type",
@@ -153,7 +150,6 @@ export default class SalesforceWorkTypesPage {
         );
 
         // Open the new work type creation dialog
-        await this.newButton.click({ timeout: 10000 });
         console.log("✅ Work type creation dialog opened");
 
         await this.dialog.waitFor({ state: "visible", timeout: 10000 });
@@ -180,7 +176,7 @@ export default class SalesforceWorkTypesPage {
             try {
                 await this.descriptionTextbox.fill("", { timeout: 5000 });
                 await this.page.waitForTimeout(200);
-                await this.descriptionTextbox.fill(details.Description, { timeout: 10000 });
+                await this.descriptionTextbox.fill(Helper.generateUniqueValue(details.Description), { timeout: 10000 });
                 console.log("✅ Description filled:", details.Description);
             } catch (e) {
                 console.log("❌ Failed to fill Description:", e);
@@ -193,23 +189,7 @@ export default class SalesforceWorkTypesPage {
             console.log("🔽 Selecting Operating Hours from combobox...");
             await this.operatingHoursCombobox.click({ timeout: 10000 });
             await this.page.waitForTimeout(1000);
-
-            try {
-                const optionRole = this.page.locator(`[role="option"]:has-text("${operatingHours}")`).first();
-                await optionRole.click({ timeout: 10000, force: true });
-                console.log("✅ Operating Hours selected:", operatingHours);
-            } catch (e) {
-                try {
-                    await this.operatingHoursCombobox.fill(operatingHours, { timeout: 10000 });
-                    await this.page.waitForTimeout(500);
-                    await this.page.keyboard.press("ArrowDown");
-                    await this.page.waitForTimeout(300);
-                    await this.page.keyboard.press("Enter");
-                    console.log("✅ Operating Hours selected via type and keyboard");
-                } catch (e2) {
-                    console.log("❌ Failed to select Operating Hours:", e2);
-                }
-            }
+            await this.allOptionsLocator.first().click({ timeout: 10000 });
         }
 
         // Estimated Duration (Spinbutton) - Required
@@ -230,23 +210,7 @@ export default class SalesforceWorkTypesPage {
             console.log("🔽 Selecting Duration Type from dropdown...");
             await this.durationTypeDropdown.click({ timeout: 10000 });
             await this.page.waitForTimeout(1000);
-
-            try {
-                const optionRole = this.page.locator(`[role="option"]:has-text("${durationType}")`).first();
-                await optionRole.click({ timeout: 10000, force: true });
-                console.log("✅ Duration Type selected:", durationType);
-            } catch (e) {
-                try {
-                    await this.durationTypeDropdown.fill(durationType, { timeout: 10000 });
-                    await this.page.waitForTimeout(500);
-                    await this.page.keyboard.press("ArrowDown");
-                    await this.page.waitForTimeout(300);
-                    await this.page.keyboard.press("Enter");
-                    console.log("✅ Duration Type selected via type and keyboard");
-                } catch (e2) {
-                    console.log("❌ Failed to select Duration Type:", e2);
-                }
-            }
+            await this.allOptionsLocator.filter({ hasText: durationType }).first().click({ timeout: 10000 });
         }
 
         // Block Time Before Appointment (Spinbutton)
@@ -267,14 +231,7 @@ export default class SalesforceWorkTypesPage {
             console.log("🔽 Selecting Block Time Before Unit from dropdown...");
             await this.blockTimeBeforeUnitDropdown.click({ timeout: 10000 });
             await this.page.waitForTimeout(800);
-
-            try {
-                const optionRole = this.page.locator(`[role="option"]:has-text("${blockTimeBeforeUnit}")`).first();
-                await optionRole.click({ timeout: 10000, force: true });
-                console.log("✅ Block Time Before Unit selected:", blockTimeBeforeUnit);
-            } catch (e) {
-                console.log("❌ Failed to select Block Time Before Unit:", e);
-            }
+            await this.allOptionsLocator.filter({ hasText: blockTimeBeforeUnit }).first().click({ timeout: 10000 });
         }
 
         // Block Time After Appointment (Spinbutton)
@@ -293,25 +250,9 @@ export default class SalesforceWorkTypesPage {
         if (details.BlockTimeAfterUnit || details["Block Time After Unit"]) {
             const blockTimeAfterUnit = details.BlockTimeAfterUnit || details["Block Time After Unit"];
             console.log("🔽 Selecting Block Time After Unit from dropdown...");
-            try {
-                await this.blockTimeAfterUnitDropdown.click({ timeout: 5000 });
-                await this.page.waitForTimeout(1000);
-                const optionRole = this.page.locator(`[role="option"]:has-text("${blockTimeAfterUnit}")`).first();
-                await optionRole.click({ timeout: 5000, force: true });
-                console.log("✅ Block Time After Unit selected:", blockTimeAfterUnit);
-            } catch (e) {
-                console.log("❌ Failed to select Block Time After Unit with click, trying keyboard...", e);
-                try {
-                    await this.blockTimeAfterUnitDropdown.fill(blockTimeAfterUnit, { timeout: 5000 });
-                    await this.page.waitForTimeout(300);
-                    await this.page.keyboard.press("ArrowDown");
-                    await this.page.waitForTimeout(300);
-                    await this.page.keyboard.press("Enter");
-                    console.log("✅ Block Time After Unit selected via keyboard:", blockTimeAfterUnit);
-                } catch (ke) {
-                    console.log("❌ Failed to select Block Time After Unit:", ke);
-                }
-            }
+            await this.blockTimeAfterUnitDropdown.click({ timeout: 10000 });
+            await this.page.waitForTimeout(800);
+            await this.allOptionsLocator.filter({ hasText: blockTimeAfterUnit }).first().click({ timeout: 10000 });
         }
 
         // Timeframe Start (Spinbutton)
@@ -330,25 +271,9 @@ export default class SalesforceWorkTypesPage {
         if (details.TimeFrameStartUnit || details["Time Frame Start Unit"]) {
             const timeFrameStartUnit = details.TimeFrameStartUnit || details["Time Frame Start Unit"];
             console.log("🔽 Selecting Time Frame Start Unit from dropdown...");
-            try {
-                await this.timeFrameStartUnitDropdown.click({ timeout: 5000 });
-                await this.page.waitForTimeout(1000);
-                const optionRole = this.page.locator(`[role="option"]:has-text("${timeFrameStartUnit}")`).first();
-                await optionRole.click({ timeout: 5000, force: true });
-                console.log("✅ Time Frame Start Unit selected:", timeFrameStartUnit);
-            } catch (e) {
-                console.log("❌ Failed to select Time Frame Start Unit with click, trying keyboard...", e);
-                try {
-                    await this.timeFrameStartUnitDropdown.fill(timeFrameStartUnit, { timeout: 5000 });
-                    await this.page.waitForTimeout(300);
-                    await this.page.keyboard.press("ArrowDown");
-                    await this.page.waitForTimeout(300);
-                    await this.page.keyboard.press("Enter");
-                    console.log("✅ Time Frame Start Unit selected via keyboard:", timeFrameStartUnit);
-                } catch (ke) {
-                    console.log("❌ Failed to select Time Frame Start Unit:", ke);
-                }
-            }
+            await this.timeFrameStartUnitDropdown.click({ timeout: 5000 });
+            await this.page.waitForTimeout(1000);
+            await this.allOptionsLocator.filter({ hasText: timeFrameStartUnit }).first().click({ timeout: 10000 });
         }
 
         // Timeframe End (Spinbutton)
@@ -367,25 +292,9 @@ export default class SalesforceWorkTypesPage {
         if (details.TimeFrameEndUnit || details["Time Frame End Unit"]) {
             const timeFrameEndUnit = details.TimeFrameEndUnit || details["Time Frame End Unit"];
             console.log("🔽 Selecting Time Frame End Unit from dropdown...");
-            try {
-                await this.timeFrameEndUnitDropdown.click({ timeout: 5000 });
-                await this.page.waitForTimeout(1000);
-                const optionRole = this.page.locator(`[role="option"]:has-text("${timeFrameEndUnit}")`).first();
-                await optionRole.click({ timeout: 5000, force: true });
-                console.log("✅ Time Frame End Unit selected:", timeFrameEndUnit);
-            } catch (e) {
-                console.log("❌ Failed to select Time Frame End Unit with click, trying keyboard...", e);
-                try {
-                    await this.timeFrameEndUnitDropdown.fill(timeFrameEndUnit, { timeout: 5000 });
-                    await this.page.waitForTimeout(300);
-                    await this.page.keyboard.press("ArrowDown");
-                    await this.page.waitForTimeout(300);
-                    await this.page.keyboard.press("Enter");
-                    console.log("✅ Time Frame End Unit selected via keyboard:", timeFrameEndUnit);
-                } catch (ke) {
-                    console.log("❌ Failed to select Time Frame End Unit:", ke);
-                }
-            }
+            await this.timeFrameEndUnitDropdown.click({ timeout: 5000 });
+            await this.page.waitForTimeout(1000);
+            await this.allOptionsLocator.filter({ hasText: timeFrameEndUnit }).first().click({ timeout: 10000 });
         }
 
         // Take screenshot AFTER all fields are filled

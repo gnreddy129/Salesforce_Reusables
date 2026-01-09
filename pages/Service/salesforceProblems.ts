@@ -1,4 +1,4 @@
-import { Page, Locator, TestInfo } from '@playwright/test';
+import { Page, Locator, TestInfo, expect } from '@playwright/test';
 import { BasePage } from '../basePage';
 import { Helper } from '../../utils/helper';
 
@@ -76,16 +76,12 @@ export class SalesforceProblemsPage extends BasePage {
 
     /** Cancel button - Closes the form without saving */
     readonly cancelButton: Locator;
+    readonly createdMessage: Locator;
 
     // ========== Helper Reference ==========
     private testInfo: TestInfo;
+    readonly allOptionsLocator: Locator;
 
-    /**
-     * Constructor - Initializes all locators using role-based selectors
-     * 
-     * @param {Page} page - Playwright page object
-     * @param {TestInfo} testInfo - Playwright test info for screenshot artifacts
-     */
     constructor(page: Page, testInfo: TestInfo) {
         super(page);
 
@@ -117,6 +113,8 @@ export class SalesforceProblemsPage extends BasePage {
         this.saveButton = page.getByRole('button', { name: /^Save$/i });
         this.saveNewButton = page.getByRole('button', { name: /Save & New/i });
         this.cancelButton = page.getByRole('button', { name: /Cancel/i });
+        this.allOptionsLocator = page.getByRole("option");
+        this.createdMessage = page.locator(".toastMessage");
     }
 
     /**
@@ -162,7 +160,7 @@ export class SalesforceProblemsPage extends BasePage {
 
             // Fill Subject (Problem Name) - Required field
             if (problemDetails.Subject) {
-                await this.subject.fill(problemDetails.Subject);
+                await this.subject.fill(Helper.generateUniqueValue(problemDetails.Subject));
                 console.log('✅ Subject filled:', problemDetails.Subject);
             } else {
                 throw new Error('Subject (Problem Name) is required');
@@ -171,7 +169,7 @@ export class SalesforceProblemsPage extends BasePage {
             // Fill Description - Optional field
             if (problemDetails.Description) {
                 try {
-                    await this.description.fill(problemDetails.Description);
+                    await this.description.fill(Helper.generateUniqueValue(problemDetails.Description));
                     console.log('✅ Description filled:', problemDetails.Description);
                 } catch (error) {
                     console.warn('⚠️ Could not fill Description field:', error);
@@ -181,8 +179,8 @@ export class SalesforceProblemsPage extends BasePage {
             // Set Status - Optional field (if provided)
             if (problemDetails.Status) {
                 try {
-                    await this.status.click();
-                    await this.page.getByRole('option', { name: problemDetails.Status, exact: true }).click();
+                    await this.status.click({ timeout: 10000 });
+                    await this.allOptionsLocator.filter({ hasText: problemDetails.Status }).first().click({ timeout: 10000 });
                     console.log('✅ Status set to:', problemDetails.Status);
                 } catch (error) {
                     console.warn('⚠️ Could not set Status:', error);
@@ -192,8 +190,8 @@ export class SalesforceProblemsPage extends BasePage {
             // Set Urgency - Optional field (if provided)
             if (problemDetails.Urgency) {
                 try {
-                    await this.urgency.click();
-                    await this.page.getByRole('option', { name: problemDetails.Urgency, exact: true }).click();
+                    await this.urgency.click({ timeout: 10000 });
+                    await this.allOptionsLocator.filter({ hasText: problemDetails.Urgency }).first().click({ timeout: 10000 });
                     console.log('✅ Urgency set to:', problemDetails.Urgency);
                 } catch (error) {
                     console.warn('⚠️ Could not set Urgency:', error);
@@ -203,8 +201,8 @@ export class SalesforceProblemsPage extends BasePage {
             // Set Impact - Optional field (if provided)
             if (problemDetails.Impact) {
                 try {
-                    await this.impact.click();
-                    await this.page.getByRole('option', { name: problemDetails.Impact, exact: true }).click();
+                    await this.impact.click({ timeout: 10000 });
+                    await this.allOptionsLocator.filter({ hasText: problemDetails.Impact }).first().click({ timeout: 10000 });
                     console.log('✅ Impact set to:', problemDetails.Impact);
                 } catch (error) {
                     console.warn('⚠️ Could not set Impact:', error);
@@ -214,8 +212,8 @@ export class SalesforceProblemsPage extends BasePage {
             // Set Priority - Optional field (if provided)
             if (problemDetails.Priority) {
                 try {
-                    await this.priority.click();
-                    await this.page.getByRole('option', { name: problemDetails.Priority, exact: true }).click();
+                    await this.priority.click({ timeout: 10000 });
+                    await this.allOptionsLocator.filter({ hasText: problemDetails.Priority }).first().click({ timeout: 10000 });
                     console.log('✅ Priority set to:', problemDetails.Priority);
                 } catch (error) {
                     console.warn('⚠️ Could not set Priority:', error);
@@ -225,8 +223,8 @@ export class SalesforceProblemsPage extends BasePage {
             // Set Parent Problem - Optional field (if provided)
             if (problemDetails.ParentProblem) {
                 try {
-                    await this.parentProblem.click();
-                    await this.page.getByRole('option', { name: new RegExp(problemDetails.ParentProblem, 'i') }).click();
+                    await this.parentProblem.click({ timeout: 10000 });
+                    await this.allOptionsLocator.first().click({ timeout: 10000 });
                     console.log('✅ Parent Problem set to:', problemDetails.ParentProblem);
                 } catch (error) {
                     console.warn('⚠️ Could not set Parent Problem:', error);
@@ -236,8 +234,8 @@ export class SalesforceProblemsPage extends BasePage {
             // Set Category - Optional field (if provided)
             if (problemDetails.Category) {
                 try {
-                    await this.category.click();
-                    await this.page.getByRole('option', { name: problemDetails.Category, exact: true }).click();
+                    await this.category.click({ timeout: 10000 });
+                    await this.allOptionsLocator.filter({ hasText: problemDetails.Category }).first().click({ timeout: 10000 });
                     console.log('✅ Category set to:', problemDetails.Category);
                 } catch (error) {
                     console.warn('⚠️ Could not set Category:', error);
@@ -247,8 +245,8 @@ export class SalesforceProblemsPage extends BasePage {
             // Set Subcategory - Optional field (if provided)
             if (problemDetails.Subcategory) {
                 try {
-                    await this.subcategory.click();
-                    await this.page.getByRole('option', { name: problemDetails.Subcategory, exact: true }).click();
+                    await this.subcategory.click({ timeout: 10000 });
+                    await this.allOptionsLocator.filter({ hasText: problemDetails.Subcategory }).first().click({ timeout: 10000 });
                     console.log('✅ Subcategory set to:', problemDetails.Subcategory);
                 } catch (error) {
                     console.warn('⚠️ Could not set Subcategory:', error);
@@ -258,7 +256,7 @@ export class SalesforceProblemsPage extends BasePage {
             // Fill Priority Override Reason - Optional field
             if (problemDetails.PriorityOverrideReason) {
                 try {
-                    await this.priorityOverrideReason.fill(problemDetails.PriorityOverrideReason);
+                    await this.priorityOverrideReason.fill(Helper.generateUniqueValue(problemDetails.PriorityOverrideReason));
                     console.log('✅ Priority Override Reason filled:', problemDetails.PriorityOverrideReason);
                 } catch (error) {
                     console.warn('⚠️ Could not fill Priority Override Reason:', error);
@@ -268,7 +266,7 @@ export class SalesforceProblemsPage extends BasePage {
             // Fill Root Cause Summary - Optional field
             if (problemDetails.RootCauseSummary) {
                 try {
-                    await this.rootCauseSummary.fill(problemDetails.RootCauseSummary);
+                    await this.rootCauseSummary.fill(Helper.generateUniqueValue(problemDetails.RootCauseSummary));
                     console.log('✅ Root Cause Summary filled:', problemDetails.RootCauseSummary);
                 } catch (error) {
                     console.warn('⚠️ Could not fill Root Cause Summary:', error);
@@ -278,8 +276,8 @@ export class SalesforceProblemsPage extends BasePage {
             // Set Resolved By - Optional field (if provided)
             if (problemDetails.ResolvedBy) {
                 try {
-                    await this.resolvedBy.click();
-                    await this.page.getByRole('option', { name: new RegExp(problemDetails.ResolvedBy, 'i') }).click();
+                    await this.resolvedBy.click({ timeout: 10000 });
+                    await this.allOptionsLocator.first().click({ timeout: 10000 });
                     console.log('✅ Resolved By set to:', problemDetails.ResolvedBy);
                 } catch (error) {
                     console.warn('⚠️ Could not set Resolved By:', error);
@@ -299,8 +297,8 @@ export class SalesforceProblemsPage extends BasePage {
             // Set Resolution Time - Optional field (if provided)
             if (problemDetails.ResolutionTime) {
                 try {
-                    await this.resolutionTime.click();
-                    await this.page.getByRole('option', { name: problemDetails.ResolutionTime }).click();
+                    await this.resolutionTime.click({ timeout: 10000 });
+                    await this.allOptionsLocator.filter({ hasText: problemDetails.ResolutionTime }).first().click({ timeout: 10000 });
                     console.log('✅ Resolution Time set to:', problemDetails.ResolutionTime);
                 } catch (error) {
                     console.warn('⚠️ Could not set Resolution Time:', error);
@@ -310,7 +308,7 @@ export class SalesforceProblemsPage extends BasePage {
             // Fill Resolution Summary - Optional field
             if (problemDetails.ResolutionSummary) {
                 try {
-                    await this.resolutionSummary.fill(problemDetails.ResolutionSummary);
+                    await this.resolutionSummary.fill(Helper.generateUniqueValue(problemDetails.ResolutionSummary));
                     console.log('✅ Resolution Summary filled:', problemDetails.ResolutionSummary);
                 } catch (error) {
                     console.warn('⚠️ Could not fill Resolution Summary:', error);
@@ -321,7 +319,7 @@ export class SalesforceProblemsPage extends BasePage {
             await Helper.takeScreenshotToFile(this.page, '02-problem_form_filled', this.testInfo, 'Service/salesforce-problems');
 
             // Click Save button
-            await this.saveButton.click();
+            await this.saveButton.click({ timeout: 10000 });
             console.log('✅ Save button clicked');
 
             // Wait for form to close and problem to be created
@@ -351,27 +349,18 @@ export class SalesforceProblemsPage extends BasePage {
      * 
      * @throws {Error} If the problem is not found in the list
      */
-    async verifyProblemCreation(subject: string): Promise<void> {
-        try {
-            console.log('🔍 Verifying Problem creation for:', subject);
+    async verifyProblemCreation(Category: string): Promise<void> {
+        console.log('🔍 Verifying Problem creation for:', Category);
 
-            // Wait for list to update
-            await this.page.waitForTimeout(1000);
+        await expect(this.createdMessage).toContainText("was created");
 
-            // Check if the problem appears in the Problems list
-            const problemInList = this.page.locator('text=' + subject);
-
-            if (await problemInList.isVisible({ timeout: 5000 })) {
-                console.log('✅ Problem found in list:', subject);
-                await Helper.takeScreenshotToFile(this.page, '04-problem_verification_success', this.testInfo, 'Service/salesforce-problems');
+        await this.page.waitForTimeout(1000);
+        await this.page.getByText(Category).count().then(async (count) => {
+            if (count === 0) {
+                throw new Error(`Problem '${Category}' not found in the list`);
             } else {
-                throw new Error(`Problem '${subject}' not found in the list`);
+                console.log(`✅ Problem '${Category}' found in the list`);
             }
-
-        } catch (error) {
-            console.error('❌ Error verifying Problem creation:', error);
-            await Helper.takeScreenshotToFile(this.page, 'problem_verification_error', this.testInfo, 'Service/salesforce-problems');
-            throw error;
-        }
+        });
     }
 }

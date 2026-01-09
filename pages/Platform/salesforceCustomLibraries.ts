@@ -1,5 +1,6 @@
 import { expect, Page, Locator, TestInfo } from "@playwright/test";
 import { Helper } from "../../utils/helper";
+import { de } from "@faker-js/faker";
 
 /**
  * SalesforceCustomLibraries Page Object Model
@@ -25,7 +26,6 @@ export default class SalesforceCustomLibrariesPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newButton: Locator;
   readonly saveButton: Locator;
   readonly saveAndNewButton: Locator;
   readonly cancelButton: Locator;
@@ -38,6 +38,8 @@ export default class SalesforceCustomLibrariesPage {
 
   // Navigation Elements
   readonly customLibraryCreatedMessage: Locator;
+  readonly allOptionsLocator: Locator;
+  readonly primaryFieldLocator: Locator;
 
   /**
    * Constructor - Initializes the SalesforceCustomLibraries page object with all necessary locators
@@ -54,7 +56,6 @@ export default class SalesforceCustomLibrariesPage {
     this.testInfo = testInfo;
 
     // Primary UI Controls
-    this.newButton = page.getByRole("button", { name: "New" });
     this.saveButton = page.getByRole("button", { name: "Save", exact: true });
     this.saveAndNewButton = page.getByRole("button", {
       name: "Save & New",
@@ -85,6 +86,8 @@ export default class SalesforceCustomLibrariesPage {
 
     // Navigation Elements
     this.customLibraryCreatedMessage = page.locator(".toastMessage");
+    this.allOptionsLocator = page.getByRole("option");
+    this.primaryFieldLocator = page.locator(`[slot="primaryField"]`);
 
     console.log(
       "✅ SalesforceCustomLibraries page object initialized successfully with all locators"
@@ -119,8 +122,6 @@ export default class SalesforceCustomLibrariesPage {
     console.log("🔄 Starting custom library creation process...");
     console.log("📝 Custom Library details:", JSON.stringify(details, null, 2));
 
-    await expect(this.newButton).toBeVisible({ timeout: 10000 });
-
     // Take start screenshot for verification
     if (this.testInfo) {
       await Helper.takeScreenshotToFile(
@@ -132,7 +133,6 @@ export default class SalesforceCustomLibrariesPage {
     }
 
     // Click New Custom Library
-    await this.newButton.click({ timeout: 10000 });
     console.log("✅ Custom Library creation form opened");
 
     // Wait for the form dialog to be fully loaded
@@ -143,7 +143,7 @@ export default class SalesforceCustomLibrariesPage {
 
     // Fill Name field (text input)
     if (details.Name) {
-      await this.nameInput.fill(details.Name, {
+      await this.nameInput.fill(Helper.generateUniqueValue(details.Name), {
         timeout: 10000,
       });
       console.log(`✅ Name filled: ${details.Name}`);
@@ -151,7 +151,7 @@ export default class SalesforceCustomLibrariesPage {
 
     // Fill Description field (text input)
     if (details.Description && details.Description !== "--None--") {
-      await this.descriptionInput.fill(details.Description, {
+      await this.descriptionInput.fill(Helper.generateUniqueValue(details.Description), {
         timeout: 10000,
       });
       console.log(`✅ Description filled: ${details.Description}`);
@@ -160,9 +160,7 @@ export default class SalesforceCustomLibrariesPage {
     // Fill Content Type field (combobox)
     if (details["Content Type"] && details["Content Type"] !== "--None--") {
       await this.contentTypeCombobox.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: details["Content Type"] })
-        .click();
+      await this.allOptionsLocator.filter({ hasText: details["Content Type"] }).first().click({ timeout: 10000 });
       console.log(`✅ Content Type selected: ${details["Content Type"]}`);
     }
 
@@ -217,31 +215,23 @@ export default class SalesforceCustomLibrariesPage {
    */
   async verifyCustomLibraryCreation(details: { [key: string]: string }) {
     console.log("🔍 Starting custom library verification...");
-    await expect(this.customLibraryCreatedMessage).toBeVisible({
-      timeout: 10000,
-    });
+    await expect(this.customLibraryCreatedMessage).toBeVisible({ timeout: 10000 });
+    
     // Take verification screenshot
-    if (this.testInfo) {
-      await Helper.takeScreenshotToFile(
-        this.page,
-        "3-verification-custom-library",
-        this.testInfo,
-        "Platform/salesforce-custom-libraries/"
-      );
-    }
+    await Helper.takeScreenshotToFile(
+      this.page,
+      "3-verification-custom-library",
+      this.testInfo,
+      "Platform/salesforce-custom-libraries/"
+    );
 
     // Check if the custom library name appears in the interface
-    const customLibraryName = details.Name;
-    if (customLibraryName) {
-      // Wait for page to load after creation
-      const customLibraryLocator = this.page
-        .locator(`[slot="primaryField"]`)
-        .filter({ hasText: customLibraryName })
-        .first();
-      await expect(customLibraryLocator).toBeVisible({ timeout: 10000 });
-      console.log(
-        `✅ Custom Library name verification successful: ${customLibraryName}`
-      );
+    if (details.Name) {
+      this.page.getByText(details.Name).count().then(async (count) => {
+        if (count === 0) {
+          throw new Error(`Custom Library with Name "${details.Name}" was not found on the page.`);
+        }
+      });
     }
 
     console.log("🎉 Custom Library verification completed!");

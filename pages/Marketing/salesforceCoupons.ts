@@ -1,23 +1,8 @@
 import { expect, Page, Locator, TestInfo } from "@playwright/test";
 import { Helper } from "../../utils/helper";
-import { th } from "@faker-js/faker";
 
 /**
  * SalesforceCoupons Page Object Model
- *
- * This class provides automation capabilities for Salesforce Coupons manag    // Redemption Limit All Buyers
-    if (details.RedemptionLimitAllBuyers) {
-      console.log("📝 Filling Redemption Limit All Buyers...");
-      try {
-        await this.dialogRedemptionLimitAllBuyersTextbox.scrollIntoViewIfNeeded();
-        await this.page.waitForTimeout(500);
-        await this.dialogRedemptionLimitAllBuyersTextbox.clear();
-        await this.dialogRedemptionLimitAllBuyersTextbox.fill(details.RedemptionLimitAllBuyers, { timeout: 10000 });
-        console.log("✅ Redemption Limit All Buyers filled:", details.RedemptionLimitAllBuyers);
-      } catch (e) {
-        console.log("❌ Failed to fill Redemption Limit All Buyers:", e);
-      }
-    }ionality.
  * It handles coupon creation, configuration, and verification processes with robust
  * locator strategies and timeout configurations for reliable test execution.
  *
@@ -36,14 +21,17 @@ export default class SalesforceCouponsPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newButton: Locator;
   readonly dialog: Locator;
 
   // Coupon Configuration Fields
   readonly dialogCodeTextbox: Locator;
   readonly dialogPromotionCombobox: Locator;
+  readonly dialogPromotionOptionRole: Locator;
+  readonly dialogPromotionTextOption: Locator;
   readonly dialogDescriptionTextbox: Locator;
   readonly dialogStatusCombobox: Locator;
+  readonly dialogStatusOptionRole: Locator;
+  readonly dialogStatusTextOption: Locator;
   readonly dialogRedemptionLimitAllBuyersTextbox: Locator;
   readonly dialogRedemptionLimitPerBuyerTextbox: Locator;
   readonly dialogStartDateTextbox: Locator;
@@ -53,6 +41,7 @@ export default class SalesforceCouponsPage {
 
   // Action Buttons
   readonly dialogSaveButton: Locator;
+  readonly allOptionsLocator: Locator;
 
   /**
    * Constructor - Initializes the SalesforceCoupons page object with all necessary locators
@@ -68,9 +57,6 @@ export default class SalesforceCouponsPage {
     this.page = page;
     this.testInfo = testInfo;
 
-    // Primary controls - Main UI interaction elements
-    this.newButton = page.getByRole("button", { name: /New|Create/i });
-
     // Dialog elements - Handle coupon creation
     this.dialog = this.page.getByRole("dialog", {
       name: /New|New Coupon|Create Coupon/i,
@@ -84,6 +70,10 @@ export default class SalesforceCouponsPage {
       name: /Promotion/i,
     });
 
+    // Promotion dropdown options - for dynamic selection
+    this.dialogPromotionOptionRole = page.locator(`[role="option"]:has-text("[PLACEHOLDER_PROMOTION]")`);
+    this.dialogPromotionTextOption = page.locator(`text=/\\b[PLACEHOLDER_PROMOTION]\\b/`);
+
     this.dialogDescriptionTextbox = this.dialog.getByRole("textbox", {
       name: /Description/i,
     });
@@ -91,6 +81,10 @@ export default class SalesforceCouponsPage {
     this.dialogStatusCombobox = this.dialog.getByRole("combobox", {
       name: /Status/i,
     });
+
+    // Status dropdown options - for dynamic selection
+    this.dialogStatusOptionRole = page.locator(`[role="option"]:has-text("[PLACEHOLDER_STATUS]")`);
+    this.dialogStatusTextOption = page.locator(`text=/\\b[PLACEHOLDER_STATUS]\\b/`);
 
     // Redemption Limit fields - using spinbutton roles
     this.dialogRedemptionLimitAllBuyersTextbox = this.dialog.getByRole("spinbutton", {
@@ -107,9 +101,8 @@ export default class SalesforceCouponsPage {
     this.dialogEndDateTextbox = this.dialog.getByRole("group", { name: /End Date Time/i }).getByLabel(/Date/i);
     this.dialogEndTimeTextbox = this.dialog.getByRole("group", { name: /End Date Time/i }).getByLabel(/Time/i);
 
-    this.dialogSaveButton = this.dialog.getByRole("button", {
-      name: /^Save$/i,
-    });
+    this.dialogSaveButton = this.dialog.getByRole("button", { name: /^Save$/i });
+    this.allOptionsLocator = page.getByRole("option");
 
     console.log(
       "✅ SalesforceCoupons page object initialized successfully with all locators"
@@ -156,8 +149,8 @@ export default class SalesforceCouponsPage {
     console.log("🔄 Starting coupon creation process...");
     console.log("📋 Coupon details:", JSON.stringify(details, null, 2));
 
-    // Wait for the new button to be visible and take start screenshot
-    await expect(this.newButton).toBeVisible({ timeout: 10000 });
+    // Wait for dialog to become visible and take start screenshot
+    await this.dialog.waitFor({ state: "visible", timeout: 10000 });
     await Helper.takeScreenshotToFile(
       this.page,
       "1-start-coupon",
@@ -165,17 +158,11 @@ export default class SalesforceCouponsPage {
       "OtherFunctionality/salesforce-coupons/"
     );
 
-    // Open the new coupon creation dialog
-    await this.newButton.click({ timeout: 10000 });
-    console.log("✅ Coupon creation dialog opened");
-
-    await this.dialog.waitFor({ state: "visible", timeout: 10000 });
-
     console.log("📋 Filling form fields...");
 
     // Coupon Code - Primary identifier for the coupon (required)
     if (details.Code) {
-      await this.dialogCodeTextbox.fill(details.Code, { timeout: 10000 });
+      await this.dialogCodeTextbox.fill(Helper.generateUniqueValue(details.Code), { timeout: 10000 });
       console.log("✅ Code filled:", details.Code);
     }
 
@@ -184,31 +171,12 @@ export default class SalesforceCouponsPage {
       console.log("🔽 Selecting Promotion from combobox...");
       await this.dialogPromotionCombobox.click({ timeout: 10000 });
       await this.page.waitForTimeout(1000);
-
-      try {
-        // Strategy 1: Look for the option using role
-        const optionRole = this.page.locator(`[role="option"]:has-text("${details.Promotion}")`).first();
-        await optionRole.click({ timeout: 5000, force: true });
-        console.log("✅ Promotion selected:", details.Promotion);
-      } catch (e) {
-        try {
-          // Strategy 2: Click with force using text
-          const textOption = this.page.locator(`text=/\\b${details.Promotion}\\b/`).first();
-          await textOption.click({ timeout: 5000, force: true });
-          console.log("✅ Promotion selected with force:", details.Promotion);
-        } catch (e2) {
-          // Strategy 3: Keyboard navigation
-          await this.page.keyboard.press("ArrowDown");
-          await this.page.waitForTimeout(300);
-          await this.page.keyboard.press("Enter");
-          console.log("✅ Promotion selected via keyboard");
-        }
-      }
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
     }
 
     // Description
     if (details.Description) {
-      await this.dialogDescriptionTextbox.fill(details.Description, { timeout: 10000 });
+      await this.dialogDescriptionTextbox.fill(Helper.generateUniqueValue(details.Description), { timeout: 10000 });
       console.log("✅ Description filled:", details.Description);
     }
 
@@ -217,23 +185,7 @@ export default class SalesforceCouponsPage {
       console.log("🔽 Selecting Status...");
       await this.dialogStatusCombobox.click({ timeout: 10000 });
       await this.page.waitForTimeout(1000);
-
-      try {
-        const optionRole = this.page.locator(`[role="option"]:has-text("${details.Status}")`).first();
-        await optionRole.click({ timeout: 5000, force: true });
-        console.log("✅ Status selected:", details.Status);
-      } catch (e) {
-        try {
-          const textOption = this.page.locator(`text=/\\b${details.Status}\\b/`).first();
-          await textOption.click({ timeout: 5000, force: true });
-          console.log("✅ Status selected with force:", details.Status);
-        } catch (e2) {
-          await this.page.keyboard.press("ArrowDown");
-          await this.page.waitForTimeout(300);
-          await this.page.keyboard.press("Enter");
-          console.log("✅ Status selected via keyboard");
-        }
-      }
+      await this.allOptionsLocator.filter({ hasText: details.Status }).first().click({ timeout: 10000 });
     }
 
     // Allow form to stabilize after Status selection
@@ -291,7 +243,7 @@ export default class SalesforceCouponsPage {
 
     // End Date
     if (details.EndDate || details["End Date"]) {
-     const endDate = details.EndDate || details["End Date"];
+      const endDate = details.EndDate || details["End Date"];
       console.log("📝 Filling End Date...");
       try {
         await this.dialogEndDateTextbox.clear({ timeout: 10000 });

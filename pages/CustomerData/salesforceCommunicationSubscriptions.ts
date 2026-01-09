@@ -25,7 +25,6 @@ export default class SalesforceCommunicationSubscriptionsPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newButton: Locator;
   readonly saveButton: Locator;
   readonly saveAndNewButton: Locator;
   readonly cancelButton: Locator;
@@ -53,9 +52,6 @@ export default class SalesforceCommunicationSubscriptionsPage {
     this.testInfo = testInfo;
 
     // Primary controls - Main UI interaction elements
-    this.newButton = page.getByRole("button", {
-      name: "New",
-    });
     this.saveButton = page.getByRole("button", { name: "Save", exact: true });
     this.saveAndNewButton = page.getByRole("button", { name: "Save & New" });
     this.cancelButton = page.getByRole("button", { name: "Cancel" });
@@ -91,10 +87,6 @@ export default class SalesforceCommunicationSubscriptionsPage {
       JSON.stringify(details, null, 2)
     );
 
-    await expect(this.newButton).toBeVisible({
-      timeout: 10000,
-    });
-
     // Take start screenshot for verification
     await Helper.takeScreenshotToFile(
       this.page,
@@ -104,7 +96,6 @@ export default class SalesforceCommunicationSubscriptionsPage {
     );
 
     // Click New Communication Subscription
-    await this.newButton.click({ timeout: 10000 });
     console.log("✅ Communication subscription creation form opened");
 
     // Wait for form to be fully loaded
@@ -114,7 +105,7 @@ export default class SalesforceCommunicationSubscriptionsPage {
 
     // Fill Name field (required)
     if (details.Name && details.Name !== "--None--") {
-      await this.nameInput.fill(details.Name, { timeout: 10000 });
+      await this.nameInput.fill(Helper.generateUniqueValue(details.Name), { timeout: 10000 });
       console.log(`✅ Name filled: ${details.Name}`);
     }
 

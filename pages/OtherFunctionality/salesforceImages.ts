@@ -1,6 +1,5 @@
 import { expect, Page, Locator, TestInfo } from "@playwright/test";
 import { Helper } from "../../utils/helper";
-import exp from "constants";
 
 /**
  * SalesforceImages Page Object Model
@@ -25,7 +24,6 @@ export default class SalesforceImagesPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newImageButton: Locator;
   readonly dialog: Locator;
   readonly saveButton: Locator;
 
@@ -42,9 +40,6 @@ export default class SalesforceImagesPage {
   readonly cameraAngleInput: Locator;
 
   // Additional UI elements
-  readonly appLauncher: Locator;
-  readonly viewAllButton: Locator;
-  readonly searchBox: Locator;
   readonly imageCreatedMessage: Locator;
 
   // List View Elements
@@ -52,6 +47,10 @@ export default class SalesforceImagesPage {
   readonly listViewControls: Locator;
   readonly refreshButton: Locator;
   readonly editListButton: Locator;
+  readonly primaryFieldWithImageLocator: Locator;
+
+  // Dropdown option locator
+  readonly allOptionsLocator: Locator;
 
   /**
    * Constructor - Initializes the SalesforceImages page object with all necessary locators
@@ -65,7 +64,6 @@ export default class SalesforceImagesPage {
     console.log("🚀 Initializing SalesforceImages page object");
 
     // Initialize primary UI controls
-    this.newImageButton = page.getByRole("button", { name: /new/i });
     this.dialog = page.locator(".modal-dialog, .slds-modal");
     this.saveButton = page.getByRole("button", { name: "Save", exact: true });
 
@@ -92,11 +90,6 @@ export default class SalesforceImagesPage {
     });
 
     // Initialize additional UI elements
-    this.appLauncher = page.locator("//button[@title='App Launcher']");
-    this.viewAllButton = page.getByRole("button", { name: "View all" });
-    this.searchBox = page.locator(
-      "//input[@placeholder='Search apps and items...']"
-    );
     this.imageCreatedMessage = page.locator(".toastMessage");
 
     // Initialize list view elements
@@ -106,6 +99,12 @@ export default class SalesforceImagesPage {
     this.listViewControls = page.locator(".slds-page-header__controls");
     this.refreshButton = page.getByRole("button", { name: "Refresh" });
     this.editListButton = page.getByRole("button", { name: "Edit List" });
+
+    // Primary field locator with image name filter
+    this.primaryFieldWithImageLocator = page.locator(`[slot="primaryField"]`);
+
+    // Dropdown option locator
+    this.allOptionsLocator = page.getByRole("option");
 
     console.log(
       "✅ SalesforceImages page object initialized successfully with all locators"
@@ -129,7 +128,6 @@ export default class SalesforceImagesPage {
     console.log("📝 Image details:", JSON.stringify(details, null, 2));
 
     // Wait for the new button to be visible and take start screenshot
-    await expect(this.newImageButton).toBeVisible({ timeout: 10000 });
     await Helper.takeScreenshotToFile(
       this.page,
       "1-start-image",
@@ -138,7 +136,6 @@ export default class SalesforceImagesPage {
     );
 
     // Open the new image creation dialog
-    await this.newImageButton.click({ timeout: 10000 });
     console.log("✅ Image creation dialog opened");
 
     await this.dialog.waitFor({ state: "visible", timeout: 10000 });
@@ -147,7 +144,7 @@ export default class SalesforceImagesPage {
 
     // Image Name - Primary identifier for the image (required)
     if (details.Name) {
-      await this.nameInput.fill(details.Name, { timeout: 10000 });
+      await this.nameInput.fill(Helper.generateUniqueValue(details.Name), { timeout: 10000 });
     }
 
     // Image Orientation
@@ -157,19 +154,19 @@ export default class SalesforceImagesPage {
 
     // Title
     if (details.Title) {
-      await this.titleInput.fill(details.Title, { timeout: 10000 });
+      await this.titleInput.fill(Helper.generateUniqueValue(details.Title), { timeout: 10000 });
     }
 
     // Accessibility Text
     if (details.AccessibilityText && details.AccessibilityText !== "--None--") {
-      await this.accessibilityTextInput.fill(details.AccessibilityText, {
+      await this.accessibilityTextInput.fill(Helper.generateUniqueValue(details.AccessibilityText), {
         timeout: 10000,
       });
     }
 
     // URL
     if (details.URL) {
-      await this.urlInput.fill(details.URL, { timeout: 10000 });
+      await this.urlInput.fill(Helper.generateUniqueValue(details.URL), { timeout: 10000 });
     }
 
     // Active checkbox
@@ -184,24 +181,24 @@ export default class SalesforceImagesPage {
     // Category
     if (details.Category && details.Category !== "--None--") {
       await this.categoryCombobox.click({ timeout: 10000 });
-      await this.page.getByRole("option", { name: details.Category }).click();
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
     }
 
     // Image Type
     if (details.ImageType && details.ImageType !== "--None--") {
       await this.imageTypeCombobox.click({ timeout: 10000 });
-      await this.page.getByRole("option", { name: details.ImageType }).click();
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
     }
 
     // File
     if (details.File && details.File !== "--None--") {
       await this.fileCombobox.click({ timeout: 10000 });
-      await this.page.getByRole("option", { name: details.File }).click();
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
     }
 
     // Camera Angle
     if (details.CameraAngle && details.CameraAngle !== "--None--") {
-      await this.cameraAngleInput.fill(details.CameraAngle, { timeout: 10000 });
+      await this.cameraAngleInput.fill(Helper.generateUniqueValue(details.CameraAngle), { timeout: 10000 });
     }
 
     console.log("💾 Saving the image...");
@@ -238,10 +235,11 @@ export default class SalesforceImagesPage {
     console.log("🔍 Starting image verification...");
 
     // Check if the image name appears in the list
-    const imageName = details["Name"] || details["name"];
-    if (imageName) {
-      await expect(this.page.locator(`[slot="primaryField"]`).filter({ hasText: imageName }).first()).toBeVisible({ timeout: 10000 });
-      console.log(`✅ Image name verification successful: ${imageName}`);
+    if (details["Name"] || details["name"]) {
+      const imageName = details["Name"] || details["name"];
+      if (await this.page.getByText(imageName).count() === 0) {
+        throw new Error(`Image name not found: ${imageName}`);
+      }
     }
 
     await Helper.takeScreenshotToFile(

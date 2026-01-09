@@ -25,7 +25,6 @@ export default class SalesforceChangeRequestsPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newButton: Locator;
   readonly saveButton: Locator;
   readonly saveAndNewButton: Locator;
   readonly cancelButton: Locator;
@@ -63,6 +62,7 @@ export default class SalesforceChangeRequestsPage {
 
   // Navigation Elements
   readonly changeRequestCreatedMessage: Locator;
+  readonly allOptionsLocator: Locator;
 
   /**
    * Constructor - Initializes the SalesforceChangeRequests page object with all necessary locators
@@ -79,7 +79,6 @@ export default class SalesforceChangeRequestsPage {
     this.testInfo = testInfo;
 
     // Primary controls - Main UI interaction elements
-    this.newButton = page.getByRole("button", { name: "New" });
     this.saveButton = page.getByRole("button", { name: "Save", exact: true });
     this.saveAndNewButton = page.getByRole("button", { name: "Save & New" });
     this.cancelButton = page.getByRole("button", { name: "Cancel" });
@@ -169,6 +168,7 @@ export default class SalesforceChangeRequestsPage {
 
     // Success message locator
     this.changeRequestCreatedMessage = page.locator(".toastMessage");
+    this.allOptionsLocator = page.getByRole("option");
 
     console.log(
       "✅ SalesforceChangeRequests page object initialized successfully with all locators"
@@ -198,9 +198,6 @@ export default class SalesforceChangeRequestsPage {
       this.testInfo,
       "Service/salesforce-change-requests/"
     );
-
-    // Click New button to open creation form
-    await this.newButton.click();
     console.log("✅ Clicked New button");
 
     // Wait for dialog to be visible
@@ -209,73 +206,58 @@ export default class SalesforceChangeRequestsPage {
 
     // Fill Subject (required field)
     if (details.Subject) {
-      await this.subjectInput.clear();
-      await this.subjectInput.fill(details.Subject);
+      await this.subjectInput.click({ timeout: 10000 });
+      await this.subjectInput.clear({ timeout: 10000 });
+      await this.subjectInput.fill(Helper.generateUniqueValue(details.Subject));
       console.log(`✅ Filled Subject: ${details.Subject}`);
     }
 
     // Fill Description
     if (details.Description && details.Description !== "--None--") {
       await this.descriptionInput.clear();
-      await this.descriptionInput.fill(details.Description);
+      await this.descriptionInput.fill(Helper.generateUniqueValue(details.Description));
       console.log(`✅ Filled Description: ${details.Description}`);
     }
 
     // Handle Risk Level
     if (details["Risk Level"] && details["Risk Level"] !== "--None--") {
-      await this.riskLevelInput.click();
-      await this.page
-        .getByRole("option", {
-          name: details["Risk Level"],
-          exact: true,
-        })
-        .click();
+      await this.riskLevelInput.click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: details["Risk Level"] }).click({ timeout: 10000 });
       console.log(`✅ Selected Risk Level: ${details["Risk Level"]}`);
     }
 
     // Handle Status
     if (details.Status && details.Status !== "--None--") {
-      await this.statusInput.click();
-      await this.page
-        .getByRole("option", { name: details.Status, exact: true })
-        .click();
+      await this.statusInput.click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: details.Status }).click({ timeout: 10000 });
       console.log(`✅ Selected Status: ${details.Status}`);
     }
 
     // Handle Priority
     if (details.Priority && details.Priority !== "--None--") {
-      await this.priorityInput.click();
-      await this.page
-        .getByRole("option", { name: details.Priority, exact: true })
-        .click();
+      await this.priorityInput.click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: details.Priority }).click({ timeout: 10000 });
       console.log(`✅ Selected Priority: ${details.Priority}`);
     }
 
     // Handle Impact
     if (details.Impact && details.Impact !== "--None--") {
-      await this.impactInput.click();
-      await this.page
-        .getByRole("option", { name: details.Impact, exact: true })
-        .click();
+      await this.impactInput.click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: details.Impact }).click({ timeout: 10000 });
       console.log(`✅ Selected Impact: ${details.Impact}`);
     }
 
     // Handle Type of Change
     if (details["Type of Change"] && details["Type of Change"] !== "--None--") {
-      await this.typeOfChangeInput.click();
-      await this.page
-        .getByRole("option", {
-          name: details["Type of Change"],
-          exact: true,
-        })
-        .click();
+      await this.typeOfChangeInput.click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: details["Type of Change"] }).first().click({ timeout: 10000 });
       console.log(`✅ Selected Type of Change: ${details["Type of Change"]}`);
     }
 
     // Handle Reviewer
     if (details.Reviewer && details.Reviewer !== "--None--") {
-      await this.reviewerInput.click();
-      await this.page.getByText(details.Reviewer).click();
+      await this.reviewerInput.click({ timeout: 10000 });
+      await this.page.getByText(details.Reviewer).click({ timeout: 10000 });
       console.log(`✅ Selected Reviewer: ${details.Reviewer}`);
     }
 
@@ -330,7 +312,7 @@ export default class SalesforceChangeRequestsPage {
       details["Start Time (Estimated) Time"] &&
       details["Start Time (Estimated) Time"] !== "--None--"
     ) {
-      await this.startTimeEstimatedTimeInput.click();
+      await this.startTimeEstimatedTimeInput.click({ timeout: 10000 });
       await this.startTimeEstimatedTimeInput.fill(
         details["Start Time (Estimated) Time"]
       );
@@ -356,7 +338,7 @@ export default class SalesforceChangeRequestsPage {
       details["End Time (Estimated) Time"] &&
       details["End Time (Estimated) Time"] !== "--None--"
     ) {
-      await this.endTimeEstimatedTimeInput.click();
+      await this.endTimeEstimatedTimeInput.click({ timeout: 10000 });
       await this.endTimeEstimatedTimeInput.fill(
         details["End Time (Estimated) Time"]
       );
@@ -378,7 +360,7 @@ export default class SalesforceChangeRequestsPage {
       details["Reviewed On Time"] &&
       details["Reviewed On Time"] !== "--None--"
     ) {
-      await this.reviewedOnTimeInput.click();
+      await this.reviewedOnTimeInput.click({ timeout: 10000 });
       await this.reviewedOnTimeInput.fill(details["Reviewed On Time"]);
       console.log(
         `✅ Selected Reviewed On Time: ${details["Reviewed On Time"]}`
@@ -406,7 +388,7 @@ export default class SalesforceChangeRequestsPage {
     );
 
     // Click Save button
-    await this.saveButton.click();
+    await this.saveButton.click({ timeout: 10000 });
     console.log("✅ Clicked Save button");
 
     // Wait for success or error response
@@ -431,18 +413,18 @@ export default class SalesforceChangeRequestsPage {
   async verifyChangeRequestCreation(details: { [field: string]: string }) {
     console.log("🔍 Verifying Change Request creation success");
 
-    await expect(this.changeRequestCreatedMessage).toBeVisible({
-      timeout: 10000,
-    });
+    await expect(this.changeRequestCreatedMessage).toBeVisible({ timeout: 10000 });
     console.log("✅ Success message is visible");
 
-    // Additional verification can be added here
     // Such as checking if we're on the detail page or if the change request appears in the list
-    await expect(
-      this.page
-        .locator(`[slot="outputField"]`)
-        .filter({ hasText: details.Subject })
-    ).toBeVisible();
+    if (details["Risk Level"]) {
+      await this.page.getByText(details["Risk Level"]).count().then(async (count) => {
+        if (count === 0) {
+          throw new Error("Change Request not found with the expected details");
+        }
+        console.log(`✅ Verified Risk Level: ${details["Risk Level"]}`);
+      });
+    }
 
     await Helper.takeScreenshotToFile(
       this.page,

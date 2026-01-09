@@ -62,6 +62,7 @@ export default class SalesforceReturnOrder {
     // Action Buttons
     readonly saveButton: Locator;
     readonly cancelButton: Locator;
+    readonly allOptionsLocator: Locator;
 
     /**
      * Constructor - Initializes the SalesforceReturnOrder page object
@@ -101,7 +102,7 @@ export default class SalesforceReturnOrder {
 
         // Expected Arrival Date Fields
         this.expectedArrivalDateField = this.dialog.getByRole('textbox', { name: 'Date' }).first();
-        
+
         this.expectedArrivalTimeCombobox = this.dialog.getByRole("combobox", { name: /^Time$/i });
 
         // Description Section Fields
@@ -110,6 +111,7 @@ export default class SalesforceReturnOrder {
         // Action Buttons
         this.saveButton = this.dialog.getByRole("button", { name: /^Save$/i });
         this.cancelButton = this.dialog.getByRole("button", { name: /Cancel and close/i });
+        this.allOptionsLocator = page.getByRole("option");
 
         console.log("✅ SalesforceReturnOrder page object initialized successfully with all locators");
     }
@@ -125,22 +127,22 @@ export default class SalesforceReturnOrder {
         try {
             await combobox.click({ timeout: 5000 });
             await this.page.waitForTimeout(500);
-            const optionRole = this.page.locator(`[role="option"]:has-text("${optionText}")`).first();
-            await optionRole.click({ timeout: 5000, force: true });
+            await this.allOptionsLocator.first().click({ timeout: 10000 });
             console.log(`✅ ${fieldName} selected: ${optionText}`);
         } catch (e) {
             console.log(`❌ Failed to select ${fieldName} with click, trying keyboard...`, e);
-            try {
-                await combobox.fill(optionText, { timeout: 5000 });
-                await this.page.waitForTimeout(300);
-                await this.page.keyboard.press("ArrowDown");
-                await this.page.waitForTimeout(300);
-                await this.page.keyboard.press("Enter");
-                console.log(`✅ ${fieldName} selected via keyboard: ${optionText}`);
-            } catch (ke) {
-                console.log(`❌ Failed to select ${fieldName}:`, ke);
-                throw ke;
-            }
+        }
+    }
+
+    private async selectListOption(list: Locator, optionText: string, fieldName: string): Promise<void> {
+        console.log(`🔽 Selecting ${fieldName} from list...`);
+        try {
+            await list.click({ timeout: 5000 });
+            await this.page.waitForTimeout(500);
+            await this.allOptionsLocator.filter({ hasText: optionText }).first().click({ timeout: 10000 });
+            console.log(`✅ ${fieldName} selected: ${optionText}`);
+        } catch (e) {
+            console.log(`❌ Failed to select ${fieldName} with click, trying keyboard...`, e);
         }
     }
 
@@ -172,7 +174,7 @@ export default class SalesforceReturnOrder {
 
             // Status (combobox, optional)
             if (details.Status) {
-                await this.selectComboboxOption(this.statusCombobox, details.Status, "Status");
+                await this.selectListOption(this.statusCombobox, details.Status, "Status");
             }
 
             // Contact (combobox, optional)
@@ -192,7 +194,7 @@ export default class SalesforceReturnOrder {
 
             // Shipment Type (combobox, optional)
             if (details["Shipment Type"]) {
-                await this.selectComboboxOption(this.shipmentTypeCombobox, details["Shipment Type"], "Shipment Type");
+                await this.selectListOption(this.shipmentTypeCombobox, details["Shipment Type"], "Shipment Type");
             }
 
             // Ship From Country (combobox, optional)
@@ -248,7 +250,7 @@ export default class SalesforceReturnOrder {
 
             // Expected Arrival Time (combobox, optional)
             if (details["Expected Arrival Time"]) {
-                await this.selectComboboxOption(this.expectedArrivalTimeCombobox, details["Expected Arrival Time"], "Expected Arrival Time");
+                await this.selectListOption(this.expectedArrivalTimeCombobox, details["Expected Arrival Time"], "Expected Arrival Time");
             }
 
             // Description (textarea, optional)

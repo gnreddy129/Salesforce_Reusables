@@ -1,5 +1,6 @@
 import { expect, type Locator, type Page, TestInfo } from "@playwright/test";
 import { Helper } from "../../utils/helper";
+import { th } from "@faker-js/faker";
 
 /**
  * SalesforceContacts Page Object Model
@@ -75,6 +76,7 @@ export class SalesforceContactsPage {
   // Additional Fields
   readonly description: Locator;
   readonly contactCreatedMessage: Locator;
+  readonly allOptionsLocator: Locator;
 
   /**
    * Constructor - Initializes the SalesforceContacts page object with all necessary locators
@@ -145,112 +147,11 @@ export class SalesforceContactsPage {
     // Additional fields
     this.description = page.getByRole("textbox", { name: "Description", exact: true }).first();
     this.contactCreatedMessage = page.locator(".toastMessage ");
+    this.allOptionsLocator = page.getByRole("option");
 
     console.log(
       "✅ SalesforceContacts page object initialized successfully with all locators"
     );
-  }
-
-  /**
-   * Helper method to fill dynamic fields that can be either textbox or combobox
-   * Detects the field type and fills accordingly
-   * 
-   * @param textboxLocator - Locator for textbox variant of the field
-   * @param comboboxLocator - Locator for combobox variant of the field
-   * @param fieldName - Name of the field for logging
-   * @param value - Value to fill/select (EXACT match required)
-   */
-  private async fillDynamicField(
-    textboxLocator: Locator,
-    comboboxLocator: Locator,
-    fieldName: string,
-    value: string
-  ): Promise<void> {
-    try {
-      // Check if combobox is visible and enabled
-      const comboboxVisible = await comboboxLocator.isVisible({ timeout: 2000 }).catch(() => false);
-      
-      if (comboboxVisible) {
-        console.log(`🔽 ${fieldName} is a combobox, selecting from dropdown...`);
-        await comboboxLocator.click({ timeout: 10000 });
-        await this.page.waitForTimeout(1000);
-
-        try {
-          // The combobox is read-only, so we need to type to filter options
-          // Type the value to filter dropdown options
-          console.log(`📝 Typing "${value}" to filter and select exact match...`);
-          await comboboxLocator.type(value, { delay: 100 });
-          await this.page.waitForTimeout(1500);
-
-          // IMPORTANT: Look for EXACT match only - using text normalization
-          const exactMatchOption = this.page.locator(
-            `[role="option"]`
-          ).filter({ 
-            hasText: new RegExp(`^${value}$`, 'i') 
-          }).first();
-          
-          const exactMatchVisible = await exactMatchOption.isVisible({ timeout: 5000 }).catch(() => false);
-          
-          if (exactMatchVisible) {
-            await exactMatchOption.click({ timeout: 5000, force: true });
-            console.log(`✅ ${fieldName} selected with EXACT match:`, value);
-            return;
-          }
-
-          // If exact match not found, throw error and try fallback
-          throw new Error(`Exact match not found for "${value}"`);
-          
-        } catch (e) {
-          console.log(`⏱️ Exact match not found, attempting keyboard navigation for ${fieldName}...`);
-          try {
-            // Clear previous attempt
-            await comboboxLocator.clear({ timeout: 2000 }).catch(() => {});
-            await this.page.waitForTimeout(500);
-            
-            // Try again with fresh typing
-            await comboboxLocator.type(value, { delay: 100 });
-            await this.page.waitForTimeout(1500);
-            
-            // Use keyboard to navigate and select
-            await this.page.keyboard.press("ArrowDown");
-            await this.page.waitForTimeout(500);
-            await this.page.keyboard.press("Enter");
-            console.log(`✅ ${fieldName} selected via keyboard navigation:`, value);
-          } catch (e2) {
-            console.log(`❌ Failed to select exact match for ${fieldName}:`, value);
-            throw new Error(`Could not select exact value "${value}" for field "${fieldName}". Available options may differ.`);
-          }
-        }
-      } else {
-        // Use textbox
-        console.log(`📝 ${fieldName} is a textbox, filling value...`);
-        await textboxLocator.fill(value, { timeout: 10000 });
-        console.log(`✅ ${fieldName} filled:`, value);
-      }
-    } catch (error) {
-      console.log(`⚠️ Error filling ${fieldName}, attempting textbox as fallback:`, error);
-      try {
-        await textboxLocator.fill(value, { timeout: 10000 });
-        console.log(`✅ ${fieldName} filled via textbox fallback:`, value);
-      } catch (fallbackError) {
-        console.log(`❌ Failed to fill ${fieldName}:`, fallbackError);
-        throw fallbackError;
-      }
-    }
-  }
-
-  /**
-   * Helper method to check if a field is a combobox
-   * 
-   * @param comboboxLocator - Locator for the combobox
-   * @returns true if the field is visible as a combobox, false otherwise
-   */
-  private async isCombobox(comboboxLocator: Locator): Promise<boolean> {
-    try {
-      return await comboboxLocator.isVisible({ timeout: 2000 });
-    } catch {
-      return false;
-    }
   }
 
   /**
@@ -322,50 +223,53 @@ export class SalesforceContactsPage {
     if (details.Salutation) {
       console.log("🔽 Selecting Salutation from dropdown...");
       await this.salutation.click({ timeout: 10000 });
-      await this.page.waitForTimeout(1000);
-
-      try {
-        const optionRole = this.page.locator(`[role="option"]:has-text("${details.Salutation}")`).first();
-        await optionRole.click({ timeout: 5000, force: true });
-        console.log("✅ Salutation selected:", details.Salutation);
-      } catch (e) {
-        try {
-          const textOption = this.page.locator(`text=/\\b${details.Salutation}\\b/`).first();
-          await textOption.click({ timeout: 5000, force: true });
-          console.log("✅ Salutation selected with force:", details.Salutation);
-        } catch (e2) {
-          try {
-            await this.salutation.fill(details.Salutation, { timeout: 5000 });
-            await this.page.waitForTimeout(500);
-            await this.page.keyboard.press("ArrowDown");
-            await this.page.waitForTimeout(300);
-            await this.page.keyboard.press("Enter");
-            console.log("✅ Salutation selected via type and keyboard");
-          } catch (e3) {
-            console.log("❌ Failed to select Salutation:", e3);
-          }
-        }
-      }
+      await this.allOptionsLocator.filter({ hasText: details.Salutation }).first().click({ timeout: 10000 });
     }
 
     // Personal Information
-    if (details.FirstName) await this.firstName.fill(details.FirstName, { timeout: 10000 });
-    if (details.LastName) await this.lastName.fill(details.LastName, { timeout: 10000 });
-    if (details.Title) await this.title.fill(details.Title, { timeout: 10000 });
-    if (details.Department) await this.department.fill(details.Department, { timeout: 10000 });
+    if (details.FirstName) {
+      await this.firstName.fill(Helper.generateUniqueValue(details.FirstName), { timeout: 10000 });
+    }
+
+    if (details.LastName) {
+      await this.lastName.fill(Helper.generateUniqueValue(details.LastName), { timeout: 10000 });
+    }
+
+    if (details.Title) {
+      await this.title.fill(Helper.generateUniqueValue(details.Title), { timeout: 10000 });
+    }
+    
+    if (details.Department) {
+      await this.department.fill(Helper.generateUniqueValue(details.Department), { timeout: 10000 });
+    }
 
     // Contact Information
-    if (details.Phone) await this.phone.fill(details.Phone, { timeout: 10000 });
-    if (details.HomePhone) await this.homePhone.fill(details.HomePhone, { timeout: 10000 });
-    if (details.Mobile) await this.mobile.fill(details.Mobile, { timeout: 10000 });
-    if (details.OtherPhone) await this.otherPhone.fill(details.OtherPhone, { timeout: 10000 });
-    if (details.Fax) await this.fax.fill(details.Fax, { timeout: 10000 });
-    if (details.Email) await this.email.fill(details.Email, { timeout: 10000 });
+    if (details.Phone) {
+      await this.phone.fill(Helper.generateUniqueValue(details.Phone), { timeout: 10000 });
+    }
+    if (details.HomePhone) {
+      await this.homePhone.fill(Helper.generateUniqueValue(details.HomePhone), { timeout: 10000 });
+    }
+    if (details.Mobile) {
+      await this.mobile.fill(Helper.generateUniqueValue(details.Mobile), { timeout: 10000 });
+    }
+    if (details.OtherPhone) {
+      await this.otherPhone.fill(Helper.generateUniqueValue(details.OtherPhone), { timeout: 10000 });
+    }
+    if (details.Fax) {
+      await this.fax.fill(Helper.generateUniqueValue(details.Fax), { timeout: 10000 });
+    }
+    if (details.Email) {
+      let uniqueEmail = await this.email.fill(Helper.generateUniqueEmail(details.Email), { timeout: 10000 });
+    }
 
     // Assistant Information
-    if (details.Assistant) await this.assistant.fill(details.Assistant, { timeout: 10000 });
-    if (details.AssistantPhone)
-      await this.assistantPhone.fill(details.AssistantPhone, { timeout: 10000 });
+    if (details.Assistant) {
+      await this.assistant.fill(Helper.generateUniqueValue(details.Assistant), { timeout: 10000 });
+    }
+    if (details.AssistantPhone) {
+      await this.assistantPhone.fill(Helper.generateUniqueValue(details.AssistantPhone), { timeout: 10000 });
+    }
 
     // Birthdate
     if (details.Birthdate)
@@ -374,81 +278,42 @@ export class SalesforceContactsPage {
       );
 
     // Languages
-    if (details.Languages) await this.languages.fill(details.Languages, { timeout: 10000 });
+    if (details.Languages) {
+      await this.languages.fill(Helper.generateUniqueValue(details.Languages), { timeout: 10000 });
+    }
 
     // Lead Source (Dropdown)
     if (details.LeadSource) {
       console.log("🔽 Selecting LeadSource from dropdown...");
       await this.leadSource.click({ timeout: 10000 });
-      await this.page.waitForTimeout(1000);
-
-      try {
-        const optionRole = this.page.locator(`[role="option"]:has-text("${details.LeadSource}")`).first();
-        await optionRole.click({ timeout: 5000, force: true });
-        console.log("✅ LeadSource selected:", details.LeadSource);
-      } catch (e) {
-        try {
-          const textOption = this.page.locator(`text=/\\b${details.LeadSource}\\b/`).first();
-          await textOption.click({ timeout: 5000, force: true });
-          console.log("✅ LeadSource selected with force:", details.LeadSource);
-        } catch (e2) {
-          try {
-            await this.leadSource.fill(details.LeadSource, { timeout: 5000 });
-            await this.page.waitForTimeout(500);
-            await this.page.keyboard.press("ArrowDown");
-            await this.page.waitForTimeout(300);
-            await this.page.keyboard.press("Enter");
-            console.log("✅ LeadSource selected via type and keyboard");
-          } catch (e3) {
-            console.log("❌ Failed to select LeadSource:", e3);
-          }
-        }
-      }
+      await this.allOptionsLocator.filter({ hasText: details.LeadSource }).first().click({ timeout: 10000 });
     }
 
     if (details.Level) {
       console.log("🔽 Selecting Level from dropdown...");
       await this.level.click({ timeout: 10000 });
-      await this.page.waitForTimeout(1000);
-
-      try {
-        const optionRole = this.page.locator(`[role="option"]:has-text("${details.Level}")`).first();
-        await optionRole.click({ timeout: 5000, force: true });
-        console.log("✅ Level selected:", details.Level);
-      } catch (e) {
-        try {
-          const textOption = this.page.locator(`text=/\\b${details.Level}\\b/`).first();
-          await textOption.click({ timeout: 5000, force: true });
-          console.log("✅ Level selected with force:", details.Level);
-        } catch (e2) {
-          try {
-            await this.level.fill(details.Level, { timeout: 5000 });
-            await this.page.waitForTimeout(500);
-            await this.page.keyboard.press("ArrowDown");
-            await this.page.waitForTimeout(300);
-            await this.page.keyboard.press("Enter");
-            console.log("✅ Level selected via type and keyboard");
-          } catch (e3) {
-            console.log("❌ Failed to select Level:", e3);
-          }
-        }
-      }
+      await this.allOptionsLocator.filter({ hasText: details.Level }).first().click({ timeout: 10000 });
     }
 
     // Mailing Address
-    if (details.MailingStreet)
-      await this.mailingStreet.fill(details.MailingStreet, { timeout: 10000 });
-    if (details.MailingCity) await this.mailingCity.fill(details.MailingCity, { timeout: 10000 });
+    if (details.MailingStreet) {
+      await this.mailingStreet.fill(Helper.generateUniqueValue(details.MailingStreet), { timeout: 10000 });
+    }
+    if (details.MailingCity) {
+      await this.mailingCity.fill(Helper.generateUniqueValue(details.MailingCity), { timeout: 10000 });
+    }
     // IMPORTANT: Fill Country BEFORE State (country selection may affect available state options)
     if (details.MailingCountry)
-      await this.fillDynamicField(
+      await Helper.fillDynamicField(
+        this.page,
         this.mailingCountryTextbox,
         this.mailingCountryCombobox,
         "Mailing Country",
         details.MailingCountry
       );
     if (details.MailingState)
-      await this.fillDynamicField(
+      await Helper.fillDynamicField(
+        this.page,
         this.mailingStateTextbox,
         this.mailingStateCombobox,
         "Mailing State",
@@ -457,18 +322,24 @@ export class SalesforceContactsPage {
     if (details.MailingZip) await this.mailingZip.fill(details.MailingZip, { timeout: 10000 });
 
     // Other Address
-    if (details.OtherStreet) await this.otherStreet.fill(details.OtherStreet, { timeout: 10000 });
-    if (details.OtherCity) await this.otherCity.fill(details.OtherCity, { timeout: 10000 });
+    if (details.OtherStreet) {
+      await this.otherStreet.fill(Helper.generateUniqueValue(details.OtherStreet), { timeout: 10000 });
+    }
+    if (details.OtherCity) {
+      await this.otherCity.fill(Helper.generateUniqueValue(details.OtherCity), { timeout: 10000 });
+    }
     // IMPORTANT: Fill Country BEFORE State (country selection may affect available state options)
     if (details.OtherCountry)
-      await this.fillDynamicField(
+      await Helper.fillDynamicField(
+        this.page,
         this.otherCountryTextbox,
         this.otherCountryCombobox,
         "Other Country",
         details.OtherCountry
       );
     if (details.OtherState)
-      await this.fillDynamicField(
+      await Helper.fillDynamicField(
+        this.page,
         this.otherStateTextbox,
         this.otherStateCombobox,
         "Other State",
@@ -477,7 +348,9 @@ export class SalesforceContactsPage {
     if (details.OtherZip) await this.otherZip.fill(details.OtherZip, { timeout: 10000 });
 
     // Description
-    if (details.Description) await this.description.fill(details.Description, { timeout: 10000 });
+    if (details.Description) {
+      await this.description.fill(Helper.generateUniqueValue(details.Description), { timeout: 10000 });
+    }
 
     console.log("💾 Saving the contact...");
 

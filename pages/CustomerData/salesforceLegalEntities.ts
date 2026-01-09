@@ -25,7 +25,6 @@ export default class SalesforceLegalEntitiesPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newButton: Locator;
   readonly saveButton: Locator;
   readonly saveAndNewButton: Locator;
   readonly cancelButton: Locator;
@@ -33,7 +32,7 @@ export default class SalesforceLegalEntitiesPage {
   // Legal Entities Information Fields
   readonly legalEntityNameInput: Locator;
   readonly companyNameInput: Locator;
-  readonly countryInput: Locator;
+  readonly countryCombobox: Locator;
   readonly streetInput: Locator;
   readonly cityInput: Locator;
   readonly stateCombobox: Locator;
@@ -43,6 +42,8 @@ export default class SalesforceLegalEntitiesPage {
 
   // Navigation Elements
   readonly legalEntitiesCreatedMessage: Locator;
+  readonly allOptionsLocator: Locator;
+  readonly primaryFieldLocator: Locator;
 
   /**
    * Constructor - Initializes the SalesforceLegalEntities page object with all necessary locators
@@ -59,7 +60,6 @@ export default class SalesforceLegalEntitiesPage {
     this.testInfo = testInfo;
 
     // Primary controls - Main UI interaction elements
-    this.newButton = page.getByRole("button", { name: "New" });
     this.saveButton = page.getByRole("button", { name: "Save", exact: true });
     this.saveAndNewButton = page.getByRole("button", { name: "Save & New" });
     this.cancelButton = page.getByRole("button", { name: "Cancel" });
@@ -95,6 +95,8 @@ export default class SalesforceLegalEntitiesPage {
 
     // Success message locator
     this.legalEntitiesCreatedMessage = page.locator(".toastMessage");
+    this.allOptionsLocator = page.getByRole("option");
+    this.primaryFieldLocator = page.locator(`[slot="primaryField"]`);
 
     console.log(
       "✅ SalesforceLegalEntities page object initialized successfully with all locators"
@@ -141,8 +143,6 @@ export default class SalesforceLegalEntitiesPage {
     console.log("🔄 Starting legal entities creation process...");
     console.log("📝 Legal Entities details:", JSON.stringify(details, null, 2));
 
-    await expect(this.newButton).toBeVisible({ timeout: 10000 });
-
     // Take start screenshot for verification
     if (this.testInfo) {
       await Helper.takeScreenshotToFile(
@@ -154,7 +154,6 @@ export default class SalesforceLegalEntitiesPage {
     }
 
     // Click New Legal Entities
-    await this.newButton.click({ timeout: 10000 });
     console.log("✅ Legal Entities creation form opened");
 
     // Wait for the form dialog to be fully loaded
@@ -192,9 +191,7 @@ export default class SalesforceLegalEntitiesPage {
     ) {
       const countryValue = details.Country || details["Country"];
       await this.countryCombobox.click({ timeout: 10000 });
-      await this.page.getByRole("option", { name: countryValue }).click({
-        timeout: 10000,
-      });
+      await this.allOptionsLocator.filter({ hasText: countryValue }).first().click({ timeout: 10000 });
       console.log(`✅ Country selected: ${countryValue}`);
     }
 
@@ -204,9 +201,7 @@ export default class SalesforceLegalEntitiesPage {
       (details["Street"] && details["Street"] !== "--None--")
     ) {
       const streetValue = details.Street || details["Street"];
-      await this.streetInput.fill(streetValue, {
-        timeout: 10000,
-      });
+      await this.streetInput.fill(streetValue, { timeout: 10000 });
       console.log(`✅ Street filled: ${streetValue}`);
     }
 
@@ -229,11 +224,7 @@ export default class SalesforceLegalEntitiesPage {
     ) {
       const stateValue = details.State || details["State"];
       await this.stateCombobox.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: stateValue, exact: true })
-        .click({
-          timeout: 10000,
-        });
+      await this.allOptionsLocator.filter({ hasText: stateValue}).first().click({ timeout: 10000 });
       console.log(`✅ State selected: ${stateValue}`);
     }
 
@@ -268,11 +259,7 @@ export default class SalesforceLegalEntitiesPage {
     ) {
       const statusValue = details.Status || details["Status"];
       await this.statusCombobox.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: statusValue, exact: true })
-        .click({
-          timeout: 10000,
-        });
+      await this.allOptionsLocator.filter({ hasText: statusValue }).first().click({ timeout: 10000 });
       console.log(`✅ Status selected: ${statusValue}`);
     }
 
@@ -323,9 +310,7 @@ export default class SalesforceLegalEntitiesPage {
       details.EntityName || details["Legal Entity Name"];
     console.log(`📝 Verifying Legal Entities: ${legalEntityNameValue}`);
     await expect(this.legalEntitiesCreatedMessage).toContainText("was created");
-    await expect(this.page.locator(`[slot="primaryField"]`)).toContainText(
-      legalEntityNameValue
-    );
+    await expect(this.primaryFieldLocator).toContainText(legalEntityNameValue);
 
     // Take verification screenshot
     if (this.testInfo) {

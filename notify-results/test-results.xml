@@ -1,6 +1,6 @@
-<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="53.193807">
-<testsuite name="tests\features\Platform\salesforce_dashboards.feature.spec.js" timestamp="2025-12-09T03:45:51.221Z" hostname="Google Chrome" tests="1" failures="0" skipped="0" time="48.45" errors="0">
-<testcase name="Salesforce Dashboards Management › Create and Manage Dashboards with Different Components › Example #1" classname="tests\features\Platform\salesforce_dashboards.feature.spec.js" time="48.45">
+<testsuites id="" name="" tests="5" failures="4" skipped="0" errors="0" time="366.450849">
+<testsuite name="tests\features\IntegrationTest\accounts_opportunities.feature.spec.js" timestamp="2025-12-15T05:59:45.124Z" hostname="Google Chrome" tests="1" failures="0" skipped="0" time="44.594" errors="0">
+<testcase name="Create account module then click on first account on list and add opportunities on it. › Create a new business account with complete details › Example #1" classname="tests\features\IntegrationTest\accounts_opportunities.feature.spec.js" time="44.594">
 <system-out>
 <![CDATA[🚀 Initializing SalesforceLogin page object
 ✅ SalesforceLogin page object initialized successfully with all locators
@@ -15,7 +15,7 @@ Screenshot saved: 1-start-login
 Retrieving verification code from Mailosaur via API...
 credentials q2LAcc0Um0nOqbIfP1W0lwejUVXoe0q8 l4xgwx7y breakfast-bush@l4xgwx7y.mailosaur.net
 Message retrieved: Verify your identity in Salesforce
-🔐 Retrieved code: 445599
+🔐 Retrieved code: 328374
 🔐 Entering verification code...
 Screenshot saved: 2-end-login
 ✅ Verification code entered successfully
@@ -24,52 +24,939 @@ Screenshot saved: 2-end-login
 🚀 Initializing SalesforceHome page object
 ✅ SalesforceHome page object initialized successfully with all locators
 🔄 Starting app search and navigation...
-📱 Searching for app: Dashboards
+📱 Searching for app: Accounts
 ✅ App launcher is visible
 Screenshot saved: 1-start-app-search
 ✅ App launcher opened
 🔍 Searched for app in search box
 Screenshot saved: 2-end-app-navigation
-✅ Successfully navigated to Dashboards app
+✅ Successfully navigated to Accounts app
 🎉 App navigation completed!
-🚀 Initializing SalesforceDashboards page object
-✅ SalesforceDashboards page object initialized successfully with all locators
-🔄 Starting dashboard creation process...
-📝 Dashboard details: {
-  "Field": "Value",
-  "DashboardName": "Sales",
-  "Description": "Sales performance tracking",
-  "Folder": "Enablement Dashboard Spring '24"
+🚀 Initializing SalesforceHome page object
+✅ SalesforceHome page object initialized successfully with all locators
+🔄 Starting New Page creation process of Accounts...
+Screenshot saved: 1-start-opportunity
+✅ Accounts creation dialog opened
+🚀 Initializing SalesforceAccounts page object
+✅ SalesforceAccounts page object initialized successfully with all locators
+🔄 Starting account creation process...
+📝 Account details: {
+  "Field Name": "Value",
+  "Account Name": "Testing",
+  "Phone": "555-0123",
+  "Industry": "Technology",
+  "Type": "Technology Partner",
+  "Website": "www.techsol2025.com",
+  "Employees": "500",
+  "Description": "A leading technology company specializing in enterprise solutions",
+  "Rating": "Hot",
+  "Account Site": "Headquarters",
+  "Account Number": "ACC2025",
+  "Annual Revenue": "5000000"
 }
-Screenshot saved: 1-start-dashboard
-✅ Dashboard creation dialog opened
+Screenshot saved: 1-start-account
 📋 Filling form fields...
-💾 Saving the dashboard...
-✅ Dashboard Created successfully
-✅ Dashboard saved successfully
-✅ Dashboard creation completed successfully
-Screenshot saved: 2-end-dashboard
-🎉 Dashboard creation completed!
-🚀 Initializing SalesforceDashboards page object
-✅ SalesforceDashboards page object initialized successfully with all locators
-🚀 Initializing SalesforceDashboards page object
-✅ SalesforceDashboards page object initialized successfully with all locators
-🔍 Starting dashboard verification...
+💾 Saving the account...
+✅ Account saved successfully
+Screenshot saved: 2-end-account
+🎉 Account creation completed!
+🚀 Initializing SalesforceAccounts page object
+✅ SalesforceAccounts page object initialized successfully with all locators
+🔍 Starting account verification...
+✅ Account name verification successful: Testing
 Screenshot saved: 3-verification
-📊 Verifying dashboard: Sales
-✅ Dashboard successfully verified in interface
-🎉 Verification completed!
+🎉 Account verification completed!
+🚀 Initializing SalesforceOpportunities page object
+✅ SalesforceOpportunities page object initialized successfully with all locators
+📋 Filling form fields...
+📝 Opportunity details: {
+  "Field": "Value",
+  "Name": "New Business Opp",
+  "Type": "New Customer",
+  "Stage": "Prospecting",
+  "Amount": "50000",
+  "CloseDate": "10/10/2024",
+  "Private": "Yes",
+  "NextStep": "Initial Contact",
+  "Description": "New business opportunity test"
+}
+💾 Saving the opportunity...
+✅ Opportunity saved successfully
+Screenshot saved: 2-end-opportunity
+🎉 Opportunity creation completed!
 
-[[ATTACHMENT|..\test-results\tests-features-Platform-sa-6e30d-ferent-Components-Example-1-Google-Chrome\test-finished-1.png]]
+[[ATTACHMENT|..\test-results\tests-features-Integration-1dd21--complete-details-Example-1-Google-Chrome\test-finished-1.png]]
 
-[[ATTACHMENT|..\test-results\tests-features-Platform-sa-6e30d-ferent-Components-Example-1-Google-Chrome\trace.zip]]
+[[ATTACHMENT|..\test-results\tests-features-Integration-1dd21--complete-details-Example-1-Google-Chrome\trace.zip]]
 ]]>
 </system-out>
 <system-err>
-<![CDATA[(node:13400) Warning: Setting the NODE_TLS_REJECT_UNAUTHORIZED environment variable to '0' makes TLS connections and HTTPS requests insecure by disabling certificate verification.
+<![CDATA[(node:22552) Warning: Setting the NODE_TLS_REJECT_UNAUTHORIZED environment variable to '0' makes TLS connections and HTTPS requests insecure by disabling certificate verification.
 (Use `node --trace-warnings ...` to show where the warning was created)
 ]]>
 </system-err>
+</testcase>
+</testsuite>
+<testsuite name="tests\features\IntegrationTest\campaign_leadsContactsOpportunities.feature.spec.js" timestamp="2025-12-15T05:59:45.124Z" hostname="Google Chrome" tests="1" failures="1" skipped="0" time="94.656" errors="0">
+<testcase name="Campaign Management in Salesforce and adding Lead, opportunity, Contact › Create a new marketing campaign with complete details › Example #1" classname="tests\features\IntegrationTest\campaign_leadsContactsOpportunities.feature.spec.js" time="94.656">
+<failure message="campaign_leadsContactsOpportunities.feature.spec.js:8:9 Example #1" type="FAILURE">
+<![CDATA[  [Google Chrome] › tests\features\IntegrationTest\campaign_leadsContactsOpportunities.feature.spec.js:8:9 › Campaign Management in Salesforce and adding Lead, opportunity, Contact › Create a new marketing campaign with complete details › Example #1 @campaign_leadContact 
+
+    Error: apiRequestContext._wrapApiCall: EBUSY: resource busy or locked, open 'C:\Users\pradhkum\Documents\Pk_salesforce\Salesforce_Reusables\test-results\.playwright-artifacts-0\traces\da7d5b6b6826126e3818-e7e55890a0a2b0b159b8-recording1.trace'
+
+    attachment #11: screenshot (image/png) ─────────────────────────────────────────────────────────
+    ..\test-results\tests-features-Integration-e96ba--complete-details-Example-1-Google-Chrome\test-finished-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\tests-features-Integration-e96ba--complete-details-Example-1-Google-Chrome\error-context.md
+
+    attachment #13: trace (application/zip) ────────────────────────────────────────────────────────
+    ..\test-results\tests-features-Integration-e96ba--complete-details-Example-1-Google-Chrome\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\tests-features-Integration-e96ba--complete-details-Example-1-Google-Chrome\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[🚀 Initializing SalesforceLogin page object
+✅ SalesforceLogin page object initialized successfully with all locators
+🔄 Starting Salesforce login process...
+📝 Login username: breakfast-bush786@agentforce.com
+🔧 Verification method: Mailosaur
+Screenshot saved: 1-start-login
+✅ Navigated to Salesforce login page
+📋 Filling login credentials...
+✅ Login credentials submitted
+🔐 Two-factor authentication required - retrieving verification code from Mailosaur...
+Retrieving verification code from Mailosaur via API...
+credentials q2LAcc0Um0nOqbIfP1W0lwejUVXoe0q8 l4xgwx7y breakfast-bush@l4xgwx7y.mailosaur.net
+Message retrieved: Verify your identity in Salesforce
+🔐 Retrieved code: 736562
+🔐 Entering verification code...
+Screenshot saved: 2-end-login
+✅ Verification code entered successfully
+✅ Two-factor authentication completed
+🎉 Login process completed!
+🚀 Initializing SalesforceHome page object
+✅ SalesforceHome page object initialized successfully with all locators
+🔄 Starting app search and navigation...
+📱 Searching for app: Campaigns
+✅ App launcher is visible
+Screenshot saved: 1-start-app-search
+✅ App launcher opened
+🔍 Searched for app in search box
+Screenshot saved: 2-end-app-navigation
+✅ Successfully navigated to Campaigns app
+🎉 App navigation completed!
+🚀 Initializing SalesforceHome page object
+✅ SalesforceHome page object initialized successfully with all locators
+🔄 Starting New Page creation process of Campaigns...
+Screenshot saved: 1-start-opportunity
+✅ Campaigns creation dialog opened
+🚀 Initializing SalesforceCampaigns page object
+✅ SalesforceCampaigns page object initialized successfully with all locators
+🔄 Starting campaign creation process...
+📝 Campaign details: {
+  "Field": "Value",
+  "Campaign Name": "End of Year Campaign 2025",
+  "Type": "Conference",
+  "Status": "Planned",
+  "Active": "true",
+  "Start Date": "11/01/2025",
+  "Expected Revenue": "10/01/2026",
+  "Budgeted Cost": "50000",
+  "Actual Cost": "25000",
+  "Expected Response": "0",
+  "Description": "10"
+}
+Screenshot saved: 1-start-campaign
+✅ Campaign creation dialog opened
+📋 Filling form fields...
+💾 Saving the campaign...
+✅ Campaign saved successfully
+Screenshot saved: 2-end-campaign
+🎉 Campaign creation completed!
+🚀 Initializing SalesforceCampaigns page object
+✅ SalesforceCampaigns page object initialized successfully with all locators
+🔍 Starting campaign verification...
+✅ Campaign name verification successful: End of Year Campaign 2025
+Screenshot saved: 3-verification
+🎉 Campaign verification completed!
+🚀 Initializing SalesforceOpportunities page object
+✅ SalesforceOpportunities page object initialized successfully with all locators
+📋 Filling form fields...
+📝 Opportunity details: {
+  "Field": "Value",
+  "Name": "New Business Opp",
+  "Type": "New Customer",
+  "Stage": "Prospecting",
+  "Amount": "50000",
+  "CloseDate": "10/10/2024",
+  "Private": "Yes",
+  "NextStep": "Initial Contact",
+  "Description": "New business opportunity test"
+}
+💾 Saving the opportunity...
+✅ Opportunity saved successfully
+Screenshot saved: 2-end-opportunity
+🎉 Opportunity creation completed!
+🚀 Initializing SalesforceLeads page object
+✅ SalesforceLeads page object initialized successfully with all locators
+🔄 Starting lead creation process...
+📝 Lead details: {
+  "Field": "Value",
+  "First Name": "Johnny",
+  "Last Name": "Deep",
+  "Company": "Tech Corp Ltd",
+  "Email": "johnny.smith@techcorp.com",
+  "Phone": "9876543210",
+  "Lead Status": "Open - Not Contacted",
+  "Industry": "Technology"
+}
+Screenshot saved: 1-start-lead
+📋 Filling form fields...
+💾 Saving the lead...
+✅ Lead saved successfully
+Screenshot saved: 2-end-lead
+🎉 Lead creation completed!
+Lead or Contact Adding done
+🚀 Initializing SalesforceContacts page object
+✅ SalesforceContacts page object initialized successfully with all locators
+🔄 Starting contact creation process...
+📝 Contact details: {
+  "Field": "Value",
+  "Salutation": "Mr.",
+  "FirstName": "Jhon",
+  "LastName": "Smith",
+  "AccountName": "Testing",
+  "Title": "Sales Manager",
+  "Phone": "+1234567890",
+  "HomePhone": "+1234567891",
+  "Mobile": "+1987654321",
+  "OtherPhone": "+1234567892",
+  "Fax": "+1234567893",
+  "Email": "john.smith@test.com",
+  "Assistant": "Mary Johnson",
+  "AssistantPhone": "+1234567894",
+  "Department": "Sales",
+  "LeadSource": "Web",
+  "Birthdate": "10/10/2000",
+  "ReportsTo": "Sarah Johnson",
+  "Languages": "English,French",
+  "Level": "Primary",
+  "MailingStreet": "123 Main St",
+  "MailingCity": "New York",
+  "MailingState": "",
+  "MailingZip": "10001",
+  "MailingCountry": "",
+  "OtherStreet": "456 Work St",
+  "OtherCity": "Brooklyn",
+  "OtherState": "",
+  "OtherZip": "10002",
+  "OtherCountry": "",
+  "Description": "Primary sales contact"
+}
+Screenshot saved: 1-start-contact
+📋 Filling form fields...
+🔽 Selecting Salutation from dropdown...
+✅ Salutation selected: Mr.
+🔽 Selecting LeadSource from dropdown...
+✅ LeadSource selected: Web
+🔽 Selecting Level from dropdown...
+✅ Level selected: Primary
+💾 Saving the contact...
+✅ Contact saved successfully
+Screenshot saved: 2-end-contact
+🎉 Contact creation completed!
+Lead or Contact Adding done
+
+[[ATTACHMENT|..\test-results\tests-features-Integration-e96ba--complete-details-Example-1-Google-Chrome\test-finished-1.png]]
+
+[[ATTACHMENT|..\test-results\tests-features-Integration-e96ba--complete-details-Example-1-Google-Chrome\error-context.md]]
+
+[[ATTACHMENT|..\test-results\tests-features-Integration-e96ba--complete-details-Example-1-Google-Chrome\trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="tests\features\IntegrationTest\contact_opportunities.feature.spec.js" timestamp="2025-12-15T05:59:45.124Z" hostname="Google Chrome" tests="1" failures="1" skipped="0" time="47.095" errors="0">
+<testcase name="Create account module then click on first account on list and add opportunities on it. › Create a new business account with complete details › Example #1" classname="tests\features\IntegrationTest\contact_opportunities.feature.spec.js" time="47.095">
+<failure message="contact_opportunities.feature.spec.js:8:9 Example #1" type="FAILURE">
+<![CDATA[  [Google Chrome] › tests\features\IntegrationTest\contact_opportunities.feature.spec.js:8:9 › Create account module then click on first account on list and add opportunities on it. › Create a new business account with complete details › Example #1 @Contacts-opportunities 
+
+    Error: apiRequestContext._wrapApiCall: EBUSY: resource busy or locked, open 'C:\Users\pradhkum\Documents\Pk_salesforce\Salesforce_Reusables\test-results\.playwright-artifacts-1\traces\625d3ad843d51cdb8107-8180ea3cac38abe3f406.trace'
+
+    attachment #9: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\test-results\tests-features-Integration-b33ba--complete-details-Example-1-Google-Chrome\test-finished-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\tests-features-Integration-b33ba--complete-details-Example-1-Google-Chrome\error-context.md
+
+    attachment #11: trace (application/zip) ────────────────────────────────────────────────────────
+    ..\test-results\tests-features-Integration-b33ba--complete-details-Example-1-Google-Chrome\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\tests-features-Integration-b33ba--complete-details-Example-1-Google-Chrome\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[🚀 Initializing SalesforceLogin page object
+✅ SalesforceLogin page object initialized successfully with all locators
+🔄 Starting Salesforce login process...
+📝 Login username: breakfast-bush786@agentforce.com
+🔧 Verification method: Mailosaur
+Screenshot saved: 1-start-login
+✅ Navigated to Salesforce login page
+📋 Filling login credentials...
+✅ Login credentials submitted
+🔐 Two-factor authentication required - retrieving verification code from Mailosaur...
+Retrieving verification code from Mailosaur via API...
+credentials q2LAcc0Um0nOqbIfP1W0lwejUVXoe0q8 l4xgwx7y breakfast-bush@l4xgwx7y.mailosaur.net
+Message retrieved: Verify your identity in Salesforce
+🔐 Retrieved code: 139947
+🔐 Entering verification code...
+Screenshot saved: 2-end-login
+✅ Verification code entered successfully
+✅ Two-factor authentication completed
+🎉 Login process completed!
+🚀 Initializing SalesforceHome page object
+✅ SalesforceHome page object initialized successfully with all locators
+🔄 Starting app search and navigation...
+📱 Searching for app: Contacts
+✅ App launcher is visible
+Screenshot saved: 1-start-app-search
+✅ App launcher opened
+🔍 Searched for app in search box
+Screenshot saved: 2-end-app-navigation
+✅ Successfully navigated to Contacts app
+🎉 App navigation completed!
+🚀 Initializing SalesforceHome page object
+✅ SalesforceHome page object initialized successfully with all locators
+🔄 Starting New Page creation process of Contacts...
+Screenshot saved: 1-start-opportunity
+✅ Contacts creation dialog opened
+🚀 Initializing SalesforceContacts page object
+✅ SalesforceContacts page object initialized successfully with all locators
+🔄 Starting contact creation process...
+📝 Contact details: {
+  "Field": "Value",
+  "Salutation": "Mr.",
+  "FirstName": "Jhonnny",
+  "LastName": "Smitth",
+  "AccountName": "Testing",
+  "Title": "Sales Maneager",
+  "Phone": "+123r456789",
+  "HomePhone": "+1234456789",
+  "Mobile": "+1985654321",
+  "OtherPhone": "+1274567892",
+  "Fax": "+1234767893",
+  "Email": "john.smith@tert.com",
+  "Assistant": "Mary Johtson",
+  "AssistantPhone": "+1236567894",
+  "Department": "Salles",
+  "LeadSource": "Web",
+  "Birthdate": "12/10/2025",
+  "ReportsTo": "Sarah Johdnson",
+  "Languages": "English",
+  "Level": "Primary",
+  "MailingStreet": "123 Main St",
+  "MailingCity": "New York",
+  "MailingState": "",
+  "MailingZip": "10001",
+  "MailingCountry": "",
+  "OtherStreet": "456 Work St",
+  "OtherCity": "Brooklyn",
+  "OtherState": "",
+  "OtherZip": "10002",
+  "OtherCountry": "",
+  "Description": "Primary sales contact"
+}
+Screenshot saved: 1-start-contact
+📋 Filling form fields...
+🔽 Selecting Salutation from dropdown...
+✅ Salutation selected: Mr.
+🔽 Selecting LeadSource from dropdown...
+✅ LeadSource selected: Web
+🔽 Selecting Level from dropdown...
+✅ Level selected: Primary
+💾 Saving the contact...
+✅ Contact saved successfully
+Screenshot saved: 2-end-contact
+🎉 Contact creation completed!
+🚀 Initializing SalesforceOpportunities page object
+✅ SalesforceOpportunities page object initialized successfully with all locators
+📋 Filling form fields...
+📝 Opportunity details: {
+  "Field": "Value",
+  "Name": "New Business Opp",
+  "Type": "New Customer",
+  "Stage": "Prospecting",
+  "Amount": "50000",
+  "CloseDate": "10/10/2024",
+  "Private": "Yes",
+  "NextStep": "Initial Contact",
+  "Description": "Primary sales contact"
+}
+💾 Saving the opportunity...
+✅ Opportunity saved successfully
+Screenshot saved: 2-end-opportunity
+🎉 Opportunity creation completed!
+
+[[ATTACHMENT|..\test-results\tests-features-Integration-b33ba--complete-details-Example-1-Google-Chrome\test-finished-1.png]]
+
+[[ATTACHMENT|..\test-results\tests-features-Integration-b33ba--complete-details-Example-1-Google-Chrome\error-context.md]]
+
+[[ATTACHMENT|..\test-results\tests-features-Integration-b33ba--complete-details-Example-1-Google-Chrome\trace.zip]]
+]]>
+</system-out>
+<system-err>
+<![CDATA[(node:2840) Warning: Setting the NODE_TLS_REJECT_UNAUTHORIZED environment variable to '0' makes TLS connections and HTTPS requests insecure by disabling certificate verification.
+(Use `node --trace-warnings ...` to show where the warning was created)
+]]>
+</system-err>
+</testcase>
+</testsuite>
+<testsuite name="tests\features\IntegrationTest\order_contractsAccount.feature.spec.js" timestamp="2025-12-15T05:59:45.124Z" hostname="Google Chrome" tests="1" failures="1" skipped="0" time="70.966" errors="0">
+<testcase name="Salesforce Orders Management › Create a new order with different data sets › Example #1" classname="tests\features\IntegrationTest\order_contractsAccount.feature.spec.js" time="70.966">
+<failure message="order_contractsAccount.feature.spec.js:9:9 Example #1" type="FAILURE">
+<![CDATA[  [Google Chrome] › tests\features\IntegrationTest\order_contractsAccount.feature.spec.js:9:9 › Salesforce Orders Management › Create a new order with different data sets › Example #1 @mode:serial @order_contractsAccount 
+
+    Error: apiRequestContext._wrapApiCall: EBUSY: resource busy or locked, open 'C:\Users\pradhkum\Documents\Pk_salesforce\Salesforce_Reusables\test-results\.playwright-artifacts-2\traces\55ee796d1d9a607d93f0-e7b973b05688de2489a7.trace'
+
+    attachment #11: screenshot (image/png) ─────────────────────────────────────────────────────────
+    ..\test-results\tests-features-Integration-7a81b-fferent-data-sets-Example-1-Google-Chrome\test-finished-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\tests-features-Integration-7a81b-fferent-data-sets-Example-1-Google-Chrome\error-context.md
+
+    attachment #13: trace (application/zip) ────────────────────────────────────────────────────────
+    ..\test-results\tests-features-Integration-7a81b-fferent-data-sets-Example-1-Google-Chrome\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\tests-features-Integration-7a81b-fferent-data-sets-Example-1-Google-Chrome\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[🚀 Initializing SalesforceLogin page object
+✅ SalesforceLogin page object initialized successfully with all locators
+🔄 Starting Salesforce login process...
+📝 Login username: breakfast-bush786@agentforce.com
+🔧 Verification method: Mailosaur
+Screenshot saved: 1-start-login
+✅ Navigated to Salesforce login page
+📋 Filling login credentials...
+✅ Login credentials submitted
+🔐 Two-factor authentication required - retrieving verification code from Mailosaur...
+Retrieving verification code from Mailosaur via API...
+credentials q2LAcc0Um0nOqbIfP1W0lwejUVXoe0q8 l4xgwx7y breakfast-bush@l4xgwx7y.mailosaur.net
+Message retrieved: Verify your identity in Salesforce
+🔐 Retrieved code: 127440
+🔐 Entering verification code...
+Screenshot saved: 2-end-login
+✅ Verification code entered successfully
+✅ Two-factor authentication completed
+🎉 Login process completed!
+🚀 Initializing SalesforceHome page object
+✅ SalesforceHome page object initialized successfully with all locators
+🔄 Starting app search and navigation...
+📱 Searching for app: Orders
+✅ App launcher is visible
+Screenshot saved: 1-start-app-search
+✅ App launcher opened
+🔍 Searched for app in search box
+Screenshot saved: 2-end-app-navigation
+✅ Successfully navigated to Orders app
+🎉 App navigation completed!
+🚀 Initializing SalesforceHome page object
+✅ SalesforceHome page object initialized successfully with all locators
+🔄 Starting New Page creation process of Orders...
+Screenshot saved: 1-start-opportunity
+✅ Orders creation dialog opened
+🚀 Initializing SalesforceOrders page object
+✅ SalesforceOrders page object initialized successfully with all locators
+🔄 Starting order creation process...
+📝 Order details: {
+  "Field": "Value",
+  "Status": "Draft",
+  "Order Start Date": "11/11/2025",
+  "Customer Authorized By": "",
+  "Company Authorized By": "",
+  "Shipping Street": "123 Main Street",
+  "Shipping City": "New York",
+  "Shipping Zip": "10001",
+  "Shipping State": "",
+  "Shipping Country": "",
+  "Billing Street": "123 Main St",
+  "Billing City": "New York",
+  "Billing Zip": "10001",
+  "Billing State": "",
+  "Billing Country": "",
+  "Description": "Annual service contract"
+}
+Screenshot saved: 1-start-order
+📋 Filling form fields...
+✅ Status selected: Draft
+✅ Order Start Date filled: 11/11/2025
+✅ Shipping Street filled: 493123 Main Street1765778625984
+✅ Shipping City filled: class Helper {
+  /**
+   * Attaches a screenshot to the Playwright test report
+   *
+   * @param page - Playwright Page instance
+   * @param screenshotName - Name for the screenshot in the report
+   * @param testInfo - Playwright TestInfo for attaching to report
+   */
+  static async attachScreenshotToReport(page, screenshotName, testInfo) {
+    const screenshot = await page.screenshot();
+    await testInfo.attach(screenshotName, {
+      body: screenshot,
+      contentType: "image/png"
+    });
+  }
+
+  /**
+   * Takes a screenshot and saves it to file
+   *
+   * @param page - Playwright Page instance
+   * @param screenshotName - Name for the screenshot file (without extension)
+   * @param testInfo - Optional TestInfo to also attach to report
+   * @param subfolder - Optional subfolder within screenshots directory
+   * @returns Promise<string> - Path to the saved screenshot
+   */
+  static async takeScreenshotToFile(page, screenshotName, testInfo, subfolder) {
+    const screenshotsBaseDir = path.join(process.cwd(), "screenshots");
+    const screenshotsDir = subfolder ? path.join(screenshotsBaseDir, subfolder) : screenshotsBaseDir;
+    if (!fs.existsSync(screenshotsDir)) {
+      fs.mkdirSync(screenshotsDir, {
+        recursive: true
+      });
+    }
+    const screenshotPath = path.join(screenshotsDir, `${screenshotName}.png`);
+    await page.screenshot({
+      path: screenshotPath,
+      fullPage: true
+    });
+
+    // Also attach to test report if testInfo is provided
+    if (testInfo) {
+      const screenshot = fs.readFileSync(screenshotPath);
+      await testInfo.attach(screenshotName, {
+        body: screenshot,
+        contentType: "image/png"
+      });
+    }
+    console.log(`Screenshot saved: ${screenshotName}`);
+    return screenshotPath;
+  }
+
+  /**
+   * Fills dynamic fields that can be either textbox or combobox
+   * This method detects the field type and fills accordingly
+   * 
+   * Supports read-only combobox fields that require typing to filter options
+   * Used for address fields like Country/State that toggle between textbox and combobox
+   *
+   * @param page - Playwright Page instance for navigation
+   * @param textboxLocator - Locator for textbox variant of the field
+   * @param comboboxLocator - Locator for combobox variant of the field
+   * @param fieldName - Name of the field for logging purposes
+   * @param value - Value to fill/select (EXACT match required for combobox)
+   *
+   * @example
+   * await Helper.fillDynamicField(
+   *   page,
+   *   mailingStateTextbox,
+   *   mailingStateCombobox,
+   *   "Mailing State",
+   *   "California"
+   * );
+   */
+  static async fillDynamicField(page, textboxLocator, comboboxLocator, fieldName, value) {
+    try {
+      // Check if combobox is visible and enabled
+      const comboboxVisible = await comboboxLocator.isVisible({
+        timeout: 2000
+      }).catch(() => false);
+      if (comboboxVisible) {
+        console.log(`🔽 ${fieldName} is a combobox, selecting from dropdown...`);
+        await comboboxLocator.click({
+          timeout: 10000
+        });
+        await page.waitForTimeout(1000);
+        try {
+          // The combobox is read-only, so we need to type to filter options
+          // Type the value to filter dropdown options
+          console.log(`📝 Typing "${value}" to filter and select exact match...`);
+          await comboboxLocator.type(value, {
+            delay: 100
+          });
+          await page.waitForTimeout(1500);
+
+          // IMPORTANT: Look for EXACT match only - using text normalization
+          const exactMatchOption = page.locator(`[role="option"]`).filter({
+            hasText: new RegExp(`^${value}$`, 'i')
+          }).first();
+          const exactMatchVisible = await exactMatchOption.isVisible({
+            timeout: 5000
+          }).catch(() => false);
+          if (exactMatchVisible) {
+            await exactMatchOption.click({
+              timeout: 5000,
+              force: true
+            });
+            console.log(`✅ ${fieldName} selected with EXACT match:`, value);
+            return;
+          }
+
+          // If exact match not found, throw error and try fallback
+          throw new Error(`Exact match not found for "${value}"`);
+        } catch (e) {
+          console.log(`⏱️ Exact match not found, attempting keyboard navigation for ${fieldName}...`);
+          try {
+            // Clear previous attempt
+            await comboboxLocator.clear({
+              timeout: 2000
+            }).catch(() => {});
+            await page.waitForTimeout(500);
+
+            // Try again with fresh typing
+            await comboboxLocator.type(value, {
+              delay: 100
+            });
+            await page.waitForTimeout(1500);
+
+            // Use keyboard to navigate and select
+            await page.keyboard.press("ArrowDown");
+            await page.waitForTimeout(500);
+            await page.keyboard.press("Enter");
+            console.log(`✅ ${fieldName} selected via keyboard navigation:`, value);
+          } catch (e2) {
+            console.log(`❌ Failed to select exact match for ${fieldName}:`, value);
+            throw new Error(`Could not select exact value "${value}" for field "${fieldName}". Available options may differ.`);
+          }
+        }
+      } else {
+        // Use textbox
+        console.log(`📝 ${fieldName} is a textbox, filling value...`);
+        await textboxLocator.fill(value, {
+          timeout: 10000
+        });
+        console.log(`✅ ${fieldName} filled:`, value);
+      }
+    } catch (error) {
+      console.log(`⚠️ Error filling ${fieldName}, attempting textbox as fallback:`, error);
+      try {
+        await textboxLocator.fill(value, {
+          timeout: 10000
+        });
+        console.log(`✅ ${fieldName} filled via textbox fallback:`, value);
+      } catch (fallbackError) {
+        console.log(`❌ Failed to fill ${fieldName}:`, fallbackError);
+        throw fallbackError;
+      }
+    }
+  }
+  static generateUniqueValue(baseString) {
+    const timestamp = Date.now();
+    const randomNum = Math.floor(Math.random() * 1000);
+    return `${randomNum}${baseString}${timestamp}`;
+  }
+  static generateUniqueEmail(baseEmail) {
+    const timestamp = Date.now();
+    const randomNum = Math.floor(Math.random() * 1000);
+    return `test+${timestamp}${randomNum}${baseEmail}`;
+  }
+}
+✅ Shipping Zip filled: 10001
+✅ Billing Street filled: 860123 Main St1765778626376
+✅ Billing City filled: 367New York1765778626513
+✅ Billing Zip filled: 10001
+✅ Description filled: 464Annual service contract1765778626742
+🎉 Order creation completed!
+🚀 Initializing SalesforceAccounts page object
+✅ SalesforceAccounts page object initialized successfully with all locators
+🔄 Starting account creation process...
+📝 Account details: {
+  "Field Name": "Value",
+  "Account Name": "Testing",
+  "Phone": "555-0123",
+  "Industry": "Technology",
+  "Type": "Technology Partner",
+  "Website": "www.techsol2025.com",
+  "Employees": "500",
+  "Description": "A leading technology company specializing in enterprise solutions",
+  "Rating": "Hot",
+  "Account Site": "Headquarters",
+  "Account Number": "ACC2025",
+  "Annual Revenue": "5000000"
+}
+Screenshot saved: 1-start-account
+📋 Filling form fields...
+💾 Saving the account...
+✅ Account saved successfully
+Screenshot saved: 2-end-account
+🎉 Account creation completed!
+🚀 Initializing SalesforceContracts page object
+✅ SalesforceContracts page object initialized successfully with all locators
+🔄 Starting contract creation process...
+📝 Contract details: {
+  "Field": "Value",
+  "Status": "Draft",
+  "Contract Start Date": "11/11/2025",
+  "Account Name": "Testing",
+  "Contract Term": "12",
+  "Customer Signed By": "",
+  "Owner Expiration Notice": "15 Days",
+  "Customer Signed Title": "Sales Manager",
+  "Company Signed By": "",
+  "Customer Signed Date": "10/12/2024",
+  "Company Signed Date": "11/11/2025",
+  "Price Book": "",
+  "Billing Street": "456 Oak Avenue",
+  "Billing City": "Los Angeles",
+  "Billing Zip": "90210",
+  "Billing State": "",
+  "Billing Country": "",
+  "Special Terms": "Standard contract terms apply",
+  "Description": "Standard order for testing"
+}
+Screenshot saved: 1-start-contract
+📋 Filling form fields...
+✅ Status selected: Draft
+✅ Contract Start Date filled: 11/11/2025
+🔄 Attempting to select account: Testing
+✅ Account combobox clicked
+✅ Account selected: Testing
+✅ Contract Term filled: 12
+✅ Owner Expiration Notice selected: 15 Days
+✅ Customer Signed Title filled: Sales Manager
+✅ Customer Signed Date filled: 10/12/2024
+✅ Company Signed Date filled: 11/11/2025
+✅ Billing Street filled: 352456 Oak Avenue1765778648260
+✅ Billing City filled: 364Los Angeles1765778648393
+✅ Billing Zip filled: 90210
+✅ Special Terms filled: 361Standard contract terms apply1765778648688
+✅ Description filled: 297Standard order for testing1765778648857
+💾 Saving the contract...
+✅ Contract saved successfully
+Screenshot saved: 2-end-contract
+🎉 Contract creation completed!
+🚀 Initializing SalesforceHome page object
+✅ SalesforceHome page object initialized successfully with all locators
+💾 Saving the order...
+✅ Order saved successfully
+🚀 Initializing SalesforceOrders page object
+✅ SalesforceOrders page object initialized successfully with all locators
+Screenshot saved: 2-verification
+🔍 Starting order verification...
+✅ Order creation message verified
+✅ Order account name verification successful: Testing
+Screenshot saved: 3-verification
+🎉 Order verification completed!
+
+[[ATTACHMENT|..\test-results\tests-features-Integration-7a81b-fferent-data-sets-Example-1-Google-Chrome\test-finished-1.png]]
+
+[[ATTACHMENT|..\test-results\tests-features-Integration-7a81b-fferent-data-sets-Example-1-Google-Chrome\error-context.md]]
+
+[[ATTACHMENT|..\test-results\tests-features-Integration-7a81b-fferent-data-sets-Example-1-Google-Chrome\trace.zip]]
+]]>
+</system-out>
+<system-err>
+<![CDATA[(node:14304) Warning: Setting the NODE_TLS_REJECT_UNAUTHORIZED environment variable to '0' makes TLS connections and HTTPS requests insecure by disabling certificate verification.
+(Use `node --trace-warnings ...` to show where the warning was created)
+]]>
+</system-err>
+</testcase>
+</testsuite>
+<testsuite name="tests\features\IntegrationTest\workorders_serviceAppointment.feature.spec.js" timestamp="2025-12-15T05:59:45.124Z" hostname="Google Chrome" tests="1" failures="1" skipped="0" time="92.081" errors="0">
+<testcase name="Salesforce Work Orders Management › Create and Manage New Work Orders with Comprehensive Data › Example #1" classname="tests\features\IntegrationTest\workorders_serviceAppointment.feature.spec.js" time="92.081">
+<failure message="workorders_serviceAppointment.feature.spec.js:9:9 Example #1" type="FAILURE">
+<![CDATA[  [Google Chrome] › tests\features\IntegrationTest\workorders_serviceAppointment.feature.spec.js:9:9 › Salesforce Work Orders Management › Create and Manage New Work Orders with Comprehensive Data › Example #1 @mode:serial @workOrders_serviceAppointment 
+
+    Error: apiRequestContext._wrapApiCall: EBUSY: resource busy or locked, open 'C:\Users\pradhkum\Documents\Pk_salesforce\Salesforce_Reusables\test-results\.playwright-artifacts-3\traces\f7b01bb102f8f931af23-be1d53abcba555f4a9c1.trace'
+
+    attachment #11: screenshot (image/png) ─────────────────────────────────────────────────────────
+    ..\test-results\tests-features-Integration-f06c5-omprehensive-Data-Example-1-Google-Chrome\test-finished-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\tests-features-Integration-f06c5-omprehensive-Data-Example-1-Google-Chrome\error-context.md
+
+    attachment #13: trace (application/zip) ────────────────────────────────────────────────────────
+    ..\test-results\tests-features-Integration-f06c5-omprehensive-Data-Example-1-Google-Chrome\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\tests-features-Integration-f06c5-omprehensive-Data-Example-1-Google-Chrome\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[🚀 Initializing SalesforceLogin page object
+✅ SalesforceLogin page object initialized successfully with all locators
+🔄 Starting Salesforce login process...
+📝 Login username: breakfast-bush786@agentforce.com
+🔧 Verification method: Mailosaur
+Screenshot saved: 1-start-login
+✅ Navigated to Salesforce login page
+📋 Filling login credentials...
+✅ Login credentials submitted
+🎉 Login process completed!
+🚀 Initializing SalesforceHome page object
+✅ SalesforceHome page object initialized successfully with all locators
+🔄 Starting app search and navigation...
+📱 Searching for app: Work Orders
+✅ App launcher is visible
+Screenshot saved: 1-start-app-search
+✅ App launcher opened
+🔍 Searched for app in search box
+Screenshot saved: 2-end-app-navigation
+✅ Successfully navigated to Work Orders app
+🎉 App navigation completed!
+🚀 Initializing SalesforceHome page object
+✅ SalesforceHome page object initialized successfully with all locators
+🔄 Starting New Page creation process of Work Orders...
+Screenshot saved: 1-start-opportunity
+✅ Work Orders creation dialog opened
+🚀 Initializing SalesforceWorkOrders page object
+✅ SalesforceWorkOrders page object initialized successfully with all locators
+🔄 Starting work order creation process...
+📝 Work order details: {
+  "Field": "Value",
+  "Status": "Completed",
+  "Priority": "Medium",
+  "ParentWorkOrder": "00000001",
+  "Contact": "John Doe",
+  "Account": "Testing",
+  "Asset": "Test Asset 1",
+  "Case": "00001026",
+  "Entitlement": "Web Support ENT",
+  "ServiceContract": "--None--",
+  "Description": "HVAC system maintenance required for building",
+  "Subject": "HVAC System Maintenance"
+}
+Screenshot saved: 1-start-work-order
+📋 Filling form fields...
+✅ Status selected: Completed
+✅ Priority selected: Medium
+✅ Parent Work Order selected: 00000001
+✅ Contact selected: John Doe
+✅ Account selected: Testing
+✅ Asset selected: Test Asset 1
+✅ Case selected: 00001026
+✅ Entitlement selected: Web Support ENT
+✅ Description filled: 340HVAC system maintenance required for building1765778723367
+✅ Subject filled: 514HVAC System Maintenance1765778723520
+💾 Saving the work order...
+✅ Work order saved successfully
+Screenshot saved: 2-end-work-order
+🎉 Work order creation completed!
+🚀 Initializing SalesforceWorkOrders page object
+✅ SalesforceWorkOrders page object initialized successfully with all locators
+🔍 Verifying work order creation...
+✅ Work order creation success message appeared
+Screenshot saved: 3-verification
+✅ Work order verification completed successfully
+🚀 Initializing SalesforceServiceAppointments page object
+✅ SalesforceServiceAppointments page object initialized successfully with all locators
+🔄 Starting service appointment creation process...
+📝 Service appointment details: {
+  "Field": "Value",
+  "Description": "Regular HVAC system maintenance for office building",
+  "Contact": "John doe",
+  "ParentRecordType": "",
+  "ParentRecord": "",
+  "Status": "Scheduled",
+  "Subject": "HVAC System Maintenance",
+  "WorkType": "Work Item A",
+  "AppointmentType": "",
+  "Duration": "120",
+  "DurationType": "Hours",
+  "AdditionalInformation": "Customer requests morning appointment",
+  "Comment": "Bring standard HVAC tools",
+  "CancellationReason": "xyz",
+  "EarliestStartPermittedDate": "11/12/2025",
+  "EarliestStartPermittedTime": "8:00 am",
+  "DueDate": "11/12/2025",
+  "DueTime": "7:00 pm",
+  "ArrivalWindowStartDate": "11/12/2025",
+  "ArrivalWindowStartTime": "9:00 am",
+  "ArrivalWindowEndDate": "11/12/2025",
+  "ArrivalWindowEndTime": "10:00 pm",
+  "ScheduledStartDate": "11/12/2025",
+  "ScheduledStartTime": "9:30 am",
+  "ScheduledEndDate": "11/12/2025",
+  "ScheduledEndTime": "11:00 pm",
+  "ActualStartDate": "11/12/2025",
+  "ActualStartTime": "11:00 pm",
+  "ActualEndDate": "11/12/2025",
+  "ActualEndTime": "11:00 pm",
+  "ActualDuration": "1",
+  "Street": "123 Main Street",
+  "City": "New York",
+  "ZipPostalCode": "10001",
+  "StateProvince": "",
+  "Country": "",
+  "Phone": "(555) 123-4567",
+  "Email": "maintenance@acme.com"
+}
+Screenshot saved: 1-start-service-appointment
+📋 Filling form fields based on MCP analysis...
+✅ Description filled: 603Regular HVAC system maintenance for office building1765778734321
+✅ Contact selected: John doe
+✅ Status selected: Scheduled
+✅ Subject filled: HVAC System Maintenance
+✅ Work Type selected: Work Item A
+✅ Duration filled: 120
+✅ Duration Type selected: Hours
+✅ Additional Information filled: 991Customer requests morning appointment1765778739707
+✅ Comment filled: 9Bring standard HVAC tools1765778739850
+✅ Cancellation Reason filled: 420xyz1765778740009
+✅ Earliest Start Permitted Date filled: 11/12/2025
+✅ Earliest Start Permitted Time selected: 8:00 am
+✅ Due Date filled: 11/12/2025
+✅ Due Time selected: 7:00 pm
+✅ Arrival Window Start Date filled: 11/12/2025
+✅ Arrival Window Start Time selected: 9:00 am
+✅ Arrival Window End Date filled: 11/12/2025
+✅ Arrival Window End Time selected: 10:00 pm
+✅ Scheduled Start Date filled: 11/12/2025
+✅ Scheduled Start Time selected: 9:30 am
+✅ Scheduled End Date filled: 11/12/2025
+✅ Scheduled End Time selected: 11:00 pm
+✅ Actual Start Date filled: 11/12/2025
+✅ Actual Start Time selected: 11:00 pm
+✅ Actual End Date filled: 11/12/2025
+✅ Actual End Time selected: 11:00 pm
+✅ Actual Duration filled: 1
+✅ Street filled: 705123 Main Street1765778746267
+✅ City filled: 765New York1765778746524
+✅ Zip/Postal Code filled: 10001
+✅ Phone filled: 946(555) 123-45671765778747004
+✅ Email filled: test+1765778747259931maintenance@acme.com
+💾 Saving the service appointment...
+✅ Service appointment saved successfully
+Screenshot saved: 2-end-service-appointment
+🎉 Service appointment creation completed!
+🚀 Initializing SalesforceServiceAppointments page object
+✅ SalesforceServiceAppointments page object initialized successfully with all locators
+🔍 Starting service appointment verification...
+✅ Service appointment creation message verified
+Screenshot saved: 3-verification
+🎉 Service appointment verification completed!
+
+[[ATTACHMENT|..\test-results\tests-features-Integration-f06c5-omprehensive-Data-Example-1-Google-Chrome\test-finished-1.png]]
+
+[[ATTACHMENT|..\test-results\tests-features-Integration-f06c5-omprehensive-Data-Example-1-Google-Chrome\error-context.md]]
+
+[[ATTACHMENT|..\test-results\tests-features-Integration-f06c5-omprehensive-Data-Example-1-Google-Chrome\trace.zip]]
+]]>
+</system-out>
 </testcase>
 </testsuite>
 </testsuites>

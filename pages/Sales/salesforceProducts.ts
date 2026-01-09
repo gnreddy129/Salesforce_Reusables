@@ -25,7 +25,6 @@ export default class SalesforceProductsPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newProductButton: Locator;
   readonly saveButton: Locator;
   readonly saveAndNewButton: Locator;
   readonly cancelButton: Locator;
@@ -39,6 +38,7 @@ export default class SalesforceProductsPage {
 
   // Navigation Elements
   readonly productCreatedMessage: Locator;
+  readonly allOptionsLocator: Locator;
 
   /**
    * Constructor - Initializes the SalesforceProducts page object with all necessary locators
@@ -55,7 +55,6 @@ export default class SalesforceProductsPage {
     this.testInfo = testInfo;
 
     // Primary controls - Main UI interaction elements
-    this.newProductButton = page.getByRole("button", { name: "New" });
     this.saveButton = page.getByRole("button", { name: "Save", exact: true });
     this.saveAndNewButton = page.getByRole("button", { name: "Save & New" });
     this.cancelButton = page.getByRole("button", { name: "Cancel" });
@@ -73,6 +72,7 @@ export default class SalesforceProductsPage {
 
     // Success message locator
     this.productCreatedMessage = page.locator(".toastMessage");
+    this.allOptionsLocator = page.getByRole("option");
 
     console.log(
       "✅ SalesforceProducts page object initialized successfully with all locators"
@@ -100,8 +100,6 @@ export default class SalesforceProductsPage {
     console.log("🔄 Starting product creation process...");
     console.log("📝 Product details:", JSON.stringify(details, null, 2));
 
-    await expect(this.newProductButton).toBeVisible({ timeout: 10000 });
-
     // Take start screenshot for verification
     await Helper.takeScreenshotToFile(
       this.page,
@@ -109,9 +107,6 @@ export default class SalesforceProductsPage {
       this.testInfo,
       "Sales/salesforce-products/"
     );
-
-    // Click New Product
-    await this.newProductButton.click({ timeout: 10000 });
     console.log("✅ Product creation form opened");
 
     // Wait for form to be fully loaded
@@ -158,9 +153,7 @@ export default class SalesforceProductsPage {
       const productFamily =
         details.ProductFamily || details["Product Family"];
       await this.productFamilyCombobox.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: productFamily, exact: true })
-        .click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: productFamily }).first().click({ timeout: 10000 });
       console.log(`✅ Product Family selected: ${productFamily}`);
     }
 

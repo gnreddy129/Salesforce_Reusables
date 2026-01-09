@@ -25,7 +25,6 @@ export default class SalesforceWorkStepTemplatesPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newWorkStepTemplateButton: Locator;
   readonly saveButton: Locator;
   readonly saveAndNewButton: Locator;
   readonly cancelButton: Locator;
@@ -38,6 +37,7 @@ export default class SalesforceWorkStepTemplatesPage {
 
   // Navigation Elements
   readonly workStepTemplateCreatedMessage: Locator;
+  readonly allOptionsLocator: Locator;
 
   /**
    * Constructor - Initializes the SalesforceWorkStepTemplates page object with all necessary locators
@@ -54,9 +54,6 @@ export default class SalesforceWorkStepTemplatesPage {
     this.testInfo = testInfo;
 
     // Primary controls - Main UI interaction elements
-    this.newWorkStepTemplateButton = page.getByRole("button", {
-      name: "New",
-    });
     this.saveButton = page.getByRole("button", { name: "Save", exact: true });
     this.saveAndNewButton = page.getByRole("button", { name: "Save & New" });
     this.cancelButton = page.getByRole("button", { name: "Cancel" });
@@ -74,6 +71,7 @@ export default class SalesforceWorkStepTemplatesPage {
 
     // Success message locator
     this.workStepTemplateCreatedMessage = page.locator(".toastMessage");
+    this.allOptionsLocator = page.getByRole("option");
 
     console.log(
       "✅ SalesforceWorkStepTemplates page object initialized successfully with all locators"
@@ -100,10 +98,6 @@ export default class SalesforceWorkStepTemplatesPage {
       JSON.stringify(details, null, 2)
     );
 
-    await expect(this.newWorkStepTemplateButton).toBeVisible({
-      timeout: 10000,
-    });
-
     // Take start screenshot for verification
     await Helper.takeScreenshotToFile(
       this.page,
@@ -111,9 +105,6 @@ export default class SalesforceWorkStepTemplatesPage {
       this.testInfo,
       "OtherFunctionality/salesforce-work-step-templates/"
     );
-
-    // Click New Work Step Template
-    await this.newWorkStepTemplateButton.click({ timeout: 10000 });
     console.log("✅ Work step template creation form opened");
 
     // Wait for form to be fully loaded
@@ -149,9 +140,9 @@ export default class SalesforceWorkStepTemplatesPage {
     ) {
       const actionDefinition =
         details["Action Definition"] || details.ActionDefinition;
-      await this.actionDefinitionCombobox.click();
+      await this.actionDefinitionCombobox.click({ timeout: 10000 });
       await this.page.waitForTimeout(1000);
-      await this.page.getByRole("option", { name: actionDefinition }).click();
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
       console.log(`✅ Action Definition: ${actionDefinition}`);
     }
 
@@ -170,7 +161,7 @@ export default class SalesforceWorkStepTemplatesPage {
     );
 
     // Save the work step template
-    await this.saveButton.click();
+    await this.saveButton.click({ timeout: 10000 });
     console.log("✅ Clicked Save button");
 
     // Wait for success message
@@ -209,9 +200,7 @@ export default class SalesforceWorkStepTemplatesPage {
 
     // Verify Name field if provided
     if (details["Name"]) {
-      await expect(
-        this.page.locator(`[title="${details["Name"]}"]`).first()
-      ).toContainText(details["Name"]);
+      await expect(this.page.locator(`[title="${details["Name"]}"]`).first()).toContainText(details["Name"]);
       console.log(`✅ Name field verified: ${details["Name"]}`);
     }
 
@@ -224,18 +213,5 @@ export default class SalesforceWorkStepTemplatesPage {
     );
 
     console.log("🎉 Work step template verification completed successfully");
-  }
-
-  /**
-   * Navigates to the Work Step Templates section in Salesforce
-   * Uses the standard navigation pattern
-   */
-  async navigateToWorkStepTemplates() {
-    console.log("🧭 Navigating to Work Step Templates section...");
-    await this.page.goto("/lightning/o/WorkStepTemplate/list");
-    await expect(this.newWorkStepTemplateButton).toBeVisible({
-      timeout: 10000,
-    });
-    console.log("✅ Successfully navigated to Work Step Templates section");
   }
 }

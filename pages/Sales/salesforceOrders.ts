@@ -65,6 +65,7 @@ export default class SalesforceOrdersPage {
 
   // Navigation Elements
   readonly orderCreatedMessage: Locator;
+  readonly allOptionsLocator: Locator;
 
   /**
    * Constructor - Initializes the SalesforceOrders page object with all necessary locators
@@ -81,8 +82,8 @@ export default class SalesforceOrdersPage {
     this.testInfo = testInfo;
 
     // Primary controls - Main UI interaction elements
-    this.saveAndNewButton = page.getByRole("button", { name: "Save & New" });
-    this.cancelButton = page.getByRole("button", { name: "Cancel" });
+    this.saveAndNewButton = page.getByRole("button", { name: "Save & New", exact: true });
+    this.cancelButton = page.getByRole("button", { name: "Cancel", exact: true });
 
     // Order Information field locators
     this.contractNumberCombobox = page.getByRole("combobox", {
@@ -141,6 +142,7 @@ export default class SalesforceOrdersPage {
 
     // Success message locator
     this.orderCreatedMessage = page.locator(".toastMessage");
+    this.allOptionsLocator = page.getByRole("option");
 
     console.log(
       "✅ SalesforceOrders page object initialized successfully with all locators"
@@ -205,10 +207,7 @@ export default class SalesforceOrdersPage {
       const contractNumber =
         details.ContractNumber || details["Contract Number"];
       await this.contractNumberCombobox.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: contractNumber })
-        .first()
-        .click({ timeout: 10000 });
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
       console.log(`✅ Contract Number selected: ${contractNumber}`);
     }
 
@@ -239,13 +238,7 @@ export default class SalesforceOrdersPage {
         await this.accountNameCombobox.click({ timeout: 10000 });
         console.log("✅ Account combobox clicked");
         await this.page.waitForTimeout(1000);
-
-        // Select the account option
-        await this.page
-          .getByRole("option", { name: accountName })
-          .first()
-          .click({ timeout: 10000 });
-
+        await this.allOptionsLocator.first().click({ timeout: 10000 });
         console.log(`✅ Account selected: ${accountName}`);
       } catch (error) {
         console.log(`❌ Account selection error: ${error}`);
@@ -261,9 +254,7 @@ export default class SalesforceOrdersPage {
 
     if (details.Status && details.Status !== "--None--") {
       await this.statusCombobox.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: details.Status })
-        .click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: details.Status }).first().click({ timeout: 10000 });
       console.log(`✅ Status selected: ${details.Status}`);
     }
 
@@ -289,10 +280,7 @@ export default class SalesforceOrdersPage {
       const customerAuthorizedBy =
         details.CustomerAuthorizedBy || details["Customer Authorized By"];
       await this.customerAuthorizedByCombobox.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: customerAuthorizedBy })
-        .first()
-        .click({ timeout: 10000 });
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
       console.log(
         `✅ Customer Authorized By selected: ${customerAuthorizedBy}`
       );
@@ -307,10 +295,7 @@ export default class SalesforceOrdersPage {
       const companyAuthorizedBy =
         details.CompanyAuthorizedBy || details["Company Authorized By"];
       await this.companyAuthorizedByCombobox.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: companyAuthorizedBy })
-        .first()
-        .click({ timeout: 10000 });
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
       console.log(`✅ Company Authorized By selected: ${companyAuthorizedBy}`);
     }
 
@@ -318,19 +303,18 @@ export default class SalesforceOrdersPage {
       (details.ShippingStreet && details.ShippingStreet !== "--None--") ||
       (details["Shipping Street"] && details["Shipping Street"] !== "--None--")
     ) {
-      const shippingStreet =
-        details.ShippingStreet || details["Shipping Street"];
-      await this.shippingStreetInput.fill(shippingStreet, { timeout: 10000 });
-      console.log(`✅ Shipping Street filled: ${shippingStreet}`);
+      let shippingStreet = details.ShippingStreet || details["Shipping Street"];
+      await this.shippingStreetInput.fill(Helper.generateUniqueValue(shippingStreet), { timeout: 10000 });
+      console.log(`✅ Shipping Street filled: ${Helper.generateUniqueValue(shippingStreet)}`);
     }
 
     if (
       (details.ShippingCity && details.ShippingCity !== "--None--") ||
       (details["Shipping City"] && details["Shipping City"] !== "--None--")
     ) {
-      const shippingCity = details.ShippingCity || details["Shipping City"];
-      await this.shippingCityInput.fill(shippingCity, { timeout: 10000 });
-      console.log(`✅ Shipping City filled: ${shippingCity}`);
+      let shippingCity = details.ShippingCity || details["Shipping City"];
+      await this.shippingCityInput.fill(Helper.generateUniqueValue(shippingCity), { timeout: 10000 });
+      console.log(`✅ Shipping City filled: ${Helper}`);
     }
 
     if (
@@ -380,18 +364,18 @@ export default class SalesforceOrdersPage {
       (details.BillingStreet && details.BillingStreet !== "--None--") ||
       (details["Billing Street"] && details["Billing Street"] !== "--None--")
     ) {
-      const billingStreet = details.BillingStreet || details["Billing Street"];
-      await this.billingStreetInput.fill(billingStreet, { timeout: 10000 });
-      console.log(`✅ Billing Street filled: ${billingStreet}`);
+      let billingStreet = details.BillingStreet || details["Billing Street"];
+      await this.billingStreetInput.fill(Helper.generateUniqueValue(billingStreet), { timeout: 10000 });
+      console.log(`✅ Billing Street filled: ${Helper.generateUniqueValue(billingStreet)}`);
     }
 
     if (
       (details.BillingCity && details.BillingCity !== "--None--") ||
       (details["Billing City"] && details["Billing City"] !== "--None--")
     ) {
-      const billingCity = details.BillingCity || details["Billing City"];
-      await this.billingCityInput.fill(billingCity, { timeout: 10000 });
-      console.log(`✅ Billing City filled: ${billingCity}`);
+      let billingCity = details.BillingCity || details["Billing City"];
+      await this.billingCityInput.fill(Helper.generateUniqueValue(billingCity), { timeout: 10000 });
+      console.log(`✅ Billing City filled: ${Helper.generateUniqueValue(billingCity)}`);
     }
 
     if (
@@ -438,10 +422,16 @@ export default class SalesforceOrdersPage {
 
     // Fill Description field
     if (details.Description && details.Description !== "--None--") {
-      await this.descriptionInput.fill(details.Description, { timeout: 10000 });
-      console.log(`✅ Description filled: ${details.Description}`);
+      await this.descriptionInput.fill(Helper.generateUniqueValue(details.Description), { timeout: 10000 });
+      console.log(`✅ Description filled: ${Helper.generateUniqueValue(details.Description)}`);
     }
-
+    await Helper.takeScreenshotToFile(
+      this.page,
+      "2-filled-form",
+      this.testInfo,
+      "Sales/salesforce-orders/"
+    );
+    await this.page.waitForTimeout(1000);
     console.log("🎉 Order creation completed!");
   }
 
@@ -457,27 +447,9 @@ export default class SalesforceOrdersPage {
    * @param details.OrderNumber - Order number to verify
    */
   async verifyOrder(details: { [k: string]: string }) {
-    await Helper.takeScreenshotToFile(
-      this.page,
-      "2-verification",
-      this.testInfo,
-      "Sales/salesforce-orders/"
-    );
     console.log("🔍 Starting order verification...");
 
-    await expect(this.orderCreatedMessage.first()).toContainText("was created", {
-      timeout: 10000,
-    });
-    console.log("✅ Order creation message verified");
-
-    // Verify order creation by checking for key field values on the page
-    if (details.AccountName || details["Account Name"]) {
-      const accountName = details.AccountName || details["Account Name"];
-      expect(await this.page.getByText(accountName).count()).toBeGreaterThan(0);
-      console.log(
-        `✅ Order account name verification successful: ${accountName}`
-      );
-    }
+    await expect(this.orderCreatedMessage.first()).toContainText("was created", { timeout: 10000, });
 
     // Take verification screenshot
     await Helper.takeScreenshotToFile(

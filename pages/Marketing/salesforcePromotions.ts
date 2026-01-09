@@ -23,7 +23,6 @@ export default class SalesforcePromotionsPage {
     private testInfo?: TestInfo;
 
     // Primary UI Controls
-    readonly newButton: Locator;
     readonly dialog: Locator;
 
     // Basic Information Fields
@@ -59,6 +58,7 @@ export default class SalesforcePromotionsPage {
 
     // Action Buttons
     readonly saveButton: Locator;
+    readonly allOptionsLocator: Locator;
 
     /**
      * Constructor - Initializes the SalesforcePromotions page object with all necessary locators
@@ -73,9 +73,6 @@ export default class SalesforcePromotionsPage {
         console.log("🚀 Initializing SalesforcePromotions page object");
         this.page = page;
         this.testInfo = testInfo;
-
-        // Primary controls - Main UI interaction elements
-        this.newButton = page.getByRole("button", { name: /New|Create/i }).first();
 
         // Dialog elements - Handle promotion creation
         this.dialog = this.page.getByRole("dialog").first();
@@ -181,6 +178,8 @@ export default class SalesforcePromotionsPage {
             name: /^Save$/i,
         });
 
+        this.allOptionsLocator = page.getByRole("option");
+
         console.log(
             "✅ SalesforcePromotions page object initialized successfully with all locators"
         );
@@ -203,7 +202,6 @@ export default class SalesforcePromotionsPage {
         console.log("📋 Promotion details:", JSON.stringify(details, null, 2));
 
         // Wait for the new button to be visible and take start screenshot
-        await expect(this.newButton).toBeVisible({ timeout: 10000 });
         await Helper.takeScreenshotToFile(
             this.page,
             "1-start-promotion",
@@ -212,7 +210,6 @@ export default class SalesforcePromotionsPage {
         );
 
         // Open the new promotion creation dialog
-        await this.newButton.click({ timeout: 10000 });
         console.log("✅ Promotion creation dialog opened");
 
         await this.dialog.waitFor({ state: "visible", timeout: 10000 });
@@ -225,7 +222,7 @@ export default class SalesforcePromotionsPage {
             try {
                 await this.nameTextbox.fill("", { timeout: 5000 });
                 await this.page.waitForTimeout(200);
-                await this.nameTextbox.fill(details.Name, { timeout: 10000 });
+                await this.nameTextbox.fill(Helper.generateUniqueValue(details.Name), { timeout: 10000 });
                 console.log("✅ Name filled:", details.Name);
             } catch (e) {
                 console.log("❌ Failed to fill Name:", e);
@@ -238,7 +235,7 @@ export default class SalesforcePromotionsPage {
             try {
                 await this.descriptionTextbox.fill("", { timeout: 5000 });
                 await this.page.waitForTimeout(200);
-                await this.descriptionTextbox.fill(details.Description, { timeout: 10000 });
+                await this.descriptionTextbox.fill(Helper.generateUniqueValue(details.Description), { timeout: 10000 });
                 console.log("✅ Description filled:", details.Description);
             } catch (e) {
                 console.log("❌ Failed to fill Description:", e);
@@ -251,7 +248,7 @@ export default class SalesforcePromotionsPage {
             try {
                 await this.objectiveTextbox.fill("", { timeout: 5000 });
                 await this.page.waitForTimeout(200);
-                await this.objectiveTextbox.fill(details.Objective, { timeout: 10000 });
+                await this.objectiveTextbox.fill(Helper.generateUniqueValue(details.Objective), { timeout: 10000 });
                 console.log("✅ Objective filled:", details.Objective);
             } catch (e) {
                 console.log("❌ Failed to fill Objective:", e);
@@ -263,23 +260,7 @@ export default class SalesforcePromotionsPage {
             console.log("🔽 Selecting Campaign from dropdown...");
             await this.campaignCombobox.click({ timeout: 10000 });
             await this.page.waitForTimeout(2000);
-
-            try {
-                const optionRole = this.page.locator(`[role="option"]:has-text("${details.Campaign}")`).first();
-                await optionRole.click({ timeout: 10000, force: true });
-                console.log("✅ Campaign selected:", details.Campaign);
-            } catch (e) {
-                try {
-                    await this.campaignCombobox.fill(details.Campaign, { timeout: 10000 });
-                    await this.page.waitForTimeout(500);
-                    await this.page.keyboard.press("ArrowDown");
-                    await this.page.waitForTimeout(300);
-                    await this.page.keyboard.press("Enter");
-                    console.log("✅ Campaign selected via type and keyboard");
-                } catch (e2) {
-                    console.log("❌ Failed to select Campaign:", e2);
-                }
-            }
+            await this.allOptionsLocator.first().click({ timeout: 10000 });
         }
 
         // Active (Checkbox)
@@ -333,14 +314,7 @@ export default class SalesforcePromotionsPage {
             console.log("🔽 Selecting Qualifier Criteria from dropdown...");
             await this.qualifierCriteriaDropdown.click({ timeout: 10000 });
             await this.page.waitForTimeout(1000);
-
-            try {
-                const optionRole = this.page.locator(`[role="option"]:has-text("${qualifierCriteria}")`).first();
-                await optionRole.click({ timeout: 5000, force: true });
-                console.log("✅ Qualifier Criteria selected:", qualifierCriteria);
-            } catch (e) {
-                console.log("❌ Failed to select Qualifier Criteria:", e);
-            }
+            await this.allOptionsLocator.filter({ hasText: qualifierCriteria }).first().click({ timeout: 10000 });
         }
 
         // Priority Number (Textbox)
@@ -363,14 +337,7 @@ export default class SalesforcePromotionsPage {
             console.log("🔽 Selecting Target Criteria from dropdown...");
             await this.targetCriteriaDropdown.click({ timeout: 10000 });
             await this.page.waitForTimeout(1000);
-
-            try {
-                const optionRole = this.page.locator(`[role="option"]:has-text("${targetCriteria}")`).first();
-                await optionRole.click({ timeout: 5000, force: true });
-                console.log("✅ Target Criteria selected:", targetCriteria);
-            } catch (e) {
-                console.log("❌ Failed to select Target Criteria:", e);
-            }
+            await this.allOptionsLocator.filter({ hasText: targetCriteria }).first().click({ timeout: 10000 });
         }
 
         // Exclude qualifying items from discounts (Checkbox)
@@ -396,14 +363,7 @@ export default class SalesforcePromotionsPage {
             console.log("🔽 Selecting Discount Order from dropdown...");
             await this.discountOrderDropdown.click({ timeout: 10000 });
             await this.page.waitForTimeout(1000);
-
-            try {
-                const optionRole = this.page.locator(`[role="option"]:has-text("${discountOrder}")`).first();
-                await optionRole.click({ timeout: 5000, force: true });
-                console.log("✅ Discount Order selected:", discountOrder);
-            } catch (e) {
-                console.log("❌ Failed to select Discount Order:", e);
-            }
+            await this.allOptionsLocator.filter({ hasText: discountOrder }).first().click({ timeout: 10000 });
         }
 
         // Discount Restriction (Dropdown)
@@ -412,14 +372,7 @@ export default class SalesforcePromotionsPage {
             console.log("� Selecting Discount Restriction from dropdown...");
             await this.discountRestrictionDropdown.click({ timeout: 10000 });
             await this.page.waitForTimeout(1000);
-
-            try {
-                const optionRole = this.page.locator(`[role="option"]:has-text("${discountRestriction}")`).first();
-                await optionRole.click({ timeout: 5000, force: true });
-                console.log("✅ Discount Restriction selected:", discountRestriction);
-            } catch (e) {
-                console.log("❌ Failed to select Discount Restriction:", e);
-            }
+            await this.allOptionsLocator.filter({ hasText: discountRestriction }).first().click({ timeout: 10000 });
         }
 
         // Exclusivity Type (Dropdown)
@@ -428,14 +381,7 @@ export default class SalesforcePromotionsPage {
             console.log("🔽 Selecting Exclusivity Type from dropdown...");
             await this.exclusivityTypeDropdown.click({ timeout: 10000 });
             await this.page.waitForTimeout(1000);
-
-            try {
-                const optionRole = this.page.locator(`[role="option"]:has-text("${exclusivityType}")`).first();
-                await optionRole.click({ timeout: 5000, force: true });
-                console.log("✅ Exclusivity Type selected:", exclusivityType);
-            } catch (e) {
-                console.log("❌ Failed to select Exclusivity Type:", e);
-            }
+            await this.allOptionsLocator.filter({ hasText: exclusivityType }).first().click({ timeout: 10000 });
         }
 
         // Qualifying Criteria Not Required Per Application (Checkbox)

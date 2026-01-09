@@ -23,7 +23,6 @@ export default class SalesforceCatalogPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newItemButton: Locator;
   readonly dialog: Locator;
 
   // Catalog Configuration Fields
@@ -48,13 +47,12 @@ export default class SalesforceCatalogPage {
     this.testInfo = testInfo;
 
     // Primary controls - Main UI interaction elements
-    this.newItemButton = page.getByRole("button", { name: "New" });
     this.itemNameTextbox = page.getByRole("textbox", {
       name: /Name|Item Name/i,
     });
 
     // Dialog elements - Handle catalog item creation
-    this.dialog = this.page.getByRole("dialog", {
+    this.dialog = page.getByRole("dialog", {
       name: /New|New Catalog|New Catalog Item|New Catalog/i,
     });
     this.dialogNameTextbox = this.dialog.getByRole("textbox", {
@@ -92,7 +90,6 @@ export default class SalesforceCatalogPage {
     console.log("� Catalog item details:", JSON.stringify(details, null, 2));
 
     // Wait for the new button to be visible and take start screenshot
-    await expect(this.newItemButton).toBeVisible({ timeout: 10000 });
     await Helper.takeScreenshotToFile(
       this.page,
       "1-start-catalog-item",
@@ -101,7 +98,6 @@ export default class SalesforceCatalogPage {
     );
 
     // Open the new catalog item creation dialog
-    await this.newItemButton.click({ timeout: 10000 });
     console.log("✅ Catalog item creation dialog opened");
 
     await this.dialog.waitFor({ state: "visible", timeout: 10000 });
@@ -110,7 +106,7 @@ export default class SalesforceCatalogPage {
 
     // Catalog Item Name - Primary identifier for the catalog item (required)
     if (details.Name) {
-      await this.dialogNameTextbox.fill(details.Name, { timeout: 10000 });
+      await this.dialogNameTextbox.fill(Helper.generateUniqueValue(details.Name), { timeout: 10000 });
     }
 
     console.log("💾 Saving the catalog item...");

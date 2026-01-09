@@ -1,4 +1,4 @@
-import { Page, TestInfo } from '@playwright/test';
+import { Locator, Page, TestInfo } from '@playwright/test';
 import { Helper } from '../../utils/helper';
 
 /**
@@ -23,66 +23,86 @@ export default class SalesforcePaymentGatewayLogsPage {
     private testInfo?: TestInfo;
 
     // Dialog locator
-    readonly dialog = () => this.page.getByRole('dialog').first();
+    readonly dialog: Locator;
 
     // Locators - Payment Information Section
-    // Note: Referenced Entity uses a two-step combobox selection:
-    // 1. First, select object type from "Choose an object" combobox (usually "Payment")
-    // 2. Then, select specific payment authorization from "Referenced Entity" combobox
-    readonly interactionTypeCombobox = () =>
-        this.dialog().getByRole('combobox', { name: /^Interaction Type$/i });
-    readonly chooseObjectCombobox = () =>
-        this.dialog().getByRole('combobox', { name: /^Choose an object$/i });
-    readonly referencedEntityCombobox = () =>
-        this.dialog().getByRole('combobox', { name: /^Referenced Entity$/i });
-    readonly paymentGatewayCombobox = () =>
-        this.dialog().getByRole('combobox', { name: /^Payment Gateway$/i });
-    readonly statusCombobox = () =>
-        this.dialog().getByRole('combobox', { name: /^Status$/i });
+    readonly interactionTypeCombobox: Locator;
+    readonly chooseObjectCombobox: Locator;
+    readonly referencedEntityCombobox: Locator;
+    readonly paymentGatewayCombobox: Locator;
+    readonly statusCombobox: Locator;
 
     // Locators - Gateway Date & Time
-    readonly gatewayDateField = () =>
-        this.dialog().getByRole('group', { name: 'Gateway Date', exact: true }).getByLabel('Date', { exact: true });
-    readonly gatewayTimeField = () =>
-        this.dialog().getByRole('group', { name: 'Gateway Date', exact: true }).getByLabel('Time');
+    readonly gatewayDateField: Locator;
+    readonly gatewayTimeField: Locator;
 
     // Locators - Gateway Response Details
-    readonly gatewayReferenceNumberField = () =>
-        this.dialog().getByRole('textbox', { name: /^Gateway Reference Number$/i });
-    readonly gatewayResultCodeField = () =>
-        this.dialog().getByRole('textbox', { name: /^Gateway Result Code$/i });
-    readonly gatewayResultCodeDescriptionField = () =>
-        this.dialog().getByRole('textbox', { name: /^Gateway Result Code Description$/i });
-    readonly gatewayAuthCodeField = () =>
-        this.dialog().getByRole('textbox', { name: /^Gateway Auth Code$/i });
-    readonly gatewayAvsCodeField = () =>
-        this.dialog().getByRole('textbox', { name: /^Gateway Avs Code$/i });
-    readonly gatewayMessageField = () =>
-        this.dialog().getByRole('textbox', { name: /^Gateway Message$/i });
+    readonly gatewayReferenceNumberField: Locator;
+    readonly gatewayResultCodeField: Locator;
+    readonly gatewayResultCodeDescriptionField: Locator;
+    readonly gatewayAuthCodeField: Locator;
+    readonly gatewayAvsCodeField: Locator;
+    readonly gatewayMessageField: Locator;
 
     // Locators - Additional Information Section
-    readonly salesforceResultCodeCombobox = () =>
-        this.dialog().getByRole('combobox', { name: /^Salesforce Result Code$/i });
-    readonly salesforceReferenceNumberField = () =>
-        this.dialog().getByRole('textbox', { name: /^Salesforce Reference Number$/i });
+    readonly salesforceResultCodeCombobox: Locator;
+    readonly salesforceReferenceNumberField: Locator;
 
     // Locators - Request/Response Details Section
-    readonly requestField = () =>
-        this.dialog().getByRole('textbox', { name: /^Request$/i });
-    readonly responseField = () =>
-        this.dialog().getByRole('textbox', { name: /^Response$/i });
+    readonly requestField: Locator;
+    readonly responseField: Locator;
 
     // Button Locators
-    readonly saveButton = () => this.dialog().getByRole('button', { name: /^Save$/i });
-    readonly saveNewButton = () =>
-        this.dialog().getByRole('button', { name: /^Save & New$/i });
-    readonly cancelButton = () =>
-        this.dialog().getByRole('button', { name: /^Cancel$/i });
+    readonly saveButton: Locator;
+    readonly saveNewButton: Locator;
+    readonly cancelButton: Locator;
 
+    readonly allOptionsLocator: Locator;
+    
     constructor(page: Page, testInfo?: TestInfo) {
         this.page = page;
         this.testInfo = testInfo;
         console.log('🚀 Initializing SalesforcePaymentGatewayLogs page object');
+        
+        // Dialog
+        this.dialog = page.getByRole('dialog').first();
+
+        // Payment Information Section
+        this.interactionTypeCombobox = this.dialog.getByRole('combobox', { name: /^Interaction Type$/i });
+        this.chooseObjectCombobox = this.dialog.getByRole('combobox', { name: /^Choose an object$/i });
+        this.referencedEntityCombobox = this.dialog.getByRole('combobox', { name: /^Referenced Entity$/i });
+        this.paymentGatewayCombobox = this.dialog.getByRole('combobox', { name: /^Payment Gateway$/i });
+        this.statusCombobox = this.dialog.getByRole('combobox', { name: /^Status$/i });
+
+        // Gateway Date & Time
+        this.gatewayDateField = this.dialog.getByRole('group', { name: 'Gateway Date', exact: true }).getByLabel('Date', { exact: true });
+        this.gatewayTimeField = this.dialog.getByRole('group', { name: 'Gateway Date', exact: true }).getByLabel('Time');
+
+        // Gateway Response Details
+        this.gatewayReferenceNumberField = this.dialog.getByRole('textbox', { name: /^Gateway Reference Number$/i });
+        this.gatewayResultCodeField = this.dialog.getByRole('textbox', { name: /^Gateway Result Code$/i });
+        this.gatewayResultCodeDescriptionField = this.dialog.getByRole('textbox', { name: /^Gateway Result Code Description$/i });
+        this.gatewayAuthCodeField = this.dialog.getByRole('textbox', { name: /^Gateway Auth Code$/i });
+        this.gatewayAvsCodeField = this.dialog.getByRole('textbox', { name: /^Gateway Avs Code$/i });
+        this.gatewayMessageField = this.dialog.getByRole('textbox', { name: /^Gateway Message$/i });
+
+        // Additional Information Section
+        this.salesforceResultCodeCombobox = this.dialog.getByRole('combobox', { name: /^Salesforce Result Code$/i });
+        this.salesforceReferenceNumberField = this.dialog.getByRole('textbox', { name: /^Salesforce Reference Number$/i });
+
+        // Request/Response Details Section
+        this.requestField = this.dialog.getByRole('textbox', { name: /^Request$/i });
+        this.responseField = this.dialog.getByRole('textbox', { name: /^Response$/i });
+
+        // Button Locators
+        this.saveButton = this.dialog.getByRole('button', { name: /^Save$/i });
+        this.saveNewButton = this.dialog.getByRole('button', { name: /^Save & New$/i });
+        this.cancelButton = this.dialog.getByRole('button', { name: /^Cancel$/i });
+
+        // Options
+        this.allOptionsLocator = page.getByRole("option");
+        
+        console.log('✅ SalesforcePaymentGatewayLogs page object initialized successfully');
     }
 
     /**
@@ -105,141 +125,47 @@ export default class SalesforcePaymentGatewayLogsPage {
             const interactionType = details['Interaction Type'] || details.InteractionType;
             if (interactionType) {
                 console.log('🔽 Selecting Interaction Type from combobox...');
-                await this.interactionTypeCombobox().click({ timeout: 10000 });
+                await this.interactionTypeCombobox.click({ timeout: 10000 });
                 await this.page.waitForTimeout(1000);
-
-                try {
-                    const optionRole = this.page.locator(`[role="option"]:has-text("${interactionType}")`).first();
-                    await optionRole.click({ timeout: 5000, force: true });
-                    console.log('✅ Interaction Type selected:', interactionType);
-                } catch (e) {
-                    try {
-                        await this.interactionTypeCombobox().fill(interactionType, { timeout: 5000 });
-                        await this.page.waitForTimeout(500);
-                        await this.page.keyboard.press('ArrowDown');
-                        await this.page.waitForTimeout(300);
-                        await this.page.keyboard.press('Enter');
-                        console.log('✅ Interaction Type selected via type and keyboard');
-                    } catch (e2) {
-                        console.log('❌ Failed to select Interaction Type:', e2);
-                    }
-                }
+                await this.allOptionsLocator.first().click({ timeout: 10000 });
             }
 
             // Referenced Entity / Payment (Two-step combobox selection)
             const objectType = details['Object Type'] || details.ObjectType;
             const referencedEntity = details['Referenced Entity'] || details.ReferencedEntity;
-
             if (objectType && referencedEntity) {
                 console.log('🔽 Selecting Referenced Entity (Two-step process)...');
-
                 try {
                     // Step 1: Select object type (e.g., "Payment") from "Choose an object" combobox
                     console.log(`   Step 1: Selecting object type "${objectType}" from "Choose an object" combobox...`);
-                    await this.chooseObjectCombobox().click({ timeout: 10000 });
+                    await this.chooseObjectCombobox.click({ timeout: 10000 });
                     await this.page.waitForTimeout(1000);
-
-                    try {
-                        const objectOption = this.page.locator(`[role="option"]:has-text("${objectType}")`).first();
-                        await objectOption.click({ timeout: 5000, force: true });
-                        console.log(`   ✅ Object type "${objectType}" selected`);
-                    } catch (e) {
-                        try {
-                            await this.chooseObjectCombobox().fill(objectType, { timeout: 5000 });
-                            await this.page.waitForTimeout(500);
-                            await this.page.keyboard.press('ArrowDown');
-                            await this.page.waitForTimeout(300);
-                            await this.page.keyboard.press('Enter');
-                            console.log(`   ✅ Object type "${objectType}" selected via type and keyboard`);
-                        } catch (e2) {
-                            console.log(`   ❌ Failed to select ${objectType} object:`, e2);
-                            throw e2;
-                        }
-                    }
-
-                    // Wait for the Referenced Entity combobox to appear
+                    await this.allOptionsLocator.filter({ hasText: objectType }).first().click({ timeout: 10000 });
+                    console.log('✅ Object type selected:', objectType);
+                    await this.referencedEntityCombobox.click({ timeout: 10000 });
                     await this.page.waitForTimeout(1000);
-
-                    // Step 2: Select the specific referenced entity (e.g., PA-000000002)
-                    console.log(`   Step 2: Selecting Referenced Entity: ${referencedEntity}...`);
-                    await this.referencedEntityCombobox().click({ timeout: 10000 });
-                    await this.page.waitForTimeout(1000);
-
-                    try {
-                        const entityOption = this.page.locator(`[role="option"]:has-text("${referencedEntity}")`).first();
-                        await entityOption.click({ timeout: 5000, force: true });
-                        console.log('✅ Referenced Entity selected:', referencedEntity);
-                    } catch (e) {
-                        try {
-                            await this.referencedEntityCombobox().fill(referencedEntity, { timeout: 5000 });
-                            await this.page.waitForTimeout(500);
-                            await this.page.keyboard.press('ArrowDown');
-                            await this.page.waitForTimeout(300);
-                            await this.page.keyboard.press('Enter');
-                            console.log('✅ Referenced Entity selected via type and keyboard');
-                        } catch (e2) {
-                            console.log('❌ Failed to select Referenced Entity:', e2);
-                            throw e2;
-                        }
-                    }
+                    await this.allOptionsLocator.first().click({ timeout: 10000 });
                 } catch (error) {
                     console.log('❌ Failed in Referenced Entity two-step selection:', error);
-                    // Don't throw - continue with other fields
                 }
-            } else if (objectType || referencedEntity) {
-                console.log('⚠️  Warning: Both "Object Type" and "Referenced Entity" are required for two-step selection');
-                console.log(`   Object Type provided: ${objectType}`);
-                console.log(`   Referenced Entity provided: ${referencedEntity}`);
             }
 
             // Payment Gateway (Combobox)
             const paymentGateway = details['Payment Gateway'] || details.PaymentGateway;
             if (paymentGateway) {
                 console.log('🔽 Selecting Payment Gateway from combobox...');
-                await this.paymentGatewayCombobox().click({ timeout: 10000 });
+                await this.paymentGatewayCombobox.click({ timeout: 10000 });
                 await this.page.waitForTimeout(1000);
-
-                try {
-                    const optionRole = this.page.locator(`[role="option"]:has-text("${paymentGateway}")`).first();
-                    await optionRole.click({ timeout: 5000, force: true });
-                    console.log('✅ Payment Gateway selected:', paymentGateway);
-                } catch (e) {
-                    try {
-                        await this.paymentGatewayCombobox().fill(paymentGateway, { timeout: 5000 });
-                        await this.page.waitForTimeout(500);
-                        await this.page.keyboard.press('ArrowDown');
-                        await this.page.waitForTimeout(300);
-                        await this.page.keyboard.press('Enter');
-                        console.log('✅ Payment Gateway selected via type and keyboard');
-                    } catch (e2) {
-                        console.log('❌ Failed to select Payment Gateway:', e2);
-                    }
-                }
+                await this.allOptionsLocator.first().click({ timeout: 10000 });
             }
 
             // Status (Combobox)
             const status = details.Status || details.status;
             if (status) {
                 console.log('🔽 Selecting Status from combobox...');
-                await this.statusCombobox().click({ timeout: 10000 });
+                await this.statusCombobox.click({ timeout: 10000 });
                 await this.page.waitForTimeout(1000);
-
-                try {
-                    const optionRole = this.page.locator(`[role="option"]:has-text("${status}")`).first();
-                    await optionRole.click({ timeout: 5000, force: true });
-                    console.log('✅ Status selected:', status);
-                } catch (e) {
-                    try {
-                        await this.statusCombobox().fill(status, { timeout: 5000 });
-                        await this.page.waitForTimeout(500);
-                        await this.page.keyboard.press('ArrowDown');
-                        await this.page.waitForTimeout(300);
-                        await this.page.keyboard.press('Enter');
-                        console.log('✅ Status selected via type and keyboard');
-                    } catch (e2) {
-                        console.log('❌ Failed to select Status:', e2);
-                    }
-                }
+                await this.allOptionsLocator.filter({ hasText: status }).first().click({ timeout: 10000 });
             }
 
             // Gateway Date (Date field)
@@ -247,9 +173,9 @@ export default class SalesforcePaymentGatewayLogsPage {
             if (gatewayDate) {
                 console.log('📝 Filling Gateway Date...');
                 try {
-                    await this.gatewayDateField().clear();
+                    await this.gatewayDateField.clear();
                     await this.page.waitForTimeout(200);
-                    await this.gatewayDateField().fill(gatewayDate, { timeout: 10000 });
+                    await this.gatewayDateField.fill(gatewayDate, { timeout: 10000 });
                     console.log('✅ Gateway Date filled:', gatewayDate);
                 } catch (e) {
                     console.log('❌ Failed to fill Gateway Date:', e);
@@ -261,9 +187,9 @@ export default class SalesforcePaymentGatewayLogsPage {
             if (gatewayTime) {
                 console.log('📝 Filling Gateway Time...');
                 try {
-                    await this.gatewayTimeField().clear();
+                    await this.gatewayTimeField.clear();
                     await this.page.waitForTimeout(200);
-                    await this.gatewayTimeField().fill(gatewayTime, { timeout: 10000 });
+                    await this.gatewayTimeField.fill(gatewayTime, { timeout: 10000 });
                     console.log('✅ Gateway Time filled:', gatewayTime);
                 } catch (e) {
                     console.log('❌ Failed to fill Gateway Time:', e);
@@ -275,7 +201,7 @@ export default class SalesforcePaymentGatewayLogsPage {
             if (gatewayRefNum) {
                 console.log('📝 Filling Gateway Reference Number...');
                 try {
-                    await this.gatewayReferenceNumberField().fill(gatewayRefNum, { timeout: 10000 });
+                    await this.gatewayReferenceNumberField.fill(gatewayRefNum, { timeout: 10000 });
                     console.log('✅ Gateway Reference Number filled:', gatewayRefNum);
                 } catch (e) {
                     console.log('❌ Failed to fill Gateway Reference Number:', e);
@@ -287,7 +213,7 @@ export default class SalesforcePaymentGatewayLogsPage {
             if (gatewayResultCode) {
                 console.log('📝 Filling Gateway Result Code...');
                 try {
-                    await this.gatewayResultCodeField().fill(gatewayResultCode, { timeout: 10000 });
+                    await this.gatewayResultCodeField.fill(gatewayResultCode, { timeout: 10000 });
                     console.log('✅ Gateway Result Code filled:', gatewayResultCode);
                 } catch (e) {
                     console.log('❌ Failed to fill Gateway Result Code:', e);
@@ -299,7 +225,7 @@ export default class SalesforcePaymentGatewayLogsPage {
             if (gatewayResultCodeDesc) {
                 console.log('📝 Filling Gateway Result Code Description...');
                 try {
-                    await this.gatewayResultCodeDescriptionField().fill(gatewayResultCodeDesc, { timeout: 10000 });
+                    await this.gatewayResultCodeDescriptionField.fill(gatewayResultCodeDesc, { timeout: 10000 });
                     console.log('✅ Gateway Result Code Description filled:', gatewayResultCodeDesc);
                 } catch (e) {
                     console.log('❌ Failed to fill Gateway Result Code Description:', e);
@@ -311,7 +237,7 @@ export default class SalesforcePaymentGatewayLogsPage {
             if (gatewayAuthCode) {
                 console.log('📝 Filling Gateway Auth Code...');
                 try {
-                    await this.gatewayAuthCodeField().fill(gatewayAuthCode, { timeout: 10000 });
+                    await this.gatewayAuthCodeField.fill(gatewayAuthCode, { timeout: 10000 });
                     console.log('✅ Gateway Auth Code filled:', gatewayAuthCode);
                 } catch (e) {
                     console.log('❌ Failed to fill Gateway Auth Code:', e);
@@ -323,7 +249,7 @@ export default class SalesforcePaymentGatewayLogsPage {
             if (gatewayAvsCode) {
                 console.log('📝 Filling Gateway Avs Code...');
                 try {
-                    await this.gatewayAvsCodeField().fill(gatewayAvsCode, { timeout: 10000 });
+                    await this.gatewayAvsCodeField.fill(gatewayAvsCode, { timeout: 10000 });
                     console.log('✅ Gateway Avs Code filled:', gatewayAvsCode);
                 } catch (e) {
                     console.log('❌ Failed to fill Gateway Avs Code:', e);
@@ -335,7 +261,7 @@ export default class SalesforcePaymentGatewayLogsPage {
             if (gatewayMsg) {
                 console.log('📝 Filling Gateway Message...');
                 try {
-                    await this.gatewayMessageField().fill(gatewayMsg, { timeout: 10000 });
+                    await this.gatewayMessageField.fill(gatewayMsg, { timeout: 10000 });
                     console.log('✅ Gateway Message filled:', gatewayMsg);
                 } catch (e) {
                     console.log('❌ Failed to fill Gateway Message:', e);
@@ -347,24 +273,9 @@ export default class SalesforcePaymentGatewayLogsPage {
             if (sfResultCode) {
                 console.log('🔽 Selecting Salesforce Result Code from combobox...');
                 try {
-                    await this.salesforceResultCodeCombobox().click({ timeout: 10000 });
+                    await this.salesforceResultCodeCombobox.click({ timeout: 10000 });
                     await this.page.waitForTimeout(1000);
-
-                    try {
-                        const optionRole = this.page.locator(`[role="option"]:has-text("${sfResultCode}")`).first();
-                        await optionRole.click({ timeout: 5000, force: true });
-                        console.log('✅ Salesforce Result Code selected:', sfResultCode);
-                    } catch (e) {
-                        // Try keyboard navigation without fill
-                        try {
-                            await this.page.keyboard.press('ArrowDown');
-                            await this.page.waitForTimeout(300);
-                            await this.page.keyboard.press('Enter');
-                            console.log('✅ Salesforce Result Code selected via keyboard');
-                        } catch (e2) {
-                            console.log('❌ Failed to select Salesforce Result Code:', e2);
-                        }
-                    }
+                    await this.allOptionsLocator.filter({ hasText: sfResultCode }).first().click({ timeout: 10000 });
                 } catch (error) {
                     console.log('❌ Error selecting Salesforce Result Code:', error);
                 }
@@ -375,7 +286,7 @@ export default class SalesforcePaymentGatewayLogsPage {
             if (sfRefNum) {
                 console.log('📝 Filling Salesforce Reference Number...');
                 try {
-                    await this.salesforceReferenceNumberField().fill(sfRefNum, { timeout: 10000 });
+                    await this.salesforceReferenceNumberField.fill(sfRefNum, { timeout: 10000 });
                     console.log('✅ Salesforce Reference Number filled:', sfRefNum);
                 } catch (e) {
                     console.log('❌ Failed to fill Salesforce Reference Number:', e);
@@ -386,7 +297,7 @@ export default class SalesforcePaymentGatewayLogsPage {
             if (details.Request) {
                 console.log('📝 Filling Request...');
                 try {
-                    await this.requestField().fill(details.Request, { timeout: 10000 });
+                    await this.requestField.fill(details.Request, { timeout: 10000 });
                     console.log('✅ Request filled:', details.Request.substring(0, 50) + '...');
                 } catch (e) {
                     console.log('❌ Failed to fill Request:', e);
@@ -397,7 +308,7 @@ export default class SalesforcePaymentGatewayLogsPage {
             if (details.Response) {
                 console.log('📝 Filling Response...');
                 try {
-                    await this.responseField().fill(details.Response, { timeout: 10000 });
+                    await this.responseField.fill(details.Response, { timeout: 10000 });
                     console.log('✅ Response filled:', details.Response.substring(0, 50) + '...');
                 } catch (e) {
                     console.log('❌ Failed to fill Response:', e);
@@ -471,7 +382,7 @@ export default class SalesforcePaymentGatewayLogsPage {
     async clickSave() {
         console.log('💾 Clicking Save button...');
         try {
-            await this.saveButton().click({ timeout: 10000 });
+            await this.saveButton.click({ timeout: 10000 });
             console.log('⏳ Waiting for save to complete...');
 
             await Helper.takeScreenshotToFile(
@@ -490,13 +401,13 @@ export default class SalesforcePaymentGatewayLogsPage {
 
     async clickSaveNew() {
         console.log('💾 Clicking Save & New button...');
-        await this.saveNewButton().click();
+        await this.saveNewButton.click({ timeout: 10000 });
         await this.page.waitForTimeout(2000);
     }
 
     async clickCancel() {
         console.log('❌ Clicking Cancel button...');
-        await this.cancelButton().click();
+        await this.cancelButton.click({ timeout: 10000 });
         await this.page.waitForTimeout(1000);
     }
 }

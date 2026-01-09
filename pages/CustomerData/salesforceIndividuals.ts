@@ -25,7 +25,6 @@ export default class SalesforceIndividualsPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newIndividualButton: Locator;
   readonly saveButton: Locator;
   readonly saveAndNewButton: Locator;
   readonly cancelButton: Locator;
@@ -52,6 +51,7 @@ export default class SalesforceIndividualsPage {
 
   // Navigation Elements
   readonly individualCreatedMessage: Locator;
+  readonly allOptionsLocator: Locator;
 
   /**
    * Constructor - Initializes the SalesforceIndividuals page object with all necessary locators
@@ -68,7 +68,6 @@ export default class SalesforceIndividualsPage {
     this.testInfo = testInfo;
 
     // Primary controls - Main UI interaction elements
-    this.newIndividualButton = page.getByRole("button", { name: "New" });
     this.saveButton = page.getByRole("button", { name: "Save", exact: true });
     this.saveAndNewButton = page.getByRole("button", { name: "Save & New" });
     this.cancelButton = page.getByRole("button", { name: "Cancel" });
@@ -117,6 +116,7 @@ export default class SalesforceIndividualsPage {
 
     // Success message locator
     this.individualCreatedMessage = page.locator(".toastMessage");
+    this.allOptionsLocator = page.getByRole("option");
 
     console.log(
       "✅ SalesforceIndividuals page object initialized successfully with all locators"
@@ -161,8 +161,6 @@ export default class SalesforceIndividualsPage {
     console.log("🔄 Starting individual creation process...");
     console.log("📝 Individual details:", JSON.stringify(details, null, 2));
 
-    await expect(this.newIndividualButton).toBeVisible({ timeout: 10000 });
-
     // Take start screenshot for verification
     await Helper.takeScreenshotToFile(
       this.page,
@@ -172,7 +170,6 @@ export default class SalesforceIndividualsPage {
     );
 
     // Click New Individual
-    await this.newIndividualButton.click({ timeout: 10000 });
     console.log("✅ Individual creation form opened");
 
     // Wait for form to be fully loaded
@@ -183,17 +180,15 @@ export default class SalesforceIndividualsPage {
     // Fill name fields
     if (details.Salutation) {
       await this.salutationCombobox.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: details.Salutation })
-        .click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: details.Salutation }).first().click({ timeout: 10000 });
     }
 
     if (details.FirstName) {
-      await this.firstNameInput.fill(details.FirstName, { timeout: 10000 });
+      await this.firstNameInput.fill(Helper.generateUniqueValue(details.FirstName), { timeout: 10000 });
     }
 
     if (details.LastName) {
-      await this.lastNameInput.fill(details.LastName, { timeout: 10000 });
+      await this.lastNameInput.fill(Helper.generateUniqueValue(details.LastName), { timeout: 10000 });
     }
 
     // Fill additional information fields
@@ -205,9 +200,7 @@ export default class SalesforceIndividualsPage {
       const individualAge =
         details.IndividualAge || details["Individual's Age"];
       await this.individualAgeCombobox.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: individualAge })
-        .click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: individualAge }).first().click({ timeout: 10000 });
     }
 
     // Handle privacy and data protection settings

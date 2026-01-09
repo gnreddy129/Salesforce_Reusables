@@ -25,7 +25,6 @@ export default class SalesforceConsumptionSchedulesPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newConsumptionScheduleButton: Locator;
   readonly saveButton: Locator;
   readonly saveAndNewButton: Locator;
   readonly cancelButton: Locator;
@@ -41,6 +40,7 @@ export default class SalesforceConsumptionSchedulesPage {
 
   // Navigation Elements
   readonly consumptionScheduleCreatedMessage: Locator;
+  readonly allOptionsLocator: Locator;
 
   /**
    * Constructor - Initializes the SalesforceConsumptionSchedules page object with all necessary locators
@@ -57,9 +57,6 @@ export default class SalesforceConsumptionSchedulesPage {
     this.testInfo = testInfo;
 
     // Primary controls - Main UI interaction elements
-    this.newConsumptionScheduleButton = page.getByRole("button", {
-      name: "New",
-    });
     this.saveButton = page.getByRole("button", { name: "Save", exact: true });
     this.saveAndNewButton = page.getByRole("button", { name: "Save & New" });
     this.cancelButton = page.getByRole("button", { name: "Cancel" });
@@ -97,6 +94,7 @@ export default class SalesforceConsumptionSchedulesPage {
 
     // Success message locator
     this.consumptionScheduleCreatedMessage = page.locator(".toastMessage");
+    this.allOptionsLocator = page.getByRole("option");
 
     console.log(
       "✅ SalesforceConsumptionSchedules page object initialized successfully with all locators"
@@ -123,10 +121,6 @@ export default class SalesforceConsumptionSchedulesPage {
       JSON.stringify(details, null, 2)
     );
 
-    await expect(this.newConsumptionScheduleButton).toBeVisible({
-      timeout: 10000,
-    });
-
     // Take start screenshot for verification
     await Helper.takeScreenshotToFile(
       this.page,
@@ -136,7 +130,6 @@ export default class SalesforceConsumptionSchedulesPage {
     );
 
     // Click New Consumption Schedule
-    await this.newConsumptionScheduleButton.click({ timeout: 10000 });
     console.log("✅ Consumption schedule creation form opened");
 
     // Wait for form to be fully loaded
@@ -149,37 +142,21 @@ export default class SalesforceConsumptionSchedulesPage {
 
     // Fill Consumption Schedule Name field (Required)
     if (
-      details.ConsumptionScheduleName &&
-      details.ConsumptionScheduleName !== "--None--"
+      details.ConsumptionScheduleName && details.ConsumptionScheduleName !== "--None--"
     ) {
-      await this.consumptionScheduleNameInput.fill(
-        details.ConsumptionScheduleName,
-        { timeout: 10000 }
-      );
-      console.log(
-        `✅ Consumption Schedule Name filled: ${details.ConsumptionScheduleName}`
-      );
+      await this.consumptionScheduleNameInput.fill(details.ConsumptionScheduleName, { timeout: 10000 });
+      console.log(`✅ Consumption Schedule Name filled: ${details.ConsumptionScheduleName}`);
     }
 
     // Handle alternative field name formats
-    if (
-      details["Consumption Schedule Name"] &&
-      details["Consumption Schedule Name"] !== "--None--"
-    ) {
-      await this.consumptionScheduleNameInput.fill(
-        details["Consumption Schedule Name"],
-        { timeout: 10000 }
-      );
-      console.log(
-        `✅ Consumption Schedule Name filled: ${details["Consumption Schedule Name"]}`
-      );
+    if (details["Consumption Schedule Name"] && details["Consumption Schedule Name"] !== "--None--") {
+      await this.consumptionScheduleNameInput.fill(details["Consumption Schedule Name"], { timeout: 10000 });
+      console.log(`✅ Consumption Schedule Name filled: ${details["Consumption Schedule Name"]}`);
     }
 
     // Fill Active checkbox
     if (details.Active && details.Active !== "--None--") {
-      const isActive =
-        details.Active.toLowerCase() === "true" ||
-        details.Active.toLowerCase() === "yes";
+      const isActive = details.Active.toLowerCase() === "true" || details.Active.toLowerCase() === "yes";
       const isCurrentlyChecked = await this.activeCheckbox.isChecked();
 
       if (isActive !== isCurrentlyChecked) {
@@ -190,28 +167,15 @@ export default class SalesforceConsumptionSchedulesPage {
 
     // Fill Description field
     if (details.Description && details.Description !== "--None--") {
-      await this.descriptionInput.fill(details.Description, { timeout: 10000 });
+      await this.descriptionInput.fill(Helper.generateUniqueValue(details.Description), { timeout: 10000 });
       console.log(`✅ Description filled: ${details.Description}`);
     }
 
     // Fill Rating Method field
-    if (details.RatingMethod && details.RatingMethod !== "--None--") {
+    if (details.RatingMethod && details.RatingMethod !== "--None--" || details["Rating Method"] && details["Rating Method"] !== "--None--") {
       await this.ratingMethodCombobox.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: details.RatingMethod })
-        .first()
-        .click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: details.RatingMethod }).first().click({ timeout: 10000 });
       console.log(`✅ Rating Method selected: ${details.RatingMethod}`);
-    }
-
-    // Handle alternative field name formats
-    if (details["Rating Method"] && details["Rating Method"] !== "--None--") {
-      await this.ratingMethodCombobox.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: details["Rating Method"] })
-        .first()
-        .click({ timeout: 10000 });
-      console.log(`✅ Rating Method selected: ${details["Rating Method"]}`);
     }
 
     // Fill Billing Term field
@@ -230,36 +194,15 @@ export default class SalesforceConsumptionSchedulesPage {
     // Fill Type field
     if (details.Type && details.Type !== "--None--") {
       await this.typeCombobox.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: details.Type })
-        .first()
-        .click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: details.Type }).first().click({ timeout: 10000 });
       console.log(`✅ Type selected: ${details.Type}`);
     }
 
     // Fill Billing Term Unit field
-    if (details.BillingTermUnit && details.BillingTermUnit !== "--None--") {
+    if (details.BillingTermUnit && details.BillingTermUnit !== "--None--" || details["Billing Term Unit"] && details["Billing Term Unit"] !== "--None--") {
       await this.billingTermUnitCombobox.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: details.BillingTermUnit })
-        .first()
-        .click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: details.BillingTermUnit }).first().click({ timeout: 10000 });
       console.log(`✅ Billing Term Unit selected: ${details.BillingTermUnit}`);
-    }
-
-    // Handle alternative field name formats
-    if (
-      details["Billing Term Unit"] &&
-      details["Billing Term Unit"] !== "--None--"
-    ) {
-      await this.billingTermUnitCombobox.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: details["Billing Term Unit"] })
-        .first()
-        .click({ timeout: 10000 });
-      console.log(
-        `✅ Billing Term Unit selected: ${details["Billing Term Unit"]}`
-      );
     }
 
     console.log("💾 Saving the consumption schedule...");

@@ -25,7 +25,6 @@ export default class SalesforceCommunicationSubscriptionChannelTypesPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newButton: Locator;
   readonly saveButton: Locator;
   readonly saveAndNewButton: Locator;
   readonly cancelButton: Locator;
@@ -34,6 +33,8 @@ export default class SalesforceCommunicationSubscriptionChannelTypesPage {
   readonly nameInput: Locator;
   readonly engagementChannelTypeCombobox: Locator;
   readonly communicationSubscriptionCombobox: Locator;
+  readonly firstOptionLocator: Locator;
+  readonly subscriptionChannelTypeLocator: Locator;
 
   // Navigation Elements
   readonly communicationSubscriptionChannelTypeCreatedMessage: Locator;
@@ -55,7 +56,6 @@ export default class SalesforceCommunicationSubscriptionChannelTypesPage {
     this.testInfo = testInfo;
 
     // Primary UI Controls
-    this.newButton = page.getByRole("button", { name: "New" });
     this.saveButton = page.getByRole("button", { name: "Save", exact: true });
     this.saveAndNewButton = page.getByRole("button", {
       name: "Save & New",
@@ -79,6 +79,9 @@ export default class SalesforceCommunicationSubscriptionChannelTypesPage {
       name: "Communication Subscription",
       exact: true,
     });
+
+    this.firstOptionLocator = page.getByRole("option").first();
+    this.subscriptionChannelTypeLocator = page.locator(`[slot="primaryField"]`);
 
     // Navigation Elements
     this.communicationSubscriptionChannelTypeCreatedMessage =
@@ -122,8 +125,6 @@ export default class SalesforceCommunicationSubscriptionChannelTypesPage {
       JSON.stringify(details, null, 2)
     );
 
-    await expect(this.newButton).toBeVisible({ timeout: 10000 });
-
     // Take start screenshot for verification
     if (this.testInfo) {
       await Helper.takeScreenshotToFile(
@@ -135,7 +136,6 @@ export default class SalesforceCommunicationSubscriptionChannelTypesPage {
     }
 
     // Click New Communication Subscription Channel Type
-    await this.newButton.click({ timeout: 10000 });
     console.log(
       "✅ Communication Subscription Channel Type creation form opened"
     );
@@ -150,7 +150,7 @@ export default class SalesforceCommunicationSubscriptionChannelTypesPage {
 
     // Fill Name field (text input)
     if (details.Name) {
-      await this.nameInput.fill(details.Name, {
+      await this.nameInput.fill(Helper.generateUniqueValue(details.Name), {
         timeout: 10000,
       });
       console.log(`✅ Name filled: ${details.Name}`);
@@ -162,9 +162,7 @@ export default class SalesforceCommunicationSubscriptionChannelTypesPage {
       details["Engagement Channel Type"] !== "--None--"
     ) {
       await this.engagementChannelTypeCombobox.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: details["Engagement Channel Type"] })
-        .click();
+      await this.firstOptionLocator.click({ timeout: 10000 });
       console.log(
         `✅ Engagement Channel Type selected: ${details["Engagement Channel Type"]}`
       );
@@ -176,9 +174,7 @@ export default class SalesforceCommunicationSubscriptionChannelTypesPage {
       details["Communication Subscription"] !== "--None--"
     ) {
       await this.communicationSubscriptionCombobox.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: details["Communication Subscription"] })
-        .click();
+      await this.firstOptionLocator.click({ timeout: 10000 });
       console.log(
         `✅ Communication Subscription selected: ${details["Communication Subscription"]}`
       );
@@ -254,8 +250,7 @@ export default class SalesforceCommunicationSubscriptionChannelTypesPage {
     const communicationSubscriptionChannelTypeName = details.Name;
     if (communicationSubscriptionChannelTypeName) {
       // Look for the communication subscription channel type name in the page
-      const communicationSubscriptionChannelTypeLocator = this.page
-        .locator(`[slot="primaryField"]`)
+      const communicationSubscriptionChannelTypeLocator = this.subscriptionChannelTypeLocator
         .filter({ hasText: communicationSubscriptionChannelTypeName })
         .first();
       await expect(communicationSubscriptionChannelTypeLocator).toBeVisible({

@@ -5,6 +5,7 @@ Feature: Salesforce Engagement Channel Types Management
   Scenario Outline: Create and Manage New Engagement Channel Type with Different Data
     Given Open a browser and login to the sales force site
     When Search for "Engagement Channel Types" in app launcher
+    Then Click on "New" button of "Engagement Channel Types"
     Then Add new engagement channel type with following details
       | Field              | Value                |
       | Name               | <Name>               |
@@ -17,4 +18,4 @@ Feature: Salesforce Engagement Channel Types Management
 
     Examples:
       | Name           | Contact Point Type | Active | Usage Type           |
-      | Test Channel 1 | Person              | true   | Salesforce Scheduler |
+      | Test Channel 1 | Phone              | true   | Salesforce Scheduler |

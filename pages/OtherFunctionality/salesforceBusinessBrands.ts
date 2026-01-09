@@ -23,7 +23,6 @@ export default class SalesforceBusinessBrandsPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newButton: Locator;
   readonly dialog: Locator;
 
   // Business Brand Configuration Fields
@@ -36,6 +35,8 @@ export default class SalesforceBusinessBrandsPage {
 
   // Action Buttons
   readonly dialogSaveButton: Locator;
+  
+  readonly allOptionsLocator: Locator;
 
   /**
    * Constructor - Initializes the SalesforceBusinessBrands page object with all necessary locators
@@ -52,7 +53,6 @@ export default class SalesforceBusinessBrandsPage {
     this.testInfo = testInfo;
 
     // Primary controls - Main UI interaction elements
-    this.newButton = page.getByRole("button", { name: "New" });
     this.nameTextbox = page.getByRole("textbox", { name: /Name/i });
 
     // Dialog elements - Handle business brand creation
@@ -75,6 +75,7 @@ export default class SalesforceBusinessBrandsPage {
     this.dialogSaveButton = this.dialog.getByRole("button", {
       name: /^Save$/i,
     });
+    this.allOptionsLocator = page.getByRole("option");
 
     console.log(
       "✅ SalesforceBusinessBrands page object initialized successfully with all locators"
@@ -108,7 +109,6 @@ export default class SalesforceBusinessBrandsPage {
     console.log("📋 Business brand details:", JSON.stringify(details, null, 2));
 
     // Wait for the new button to be visible and take start screenshot
-    await expect(this.newButton).toBeVisible({ timeout: 10000 });
     await Helper.takeScreenshotToFile(
       this.page,
       "1-start-business-brand",
@@ -117,7 +117,6 @@ export default class SalesforceBusinessBrandsPage {
     );
 
     // Open the new business brand creation dialog
-    await this.newButton.click({ timeout: 10000 });
     console.log("✅ Business brand creation dialog opened");
 
     await this.dialog.waitFor({ state: "visible", timeout: 10000 });
@@ -126,7 +125,7 @@ export default class SalesforceBusinessBrandsPage {
 
     // Business Brand Name - Primary identifier for the business brand (required)
     if (details.Name) {
-      await this.dialogNameTextbox.fill(details.Name, { timeout: 10000 });
+      await this.dialogNameTextbox.fill(Helper.generateUniqueValue(details.Name), { timeout: 10000 });
       console.log("✅ Name filled:", details.Name);
     }
 
@@ -142,29 +141,7 @@ export default class SalesforceBusinessBrandsPage {
       console.log("🔽 Selecting Parent from combobox...");
       await this.dialogParentCombobox.click({ timeout: 10000 });
       await this.page.waitForTimeout(1000);
-      
-      // Try multiple strategies to select the option
-      try {
-        // Strategy 1: Look for the option using role and name
-        const optionRole = this.page.locator(`[role="option"]:has-text("${details.Parent}")`).first();
-        await optionRole.click({ timeout: 5000, force: true });
-        console.log("✅ Parent selected using role-option:", details.Parent);
-      } catch (e) {
-        try {
-          console.log("⚠️ Role-option strategy failed, trying text selector with force...");
-          // Strategy 2: Click with force to bypass pointer events
-          const textOption = this.page.locator(`text=/\\b${details.Parent}\\b/`).first();
-          await textOption.click({ timeout: 5000, force: true });
-          console.log("✅ Parent selected with force:", details.Parent);
-        } catch (e2) {
-          console.log("⚠️ Text selector failed, trying keyboard navigation...");
-          // Strategy 3: Use keyboard to navigate and select
-          await this.page.keyboard.press("ArrowDown");
-          await this.page.waitForTimeout(300);
-          await this.page.keyboard.press("Enter");
-          console.log("✅ Parent selected via keyboard");
-        }
-      }
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
     }
 
     console.log("💾 Saving the business brand...");

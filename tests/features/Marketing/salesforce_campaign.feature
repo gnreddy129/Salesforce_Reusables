@@ -6,6 +6,7 @@ Feature: Campaign Management in Salesforce
   Scenario Outline: Create a new marketing campaign with complete details
     Given Open a browser and login to the sales force site
     When Search for "Campaigns" in app launcher
+    Then Click on "New" button of "Campaigns"
     And I create a new campaign with following details:
       | Field Name        | Value              |
       | Campaign Name     | <campaignName>     |

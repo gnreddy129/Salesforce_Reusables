@@ -23,7 +23,6 @@ export default class SalesforceWorkPlansPage {
     private testInfo?: TestInfo;
 
     // Primary UI Controls
-    readonly newButton: Locator;
     readonly dialog: Locator;
 
     // Work Plan Configuration Fields
@@ -34,6 +33,7 @@ export default class SalesforceWorkPlansPage {
 
     // Action Buttons
     readonly saveButton: Locator;
+    readonly allOptionsLocator: Locator;
 
     /**
      * Constructor - Initializes the SalesforceWorkPlans page object with all necessary locators
@@ -48,10 +48,6 @@ export default class SalesforceWorkPlansPage {
         console.log("🚀 Initializing SalesforceWorkPlans page object");
         this.page = page;
         this.testInfo = testInfo;
-
-        // Primary controls - Main UI interaction elements
-        this.newButton = page.getByRole("button", { name: /New|Create/i }).first();
-
         // Dialog elements - Handle work plan creation
         this.dialog = this.page.getByRole("dialog").first();
 
@@ -76,6 +72,7 @@ export default class SalesforceWorkPlansPage {
         this.saveButton = this.dialog.getByRole("button", {
             name: /^Save$/i,
         });
+        this.allOptionsLocator = page.getByRole("option");
 
         console.log(
             "✅ SalesforceWorkPlans page object initialized successfully with all locators"
@@ -99,8 +96,7 @@ export default class SalesforceWorkPlansPage {
         console.log("📋 Work plan details:", JSON.stringify(details, null, 2));
 
         // Wait for the new button to be visible and take start screenshot
-        await expect(this.newButton).toBeVisible({ timeout: 10000 });
-        await Helper.takeScreenshotToFile(
+await Helper.takeScreenshotToFile(
             this.page,
             "1-start-work-plan",
             this.testInfo,
@@ -108,8 +104,7 @@ export default class SalesforceWorkPlansPage {
         );
 
         // Open the new work plan creation dialog
-        await this.newButton.click({ timeout: 10000 });
-        console.log("✅ Work plan creation dialog opened");
+console.log("✅ Work plan creation dialog opened");
 
         await this.dialog.waitFor({ state: "visible", timeout: 10000 });
 
@@ -121,7 +116,7 @@ export default class SalesforceWorkPlansPage {
             try {
                 await this.nameTextbox.fill("", { timeout: 5000 });
                 await this.page.waitForTimeout(200);
-                await this.nameTextbox.fill(details.Name, { timeout: 10000 });
+                await this.nameTextbox.fill(Helper.generateUniqueValue(details.Name), { timeout: 10000 });
                 console.log("✅ Name filled:", details.Name);
             } catch (e) {
                 console.log("❌ Failed to fill Name:", e);
@@ -150,8 +145,7 @@ export default class SalesforceWorkPlansPage {
             await this.page.waitForTimeout(1000);
 
             try {
-                const optionRole = this.page.locator(`[role="option"]:has-text("${parentRecord}")`).first();
-                await optionRole.click({ timeout: 10000, force: true });
+                await this.allOptionsLocator.filter({ hasText: parentRecord }).first().click({ timeout: 10000 });
                 console.log("✅ Parent Record selected:", parentRecord);
             } catch (e) {
                 try {
@@ -173,7 +167,7 @@ export default class SalesforceWorkPlansPage {
             try {
                 await this.descriptionTextbox.fill("", { timeout: 5000 });
                 await this.page.waitForTimeout(200);
-                await this.descriptionTextbox.fill(details.Description, { timeout: 10000 });
+                await this.descriptionTextbox.fill(Helper.generateUniqueValue(details.Description), { timeout: 10000 });
                 console.log("✅ Description filled:", details.Description);
             } catch (e) {
                 console.log("❌ Failed to fill Description:", e);

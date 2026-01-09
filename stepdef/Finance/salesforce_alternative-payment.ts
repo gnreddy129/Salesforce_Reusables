@@ -1,4 +1,3 @@
-import { expect } from "@playwright/test";
 import { createBdd } from "playwright-bdd";
 import SalesforceAlternativePaymentPage from "../../pages/Finance/salesforceAlternativePayment";
 

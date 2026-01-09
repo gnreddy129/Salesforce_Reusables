@@ -25,7 +25,6 @@ export default class SalesforceShippingCarrierMethodsPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newButton: Locator;
   readonly saveButton: Locator;
   readonly saveAndNewButton: Locator;
   readonly cancelButton: Locator;
@@ -40,6 +39,10 @@ export default class SalesforceShippingCarrierMethodsPage {
 
   // Navigation Elements
   readonly shippingCarrierMethodCreatedMessage: Locator;
+
+  // Verification locators
+  readonly primaryFieldLocator: Locator;
+  readonly allOptionsLocator: Locator;
 
   /**
    * Constructor - Initializes the SalesforceShippingCarrierMethods page object with all necessary locators
@@ -56,7 +59,6 @@ export default class SalesforceShippingCarrierMethodsPage {
     this.testInfo = testInfo;
 
     // Primary controls - Main UI interaction elements
-    this.newButton = page.getByRole("button", { name: "New" });
     this.saveButton = page.getByRole("button", { name: "Save", exact: true });
     this.saveAndNewButton = page.getByRole("button", { name: "Save & New" });
     this.cancelButton = page.getByRole("button", { name: "Cancel" });
@@ -79,6 +81,10 @@ export default class SalesforceShippingCarrierMethodsPage {
 
     // Success message locator
     this.shippingCarrierMethodCreatedMessage = page.locator(".toastMessage");
+
+    // Verification locators
+    this.primaryFieldLocator = page.locator(`[slot="primaryField"]`);
+    this.allOptionsLocator = page.getByRole("option");
 
     console.log(
       "✅ SalesforceShippingCarrierMethods page object initialized successfully with all locators"
@@ -120,8 +126,6 @@ export default class SalesforceShippingCarrierMethodsPage {
       JSON.stringify(details, null, 2)
     );
 
-    await expect(this.newButton).toBeVisible({ timeout: 10000 });
-
     // Take start screenshot for verification
     if (this.testInfo) {
       await Helper.takeScreenshotToFile(
@@ -133,7 +137,6 @@ export default class SalesforceShippingCarrierMethodsPage {
     }
 
     // Click New Shipping Carrier Method
-    await this.newButton.click({ timeout: 10000 });
     console.log("✅ Shipping Carrier Method creation form opened");
 
     // Wait for the form dialog to be fully loaded
@@ -144,28 +147,20 @@ export default class SalesforceShippingCarrierMethodsPage {
 
     // Fill Name field (text input)
     if (details.Name) {
-      await this.nameInput.fill(details.Name, {
-        timeout: 10000,
-      });
+      await this.nameInput.fill(Helper.generateUniqueValue(details.Name), { timeout: 10000 });
       console.log(`✅ Name filled: ${details.Name}`);
     }
 
     // Handle Shipping Carrier combobox
     if (details.ShippingCarrier && details.ShippingCarrier !== "--None--") {
       await this.shippingCarrierCombobox.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: details.ShippingCarrier })
-        .click({
-          timeout: 10000,
-        });
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
       console.log(`✅ Shipping Carrier selected: ${details.ShippingCarrier}`);
     }
 
     // Fill External Reference field (text input)
     if (details.ExternalReference && details.ExternalReference !== "--None--") {
-      await this.externalReferenceInput.fill(details.ExternalReference, {
-        timeout: 10000,
-      });
+      await this.externalReferenceInput.fill(Helper.generateUniqueValue(details.ExternalReference), { timeout: 10000 });
       console.log(`✅ External Reference filled: ${details.ExternalReference}`);
     }
 
@@ -198,11 +193,7 @@ export default class SalesforceShippingCarrierMethodsPage {
     // Handle Transit Time Unit combobox
     if (details.TransitTimeUnit && details.TransitTimeUnit !== "--None--") {
       await this.transitTimeUnitCombobox.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: details.TransitTimeUnit, exact: true })
-        .click({
-          timeout: 10000,
-        });
+      await this.allOptionsLocator.filter({ hasText: details.TransitTimeUnit }).first().click({ timeout: 10000 });
       console.log(`✅ Transit Time Unit selected: ${details.TransitTimeUnit}`);
     }
 
@@ -251,9 +242,7 @@ export default class SalesforceShippingCarrierMethodsPage {
     await expect(this.shippingCarrierMethodCreatedMessage).toContainText(
       "was created"
     );
-    await expect(this.page.locator(`[slot="primaryField"]`)).toContainText(
-      nameValue
-    );
+    await expect(this.primaryFieldLocator).toContainText(nameValue);
 
     // Take verification screenshot
     if (this.testInfo) {

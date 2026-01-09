@@ -1,4 +1,4 @@
-import { Page, TestInfo } from '@playwright/test';
+import { Page, TestInfo, Locator } from '@playwright/test';
 import { Helper } from '../../utils/helper';
 
 /**
@@ -25,41 +25,48 @@ export default class SalesforceGroupsPage {
     private testInfo?: TestInfo;
 
     // Dialog locator
-    readonly dialog = () => this.page.getByRole('dialog').first();
+    readonly dialog: Locator;
 
     // Locators - Group Fields
-    readonly nameField = () =>
-        this.page.getByRole('textbox', { name: 'Name *' });
-
-    readonly descriptionField = () =>
-        this.page.getByRole('textbox', { name: /^Description$/i }).first();
-
-    readonly informationField = () =>
-        this.page.getByRole('textbox', { name: 'Information - Compose text' }).first();
-
-
-    readonly disableAutomaticArchivingCheckbox = () =>
-        this.page.getByRole('checkbox', { name: /^Disable automatic archiving$/i }).first();
-
-    readonly accessTypeCombobox = () =>
-        this.page.getByRole('combobox', { name: /^Access Type$/i }).first();
-
-    readonly allowCustomersCheckbox = () =>
-        this.page.getByRole('checkbox', { name: /^Allow customers$/i }).first();
-
-    readonly broadcastOnlyCheckbox = () =>
-        this.page.getByRole('checkbox', { name: /^Broadcast Only$/i }).first();
+    readonly nameField: Locator;
+    readonly descriptionField: Locator;
+    readonly informationField: Locator;
+    readonly disableAutomaticArchivingCheckbox: Locator;
+    readonly accessTypeCombobox: Locator;
+    readonly allowCustomersCheckbox: Locator;
+    readonly broadcastOnlyCheckbox: Locator;
 
     // Button Locators
-    readonly saveNewButton = () =>
-        this.page.getByRole('button', { name: /^Save & Next$/i });
-    readonly cancelButton = () =>
-        this.page.getByRole('button', { name: /^Cancel$/i });
+    readonly saveNextButton: Locator;
+    readonly cancelButton: Locator;
+    readonly allOptionsLocator: Locator;
+    readonly uploadFile: Locator;
+    readonly nextButton: Locator;
+    readonly doneButton: Locator;
 
     constructor(page: Page, testInfo?: TestInfo) {
         this.page = page;
         this.testInfo = testInfo;
         console.log('🚀 Initializing SalesforceGroups page object');
+
+        this.dialog = page.getByRole('dialog').first();
+
+        // Group Fields
+        this.nameField = page.getByRole('textbox', { name: 'Name *' });
+        this.descriptionField = page.getByRole('textbox', { name: /^Description$/i }).first();
+        this.informationField = page.getByRole('textbox', { name: 'Information - Compose text' }).first();
+        this.disableAutomaticArchivingCheckbox = page.getByRole('checkbox', { name: /^Disable automatic archiving$/i }).first();
+        this.accessTypeCombobox = page.getByRole('combobox', { name: /^Access Type$/i }).first();
+        this.allowCustomersCheckbox = page.getByRole('checkbox', { name: /^Allow customers$/i }).first();
+        this.broadcastOnlyCheckbox = page.getByRole('checkbox', { name: /^Broadcast Only$/i }).first();
+
+        // Button Locators
+        this.saveNextButton = page.getByRole('button', { name: /^Save & Next$/i });
+        this.cancelButton = page.getByRole('button', { name: /^Cancel$/i });
+        this.allOptionsLocator = page.getByRole("option");
+        this.uploadFile = page.locator('input[type="file"]');
+        this.nextButton = page.getByRole('button', { name: /^Next$/i }).first();
+        this.doneButton = page.getByRole('button', { name: /^Done$/i }).first();
     }
 
     /**
@@ -84,7 +91,7 @@ export default class SalesforceGroupsPage {
             if (name) {
                 console.log('📝 Filling Name...');
                 try {
-                    await this.nameField().fill(name, { timeout: 10000 });
+                    await this.nameField.fill(name, { timeout: 10000 });
                     console.log('✅ Name filled:', name);
                 } catch (e) {
                     console.log('❌ Failed to fill Name:', e);
@@ -97,7 +104,7 @@ export default class SalesforceGroupsPage {
             if (description) {
                 console.log('📝 Filling Description...');
                 try {
-                    await this.descriptionField().fill(description, { timeout: 10000 });
+                    await this.descriptionField.fill(description, { timeout: 10000 });
                     console.log('✅ Description filled:', description);
                 } catch (e) {
                     console.log('⚠️ Failed to fill Description (field may not be available):', e);
@@ -109,7 +116,7 @@ export default class SalesforceGroupsPage {
             if (information) {
                 console.log('📝 Filling Information...');
                 try {
-                    await this.informationField().fill(information, { timeout: 10000 });
+                    await this.informationField.fill(information, { timeout: 10000 });
                     console.log('✅ Information filled:', information);
                 } catch (e) {
                     console.log('⚠️ Failed to fill Information (field may not be available):', e);
@@ -121,7 +128,7 @@ export default class SalesforceGroupsPage {
             if (disableArchiving && disableArchiving.toLowerCase() === 'true') {
                 console.log('☑️ Checking Disable automatic archiving checkbox...');
                 try {
-                    const archCheckbox = this.disableAutomaticArchivingCheckbox();
+                    const archCheckbox = this.disableAutomaticArchivingCheckbox;
                     const isVisible = await archCheckbox.isVisible().catch(() => false);
 
                     if (isVisible) {
@@ -144,18 +151,10 @@ export default class SalesforceGroupsPage {
             const accessType = details['Access Type'] || details.accessType;
             if (accessType) {
                 console.log('🔽 Selecting Access Type from combobox...');
-                try {
-                    await this.accessTypeCombobox().click({ timeout: 10000 });
-                    await this.page.waitForTimeout(1000);
-
-                    const optionRole = this.page.getByRole('option', { name: accessType }).first();
-                    await optionRole.waitFor({ state: 'visible', timeout: 5000 });
-                    await optionRole.click({ timeout: 5000 });
-                    console.log('✅ Access Type selected:', accessType);
-                } catch (e) {
-                    console.log('❌ Failed to select Access Type:', e);
-                    throw e;
-                }
+                await this.accessTypeCombobox.click({ timeout: 10000 });
+                await this.page.waitForTimeout(1000);
+                await this.allOptionsLocator.filter({ hasText: accessType }).first().click({ timeout: 10000 });
+                console.log('✅ Access Type selected:', accessType);
             }
 
             // Allow customers (Checkbox)
@@ -163,7 +162,7 @@ export default class SalesforceGroupsPage {
             if (allowCustomers && allowCustomers.toLowerCase() === 'true') {
                 console.log('☑️ Checking Allow customers checkbox...');
                 try {
-                    const acCheckbox = this.allowCustomersCheckbox();
+                    const acCheckbox = this.allowCustomersCheckbox;
                     const isVisible = await acCheckbox.isVisible().catch(() => false);
 
                     if (isVisible) {
@@ -187,7 +186,7 @@ export default class SalesforceGroupsPage {
             if (broadcastOnly && broadcastOnly.toLowerCase() === 'true') {
                 console.log('☑️ Checking Broadcast Only checkbox...');
                 try {
-                    const boCheckbox = this.broadcastOnlyCheckbox();
+                    const boCheckbox = this.broadcastOnlyCheckbox;
                     const isVisible = await boCheckbox.isVisible().catch(() => false);
 
                     if (isVisible) {
@@ -224,20 +223,13 @@ export default class SalesforceGroupsPage {
         console.log('💾 Clicking Save & Next button...');
         try {
             // Click Save & Next button
-            const saveNextBtn = this.page.getByRole('button', { name: /^Save & Next$/i });
-            await saveNextBtn.click({ timeout: 10000 });
+            await this.saveNextButton.click({ timeout: 10000 });
             console.log('✅ Save & Next clicked, waiting for image upload dialog...');
-
-            // Wait for the image upload dialog to appear
             await this.page.waitForTimeout(5000);
 
-            // Click on Upload button to select image
-            console.log('📸 Clicking Upload button to select image...');
-            const uploadButton = this.page.getByRole('button', { name: 'Choose File Upload Image' }).first();
+            const imgPath = './testdata/' + details['image'];
+            await this.uploadFile.setInputFiles(imgPath);
             console.log(`📁 Uploading image file: ${details['image']}`);
-             const imgPath = './testdata/' + details['image'];
-            await this.page.locator('input[type="file"]').setInputFiles(imgPath);
-            console.log('✅ Image file uploaded');
 
             // Wait for upload to process
             await this.page.waitForTimeout(2000);
@@ -251,8 +243,7 @@ export default class SalesforceGroupsPage {
 
             // Click Next button
             console.log('⏭️ Clicking Next button...');
-            const nextButton = this.page.getByRole('button', { name: /^Next$/i }).first();
-            await nextButton.click({ timeout: 10000 });
+            await this.nextButton.click({ timeout: 10000 });
             console.log('✅ Next button clicked');
 
             // Wait for next step to load
@@ -260,8 +251,7 @@ export default class SalesforceGroupsPage {
 
             // Click Done button
             console.log('✅ Clicking Done button...');
-            const doneButton = this.page.getByRole('button', { name: /^Done$/i }).first();
-            await doneButton.click({ timeout: 10000 });
+            await this.doneButton.click({ timeout: 10000 });
             console.log('✅ Done button clicked');
 
         } catch (error) {
@@ -272,7 +262,7 @@ export default class SalesforceGroupsPage {
 
     async clickCancel() {
         console.log('❌ Clicking Cancel button...');
-        await this.cancelButton().click();
+        await this.cancelButton.click({ timeout: 10000 });
         await this.page.waitForTimeout(1000);
     }
 
@@ -326,3 +316,4 @@ export default class SalesforceGroupsPage {
         }
     }
 }
+

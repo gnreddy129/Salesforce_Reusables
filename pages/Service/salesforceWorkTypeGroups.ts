@@ -23,7 +23,6 @@ export default class SalesforceWorkTypeGroupsPage {
     private testInfo?: TestInfo;
 
     // Primary UI Controls
-    readonly newButton: Locator;
     readonly dialog: Locator;
 
     // Work Type Group Configuration Fields
@@ -34,6 +33,7 @@ export default class SalesforceWorkTypeGroupsPage {
 
     // Action Buttons
     readonly saveButton: Locator;
+    readonly allOptionsLocator: Locator;
 
     /**
      * Constructor - Initializes the SalesforceWorkTypeGroups page object with all necessary locators
@@ -48,10 +48,6 @@ export default class SalesforceWorkTypeGroupsPage {
         console.log("🚀 Initializing SalesforceWorkTypeGroups page object");
         this.page = page;
         this.testInfo = testInfo;
-
-        // Primary controls - Main UI interaction elements
-        this.newButton = page.getByRole("button", { name: /New|Create/i }).first();
-
         // Dialog elements - Handle work type group creation
         this.dialog = this.page.getByRole("dialog").first();
 
@@ -76,6 +72,7 @@ export default class SalesforceWorkTypeGroupsPage {
         this.saveButton = this.dialog.getByRole("button", {
             name: /^Save$/i,
         });
+        this.allOptionsLocator = page.getByRole("option");
 
         console.log(
             "✅ SalesforceWorkTypeGroups page object initialized successfully with all locators"
@@ -99,7 +96,6 @@ export default class SalesforceWorkTypeGroupsPage {
         console.log("📋 Work type group details:", JSON.stringify(details, null, 2));
 
         // Wait for the new button to be visible and take start screenshot
-        await expect(this.newButton).toBeVisible({ timeout: 10000 });
         await Helper.takeScreenshotToFile(
             this.page,
             "1-start-work-type-group",
@@ -108,7 +104,6 @@ export default class SalesforceWorkTypeGroupsPage {
         );
 
         // Open the new work type group creation dialog
-        await this.newButton.click({ timeout: 10000 });
         console.log("✅ Work type group creation dialog opened");
 
         await this.dialog.waitFor({ state: "visible", timeout: 10000 });
@@ -135,7 +130,7 @@ export default class SalesforceWorkTypeGroupsPage {
             try {
                 await this.descriptionTextbox.fill("", { timeout: 5000 });
                 await this.page.waitForTimeout(200);
-                await this.descriptionTextbox.fill(details.Description, { timeout: 10000 });
+                await this.descriptionTextbox.fill(Helper.generateUniqueValue(details.Description), { timeout: 10000 });
                 console.log("✅ Description filled:", details.Description);
             } catch (e) {
                 console.log("❌ Failed to fill Description:", e);
@@ -148,23 +143,7 @@ export default class SalesforceWorkTypeGroupsPage {
             console.log("🔽 Selecting Group Type from dropdown...");
             await this.groupTypeDropdown.click({ timeout: 10000 });
             await this.page.waitForTimeout(1000);
-
-            try {
-                const optionRole = this.page.locator(`[role="option"]:has-text("${groupType}")`).first();
-                await optionRole.click({ timeout: 10000, force: true });
-                console.log("✅ Group Type selected:", groupType);
-            } catch (e) {
-                try {
-                    await this.groupTypeDropdown.fill(groupType, { timeout: 10000 });
-                    await this.page.waitForTimeout(500);
-                    await this.page.keyboard.press("ArrowDown");
-                    await this.page.waitForTimeout(300);
-                    await this.page.keyboard.press("Enter");
-                    console.log("✅ Group Type selected via type and keyboard");
-                } catch (e2) {
-                    console.log("❌ Failed to select Group Type:", e2);
-                }
-            }
+            await this.allOptionsLocator.filter({ hasText: groupType }).first().click({ timeout: 10000 });
         }
 
         // Active (Checkbox)

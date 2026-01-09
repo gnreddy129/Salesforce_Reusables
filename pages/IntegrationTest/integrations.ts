@@ -30,7 +30,7 @@ export default class Integrations {
         this.testInfo = testInfo;
 
         this.list = page.locator("lst-list-view-manager-header");
-        this.newOpportunities = this.list.filter({ hasText: /Opportunities/i }).getByRole('button', { name: /New/i });
+        this.newOpportunities = this.list.filter({ hasText: /Opportunities/i }).getByRole('button', { name: "New", exact: true });
 
         this.newCampaignOpportunity = this.page.getByRole('button', { name: 'New', exact: true });
         this.addLeads = this.page.getByRole('button', { name: 'Add Leads' });
@@ -46,24 +46,30 @@ export default class Integrations {
 
         this.newServiceAppointment = this.list.filter({ hasText: /Service Appointments/i }).getByRole('button', { name: /New/i });
 
-        this.contractCombobox = page.getByRole("combobox", { name: /^Contract Number/i });
-        this.accountCombobox = page.getByRole("combobox", { name: /^Account Name/i });
+        this.contractCombobox = page.getByRole("combobox", { name: /Contract Number/i });
+        this.newContract = page.getByRole("option", { name: /New Contract/i }).first();
+
+        this.accountCombobox = page.getByRole("combobox", { name: /Account Name/i });
+        this.newAccount = page.getByRole("option", { name: /New Account/i }).first();
     }
 
     async clickOnNewOpportunity() {
-        await this.newOpportunities.click();
+        await this.page.waitForTimeout(3000);
+        await this.newOpportunities.click({ timeout: 10000 });
     }
 
     async clickOnNewCampaignOpportunity() {
-        await this.newCampaignOpportunity.click();
+        await this.page.waitForTimeout(3000);
+        await this.newCampaignOpportunity.click({ timeout: 10000 });
     }
 
     async clickOnAddNewLeads() {
+        await this.page.waitForTimeout(3000);
         await this.addLeads.click({ timeout: 10000 });
         await this.page.waitForTimeout(2000);
-        await this.searchLeads.click();
+        await this.searchLeads.click({ timeout: 10000 });
         await this.page.waitForTimeout(1000);
-        await this.searchLeads.click();
+        await this.searchLeads.click({ timeout: 10000 });
         await this.page.waitForTimeout(2000);
         await expect(this.addNewLeadsLocator).toBeVisible({ timeout: 10000 });
         await this.addNewLeadsLocator.click({ timeout: 10000 });
@@ -71,23 +77,27 @@ export default class Integrations {
     }
 
     async clickOnAddNewContacts() {
-        await this.addContactsLocator.click();
+        await this.page.waitForTimeout(3000);
+        await this.addContactsLocator.click({ timeout: 10000 });
         await this.page.waitForTimeout(2000);
-        await this.serchContacts.click();
+        await this.serchContacts.click({ timeout: 10000 });
         await this.page.waitForTimeout(1000);
-        await this.serchContacts.click();
+        await this.serchContacts.click({ timeout: 10000 });
         await expect(this.addNewContactsLocator).toBeVisible({ timeout: 10000 });
-        await this.addNewContactsLocator.click();
+        await this.addNewContactsLocator.click({ timeout: 10000 });
         await this.page.waitForTimeout(2000);
     }
 
     async savingCreatedleadsOrContacts() {
-        await this.nextButton.first().click();
-        await this.submitButton.first().click();
+        await this.page.waitForTimeout(3000);
+        await this.nextButton.first().click({ timeout: 10000 });
+        await this.page.waitForTimeout(3000);
+        await this.submitButton.first().click({ timeout: 10000 });
         console.log("Lead or Contact Adding done");
     }
 
     async addNewServiceAppointment() {
+        await this.page.waitForTimeout(3000);
         await this.page.mouse.wheel(0, 1200);
         await this.page.waitForTimeout(3000);
         await expect(this.newServiceAppointment).toBeVisible({ timeout: 10000 });
@@ -95,14 +105,16 @@ export default class Integrations {
     }
 
     async clickOnCreateNewContracts() {
+        await this.page.waitForTimeout(3000);
         await this.contractCombobox.click({ timeout: 10000 });
-        await this.page.getByRole("option", { name: "New Contract" }).first().click({ timeout: 10000 });
+        await this.newContract.click({ timeout: 10000 });
         await this.page.waitForTimeout(3000);
     }
 
     async clickOnCreateNewAccounts() {
+        await this.page.waitForTimeout(3000);
         await this.accountCombobox.click({ timeout: 10000 });
-        await this.page.getByRole("option", { name: "New Account" }).first().click({ timeout: 10000 });
+        await this.newAccount.click({ timeout: 10000 });
         await this.page.waitForTimeout(3000);
     }
 }

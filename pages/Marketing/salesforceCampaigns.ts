@@ -25,7 +25,6 @@ export default class SalesforceCampaignsPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newCampaignButton: Locator;
   readonly dialog: Locator;
   readonly saveButton: Locator;
 
@@ -42,12 +41,10 @@ export default class SalesforceCampaignsPage {
   readonly expectedResponseInput: Locator;
   readonly descriptionInput: Locator;
 
-  // Additional UI elements
-  readonly appLauncher: Locator;
-  readonly viewAllButton: Locator;
-  readonly searchBox: Locator;
   readonly campaignCreatedMessage: Locator;
   readonly listbox: Locator;
+  readonly entityNameTitleLocator: Locator;
+  readonly allOptionsLocator: Locator;
 
   /**
    * Constructor - Initializes the SalesforceCampaigns page object with all necessary locators
@@ -64,7 +61,6 @@ export default class SalesforceCampaignsPage {
     this.testInfo = testInfo;
 
     // Primary controls - Main UI interaction elements
-    this.newCampaignButton = page.getByRole("button", { name: /New/i }).first();
     this.dialog = page.getByRole("dialog").first();
     this.saveButton = this.dialog
       .getByRole("button", { name: "Save", exact: true })
@@ -99,14 +95,12 @@ export default class SalesforceCampaignsPage {
       name: /Description/i,
     });
 
-    // Initialize navigation elements
-    this.appLauncher = page.getByTitle("App Launcher");
-    this.viewAllButton = page.getByRole("button", { name: "View All" });
-    this.searchBox = page.getByPlaceholder("Search apps and items...");
-    this.listbox = page.getByRole("listbox");
-
     // Success message locator
     this.campaignCreatedMessage = page.locator(".toastMessage");
+
+    // Entity name title locator for verification
+    this.entityNameTitleLocator = page.locator(`.entityNameTitle`);
+    this.allOptionsLocator = page.getByRole("option");
 
     console.log(
       "✅ SalesforceCampaigns page object initialized successfully with all locators"
@@ -140,8 +134,6 @@ export default class SalesforceCampaignsPage {
     console.log("🔄 Starting campaign creation process...");
     console.log("📝 Campaign details:", JSON.stringify(details, null, 2));
 
-    await expect(this.newCampaignButton).toBeVisible({ timeout: 10000 });
-
     // Take start screenshot for verification
     await Helper.takeScreenshotToFile(
       this.page,
@@ -150,31 +142,24 @@ export default class SalesforceCampaignsPage {
       "Marketing/salesforce-campaigns/"
     );
 
-    // Click New Campaign
-    await this.newCampaignButton.click({ timeout: 10000 });
     console.log("✅ Campaign creation dialog opened");
-
     console.log("📋 Filling form fields...");
 
     // Fill campaign name (required field)
     if (details.CampaignName || details["Campaign Name"]) {
       const campaignName = details.CampaignName || details["Campaign Name"];
-      await this.nameInput.fill(campaignName, { timeout: 10000 });
+      await this.nameInput.fill(Helper.generateUniqueValue(campaignName), { timeout: 10000 });
     }
 
     // Fill optional fields
     if (details.Type) {
       await this.typeCombo.click({ timeout: 10000 });
-      await this.listbox
-        .getByRole("option", { name: details.Type, exact: true })
-        .click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: details.Type }).first().click({ timeout: 10000 });
     }
 
     if (details.Status) {
       await this.statusCombo.click({ timeout: 10000 });
-      await this.listbox
-        .getByRole("option", { name: details.Status, exact: true })
-        .click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: details.Status }).first().click({ timeout: 10000 });
     }
 
     if (details.Active) {
@@ -196,19 +181,18 @@ export default class SalesforceCampaignsPage {
     }
 
     if (details.ExpectedRevenue || details["Expected Revenue"]) {
-      const expectedRevenue =
-        details.ExpectedRevenue || details["Expected Revenue"];
-      await this.expectedRevenueInput.fill(expectedRevenue, { timeout: 10000 });
+      let expectedRevenue = details.ExpectedRevenue || details["Expected Revenue"];
+      await this.expectedRevenueInput.fill(Helper.generateUniqueValue(expectedRevenue), { timeout: 10000 });
     }
 
     if (details.BudgetedCost || details["Budgeted Cost"]) {
-      const budgetedCost = details.BudgetedCost || details["Budgeted Cost"];
-      await this.budgetedCostInput.fill(budgetedCost, { timeout: 10000 });
+      let budgetedCost = details.BudgetedCost || details["Budgeted Cost"];
+      await this.budgetedCostInput.fill(Helper.generateUniqueValue(budgetedCost), { timeout: 10000 });
     }
 
     if (details.ActualCost || details["Actual Cost"]) {
-      const actualCost = details.ActualCost || details["Actual Cost"];
-      await this.actualCostInput.fill(actualCost, { timeout: 10000 });
+      let actualCost = details.ActualCost || details["Actual Cost"];
+      await this.actualCostInput.fill(Helper.generateUniqueValue(actualCost), { timeout: 10000 });
     }
 
     if (details.ExpectedResponse || details["Expected Response"]) {
@@ -220,7 +204,7 @@ export default class SalesforceCampaignsPage {
     }
 
     if (details.Description) {
-      await this.descriptionInput.fill(details.Description, { timeout: 10000 });
+      await this.descriptionInput.fill(Helper.generateUniqueValue(details.Description), { timeout: 10000 });
     }
 
     console.log("💾 Saving the campaign...");
@@ -257,7 +241,7 @@ export default class SalesforceCampaignsPage {
 
     console.log("🔍 Starting campaign verification...");
     await expect(this.campaignCreatedMessage).toBeVisible({ timeout: 10000 });
-    await expect(this.page.locator(`.entityNameTitle`)).toBeVisible(); // check if header is visible
+    await expect(this.entityNameTitleLocator).toBeVisible(); // check if header is visible
     // Verify campaign creation message or campaign details
     if (details.CampaignName || details["Campaign Name"]) {
       const campaignName = details.CampaignName || details["Campaign Name"];

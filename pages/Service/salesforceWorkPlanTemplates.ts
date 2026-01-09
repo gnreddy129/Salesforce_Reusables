@@ -23,7 +23,6 @@ export default class SalesforceWorkPlanTemplatesPage {
     private testInfo?: TestInfo;
 
     // Primary UI Controls
-    readonly newButton: Locator;
     readonly dialog: Locator;
 
     // Work Plan Template Configuration Fields
@@ -48,10 +47,6 @@ export default class SalesforceWorkPlanTemplatesPage {
         console.log("🚀 Initializing SalesforceWorkPlanTemplates page object");
         this.page = page;
         this.testInfo = testInfo;
-
-        // Primary controls - Main UI interaction elements
-        this.newButton = page.getByRole("button", { name: /New|Create/i }).first();
-
         // Dialog elements - Handle work plan template creation
         this.dialog = this.page.getByRole("dialog").first();
 
@@ -99,7 +94,6 @@ export default class SalesforceWorkPlanTemplatesPage {
         console.log("📋 Work plan template details:", JSON.stringify(details, null, 2));
 
         // Wait for the new button to be visible and take start screenshot
-        await expect(this.newButton).toBeVisible({ timeout: 10000 });
         await Helper.takeScreenshotToFile(
             this.page,
             "1-start-work-plan-template",
@@ -108,7 +102,6 @@ export default class SalesforceWorkPlanTemplatesPage {
         );
 
         // Open the new work plan template creation dialog
-        await this.newButton.click({ timeout: 10000 });
         console.log("✅ Work plan template creation dialog opened");
 
         await this.dialog.waitFor({ state: "visible", timeout: 10000 });
@@ -121,7 +114,7 @@ export default class SalesforceWorkPlanTemplatesPage {
             try {
                 await this.nameTextbox.fill("", { timeout: 5000 });
                 await this.page.waitForTimeout(200);
-                await this.nameTextbox.fill(details.Name, { timeout: 10000 });
+                await this.nameTextbox.fill(Helper.generateUniqueValue(details.Name), { timeout: 10000 });
                 console.log("✅ Name filled:", details.Name);
             } catch (e) {
                 console.log("❌ Failed to fill Name:", e);
@@ -162,7 +155,7 @@ export default class SalesforceWorkPlanTemplatesPage {
             try {
                 await this.descriptionTextbox.fill("", { timeout: 5000 });
                 await this.page.waitForTimeout(200);
-                await this.descriptionTextbox.fill(details.Description, { timeout: 10000 });
+                await this.descriptionTextbox.fill(Helper.generateUniqueValue(details.Description), { timeout: 10000 });
                 console.log("✅ Description filled:", details.Description);
             } catch (e) {
                 console.log("❌ Failed to fill Description:", e);

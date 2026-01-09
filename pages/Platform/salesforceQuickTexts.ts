@@ -24,7 +24,6 @@ export class SalesforceQuickTextsPage {
   private testInfo?: TestInfo;
 
   // Primary Action Elements
-  readonly newQuickTextButton: Locator;
   readonly saveButton: Locator;
   readonly cancelButton: Locator;
   readonly previewButton: Locator;
@@ -48,6 +47,8 @@ export class SalesforceQuickTextsPage {
   // Verification Elements
   readonly quickTextDetailHeader: Locator;
   readonly quickTextGrid: Locator;
+  readonly allOptionsLocator: Locator;
+
 
   /**
    * Constructor - Initializes the SalesforceQuickTexts page object with all necessary locators
@@ -93,7 +94,7 @@ export class SalesforceQuickTextsPage {
     this.quickTextDetailHeader = page.getByRole("heading", {
       name: /Quick Text/i,
     });
-    this.quickTextGrid = page.locator("[role='grid']");
+    this.allOptionsLocator = page.getByRole("option");
 
     console.log(
       "✅ SalesforceQuickTexts page object initialized successfully with all locators"
@@ -149,14 +150,13 @@ export class SalesforceQuickTextsPage {
 
     // Fill required Quick Text Name field
     if (details.QuickTextName) {
-      await this.quickTextName.fill(details.QuickTextName, { timeout: 10000 });
-      await expect(this.quickTextName).toHaveValue(details.QuickTextName);
+      await this.quickTextName.fill(Helper.generateUniqueValue(details.QuickTextName), { timeout: 10000 });
       console.log(`✅ Quick Text Name filled: "${details.QuickTextName}"`);
     }
 
     // Fill required Message field
     if (details.Message) {
-      await this.message.fill(details.Message, { timeout: 10000 });
+      await this.message.fill(Helper.generateUniqueValue(details.Message), { timeout: 10000 });
       console.log(`✅ Message field filled with content`);
     }
 
@@ -166,16 +166,12 @@ export class SalesforceQuickTextsPage {
 
       // Step 1: Select Related To (e.g., Account)
       await this.relatedTo.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: new RegExp(details.RelatedTo, "i") })
-        .click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: details.RelatedTo }).first().click({ timeout: 10000 });
       console.log(`✅ Related To set to: "${details.RelatedTo}"`);
 
       // Step 2: Select Field (e.g., Account Description)
       await this.field.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: new RegExp(details.Field, "i") })
-        .click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: details.Field }).first().click({ timeout: 10000 });
       console.log(`✅ Field set to: "${details.Field}"`);
 
       // Step 3: Click Insert button
@@ -186,9 +182,7 @@ export class SalesforceQuickTextsPage {
     // Handle Category dropdown
     if (details.Category) {
       await this.category.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: new RegExp(details.Category, "i") })
-        .click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: details.Category }).first().click({ timeout: 10000 });
       console.log(`✅ Category set to: "${details.Category}"`);
     }
 
@@ -196,7 +190,7 @@ export class SalesforceQuickTextsPage {
     if (details.IncludeInSelectedChannels) {
       const shouldCheck = details.IncludeInSelectedChannels.toLowerCase() === "true";
       const isChecked = await this.includeInSelectedChannels.isChecked();
-      
+
       if (shouldCheck && !isChecked) {
         await this.includeInSelectedChannels.check({ timeout: 10000 });
         console.log(`✅ "Include in selected channels" checkbox checked`);
@@ -246,20 +240,14 @@ export class SalesforceQuickTextsPage {
    * await quickTextPage.verifyQuickTextCreation("Order Confirmation");
    */
   async verifyQuickTextCreation(quickTextName: string) {
-    console.log("🔍 Starting quick text verification...");
-    console.log(`🔍 Verifying quick text name: "${quickTextName}"`);
-
-    // Wait for the grid to load with the new quick text
+    console.log(`🔍 Starting quick text verification for quick text name: "${quickTextName}"`);
     await this.page.waitForTimeout(1000);
-
-    // Check if quick text appears in the list/grid
-    const quickTextRow = this.page
-      .locator("[role='gridcell'], [role='listitem'], tr")
-      .filter({ hasText: quickTextName })
-      .first();
-
-    await expect(quickTextRow).toBeVisible({ timeout: 10000 });
-    console.log("✅ Quick text found in the list");
+    const count = await this.page.getByText(quickTextName).count();
+    if (count === 0) {
+      throw new Error(`❌ Quick text "${quickTextName}" not found in the list`);
+    }
+    expect(count).toBeGreaterThan(0);
+    console.log(`✅ Quick text "${quickTextName}" found in the list`);
 
     // Take verification screenshot
     await Helper.takeScreenshotToFile(

@@ -23,7 +23,6 @@ export default class SalesforcePromotionSegmentsPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newButton: Locator;
   readonly dialog: Locator;
 
   // Promotion Segment Configuration Fields
@@ -48,7 +47,6 @@ export default class SalesforcePromotionSegmentsPage {
     this.testInfo = testInfo;
 
     // Primary controls - Main UI interaction elements
-    this.newButton = page.getByRole("button", { name: "New" });
     this.segmentNameTextbox = page.getByRole("textbox", {
       name: /Promotion Segment Name/i,
     });
@@ -98,7 +96,6 @@ export default class SalesforcePromotionSegmentsPage {
     console.log("📋 Promotion segment details:", JSON.stringify(details, null, 2));
 
     // Wait for the new button to be visible and take start screenshot
-    await expect(this.newButton).toBeVisible({ timeout: 10000 });
     await Helper.takeScreenshotToFile(
       this.page,
       "1-start-promotion-segment",
@@ -107,7 +104,6 @@ export default class SalesforcePromotionSegmentsPage {
     );
 
     // Open the new promotion segment creation dialog
-    await this.newButton.click({ timeout: 10000 });
     console.log("✅ Promotion segment creation dialog opened");
 
     await this.dialog.waitFor({ state: "visible", timeout: 10000 });
@@ -116,7 +112,7 @@ export default class SalesforcePromotionSegmentsPage {
 
     // Promotion Segment Name - Primary identifier for the promotion segment (required)
     if (details.Name) {
-      await this.dialogSegmentNameTextbox.fill(details.Name, { timeout: 10000 });
+      await this.dialogSegmentNameTextbox.fill(Helper.generateUniqueValue(details.Name), { timeout: 10000 });
       console.log("✅ Promotion Segment Name filled:", details.Name);
     }
 

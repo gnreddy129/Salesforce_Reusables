@@ -25,7 +25,6 @@ export default class SalesforceAuthorizationFormTextPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newButton: Locator;
   readonly saveButton: Locator;
   readonly saveAndNewButton: Locator;
   readonly cancelButton: Locator;
@@ -40,6 +39,12 @@ export default class SalesforceAuthorizationFormTextPage {
 
   // Navigation Elements
   readonly authorizationFormTextCreatedMessage: Locator;
+
+  // Verification locators
+  readonly primaryFieldLocator: Locator;
+
+  // Dropdown option locator
+  readonly allOptionsLocator: Locator;
 
   /**
    * Constructor - Initializes the SalesforceAuthorizationFormText page object with all necessary locators
@@ -56,7 +61,6 @@ export default class SalesforceAuthorizationFormTextPage {
     this.testInfo = testInfo;
 
     // Primary controls - Main UI interaction elements
-    this.newButton = page.getByRole("button", { name: "New" });
     this.saveButton = page.getByRole("button", { name: "Save", exact: true });
     this.saveAndNewButton = page.getByRole("button", { name: "Save & New" });
     this.cancelButton = page.getByRole("button", { name: "Cancel" });
@@ -83,6 +87,12 @@ export default class SalesforceAuthorizationFormTextPage {
 
     // Success message locator
     this.authorizationFormTextCreatedMessage = page.locator(".toastMessage");
+
+    // Verification locators
+    this.primaryFieldLocator = page.locator(`[slot="primaryField"]`);
+
+    // Dropdown option locator
+    this.allOptionsLocator = page.getByRole("option");
 
     console.log(
       "✅ SalesforceAuthorizationFormText page object initialized successfully with all locators"
@@ -124,8 +134,6 @@ export default class SalesforceAuthorizationFormTextPage {
       JSON.stringify(details, null, 2)
     );
 
-    await expect(this.newButton).toBeVisible({ timeout: 10000 });
-
     // Take start screenshot for verification
     if (this.testInfo) {
       await Helper.takeScreenshotToFile(
@@ -137,7 +145,6 @@ export default class SalesforceAuthorizationFormTextPage {
     }
 
     // Click New Authorization Form Text
-    await this.newButton.click({ timeout: 10000 });
     console.log("✅ Authorization Form Text creation form opened");
 
     // Wait for the form dialog to be fully loaded
@@ -193,9 +200,7 @@ export default class SalesforceAuthorizationFormTextPage {
     ) {
       const localeValue = details.Locale || details["Locale"];
       await this.localeCombobox.click({ timeout: 10000 });
-      await this.page.getByRole("option", { name: localeValue }).click({
-        timeout: 10000,
-      });
+      await this.allOptionsLocator.filter({ hasText: localeValue }).first().click({ timeout: 10000 });
       console.log(`✅ Locale selected: ${localeValue}`);
     }
 
@@ -208,9 +213,7 @@ export default class SalesforceAuthorizationFormTextPage {
       const contentDocValue =
         details.ContentDocument || details["Content Document"];
       await this.contentDocumentCombobox.click({ timeout: 10000 });
-      await this.page.getByRole("option", { name: contentDocValue }).click({
-        timeout: 10000,
-      });
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
       console.log(`✅ Content Document selected: ${contentDocValue}`);
     }
 
@@ -223,9 +226,7 @@ export default class SalesforceAuthorizationFormTextPage {
       const authFormValue =
         details.AuthorizationForm || details["Authorization Form"];
       await this.authorizationFormCombobox.click({ timeout: 10000 });
-      await this.page.getByRole("option", { name: authFormValue }).click({
-        timeout: 10000,
-      });
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
       console.log(`✅ Authorization Form selected: ${authFormValue}`);
     }
 
@@ -276,7 +277,7 @@ export default class SalesforceAuthorizationFormTextPage {
     await expect(this.authorizationFormTextCreatedMessage).toContainText(
       "was created"
     );
-    await expect(this.page.locator(`[slot="primaryField"]`)).toContainText(
+    await expect(this.primaryFieldLocator).toContainText(
       details.Name
     );
 

@@ -23,7 +23,6 @@ export default class SalesforcePaymentsPage {
     private testInfo?: TestInfo;
 
     // Primary UI Controls
-    readonly newButton: Locator;
     readonly dialog: Locator;
 
     // Payment Information Fields
@@ -73,6 +72,7 @@ export default class SalesforcePaymentsPage {
 
     // Action Buttons
     readonly saveButton: Locator;
+    readonly allOptionsLocator: Locator;
 
     /**
      * Constructor - Initializes the SalesforcePayments page object with all necessary locators
@@ -89,7 +89,6 @@ export default class SalesforcePaymentsPage {
         this.testInfo = testInfo;
 
         // Primary controls
-        this.newButton = page.getByRole("button", { name: /New/i }).first();
         this.dialog = page.getByRole("dialog").first();
 
         // Payment Information Fields
@@ -239,6 +238,8 @@ export default class SalesforcePaymentsPage {
             name: /^Save$/i,
         });
 
+        this.allOptionsLocator = page.getByRole("option");
+
         console.log(
             "✅ SalesforcePayments page object initialized successfully with all locators"
         );
@@ -261,7 +262,6 @@ export default class SalesforcePaymentsPage {
         console.log("📋 Payment details:", JSON.stringify(details, null, 2));
 
         // Wait for the new button to be visible and take start screenshot
-        await expect(this.newButton).toBeVisible({ timeout: 10000 });
         await Helper.takeScreenshotToFile(
             this.page,
             "1-start-payment",
@@ -270,7 +270,6 @@ export default class SalesforcePaymentsPage {
         );
 
         // Open the new payment creation dialog
-        await this.newButton.click({ timeout: 10000 });
         console.log("✅ Payment creation dialog opened");
 
         await this.dialog.waitFor({ state: "visible", timeout: 10000 });
@@ -282,29 +281,7 @@ export default class SalesforcePaymentsPage {
             console.log("🔽 Selecting Account from combobox...");
             await this.accountCombobox.click({ timeout: 10000 });
             await this.page.waitForTimeout(1000);
-
-            try {
-                const optionRole = this.page.locator(`[role="option"]:has-text("${details.Account}")`).first();
-                await optionRole.click({ timeout: 5000, force: true });
-                console.log("✅ Account selected:", details.Account);
-            } catch (e) {
-                try {
-                    const textOption = this.page.locator(`text=/\\b${details.Account}\\b/`).first();
-                    await textOption.click({ timeout: 5000, force: true });
-                    console.log("✅ Account selected with force:", details.Account);
-                } catch (e2) {
-                    try {
-                        await this.accountCombobox.fill(details.Account, { timeout: 5000 });
-                        await this.page.waitForTimeout(500);
-                        await this.page.keyboard.press("ArrowDown");
-                        await this.page.waitForTimeout(300);
-                        await this.page.keyboard.press("Enter");
-                        console.log("✅ Account selected via type and keyboard");
-                    } catch (e3) {
-                        console.log("❌ Failed to select Account:", e3);
-                    }
-                }
-            }
+            await this.allOptionsLocator.first().click({ timeout: 10000 });
         }
 
         // Status (Dropdown)
@@ -312,29 +289,7 @@ export default class SalesforcePaymentsPage {
             console.log("🔽 Selecting Status from dropdown...");
             await this.statusCombobox.click({ timeout: 10000 });
             await this.page.waitForTimeout(1000);
-
-            try {
-                const optionRole = this.page.locator(`[role="option"]:has-text("${details.Status}")`).first();
-                await optionRole.click({ timeout: 5000, force: true });
-                console.log("✅ Status selected:", details.Status);
-            } catch (e) {
-                try {
-                    const textOption = this.page.locator(`text=/\\b${details.Status}\\b/`).first();
-                    await textOption.click({ timeout: 5000, force: true });
-                    console.log("✅ Status selected with force:", details.Status);
-                } catch (e2) {
-                    try {
-                        await this.statusCombobox.fill(details.Status, { timeout: 5000 });
-                        await this.page.waitForTimeout(500);
-                        await this.page.keyboard.press("ArrowDown");
-                        await this.page.waitForTimeout(300);
-                        await this.page.keyboard.press("Enter");
-                        console.log("✅ Status selected via type and keyboard");
-                    } catch (e3) {
-                        console.log("❌ Failed to select Status:", e3);
-                    }
-                }
-            }
+            await this.allOptionsLocator.filter({ hasText: details.Status }).first().click({ timeout: 10000 });
         }
 
         // Amount (Textbox) - Required
@@ -360,72 +315,35 @@ export default class SalesforcePaymentsPage {
             console.log("🔽 Selecting Type from dropdown...");
             await this.typeCombobox.click({ timeout: 10000 });
             await this.page.waitForTimeout(1000);
-
-            try {
-                const optionRole = this.page.locator(`[role="option"]:has-text("${details.Type}")`).first();
-                await optionRole.click({ timeout: 5000, force: true });
-                console.log("✅ Type selected:", details.Type);
-            } catch (e) {
-                try {
-                    await this.typeCombobox.fill(details.Type, { timeout: 5000 });
-                    await this.page.waitForTimeout(500);
-                    await this.page.keyboard.press("ArrowDown");
-                    await this.page.waitForTimeout(300);
-                    await this.page.keyboard.press("Enter");
-                    console.log("✅ Type selected via type and keyboard");
-                } catch (e2) {
-                    console.log("❌ Failed to select Type:", e2);
-                }
-            }
+            await this.allOptionsLocator.filter({ hasText: details.Type }).first().click({ timeout: 10000 });
         }
 
-        // // Payment Authorization (Combobox)
-        // if (details.PaymentAuthorization || details["Payment Authorization"]) {
-        //   const paymentAuth = details.PaymentAuthorization || details["Payment Authorization"];
-        //   console.log("🔽 Selecting Payment Authorization from combobox...");
-        //   await this.paymentAuthorizationCombobox.click({ timeout: 10000 });
-        //   await this.page.waitForTimeout(1000);
+        // Payment Authorization (Combobox)
+        if (details.PaymentAuthorization || details["Payment Authorization"]) {
+            const paymentAuth = details.PaymentAuthorization || details["Payment Authorization"];
+            console.log("🔽 Selecting Payment Authorization from combobox...");
+            await this.paymentAuthorizationCombobox.click({ timeout: 10000 });
+            await this.page.waitForTimeout(1000);
+            await this.allOptionsLocator.first().click({ timeout: 10000 });
+        }
 
-        //   try {
-        //     const optionRole = this.page.locator(`[role="option"]:has-text("${paymentAuth}")`).first();
-        //     await optionRole.click({ timeout: 5000, force: true });
-        //     console.log("✅ Payment Authorization selected:", paymentAuth);
-        //   } catch (e) {
-        //     console.log("❌ Failed to select Payment Authorization:", e);
-        //   }
-        // }
+        // Payment Group (Combobox)
+        if (details.PaymentGroup || details["Payment Group"]) {
+            const paymentGroup = details.PaymentGroup || details["Payment Group"];
+            console.log("🔽 Selecting Payment Group from combobox...");
+            await this.paymentGroupCombobox.click({ timeout: 10000 });
+            await this.page.waitForTimeout(1000);
+            await this.allOptionsLocator.first().click({ timeout: 10000 });
+        }
 
-        // // Payment Group (Combobox)
-        // if (details.PaymentGroup || details["Payment Group"]) {
-        //   const paymentGroup = details.PaymentGroup || details["Payment Group"];
-        //   console.log("🔽 Selecting Payment Group from combobox...");
-        //   await this.paymentGroupCombobox.click({ timeout: 10000 });
-        //   await this.page.waitForTimeout(1000);
-
-        //   try {
-        //     const optionRole = this.page.locator(`[role="option"]:has-text("${paymentGroup}")`).first();
-        //     await optionRole.click({ timeout: 5000, force: true });
-        //     console.log("✅ Payment Group selected:", paymentGroup);
-        //   } catch (e) {
-        //     console.log("❌ Failed to select Payment Group:", e);
-        //   }
-        // }
-
-        // // Payment Method (Combobox)
-        // if (details.PaymentMethod || details["Payment Method"]) {
-        //   const paymentMethod = details.PaymentMethod || details["Payment Method"];
-        //   console.log("🔽 Selecting Payment Method from combobox...");
-        //   await this.paymentMethodCombobox.click({ timeout: 10000 });
-        //   await this.page.waitForTimeout(1000);
-
-        //   try {
-        //     const optionRole = this.page.locator(`[role="option"]:has-text("${paymentMethod}")`).first();
-        //     await optionRole.click({ timeout: 5000, force: true });
-        //     console.log("✅ Payment Method selected:", paymentMethod);
-        //   } catch (e) {
-        //     console.log("❌ Failed to select Payment Method:", e);
-        //   }
-        // }
+        // Payment Method (Combobox)
+        if (details.PaymentMethod || details["Payment Method"]) {
+            const paymentMethod = details.PaymentMethod || details["Payment Method"];
+            console.log("🔽 Selecting Payment Method from combobox...");
+            await this.paymentMethodCombobox.click({ timeout: 10000 });
+            await this.page.waitForTimeout(1000);
+            await this.allOptionsLocator.first().click({ timeout: 10000 });
+        }
 
         // Effective Date (Date & Time)
         if (details.EffectiveDate || details["Effective Date"]) {
@@ -460,19 +378,12 @@ export default class SalesforcePaymentsPage {
             console.log("🔽 Selecting Processing Mode from dropdown...");
             await this.processingModeCombobox.click({ timeout: 10000 });
             await this.page.waitForTimeout(1000);
-
-            try {
-                const optionRole = this.page.locator(`[role="option"]:has-text("${processingMode}")`).first();
-                await optionRole.click({ timeout: 5000, force: true });
-                console.log("✅ Processing Mode selected:", processingMode);
-            } catch (e) {
-                console.log("❌ Failed to select Processing Mode:", e);
-            }
+            await this.allOptionsLocator.filter({ hasText: processingMode }).first().click({ timeout: 10000 });
         }
 
         // Comments (Textbox)
         if (details.Comments) {
-            await this.commentsTextbox.fill(details.Comments, { timeout: 10000 });
+            await this.commentsTextbox.fill(Helper.generateUniqueValue(details.Comments), { timeout: 10000 });
             console.log("✅ Comments filled:", details.Comments);
         }
 
@@ -562,14 +473,7 @@ export default class SalesforcePaymentsPage {
             console.log("🔽 Selecting Salesforce Result Code from dropdown...");
             await this.salesforceResultCodeCombobox.click({ timeout: 10000 });
             await this.page.waitForTimeout(1000);
-
-            try {
-                const optionRole = this.page.locator(`[role="option"]:has-text("${resultCode}")`).first();
-                await optionRole.click({ timeout: 5000, force: true });
-                console.log("✅ Salesforce Result Code selected:", resultCode);
-            } catch (e) {
-                console.log("❌ Failed to select Salesforce Result Code:", e);
-            }
+            await this.allOptionsLocator.filter({ hasText: resultCode }).first().click({ timeout: 10000 });
         }
 
         // Cancellation Salesforce Result Code (Textbox)
@@ -579,21 +483,14 @@ export default class SalesforcePaymentsPage {
             console.log("✅ Cancellation Salesforce Result Code filled:", cancResultCode);
         }
 
-        // // Payment Gateway (Combobox)
-        // if (details.PaymentGateway || details["Payment Gateway"]) {
-        //   const gateway = details.PaymentGateway || details["Payment Gateway"];
-        //   console.log("🔽 Selecting Payment Gateway from combobox...");
-        //   await this.paymentGatewayCombobox.click({ timeout: 10000 });
-        //   await this.page.waitForTimeout(1000);
-
-        //   try {
-        //     const optionRole = this.page.locator(`[role="option"]:has-text("${gateway}")`).first();
-        //     await optionRole.click({ timeout: 5000, force: true });
-        //     console.log("✅ Payment Gateway selected:", gateway);
-        //   } catch (e) {
-        //     console.log("❌ Failed to select Payment Gateway:", e);
-        //   }
-        // }
+        // Payment Gateway (Combobox)
+        if (details.PaymentGateway || details["Payment Gateway"]) {
+            const gateway = details.PaymentGateway || details["Payment Gateway"];
+            console.log("🔽 Selecting Payment Gateway from combobox...");
+            await this.paymentGatewayCombobox.click({ timeout: 10000 });
+            await this.page.waitForTimeout(1000);
+            await this.allOptionsLocator.first().click({ timeout: 10000 });
+        }
 
         // Gateway Date (Date & Time)
         if (details.GatewayDate || details["Gateway Date"]) {
@@ -646,7 +543,7 @@ export default class SalesforcePaymentsPage {
         // Gateway Reference Details (Textbox)
         if (details.GatewayReferenceDetails || details["Gateway Reference Details"]) {
             const gatewayRefDetails = details.GatewayReferenceDetails || details["Gateway Reference Details"];
-            await this.gatewayReferenceDetailsTextbox.fill(gatewayRefDetails, { timeout: 10000 });
+            await this.gatewayReferenceDetailsTextbox.fill(Helper.generateUniqueValue(gatewayRefDetails), { timeout: 10000 });
             console.log("✅ Gateway Reference Details filled:", gatewayRefDetails);
         }
 

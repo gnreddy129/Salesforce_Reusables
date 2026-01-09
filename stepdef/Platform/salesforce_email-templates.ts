@@ -9,12 +9,8 @@ Then(
   "Add new Email Template with following details",
   async ({ page, $testInfo }, dataTable: DataTable) => {
     const emailTemplatesPage = new SalesforceEmailTemplatesPage(page, $testInfo);
-    const details = dataTable.rowsHash(); 
-    console.log(
-      "📝 Email Template data received:",
-      JSON.stringify(details, null, 2)
-    );
-    // Call the addNewEmailTemplate method with the provided data
+    const details = dataTable.rowsHash();
+    console.log("📝 Email Template data received:", JSON.stringify(details, null, 2));
     await emailTemplatesPage.addNewEmailTemplate(details);
   }
 );
@@ -24,11 +20,8 @@ Then(
   "Verify Email Template is created successfully with details",
   async ({ page, $testInfo }, dataTable: DataTable) => {
     const emailTemplatesPage = new SalesforceEmailTemplatesPage(page, $testInfo);
-    const details = dataTable.rowsHash(); 
-    console.log(
-      "📋 Email Template verification data:",
-      JSON.stringify(details, null, 2)
-    );
+    const details = dataTable.rowsHash();
+    console.log("📋 Email Template verification data:", JSON.stringify(details, null, 2));
     await emailTemplatesPage.verifyEmailTemplateCreation(details);
   }
 );

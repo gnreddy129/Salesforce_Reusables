@@ -11,18 +11,8 @@ Then(
         const entitlementsPage = new SalesforceEntitlementsPage(page, $testInfo);
         const details = dataTable.rowsHash();
         console.log('📦 Received entitlement details:', JSON.stringify(details, null, 2));
-
-        // Click the New button to open the form
-        const newButton = page.getByRole('button', { name: /^New$/ }).first();
-        await newButton.click();
-        await page.waitForTimeout(2000);
-
-        // Fill the form
         await entitlementsPage.addNewEntitlement(details);
-
-        // Save the form
         await entitlementsPage.clickSave();
-
         console.log('✅ Step completed: Entitlement added');
     }
 );

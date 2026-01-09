@@ -67,6 +67,7 @@ export default class SalesforcePaymentAuthorization {
     readonly saveButton: Locator;
     readonly cancelButton: Locator;
     readonly saveAndNewButton: Locator;
+    readonly allOptionsLocator: Locator;
 
     /**
      * Constructor - Initializes the SalesforcePaymentAuthorization page object
@@ -83,7 +84,7 @@ export default class SalesforcePaymentAuthorization {
         this.testInfo = testInfo;
 
         // Dialog container for all form elements
-        this.dialog = this.page.getByRole("dialog", { name: /New Payment Authorization/i });
+        this.dialog = page.getByRole("dialog", { name: /New Payment Authorization/i });
 
         // Information Section Fields - Using getByRole for robust element targeting
         this.accountCombobox = this.dialog.getByRole("combobox", { name: /^Account$/i });
@@ -123,7 +124,7 @@ export default class SalesforcePaymentAuthorization {
         this.saveButton = this.dialog.getByRole("button", { name: /^Save$/i });
         this.cancelButton = this.dialog.getByRole("button", { name: /^Cancel$/i });
         this.saveAndNewButton = this.dialog.getByRole("button", { name: /^Save & New/i });
-
+        this.allOptionsLocator = page.getByRole("option");
         console.log("✅ SalesforcePaymentAuthorization page object initialized successfully with all locators");
     }
 
@@ -138,22 +139,22 @@ export default class SalesforcePaymentAuthorization {
         try {
             await combobox.click({ timeout: 5000 });
             await this.page.waitForTimeout(500);
-            const optionRole = this.page.locator(`[role="option"]:has-text("${optionText}")`).first();
-            await optionRole.click({ timeout: 5000, force: true });
+            this.allOptionsLocator.first().click({ timeout: 10000 });
             console.log(`✅ ${fieldName} selected: ${optionText}`);
         } catch (e) {
-            console.log(`❌ Failed to select ${fieldName} with click, trying keyboard...`, e);
-            try {
-                await combobox.fill(optionText, { timeout: 5000 });
-                await this.page.waitForTimeout(300);
-                await this.page.keyboard.press("ArrowDown");
-                await this.page.waitForTimeout(300);
-                await this.page.keyboard.press("Enter");
-                console.log(`✅ ${fieldName} selected via keyboard: ${optionText}`);
-            } catch (ke) {
-                console.log(`❌ Failed to select ${fieldName}:`, ke);
-                throw ke;
-            }
+            console.log(`❌ Error selecting ${fieldName}:`, e);
+        }
+    }
+
+    private async selectDropdownOption(combobox: Locator, optionText: string, fieldName: string): Promise<void> {
+        console.log(`🔽 Selecting ${fieldName} from dropdown...`);
+        try {
+            await combobox.click({ timeout: 5000 });
+            await this.page.waitForTimeout(500);
+            this.allOptionsLocator.filter({ hasText: optionText }).first().click({ timeout: 10000 });
+            console.log(`✅ ${fieldName} selected: ${optionText}`);
+        } catch (e) {
+            console.log(`❌ Error selecting ${fieldName}:`, e);
         }
     }
 
@@ -175,7 +176,7 @@ export default class SalesforcePaymentAuthorization {
 
             // Status* (combobox, required)
             if (details.Status) {
-                await this.selectComboboxOption(this.statusCombobox, details.Status, "Status");
+                await this.selectDropdownOption(this.statusCombobox, details.Status, "Status");
             }
 
             // Amount* (textbox, required)
@@ -246,14 +247,14 @@ export default class SalesforcePaymentAuthorization {
 
             // Processing Mode* (combobox, required)
             if (details["Processing Mode"]) {
-                await this.selectComboboxOption(this.processingModeCombobox, details["Processing Mode"], "Processing Mode");
+                await this.selectDropdownOption(this.processingModeCombobox, details["Processing Mode"], "Processing Mode");
             }
 
             // Comments (textbox, optional)
             if (details.Comments) {
                 console.log("📝 Filling Comments...");
                 await this.commentsTextbox.clear();
-                await this.commentsTextbox.fill(details.Comments, { timeout: 5000 });
+                await this.commentsTextbox.fill(Helper.generateUniqueValue(details.Comments), { timeout: 5000 });
                 console.log("✅ Comments filled:", details.Comments);
             }
 
@@ -338,7 +339,7 @@ export default class SalesforcePaymentAuthorization {
             if (details.Phone) {
                 console.log("📝 Filling Phone...");
                 await this.phoneTextbox.clear();
-                await this.phoneTextbox.fill(details.Phone, { timeout: 5000 });
+                await this.phoneTextbox.fill(Helper.generateUniqueValue(details.Phone), { timeout: 5000 });
                 console.log("✅ Phone filled:", details.Phone);
             }
 

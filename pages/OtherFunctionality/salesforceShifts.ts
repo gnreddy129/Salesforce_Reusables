@@ -23,7 +23,6 @@ export default class SalesforceShiftsPage {
     private testInfo?: TestInfo;
 
     // Primary UI Controls
-    readonly newButton: Locator;
     readonly dialog: Locator;
 
     // Shift Configuration Fields
@@ -40,6 +39,7 @@ export default class SalesforceShiftsPage {
 
     // Action Buttons
     readonly saveButton: Locator;
+    readonly allOptionsLocator: Locator;
 
     /**
      * Constructor - Initializes the SalesforceShifts page object with all necessary locators
@@ -54,9 +54,6 @@ export default class SalesforceShiftsPage {
         console.log("🚀 Initializing SalesforceShifts page object");
         this.page = page;
         this.testInfo = testInfo;
-
-        // Primary controls - Main UI interaction elements
-        this.newButton = page.getByRole("button", { name: /New|Create/i }).first();
 
         // Dialog elements - Handle shift creation
         this.dialog = this.page.getByRole("dialog").first();
@@ -114,6 +111,8 @@ export default class SalesforceShiftsPage {
             name: /^Save$/i,
         });
 
+        this.allOptionsLocator = page.getByRole("option");
+
         console.log(
             "✅ SalesforceShifts page object initialized successfully with all locators"
         );
@@ -135,8 +134,6 @@ export default class SalesforceShiftsPage {
         console.log("🔄 Starting shift creation process...");
         console.log("📋 Shift details:", JSON.stringify(details, null, 2));
 
-        // Wait for the new button to be visible and take start screenshot
-        await expect(this.newButton).toBeVisible({ timeout: 10000 });
         await Helper.takeScreenshotToFile(
             this.page,
             "1-start-shift",
@@ -145,7 +142,6 @@ export default class SalesforceShiftsPage {
         );
 
         // Open the new shift creation dialog
-        await this.newButton.click({ timeout: 10000 });
         console.log("✅ Shift creation dialog opened");
 
         await this.dialog.waitFor({ state: "visible", timeout: 10000 });
@@ -213,23 +209,7 @@ export default class SalesforceShiftsPage {
             console.log("🔽 Selecting Status from dropdown...");
             await this.statusDropdown.click({ timeout: 10000 });
             await this.page.waitForTimeout(1000);
-
-            try {
-                const optionRole = this.page.locator(`[role="option"]:has-text("${details.Status}")`).first();
-                await optionRole.click({ timeout: 5000, force: true });
-                console.log("✅ Status selected:", details.Status);
-            } catch (e) {
-                try {
-                    await this.statusDropdown.fill(details.Status, { timeout: 5000 });
-                    await this.page.waitForTimeout(500);
-                    await this.page.keyboard.press("ArrowDown");
-                    await this.page.waitForTimeout(300);
-                    await this.page.keyboard.press("Enter");
-                    console.log("✅ Status selected via type and keyboard");
-                } catch (e2) {
-                    console.log("❌ Failed to select Status:", e2);
-                }
-            }
+            await this.allOptionsLocator.filter({ hasText: details.Status }).first().click({ timeout: 10000 });
         }
 
         // Work Type Group (Combobox)
@@ -240,8 +220,7 @@ export default class SalesforceShiftsPage {
             await this.page.waitForTimeout(1000);
 
             try {
-                const optionRole = this.page.locator(`[role="option"]:has-text("${workTypeGroup}")`).first();
-                await optionRole.click({ timeout: 5000, force: true });
+                await this.allOptionsLocator.first().click({ timeout: 10000 });
                 console.log("✅ Work Type Group selected:", workTypeGroup);
             } catch (e) {
                 console.log("❌ Failed to select Work Type Group:", e);
@@ -256,8 +235,7 @@ export default class SalesforceShiftsPage {
             await this.page.waitForTimeout(1000);
 
             try {
-                const optionRole = this.page.locator(`[role="option"]:has-text("${serviceTerritory}")`).first();
-                await optionRole.click({ timeout: 5000, force: true });
+                await this.allOptionsLocator.first().click({ timeout: 10000 });
                 console.log("✅ Service Territory selected:", serviceTerritory);
             } catch (e) {
                 console.log("❌ Failed to select Service Territory:", e);
@@ -272,8 +250,7 @@ export default class SalesforceShiftsPage {
             await this.page.waitForTimeout(1000);
 
             try {
-                const optionRole = this.page.locator(`[role="option"]:has-text("${serviceResource}")`).first();
-                await optionRole.click({ timeout: 5000, force: true });
+                await this.allOptionsLocator.first().click({ timeout: 10000 });
                 console.log("✅ Service Resource selected:", serviceResource);
             } catch (e) {
                 console.log("❌ Failed to select Service Resource:", e);
@@ -288,20 +265,10 @@ export default class SalesforceShiftsPage {
             await this.page.waitForTimeout(1000);
 
             try {
-                const optionRole = this.page.locator(`[role="option"]:has-text("${timeSlotType}")`).first();
-                await optionRole.click({ timeout: 5000, force: true });
+                await this.allOptionsLocator.filter({ hasText: timeSlotType }).first().click({ timeout: 10000 });
                 console.log("✅ Time Slot Type selected:", timeSlotType);
             } catch (e) {
-                try {
-                    await this.timeSlotTypeDropdown.fill(timeSlotType, { timeout: 5000 });
-                    await this.page.waitForTimeout(500);
-                    await this.page.keyboard.press("ArrowDown");
-                    await this.page.waitForTimeout(300);
-                    await this.page.keyboard.press("Enter");
-                    console.log("✅ Time Slot Type selected via type and keyboard");
-                } catch (e2) {
-                    console.log("❌ Failed to select Time Slot Type:", e2);
-                }
+                console.log("❌ Failed to select Time Slot Type:", e);
             }
         }
 

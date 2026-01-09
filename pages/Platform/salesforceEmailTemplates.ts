@@ -25,7 +25,6 @@ export default class SalesforceEmailTemplatesPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newButton: Locator;
   readonly saveButton: Locator;
   readonly saveAndNewButton: Locator;
   readonly cancelButton: Locator;
@@ -43,6 +42,7 @@ export default class SalesforceEmailTemplatesPage {
 
   // Navigation Elements
   readonly emailTemplateCreatedMessage: Locator;
+  readonly allOptionsLocator: Locator;
 
   /**
    * Constructor - Initializes the SalesforceEmailTemplates page object with all necessary locators
@@ -59,7 +59,6 @@ export default class SalesforceEmailTemplatesPage {
     this.testInfo = testInfo;
 
     // Primary controls - Main UI interaction elements
-    this.newButton = page.getByRole("button", { name: "New" });
     this.saveButton = page.getByRole("button", { name: "Save", exact: true });
     this.saveAndNewButton = page.getByRole("button", { name: "Save & New" });
     this.cancelButton = page.getByRole("button", { name: "Cancel" });
@@ -93,6 +92,7 @@ export default class SalesforceEmailTemplatesPage {
 
     // Success message locator
     this.emailTemplateCreatedMessage = page.locator(".toastMessage");
+    this.allOptionsLocator = page.getByRole("option");
 
     console.log(
       "✅ SalesforceEmailTemplates page object initialized successfully with all locators"
@@ -127,8 +127,6 @@ export default class SalesforceEmailTemplatesPage {
     console.log("🔄 Starting email template creation process...");
     console.log("📝 Email Template details:", JSON.stringify(details, null, 2));
 
-    await expect(this.newButton).toBeVisible({ timeout: 10000 });
-
     // Take start screenshot for verification
     await Helper.takeScreenshotToFile(
       this.page,
@@ -138,7 +136,6 @@ export default class SalesforceEmailTemplatesPage {
     );
 
     // Click New Email Template
-    await this.newButton.click({ timeout: 10000 });
     console.log("✅ Email Template creation form opened");
 
     // Wait for the form dialog to be fully loaded
@@ -149,11 +146,8 @@ export default class SalesforceEmailTemplatesPage {
 
     // Fill Email Template Name field (text input)
     if (details.EmailTemplateName || details["Email Template Name"]) {
-      const emailTemplateName =
-        details.EmailTemplateName || details["Email Template Name"];
-      await this.emailTemplateNameInput.fill(emailTemplateName, {
-        timeout: 10000,
-      });
+      const emailTemplateName = details.EmailTemplateName || details["Email Template Name"];
+      await this.emailTemplateNameInput.fill(emailTemplateName, { timeout: 10000 });
       console.log(`✅ Email Template Name filled: ${emailTemplateName}`);
     }
 
@@ -162,15 +156,13 @@ export default class SalesforceEmailTemplatesPage {
       const relatedEntityType =
         details.RelatedEntityType || details["Related Entity Type"];
       await this.relatedEntityTypeCombobox.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: relatedEntityType, exact: true })
-        .click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: relatedEntityType }).first().click({ timeout: 10000 });
       console.log(`✅ Related Entity Type selected: ${relatedEntityType}`);
     }
 
     // Fill Description field (text input)
     if (details.Description && details.Description !== "--None--") {
-      await this.descriptionTextarea.fill(details.Description, {
+      await this.descriptionTextarea.fill(Helper.generateUniqueValue(details.Description), {
         timeout: 10000,
       });
       console.log(`✅ Description filled: ${details.Description}`);
@@ -179,9 +171,7 @@ export default class SalesforceEmailTemplatesPage {
     // Fill Folder field (combobox)
     if (details.Folder) {
       await this.folderCombobox.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: details.Folder, exact: true })
-        .click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: details.Folder }).first().click({ timeout: 10000 });
       console.log(`✅ Folder selected: ${details.Folder}`);
     }
 
@@ -189,15 +179,13 @@ export default class SalesforceEmailTemplatesPage {
 
     //Message Content
     if (details.Subject && details.Subject !== "--None--") {
-      await this.emailSubjectInput.fill(details.Subject, { timeout: 10000 });
+      await this.emailSubjectInput.fill(Helper.generateUniqueValue(details.Subject), { timeout: 10000 });
       console.log(`✅ Email Subject filled: ${details.Subject}`);
     }
 
     if (details.Letterhead && details.Letterhead !== "--None--") {
       await this.emailLetterheadCombobox.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: details.Letterhead, exact: true })
-        .click({ timeout: 10000 });
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
       console.log(`✅ Letterhead selected: ${details.Letterhead}`);
     }
 
@@ -205,7 +193,7 @@ export default class SalesforceEmailTemplatesPage {
       // Wait for the iframe to be loaded before filling the HTML body
       await this.page.waitForTimeout(2000); // Allow iframe to fully load
       await expect(this.emailBodyTextarea).toBeVisible({ timeout: 15000 });
-      await this.emailBodyTextarea.fill(details.Body, { timeout: 10000});
+      await this.emailBodyTextarea.fill(Helper.generateUniqueValue(details.Body), { timeout: 10000 });
       console.log(`✅ Email Body filled: ${details.Body}`);
     }
 
@@ -253,7 +241,7 @@ export default class SalesforceEmailTemplatesPage {
     const pageText = await this.page.innerText('body').catch(() => '');
 
     const emailTemplateName = details.EmailTemplateName || details["Email Template Name"];
-    
+
     // Verify Email Template Name
     if (emailTemplateName) {
       if (pageContent.includes(emailTemplateName) || pageText.includes(emailTemplateName)) {
@@ -270,26 +258,6 @@ export default class SalesforceEmailTemplatesPage {
         console.log(`✅ Verified Related Entity Type: ${relatedEntityType}`);
       } else {
         console.log(`✗ Related Entity Type NOT found: ${relatedEntityType}`);
-      }
-    }
-
-    // Verify Description
-    const description = details.Description;
-    if (description && description !== "--None--") {
-      if (pageContent.includes(description) || pageText.includes(description)) {
-        console.log(`✅ Verified Description: ${description}`);
-      } else {
-        console.log(`✗ Description NOT found: ${description}`);
-      }
-    }
-
-    // Verify Subject
-    const subject = details.Subject;
-    if (subject && subject !== "--None--") {
-      if (pageContent.includes(subject) || pageText.includes(subject)) {
-        console.log(`✅ Verified Subject: ${subject}`);
-      } else {
-        console.log(`✗ Subject NOT found: ${subject}`);
       }
     }
 

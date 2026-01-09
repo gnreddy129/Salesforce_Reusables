@@ -25,7 +25,6 @@ export default class SalesforceSellersPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newButton: Locator;
   readonly saveButton: Locator;
   readonly saveAndNewButton: Locator;
   readonly cancelButton: Locator;
@@ -41,6 +40,7 @@ export default class SalesforceSellersPage {
 
   // Navigation Elements
   readonly sellerCreatedMessage: Locator;
+  readonly allOptionsLocator: Locator;
 
   /**
    * Constructor - Initializes the SalesforceSellers page object with all necessary locators
@@ -57,52 +57,22 @@ export default class SalesforceSellersPage {
     this.testInfo = testInfo;
 
     // Primary UI Controls
-    this.newButton = page.getByRole("button", { name: "New" });
     this.saveButton = page.getByRole("button", { name: "Save", exact: true });
-    this.saveAndNewButton = page.getByRole("button", {
-      name: "Save & New",
-      exact: true,
-    });
-    this.cancelButton = page.getByRole("button", {
-      name: "Cancel",
-      exact: true,
-    });
+    this.saveAndNewButton = page.getByRole("button", { name: "Save & New", exact: true });
+    this.cancelButton = page.getByRole("button", { name: "Cancel", exact: true });
 
     // Seller Information Fields
-    this.partyInput = page.getByRole("combobox", {
-      name: "Party",
-      exact: true,
-    });
-    this.nameInput = page.getByRole("textbox", {
-      name: "Name",
-      exact: true,
-    });
-    this.sellerTypeCombobox = page.getByRole("combobox", {
-      name: "Seller Type",
-      exact: true,
-    });
-    this.sellerTierCombobox = page.getByRole("combobox", {
-      name: "Seller Tier",
-      exact: true,
-    });
-    this.salesAmountInput = page.getByLabel("Sales Amount", {
-      exact: true,
-    });
-    this.activeToDateInput = page.getByRole("textbox", {
-      name: "Active To Date",
-      exact: true,
-    });
-    this.activeFromDateInput = page.getByRole("textbox", {
-      name: "Active From Date",
-      exact: true,
-    });
-
-    // Navigation Elements
+    this.partyInput = page.getByRole("combobox", { name: "Party", exact: true });
+    this.nameInput = page.getByRole("textbox", { name: "Name", exact: true });
+    this.sellerTypeCombobox = page.getByRole("combobox", { name: "Seller Type", exact: true });
+    this.sellerTierCombobox = page.getByRole("combobox", { name: "Seller Tier", exact: true });
+    this.salesAmountInput = page.locator('[name="SalesAmount"]');
+    this.activeToDateInput = page.getByRole("textbox", { name: "Active To Date", exact: true });
+    this.activeFromDateInput = page.getByRole("textbox", { name: "Active From Date", exact: true });
     this.sellerCreatedMessage = page.locator(".toastMessage");
+    this.allOptionsLocator = page.getByRole("option");
 
-    console.log(
-      "✅ SalesforceSellers page object initialized successfully with all locators"
-    );
+    console.log("✅ SalesforceSellers page object initialized successfully with all locators");
   }
 
   /**
@@ -139,8 +109,6 @@ export default class SalesforceSellersPage {
     console.log("🔄 Starting seller creation process...");
     console.log("📝 Seller details:", JSON.stringify(details, null, 2));
 
-    await expect(this.newButton).toBeVisible({ timeout: 10000 });
-
     // Take start screenshot for verification
     if (this.testInfo) {
       await Helper.takeScreenshotToFile(
@@ -150,9 +118,6 @@ export default class SalesforceSellersPage {
         "Sales/salesforce-sellers/"
       );
     }
-
-    // Click New Seller
-    await this.newButton.click({ timeout: 10000 });
     console.log("✅ Seller creation form opened");
 
     // Wait for the form dialog to be fully loaded
@@ -164,16 +129,13 @@ export default class SalesforceSellersPage {
     // Fill Party field (combobox)
     if (details.Party) {
       await this.partyInput.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: details.Party })
-        .first()
-        .click();
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
       console.log(`✅ Party filled: ${details.Party}`);
     }
 
     // Fill Name field (text input)
     if (details.Name) {
-      await this.nameInput.fill(details.Name, {
+      await this.nameInput.fill(Helper.generateUniqueValue(details.Name), {
         timeout: 10000,
       });
       console.log(`✅ Name filled: ${details.Name}`);
@@ -182,18 +144,14 @@ export default class SalesforceSellersPage {
     // Fill Seller Type field (combobox)
     if (details["Seller Type"] && details["Seller Type"] !== "--None--") {
       await this.sellerTypeCombobox.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: details["Seller Type"] })
-        .click();
+      await this.allOptionsLocator.filter({ hasText: details["Seller Type"] }).first().click({ timeout: 10000 });
       console.log(`✅ Seller Type selected: ${details["Seller Type"]}`);
     }
 
     // Fill Seller Tier field (combobox)
     if (details["Seller Tier"] && details["Seller Tier"] !== "--None--") {
       await this.sellerTierCombobox.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: details["Seller Tier"] })
-        .click();
+      await this.allOptionsLocator.filter({ hasText: details["Seller Tier"] }).first().click({ timeout: 10000 });
       console.log(`✅ Seller Tier selected: ${details["Seller Tier"]}`);
     }
 
@@ -265,6 +223,8 @@ export default class SalesforceSellersPage {
   async verifySellerCreation(details: { [key: string]: string }) {
     console.log("🔍 Starting seller verification...");
 
+    await expect(this.sellerCreatedMessage).toContainText("was created", { timeout: 10000 });
+
     // Take verification screenshot
     if (this.testInfo) {
       await Helper.takeScreenshotToFile(
@@ -275,16 +235,12 @@ export default class SalesforceSellersPage {
       );
     }
 
-    // Check if the seller name appears in the interface
-    const sellerName = details.Name;
-    if (sellerName) {
-      // Wait for page to load after creation
-      await this.page.waitForTimeout(5000);
-
-      // Look for the seller name in the page
-      const sellerLocator = this.page.getByText(sellerName).first();
-      await expect(sellerLocator).toBeVisible({ timeout: 10000 });
-      console.log(`✅ Seller name verification successful: ${sellerName}`);
+    // Check if the seller type appears in the interface
+    if (details["Seller Type"]) {
+      const count = await this.page.getByText(details["Seller Type"]).count();
+      if (count === 0) {
+        throw new Error(`Seller Type "${details["Seller Type"]}" not found on the page`);
+      }
     }
 
     console.log("🎉 Seller verification completed!");

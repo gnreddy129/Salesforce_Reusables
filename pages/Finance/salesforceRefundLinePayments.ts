@@ -25,7 +25,6 @@ export default class SalesforceRefundLinePaymentsPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newRefundLinePaymentButton: Locator;
   readonly saveButton: Locator;
   readonly saveAndNewButton: Locator;
   readonly cancelButton: Locator;
@@ -63,6 +62,7 @@ export default class SalesforceRefundLinePaymentsPage {
 
   // Navigation Elements
   readonly refundLinePaymentCreatedMessage: Locator;
+  readonly allOptionsLocator: Locator;
 
   /**
    * Constructor - Initializes the SalesforceRefundLinePayments page object with all necessary locators
@@ -79,9 +79,6 @@ export default class SalesforceRefundLinePaymentsPage {
     this.testInfo = testInfo;
 
     // Primary controls - Main UI interaction elements
-    this.newRefundLinePaymentButton = page.getByRole("button", {
-      name: "New",
-    });
     this.saveButton = page.getByRole("button", { name: "Save", exact: true });
     this.saveAndNewButton = page.getByRole("button", { name: "Save & New" });
     this.cancelButton = page.getByRole("button", { name: "Cancel" });
@@ -170,6 +167,7 @@ export default class SalesforceRefundLinePaymentsPage {
     );
     // Success message locator
     this.refundLinePaymentCreatedMessage = page.locator(".toastMessage");
+    this.allOptionsLocator = page.getByRole("option");
 
     console.log(
       "✅ SalesforceRefundLinePayments page object initialized successfully with all locators"
@@ -196,10 +194,6 @@ export default class SalesforceRefundLinePaymentsPage {
       JSON.stringify(details, null, 2)
     );
 
-    await expect(this.newRefundLinePaymentButton).toBeVisible({
-      timeout: 10000,
-    });
-
     // Take start screenshot for verification
     await Helper.takeScreenshotToFile(
       this.page,
@@ -209,7 +203,6 @@ export default class SalesforceRefundLinePaymentsPage {
     );
 
     // Click New Refund Line Payment
-    await this.newRefundLinePaymentButton.click({ timeout: 10000 });
     console.log("✅ Refund line payment creation form opened");
 
     // Wait for form to be fully loaded
@@ -220,30 +213,21 @@ export default class SalesforceRefundLinePaymentsPage {
     // Fill Refund field
     if (details.Refund && details.Refund !== "--None--") {
       await this.refundCombobox.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: details.Refund })
-        .first()
-        .click({ timeout: 10000 });
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
       console.log(`✅ Refund selected: ${details.Refund}`);
     }
 
     // Fill Type field
     if (details.Type && details.Type !== "--None--") {
       await this.typeCombobox.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: details.Type })
-        .first()
-        .click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: details.Type }).first().click({ timeout: 10000 });
       console.log(`✅ Type selected: ${details.Type}`);
     }
 
     // Fill Has Been Unapplied field
     if (details.HasBeenUnapplied && details.HasBeenUnapplied !== "--None--") {
       await this.hasBeenUnappliedCombobox.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: details.HasBeenUnapplied })
-        .first()
-        .click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: details.HasBeenUnapplied }).first().click({ timeout: 10000 });
       console.log(
         `✅ Has Been Unapplied selected: ${details.HasBeenUnapplied}`
       );
@@ -252,16 +236,13 @@ export default class SalesforceRefundLinePaymentsPage {
     // Fill Payment field
     if (details.Payment && details.Payment !== "--None--") {
       await this.paymentCombobox.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: details.Payment })
-        .first()
-        .click({ timeout: 10000 });
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
       console.log(`✅ Payment selected: ${details.Payment}`);
     }
 
     // Fill Comments field
     if (details.Comments && details.Comments !== "--None--") {
-      await this.commentsInput.fill(details.Comments, { timeout: 10000 });
+      await this.commentsInput.fill(Helper.generateUniqueValue(details.Comments), { timeout: 10000 });
       console.log(`✅ Comments filled: ${details.Comments}`);
     }
 
@@ -277,10 +258,7 @@ export default class SalesforceRefundLinePaymentsPage {
     ) {
       const accountName = details.AssociatedAccount || details['Associated Account'];
       await this.associatedAccountCombobox.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: accountName })
-        .first()
-        .click({ timeout: 10000 });
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
       console.log(
         `✅ Associated Account selected: ${accountName}`
       );
@@ -294,10 +272,7 @@ export default class SalesforceRefundLinePaymentsPage {
     ) {
       const refundLinePaymentName = details.AssociatedRefundLinePayment || details['Associated Refund Line Payment'];
       await this.associatedRefundLinePaymentCombobox.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: refundLinePaymentName })
-        .first()
-        .click({ timeout: 10000 });
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
       console.log(
         `✅ Associated Refund Line Payment selected: ${refundLinePaymentName}`
       );
@@ -311,16 +286,13 @@ export default class SalesforceRefundLinePaymentsPage {
 
     if (details.DateTime && details.DateTime !== "--None--") {
       await this.dateGroupTimeCombobox.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: details.DateTime })
-        .first()
-        .click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: details.DateTime }).first().click({ timeout: 10000 });
       console.log(`✅ Date Time selected: ${details.DateTime}`);
     }
 
     // Fill Effective Date Group Date/Time
     if (details.EffectiveDate && details.EffectiveDate !== "--None--" || details['Effective Date'] && details['Effective Date'] !== "--None--") {
-     const effectiveDate = details.EffectiveDate || details['Effective Date'];
+      const effectiveDate = details.EffectiveDate || details['Effective Date'];
       await this.effectiveDateGroupDateInput.fill(effectiveDate, {
         timeout: 10000,
       });
@@ -330,10 +302,7 @@ export default class SalesforceRefundLinePaymentsPage {
     if (details.EffectiveDateTime && details.EffectiveDateTime !== "--None--" || details['Effective Date Time'] && details['Effective Date Time'] !== "--None--") {
       const effectiveDateTime = details.EffectiveDateTime || details['Effective Date Time'];
       await this.effectiveDateGroupTimeCombobox.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: effectiveDateTime })
-        .first()
-        .click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: effectiveDateTime }).first().click({ timeout: 10000 });
       console.log(
         `✅ Effective Date Time selected: ${effectiveDateTime}`
       );
@@ -351,10 +320,7 @@ export default class SalesforceRefundLinePaymentsPage {
     if (details.AppliedDateTime && details.AppliedDateTime !== "--None--" || details['Applied Date Time'] && details['Applied Date Time'] !== "--None--") {
       const appliedDateTime = details.AppliedDateTime || details['Applied Date Time'];
       await this.appliedDateGroupTimeCombobox.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: appliedDateTime })
-        .first()
-        .click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: appliedDateTime }).first().click({ timeout: 10000 });
       console.log(`✅ Applied Date Time selected: ${appliedDateTime}`);
     }
 
@@ -370,10 +336,7 @@ export default class SalesforceRefundLinePaymentsPage {
     if (details.UnappliedDateTime && details.UnappliedDateTime !== "--None--" || details['Unapplied Date Time'] && details['Unapplied Date Time'] !== "--None--") {
       const unappliedDateTime = details.UnappliedDateTime || details['Unapplied Date Time'];
       await this.unappliedDateGroupTimeCombobox.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: unappliedDateTime })
-        .first()
-        .click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: unappliedDateTime }).first().click({ timeout: 10000 });
       console.log(
         `✅ Unapplied Date Time selected: ${unappliedDateTime}`
       );
@@ -410,22 +373,15 @@ export default class SalesforceRefundLinePaymentsPage {
   async verifyRefundLinePayment(details: { [k: string]: string }) {
     console.log("🔍 Starting refund line payment verification...");
 
-    await expect(this.refundLinePaymentCreatedMessage).toContainText(
-      "was created",
-      {
-        timeout: 10000,
-      }
-    );
+    await expect(this.refundLinePaymentCreatedMessage).toContainText("was created", {
+      timeout: 10000,
+    });
     console.log("✅ Refund line payment creation message verified");
 
     // Verify refund line payment creation by checking for key field values on the page
     if (details.Refund) {
-      expect(await this.page.getByText(details.Refund).count()).toBeGreaterThan(
-        0
-      );
-      console.log(
-        `✅ Refund line payment refund verification successful: ${details.Refund}`
-      );
+      expect(await this.page.getByText(details.Refund).count()).toBeGreaterThan(0);
+      console.log(`✅ Refund line payment refund verification successful: ${details.Refund}`);
     }
 
     // Take verification screenshot

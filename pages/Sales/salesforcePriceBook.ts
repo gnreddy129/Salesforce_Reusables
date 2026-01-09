@@ -24,7 +24,6 @@ export default class SalesforcePriceBooksPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newPriceBookButton: Locator;
   readonly dialog: Locator;
   readonly saveButton: Locator;
 
@@ -34,10 +33,6 @@ export default class SalesforcePriceBooksPage {
   readonly descriptionInput: Locator;
   readonly isStandardPriceBookCheckbox: Locator;
 
-  // Additional UI elements
-  readonly appLauncher: Locator;
-  readonly viewAllButton: Locator;
-  readonly searchBox: Locator;
   readonly priceBookCreatedMessage: Locator;
 
   // List View Elements
@@ -45,6 +40,7 @@ export default class SalesforcePriceBooksPage {
   readonly listViewControls: Locator;
   readonly refreshButton: Locator;
   readonly editListButton: Locator;
+  readonly primaryFieldLocator: Locator;
 
   /**
    * Constructor - Initializes the SalesforcePriceBooks page object with all necessary locators
@@ -61,9 +57,6 @@ export default class SalesforcePriceBooksPage {
     this.testInfo = testInfo;
 
     // Primary controls - Main UI interaction elements
-    this.newPriceBookButton = page
-      .getByRole("button", { name: /New/i })
-      .first();
     this.dialog = page.getByRole("dialog").first();
     this.saveButton = this.dialog
       .getByRole("button", { name: /^Save$/i })
@@ -82,14 +75,11 @@ export default class SalesforcePriceBooksPage {
     this.isStandardPriceBookCheckbox = this.dialog.getByRole("checkbox", {
       name: /Is Standard Price Book/i,
     });
-
-    // Initialize navigation elements
-    this.appLauncher = page.getByTitle("App Launcher");
-    this.viewAllButton = page.getByRole("button", { name: "View All" });
-    this.searchBox = page.getByPlaceholder("Search apps and items...");
-
     // Success message locator
     this.priceBookCreatedMessage = page.locator(".toastMessage");
+    
+    // Primary field locator for verification
+    this.primaryFieldLocator = page.locator(`[slot="primaryField"]`);
 
     console.log(
       "✅ SalesforcePriceBooks page object initialized successfully with all locators"
@@ -115,8 +105,6 @@ export default class SalesforcePriceBooksPage {
     console.log("🔄 Starting price book creation process...");
     console.log("📝 Price Book details:", JSON.stringify(details, null, 2));
 
-    await expect(this.newPriceBookButton).toBeVisible({ timeout: 10000 });
-
     // Take start screenshot for verification
     await Helper.takeScreenshotToFile(
       this.page,
@@ -126,7 +114,6 @@ export default class SalesforcePriceBooksPage {
     );
 
     // Click New Price Book
-    await this.newPriceBookButton.click({ timeout: 10000 });
     console.log("✅ Price Book creation dialog opened");
 
     console.log("📋 Filling form fields...");
@@ -188,7 +175,7 @@ export default class SalesforcePriceBooksPage {
     if (details.PriceBookName || details["Price Book Name"]) {
       const priceBookName = details.PriceBookName || details["Price Book Name"];
       await expect(
-        this.page.locator(`[slot="primaryField"]`)
+        this.primaryFieldLocator
       ).toHaveText(priceBookName, { timeout: 10000 });
       console.log(
         `✅ Price Book name verification successful: ${priceBookName}`

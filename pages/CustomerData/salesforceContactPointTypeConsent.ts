@@ -1,26 +1,10 @@
 import { expect, Page, Locator, TestInfo } from "@playwright/test";
 import { Helper } from "../../utils/helper";
+import { fi } from "@faker-js/faker";
 
 /**
  * SalesforceContactPointTypeConsent Page Object Model
- *
- * This class provides automation capabilities for Salesforce Contact Point Type Consent management functionality.
- * It handles contact point type consent creation, form interac    // Handle Capture Contact Point Type
-    if (details["Capture Contact Point Type"]) {
-      await this.captureContactPointTypeInput.click();
-      await this.page
-        .getByRole("option", {
-          name: details["Capture Contact Point Type"],
-          exact: true,
-        })
-        .first()
-        .click();
-      console.log(
-        `✅ Selected Capture Contact Point Type: ${details["Capture Contact Point Type"]}`
-      );
-    }rification processes with robust
- * locator strategies and timeout configurations for reliable test execution.
- *
+ * This class provides automation capabilities for Salesforce Contact Point Type Consent functionality.
  * Features:
  * - Create new contact point type consents with comprehensive field support
  * - Handle text fields, date fields, time fields, and various input types
@@ -38,7 +22,6 @@ export default class SalesforceContactPointTypeConsentPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newButton: Locator;
   readonly saveButton: Locator;
   readonly saveAndNewButton: Locator;
   readonly cancelButton: Locator;
@@ -78,6 +61,7 @@ export default class SalesforceContactPointTypeConsentPage {
   readonly effectiveFromParent: Locator;
   readonly doubleConsentCaptureDateParent: Locator;
   readonly captureDateParent: Locator;
+  readonly allOptionsLocator: Locator;
 
   // Navigation Elements
   readonly contactPointTypeConsentCreatedMessage: Locator;
@@ -99,7 +83,6 @@ export default class SalesforceContactPointTypeConsentPage {
     this.testInfo = testInfo;
 
     // Primary controls - Main UI interaction elements
-    this.newButton = page.getByRole("button", { name: "New" });
     this.saveButton = page.getByRole("button", { name: "Save", exact: true });
     this.saveAndNewButton = page.getByRole("button", { name: "Save & New" });
     this.cancelButton = page.getByRole("button", { name: "Cancel" });
@@ -202,6 +185,7 @@ export default class SalesforceContactPointTypeConsentPage {
 
     // Success message locator
     this.contactPointTypeConsentCreatedMessage = page.locator(".toastMessage");
+    this.allOptionsLocator = page.getByRole("option");
 
     console.log(
       "✅ SalesforceContactPointTypeConsent page object initialized successfully with all locators"
@@ -238,8 +222,6 @@ export default class SalesforceContactPointTypeConsentPage {
     );
 
     // Click New button to open creation form
-    await this.newButton.click();
-    console.log("✅ Clicked New button");
 
     // Wait for dialog to be visible
     await this.page.waitForTimeout(3000);
@@ -248,20 +230,14 @@ export default class SalesforceContactPointTypeConsentPage {
     // Fill Name (required field)
     if (details.Name) {
       await this.nameInput.clear();
-      await this.nameInput.fill(details.Name);
+      await this.nameInput.fill(Helper.generateUniqueValue(details.Name));
       console.log(`✅ Filled Name: ${details.Name}`);
     }
 
     // Handle Contact Point Type
     if (details["Contact Point Type"]) {
-      await this.contactPointTypeInput.click();
-      await this.page
-        .getByRole("option", {
-          name: details["Contact Point Type"],
-          exact: true,
-        })
-        .first()
-        .click();
+      await this.contactPointTypeInput.click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: details["Contact Point Type"] }).first().click({ timeout: 10000 });
       console.log(
         `✅ Selected Contact Point Type: ${details["Contact Point Type"]}`
       );
@@ -269,51 +245,37 @@ export default class SalesforceContactPointTypeConsentPage {
 
     // Handle Party (required field)
     if (details.Party) {
-      await this.partyInput.click();
-      await this.page.getByText(details.Party).first().click();
+      await this.partyInput.click({ timeout: 10000 });
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
       console.log(`✅ Selected Party: ${details.Party}`);
     }
 
     // Handle Business Brand
     if (details["Business Brand"]) {
-      await this.businessBrandInput.click();
-      await this.page
-        .getByRole("option", { name: details["Business Brand"], exact: true })
-        .first()
-        .click();
+      await this.businessBrandInput.click({ timeout: 10000 });
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
       console.log(`✅ Selected Business Brand: ${details["Business Brand"]}`);
     }
 
     // Handle Party Role section
     if (details["Party Role Choose Object"]) {
-      await this.partyRoleChooseObjectInput.click();
-      await this.partyRoleChooseObjectInput
-        .getByText(details["Party Role Choose Object"], { exact: true })
-        .click();
+      await this.partyRoleChooseObjectInput.click({ timeout: 10000 });
+      await this.allOptionsLocator.first().click({ timeout: 10000 } );
       console.log(
         `✅ Selected Party Role Choose Object: ${details["Party Role Choose Object"]}`
       );
     }
 
     if (details["Party Role"]) {
-      await this.partyRoleInput.click();
-      await this.page
-        .getByRole("option", { name: details["Party Role"], exact: true })
-        .first()
-        .click();
+      await this.partyRoleInput.click({ timeout: 10000 });
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
       console.log(`✅ Selected Party Role: ${details["Party Role"]}`);
     }
 
     // Handle Privacy Consent Status (required field)
     if (details["Privacy Consent Status"]) {
-      await this.privacyConsentStatusInput.click();
-      await this.page
-        .getByRole("option", {
-          name: details["Privacy Consent Status"],
-          exact: true,
-        })
-        .first()
-        .click();
+      await this.privacyConsentStatusInput.click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: details["Privacy Consent Status"] }).first().click({ timeout: 10000 });
       console.log(
         `✅ Selected Privacy Consent Status: ${details["Privacy Consent Status"]}`
       );
@@ -321,13 +283,8 @@ export default class SalesforceContactPointTypeConsentPage {
 
     // Handle Data Use Purpose
     if (details["Data Use Purpose"]) {
-      await this.dataUsePurposeInput.click();
-      await this.page
-        .getByRole("option", {
-          name: details["Data Use Purpose"],
-        })
-        .first()
-        .click();
+      await this.dataUsePurposeInput.click({ timeout: 10000 });
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
       console.log(
         `✅ Selected Data Use Purpose: ${details["Data Use Purpose"]}`
       );
@@ -342,20 +299,11 @@ export default class SalesforceContactPointTypeConsentPage {
     }
 
     if (details["Effective To Time"]) {
-      await this.effectiveToTimeInput.click();
+      await this.effectiveToTimeInput.click({ timeout: 10000 });
       await this.effectiveToTimeInput.fill(details["Effective To Time"]);
       console.log(
         `✅ Filled Effective To Time: ${details["Effective To Time"]}`
       );
-      // await this.page
-      //   .getByRole("option", {
-      //     name: details["Effective To Time"],
-      //     exact: true,
-      //   })
-      //   .click();
-      // console.log(
-      //   `✅ Selected Effective To Time: ${details["Effective To Time"]}`
-      // );
     }
 
     if (details["Effective From Date"]) {
@@ -366,14 +314,8 @@ export default class SalesforceContactPointTypeConsentPage {
     }
 
     if (details["Effective From Time"]) {
-      await this.effectiveFromTimeInput.click();
+      await this.effectiveFromTimeInput.click({ timeout: 10000 });
       await this.effectiveFromTimeInput.fill(details["Effective From Time"]);
-      // await this.page
-      //   .getByRole("option", {
-      //     name: details["Effective From Time"],
-      //     exact: true,
-      //   })
-      //   .click();
       console.log(
         `✅ Selected Effective From Time: ${details["Effective From Time"]}`
       );
@@ -381,14 +323,8 @@ export default class SalesforceContactPointTypeConsentPage {
 
     // Handle capture fields
     if (details["Capture Contact Point Type"]) {
-      await this.captureContactPointTypeInput.click();
-      await this.page
-        .getByRole("option", {
-          name: details["Capture Contact Point Type"],
-          exact: true,
-        })
-        .first()
-        .click();
+      await this.captureContactPointTypeInput.click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: details["Capture Contact Point Type"] }).first().click({ timeout: 10000 });
       console.log(
         `✅ Selected Capture Contact Point Type: ${details["Capture Contact Point Type"]}`
       );
@@ -409,16 +345,10 @@ export default class SalesforceContactPointTypeConsentPage {
     }
 
     if (details["Double Consent Capture Date Time"]) {
-      await this.doubleConsentCaptureDateTimeInput.click();
+      await this.doubleConsentCaptureDateTimeInput.click({ timeout: 10000 });
       await this.doubleConsentCaptureDateTimeInput.fill(
         details["Double Consent Capture Date Time"]
       );
-      // await this.page
-      //   .getByRole("option", {
-      //     name: details["Double Consent Capture Date Time"],
-      //     exact: true,
-      //   })
-      //   .click();
       console.log(
         `✅ Selected Double Consent Capture Date Time: ${details["Double Consent Capture Date Time"]}`
       );
@@ -432,14 +362,8 @@ export default class SalesforceContactPointTypeConsentPage {
     }
 
     if (details["Capture Date Time"]) {
-      await this.captureDateTimeInput.click();
+      await this.captureDateTimeInput.click({ timeout: 10000 });
       await this.captureDateTimeInput.fill(details["Capture Date Time"]);
-      // await this.page
-      //   .getByRole("option", {
-      //     name: details["Capture Date Time"],
-      //     exact: true,
-      //   })
-      //   .click();
       console.log(
         `✅ Selected Capture Date Time: ${details["Capture Date Time"]}`
       );
@@ -454,7 +378,7 @@ export default class SalesforceContactPointTypeConsentPage {
     );
 
     // Click Save button
-    await this.saveButton.click();
+    await this.saveButton.click({ timeout: 10000 });
     console.log("✅ Clicked Save button");
 
     // Wait for success or error response

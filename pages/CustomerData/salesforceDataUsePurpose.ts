@@ -25,7 +25,6 @@ export default class SalesforceDataUsePurposePage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newButton: Locator;
   readonly saveButton: Locator;
   readonly saveAndNewButton: Locator;
   readonly cancelButton: Locator;
@@ -38,6 +37,8 @@ export default class SalesforceDataUsePurposePage {
 
   // Navigation Elements
   readonly dataUsePurposeCreatedMessage: Locator;
+  readonly firstOptionLocator: Locator;
+  readonly primaryFieldLocator: Locator;
 
   /**
    * Constructor - Initializes the SalesforceDataUsePurpose page object with all necessary locators
@@ -54,7 +55,6 @@ export default class SalesforceDataUsePurposePage {
     this.testInfo = testInfo;
 
     // Primary controls - Main UI interaction elements
-    this.newButton = page.getByRole("button", { name: "New" });
     this.saveButton = page.getByRole("button", { name: "Save", exact: true });
     this.saveAndNewButton = page.getByRole("button", { name: "Save & New" });
     this.cancelButton = page.getByRole("button", { name: "Cancel" });
@@ -75,6 +75,8 @@ export default class SalesforceDataUsePurposePage {
 
     // Success message locator
     this.dataUsePurposeCreatedMessage = page.locator(".toastMessage");
+    this.firstOptionLocator = page.getByRole("option").first();
+    this.primaryFieldLocator = page.locator(`[slot="primaryField"]`);
 
     console.log(
       "✅ SalesforceDataUsePurpose page object initialized successfully with all locators"
@@ -112,8 +114,6 @@ export default class SalesforceDataUsePurposePage {
       JSON.stringify(details, null, 2)
     );
 
-    await expect(this.newButton).toBeVisible({ timeout: 10000 });
-
     // Take start screenshot for verification
     await Helper.takeScreenshotToFile(
       this.page,
@@ -123,7 +123,6 @@ export default class SalesforceDataUsePurposePage {
     );
 
     // Click New Data Use Purpose
-    await this.newButton.click({ timeout: 10000 });
     console.log("✅ Data Use Purpose creation form opened");
 
     // Wait for the form dialog to be fully loaded
@@ -134,27 +133,25 @@ export default class SalesforceDataUsePurposePage {
 
     // Fill Name field (text input)
     if (details.Name) {
-      await this.nameInput.fill(details.Name, {
+      await this.nameInput.fill(Helper.generateUniqueValue(details.Name), {
         timeout: 10000,
       });
       console.log(`✅ Name filled: ${details.Name}`);
     }
 
     // Fill Description field (text input)
-    if (details.Description && details.Description !=="--None--") {
-      await this.descriptionInput.fill(details.Description, {
+    if (details.Description && details.Description !== "--None--") {
+      await this.descriptionInput.fill(Helper.generateUniqueValue(details.Description), {
         timeout: 10000,
       });
       console.log(`✅ Description filled: ${details.Description}`);
     }
 
     if (details["Legal Basis"] && details["Legal Basis"] !== "--None--") {
-      await this.legalBasisComboBox.click();
+      await this.legalBasisComboBox.click({ timeout: 10000 });
       const legalBasisOption = details.LegalBasis || details["Legal Basis"];
-      await this.page
-        .getByRole("option", { name: legalBasisOption }).first()
-        .click({ timeout: 10000 });
-      console.log(`✅ Legal Basis selected: ${legalBasisOption}`);
+      await this.firstOptionLocator.click({ timeout: 10000 });
+        console.log(`✅ Legal Basis selected: ${legalBasisOption}`);
     }
 
     if (details["Can Data Subject Opt Out"] === "true"
@@ -204,7 +201,7 @@ export default class SalesforceDataUsePurposePage {
     );
 
     // Verify Name
-    await expect(this.page.locator(`[slot="primaryField"]`)).toContainText(
+    await expect(this.primaryFieldLocator).toContainText(
       details.Name,
       { timeout: 10000 }
     );

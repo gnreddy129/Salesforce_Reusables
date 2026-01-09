@@ -2,14 +2,6 @@ import { defineConfig, devices } from "@playwright/test";
 import { defineBddConfig, cucumberReporter } from "playwright-bdd";
 import { Helper } from "./utils/helper";
 
-import path from "path";
-
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-// require('dotenv').config();
-
 const testDir = defineBddConfig({
   paths: ["./tests/features/**/*.feature"],
   require: ["./stepdef/**/*.ts"],
@@ -31,11 +23,13 @@ export default defineConfig({
   workers: process.env.CI ? undefined : 1,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
-    ["html", { open: "never" }],
-    cucumberReporter("json", {
-      outputFile: "cucumber-reports/cucumber-report.json",
-    }),
-    ["junit", { outputFile: "./notify-results/test-results.xml" }],
+    // ["html", { open: "never" }],
+    // cucumberReporter("json", { outputFile: "cucumber-reports/cucumber-report.json" }),
+    // ["junit", { outputFile: "./notify-results/test-results.xml" }],
+    
+    cucumberReporter("html", {
+      outputFile: `cucumber-reports/cucumber-html-report-${new Date().toISOString().replace(/[:.]/g, '-')}.html`,
+    })
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
@@ -60,22 +54,10 @@ export default defineConfig({
       testMatch: /global\.setup\.ts/,
       //teardown: 'close',
     },
-    //{
-    //name: 'close',
-    //testMatch: /global\.teardown\.ts/,
-    //},
-
     {
       name: "Google Chrome",
       use: { ...devices["Desktop Chrome"], channel: "chrome" },
       dependencies: ["setup"],
     },
   ],
-
-  /* Run your local dev server before starting the tests */
-  // webServer: {
-  //   command: 'npm run start',
-  //   url: 'http://127.0.0.1:3000',
-  //   reuseExistingServer: !process.env.CI,
-  // },
 });

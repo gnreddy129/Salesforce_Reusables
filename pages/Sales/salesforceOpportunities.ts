@@ -1,4 +1,3 @@
-import { createBdd, DataTable } from "playwright-bdd";
 import { expect, type Locator, type Page, TestInfo } from "@playwright/test";
 import { Helper } from "../../utils/helper";
 
@@ -24,7 +23,6 @@ export class SalesforceOpportunitiesPage {
   readonly page: Page;
   private testInfo?: TestInfo;
   // Primary Action Buttons
-  readonly newOpportunityButton: Locator;
   readonly saveButton: Locator;
   readonly dialog: Locator;
   readonly dialogSave: Locator;
@@ -46,6 +44,9 @@ export class SalesforceOpportunitiesPage {
   // Checkbox Fields
   readonly private: Locator;
 
+  // Verification Fields
+  readonly allOptionsLocator: Locator;
+
   /**
    * Constructor - Initializes the SalesforceOpportunities page object with all necessary locators
    *
@@ -64,29 +65,28 @@ export class SalesforceOpportunitiesPage {
     this.saveButton = page.getByRole("button", { name: "Save", exact: true });
 
     // Dialog-specific elements for better isolation
-    this.dialog = this.page.getByRole("dialog", {
-      name: /New Opportunity/i,
-    });
+    this.dialog = page.getByRole("dialog", { name: /New Opportunity/i });
     this.dialogSave = this.dialog.getByRole("button", { name: /^Save$/i });
 
     // Basic opportunity information fields
-    this.opportunityName = page.getByRole("textbox", {
-      name: /Opportunity Name/i,
-    });
-    this.closeDate = page.getByRole("textbox", { name: /Close Date/i });
-    this.amount = page.getByRole("spinbutton", { name: /Amount/i });
+    this.opportunityName = this.dialog.getByRole("textbox", { name: /Opportunity Name/i });
+    this.closeDate = this.dialog.getByRole("textbox", { name: /Close Date/i });
+    this.amount = this.dialog.getByRole("spinbutton", { name: /Amount/i });
 
     // Dropdown fields for opportunity categorization
-    this.type = page.getByRole("combobox", { name: /Type/i });
-    this.stage = page.getByRole("combobox", { name: /Stage/i });
-    this.leadSource = page.getByRole("combobox", { name: /Lead Source/i });
+    this.type = this.dialog.getByRole("combobox", { name: /Type/i });
+    this.stage = this.dialog.getByRole("combobox", { name: /Stage/i });
+    this.leadSource = this.dialog.getByRole("combobox", { name: /Lead Source/i });
 
     // Additional text fields
-    this.nextStep = page.getByRole("textbox", { name: /Next Step/i });
-    this.description = page.getByRole("textbox", { name: /Description/i });
+    this.nextStep = this.dialog.getByRole("textbox", { name: /Next Step/i });
+    this.description = this.dialog.getByRole("textbox", { name: /Description/i });
 
     // Boolean fields
-    this.private = page.getByRole("checkbox", { name: /Private/i });
+    this.private = this.dialog.getByRole("checkbox", { name: /Private/i });
+
+    // Verification fields
+    this.allOptionsLocator = page.getByRole("option");
 
     console.log(
       "✅ SalesforceOpportunities page object initialized successfully with all locators"
@@ -130,85 +130,53 @@ export class SalesforceOpportunitiesPage {
     console.log("📝 Opportunity details:", JSON.stringify(details, null, 2));
 
     // Fill in basic information scoped to the dialog
-    await this.dialog
-      .getByRole("textbox", { name: /Opportunity Name/i })
-      .fill(details.Name, { timeout: 10000 });
+    if (details.Name) {
+      await this.opportunityName.fill(Helper.generateUniqueValue(details.Name), { timeout: 10000 });
+    }
 
     // Handle date: fill the value provided by the feature file (DD/MM/YYYY) directly
     if (details.CloseDate) {
-      await this.dialog
-        .getByRole("textbox", { name: /Close Date/i })
-        .fill(details.CloseDate, { timeout: 10000 });
+      await this.closeDate.fill(details.CloseDate, { timeout: 10000 });
     }
 
     // Handle Type dropdown
     if (details.Type) {
-      await this.dialog.getByRole("combobox", { name: /Type/i }).click();
-      await this.dialog
-        .getByRole("listbox")
-        .waitFor({ state: "visible", timeout: 10000 })
-        .catch(() => { });
-      await this.dialog
-        .getByRole("listbox")
-        .getByRole("option", { name: details.Type })
-        .click({ timeout: 10000 });
+      await this.type.click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: details.Type }).first().click({ timeout: 10000 });
     }
 
     // Handle Stage selection
     if (details.Stage) {
-      await this.dialog.getByRole("combobox", { name: /Stage/i }).click();
-      await this.dialog
-        .getByRole("listbox")
-        .waitFor({ state: "visible", timeout: 10000 })
-        .catch(() => { });
-      await this.dialog
-        .getByRole("listbox")
-        .getByRole("option", { name: details.Stage })
-        .click({ timeout: 10000 });
+      await this.stage.click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: details.Stage }).first().click({ timeout: 10000 });
     }
 
     // Handle Lead Source if provided
     if (details.LeadSource) {
-      await this.dialog.getByRole("combobox", { name: /Lead Source/i }).click();
-      await this.dialog
-        .getByRole("listbox")
-        .waitFor({ state: "visible", timeout: 10000 })
-        .catch(() => { });
-
-      await this.dialog
-        .getByRole("listbox")
-        .getByRole("option", { name: details.LeadSource })
-        .click({ timeout: 10000 });
+      await this.leadSource.click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: details.LeadSource }).first().click({ timeout: 10000 });
     }
 
     // Fill in numeric and text fields
     if (details.Amount) {
-      await this.dialog
-        .getByRole("spinbutton", { name: /Amount/i })
-        .fill(String(details.Amount), { timeout: 10000 });
+      await this.amount.fill(String(details.Amount), { timeout: 10000 });
     }
 
     // Next Step
     if (details.NextStep) {
-      await this.dialog
-        .getByRole("textbox", { name: /Next Step/i })
-        .fill(details.NextStep, { timeout: 10000 });
+      await this.nextStep.fill(Helper.generateUniqueValue(details.NextStep), { timeout: 10000 });
     }
 
     // Description
     if (details.Description) {
-      await this.dialog
-        .getByRole("textbox", { name: /Description/i })
-        .fill(details.Description, { timeout: 10000 });
+      await this.description.fill(Helper.generateUniqueValue(details.Description), { timeout: 10000 });
     }
 
     // Handle Private checkbox
     if (details.Private?.toLowerCase() === "yes") {
-      const cb = this.dialog.getByRole("checkbox", { name: /Private/i });
-      if (!(await cb.isChecked())) await cb.check({ timeout: 10000 });
+      if (!(await this.private.isChecked())) await this.private.check({ timeout: 10000 });
     } else if (details.Private?.toLowerCase() === "no") {
-      const cb = this.dialog.getByRole("checkbox", { name: /Private/i });
-      if (await cb.isChecked()) await cb.uncheck({ timeout: 10000 });
+      if (await this.private.isChecked()) await this.private.uncheck({ timeout: 10000 });
     }
 
     console.log("💾 Saving the opportunity...");
@@ -253,9 +221,12 @@ export class SalesforceOpportunitiesPage {
   async verifyOpportunityCreated(details: { [key: string]: string }) {
     console.log("🔍 Starting opportunity verification...");
 
-    expect(this.page.locator('[slot="primaryField"]')).toContainText(
-      details.Name
-    );
+    await this.page.getByText(details.Name).count().then(async (count) => {
+      if (count === 0) {
+        throw new Error(`❌ Opportunity verification failed: "${details.Name}" not found on the page.`);
+      }
+    });
+
     console.log("✅ Opportunity verification successful");
 
     // Take verification screenshot

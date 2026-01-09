@@ -13,7 +13,7 @@ Then(
 
 Then("Save the dashboard", async ({ page, $testInfo }) => {
   const dashboardPage = new SalesforceDashboardsPage(page, $testInfo);
-  await dashboardPage.saveButton.click();
+  await dashboardPage.saveButton.click({ timeout: 10000 });
 });
 
 Then(

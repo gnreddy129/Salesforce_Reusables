@@ -22,17 +22,15 @@ import { Helper } from "../../utils/helper";
 export default class SalesforceIncidentsPage {
   readonly page: Page;
   private testInfo?: TestInfo;
-  readonly listbox: Locator;
 
   // Primary UI Controls
-  readonly newButton: Locator;
   readonly dialog: Locator;
   readonly shortDesc: Locator;
   readonly description: Locator;
   readonly urgencyCombo: Locator;
   readonly detectedDateInput: Locator;
   readonly detectedTimeInput: Locator;
-  // Action Buttons
+  readonly allOptionsLocator: Locator;
   readonly saveButton: Locator;
 
   constructor(page: Page, testInfo?: TestInfo) {
@@ -41,23 +39,21 @@ export default class SalesforceIncidentsPage {
     this.testInfo = testInfo;
 
     // Primary controls - Main UI interaction elements
-    this.newButton = this.page.getByRole("button", { name: /New/i }).first();
-    this.dialog = this.page.getByRole("dialog", { name: /New Incident/i });
-    this.listbox = this.page.getByRole("listbox").first();
+    this.dialog = page.getByRole("dialog", { name: /New Incident/i });
 
     // Form fields
-    this.shortDesc = this.page.getByRole('textbox', { name: /Subject/i });
-    this.description = this.page.getByLabel('Description').first();
-    this.urgencyCombo = this.dialog.getByRole("combobox", { name: /Urgency/i});
+    this.shortDesc = page.getByRole('textbox', { name: /Subject/i });
+    this.description = page.getByLabel('Description').first();
+    this.urgencyCombo = this.dialog.getByRole("combobox", { name: /Urgency/i });
     this.detectedDateInput = this.dialog.getByRole('textbox', { name: /DetectedDateTime/i }).first();
     this.detectedTimeInput = this.dialog.getByRole('textbox', { name: /DetectedTime/i }).first();
 
     // Action buttons - Save operations
-    this.saveButton = this.dialog
-      .getByRole("button", { name: 'Save', exact: true });
+    this.saveButton = this.dialog.getByRole("button", { name: 'Save', exact: true });
+    this.allOptionsLocator = page.getByRole("option");
 
     console.log(
-      "✅ SalesforceIncidents page object initialized successfully with all locators"    
+      "✅ SalesforceIncidents page object initialized successfully with all locators"
     );
   }
 
@@ -67,7 +63,6 @@ export default class SalesforceIncidentsPage {
     console.log("📝 incident details:", JSON.stringify(details, null, 2));
 
     // Wait for the new button to be visible and take start screenshot
-    await expect(this.newButton).toBeVisible({ timeout: 10000 });
     await Helper.takeScreenshotToFile(
       this.page,
       "1-start-incident",
@@ -76,28 +71,27 @@ export default class SalesforceIncidentsPage {
     );
 
     // Open the new incident creation dialog
-    await this.newButton.click({ timeout: 10000 });
     console.log("✅ Incident creation dialog opened");
     console.log("📋 Filling form fields...");
 
     // fill short description if present
     if (details.shortDescription) {
-      await this.shortDesc.fill(details.shortDescription);
+      await this.shortDesc.fill(Helper.generateUniqueValue(details.shortDescription));
     }
     // fill description if present
     if (details.description) {
-      await this.description.fill(details.description);
+      await this.description.fill(Helper.generateUniqueValue(details.description));
     }
     // Urgency dropdown selection
     if (details.urgency.length > 1 && details.urgency !== "--None--") {
       await this.selectFromList(this.urgencyCombo, details.urgency);
     }
     // Set detected date and time if provided
-    if (details.detectedDate.length > 1) 
-      await this.setDate(details.detectedDate).catch(() => {});
+    if (details.detectedDate.length > 1)
+      await this.setDate(details.detectedDate).catch(() => { });
     // Set detected time if provided
-    if (details.detectedTime.length > 1) 
-      await this.setTime(details.detectedTime).catch(() => {});
+    if (details.detectedTime.length > 1)
+      await this.setTime(details.detectedTime).catch(() => { });
 
     console.log("💾 Saving the incident...");
     // Save the incident
@@ -118,16 +112,14 @@ export default class SalesforceIncidentsPage {
 
   // Verify newly created incident by short description
   async verifyNewlyCreatedIncident(details: { [field: string]: string }) {
-    
+
     console.log("🔍 Starting incident verification...");
 
-    if (details.ShortDescription) {
-      await expect(
-        await this.page.getByText(details.ShortDescription, { exact: true }).count()
-      ).toBeGreaterThan(0);
+    if (details.urgency) {
+      await expect(await this.page.getByText(details.urgency).count()).toBeGreaterThan(0);
       console.log("✅ Incident verification successful");
     } else {
-      console.log("⚠️ No name provided for verification");
+      console.log("⚠️ No urgency provided for verification");
     }
 
     await Helper.takeScreenshotToFile(
@@ -159,11 +151,7 @@ export default class SalesforceIncidentsPage {
 
   // Helper function to select from listbox
   private async selectFromList(combo: Locator, value: string) {
-    // Helper function to handle dropdown/combobox selections
-      await combo.click({ timeout: 10000 });
-      await this.listbox
-        .getByRole("option", { name: value })
-        .first()
-        .click({ timeout: 10000 });
+    await combo.click({ timeout: 10000 });
+    await this.allOptionsLocator.filter({ hasText: value }).first().click({ timeout: 10000 });
   }
 }

@@ -1,5 +1,6 @@
 import { expect, Page, Locator, TestInfo } from "@playwright/test";
 import { Helper } from "../../utils/helper";
+import { fi } from "@faker-js/faker";
 
 /**
  * SalesforceEngagementChannelTypes Page Object Model
@@ -25,7 +26,6 @@ export default class SalesforceEngagementChannelTypesPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newButton: Locator;
   readonly saveButton: Locator;
   readonly saveAndNewButton: Locator;
   readonly cancelButton: Locator;
@@ -40,6 +40,7 @@ export default class SalesforceEngagementChannelTypesPage {
 
   // Navigation Elements
   readonly engagementChannelTypeCreatedMessage: Locator;
+  readonly allOptionsLocator: Locator;
 
   /**
    * Constructor - Initializes the SalesforceEngagementChannelTypes page object with all necessary locators
@@ -56,7 +57,6 @@ export default class SalesforceEngagementChannelTypesPage {
     this.testInfo = testInfo;
 
     // Primary UI Controls
-    this.newButton = page.getByRole("button", { name: "New" });
     this.saveButton = page.getByRole("button", { name: "Save", exact: true });
     this.saveAndNewButton = page.getByRole("button", {
       name: "Save & New",
@@ -93,6 +93,7 @@ export default class SalesforceEngagementChannelTypesPage {
 
     // Navigation Elements
     this.engagementChannelTypeCreatedMessage = page.locator(".toastMessage");
+    this.allOptionsLocator = page.getByRole("option");
 
     console.log(
       "✅ SalesforceEngagementChannelTypes page object initialized successfully with all locators"
@@ -130,8 +131,6 @@ export default class SalesforceEngagementChannelTypesPage {
       JSON.stringify(details, null, 2)
     );
 
-    await expect(this.newButton).toBeVisible({ timeout: 10000 });
-
     // Take start screenshot for verification
     if (this.testInfo) {
       await Helper.takeScreenshotToFile(
@@ -143,7 +142,6 @@ export default class SalesforceEngagementChannelTypesPage {
     }
 
     // Click New Engagement Channel Type
-    await this.newButton.click({ timeout: 10000 });
     console.log("✅ Engagement Channel Type creation form opened");
 
     // Wait for the form dialog to be fully loaded
@@ -154,7 +152,7 @@ export default class SalesforceEngagementChannelTypesPage {
 
     // Fill Name field (text input)
     if (details.Name) {
-      await this.nameInput.fill(details.Name, {
+      await this.nameInput.fill(Helper.generateUniqueValue(details.Name), {
         timeout: 10000,
       });
       console.log(`✅ Name filled: ${details.Name}`);
@@ -163,7 +161,7 @@ export default class SalesforceEngagementChannelTypesPage {
     // Fill Contact Point Type field (combobox)
     if (details["Contact Point Type"] && details["Contact Point Type"] !== "--None--") {
       await this.contactPointTypeCombobox.click({ timeout: 10000 });
-      await this.page.getByRole("option", { name: details["Contact Point Type"] }).click();
+      await this.allOptionsLocator.filter({ hasText: details["Contact Point Type"] }).first().click({ timeout: 10000 });
       console.log(`✅ Contact Point Type selected: ${details["Contact Point Type"]}`);
     }
 
@@ -181,7 +179,7 @@ export default class SalesforceEngagementChannelTypesPage {
     // Handle Usage Type option selection
     if (details["Usage Type"] && details["Usage Type"] !== "--None--") {
       // Click on the usage type option
-      await this.page.getByRole("option", { name: details["Usage Type"] }).click();
+      await this.allOptionsLocator.filter({ hasText: details["Usage Type"] }).first().click({ timeout: 10000 });
       console.log(`✅ Usage Type selected: ${details["Usage Type"]}`);
       
       // Click Move to Chosen button if available
@@ -245,14 +243,11 @@ export default class SalesforceEngagementChannelTypesPage {
     }
 
     // Check if the engagement channel type name appears in the interface
-    const engagementChannelTypeName = details.Name;
-    if (engagementChannelTypeName) {
-      // Look for the engagement channel type name in the page
-      const engagementChannelTypeLocator = this.page.getByText(engagementChannelTypeName).first();
-      await expect(engagementChannelTypeLocator).toBeVisible({ timeout: 10000 });
-      console.log(`✅ Engagement Channel Type name verification successful: ${engagementChannelTypeName}`);
+    if (details.Name) {
+      const engagementChannelTypeLocator = await this.page.getByText(details.Name).count();
+      expect(engagementChannelTypeLocator).toBeGreaterThan(0);
+      console.log(`✅ Engagement Channel Type name verification successful: ${details.Name}`);
     }
-
     console.log("🎉 Engagement Channel Type verification completed!");
   }
 }

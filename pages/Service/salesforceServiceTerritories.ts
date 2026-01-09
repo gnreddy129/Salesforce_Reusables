@@ -25,7 +25,6 @@ export default class SalesforceServiceTerritoriesPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newButton: Locator;
   readonly saveButton: Locator;
   readonly saveAndNewButton: Locator;
   readonly cancelButton: Locator;
@@ -49,6 +48,8 @@ export default class SalesforceServiceTerritoriesPage {
 
   // Navigation Elements
   readonly serviceTerritoryCreatedMessage: Locator;
+  readonly primaryFieldLocator: Locator;
+    readonly allOptionsLocator: Locator;
 
   /**
    * Constructor - Initializes the SalesforceServiceTerritories page object with all necessary locators
@@ -65,7 +66,6 @@ export default class SalesforceServiceTerritoriesPage {
     this.testInfo = testInfo;
 
     // Primary controls - Main UI interaction elements
-    this.newButton = page.getByRole("button", { name: "New" });
     this.saveButton = page.getByRole("button", { name: "Save", exact: true });
     this.saveAndNewButton = page.getByRole("button", { name: "Save & New" });
     this.cancelButton = page.getByRole("button", { name: "Cancel" });
@@ -113,6 +113,10 @@ export default class SalesforceServiceTerritoriesPage {
 
     // Success message locator
     this.serviceTerritoryCreatedMessage = page.locator(".toastMessage");
+    
+    // Primary field locator for verification
+    this.primaryFieldLocator = page.locator(`[slot="primaryField"]`);       
+    this.allOptionsLocator = page.getByRole("option");
 
     console.log(
       "✅ SalesforceServiceTerritories page object initialized successfully with all locators"
@@ -162,8 +166,6 @@ export default class SalesforceServiceTerritoriesPage {
       JSON.stringify(details, null, 2)
     );
 
-    await expect(this.newButton).toBeVisible({ timeout: 10000 });
-
     // Take start screenshot for verification
     if (this.testInfo) {
       await Helper.takeScreenshotToFile(
@@ -173,9 +175,6 @@ export default class SalesforceServiceTerritoriesPage {
         "Service/salesforce-service-territories/"
       );
     }
-
-    // Click New Service Territory
-    await this.newButton.click({ timeout: 10000 });
     console.log("✅ Service Territory creation form opened");
 
     // Wait for the form dialog to be fully loaded
@@ -202,10 +201,7 @@ export default class SalesforceServiceTerritoriesPage {
       const parentTerritoryValue =
         details.ParentTerritory || details["Parent Territory"];
       await this.parentTerritoryCombobox.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: parentTerritoryValue })
-        .first()
-        .click({ timeout: 5000 });
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
       console.log(`✅ Parent Territory selected: ${parentTerritoryValue}`);
     }
 
@@ -217,12 +213,7 @@ export default class SalesforceServiceTerritoriesPage {
       const operatingHoursValue =
         details.OperatingHours || details["Operating Hours"];
       await this.operatingHoursCombobox.click({ timeout: 10000 });
-
-      // Wait for dropdown to appear and select from options
-      await this.page
-        .getByRole("option", { name: operatingHoursValue })
-        .first()
-        .click({ timeout: 5000 });
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
       console.log(`✅ Operating Hours selected: ${operatingHoursValue}`);
     }
 
@@ -376,7 +367,7 @@ export default class SalesforceServiceTerritoriesPage {
     await expect(this.serviceTerritoryCreatedMessage).toContainText(
       "was created"
     );
-    await expect(this.page.locator(`[slot="primaryField"]`)).toContainText(
+    await expect(this.primaryFieldLocator).toContainText(
       details.Name
     );
 

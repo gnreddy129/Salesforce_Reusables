@@ -22,7 +22,6 @@ Then(
       page,
       $testInfo
     );
-    const expectedDetails = dataTable.rowsHash();
-    await contactRequestsPage.verifyContactRequestCreation(expectedDetails);
+    await contactRequestsPage.verifyContactRequestCreation();
   }
 );

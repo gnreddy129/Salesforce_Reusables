@@ -25,7 +25,6 @@ export default class SalesforceDataUseLegalBasisPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newButton: Locator;
   readonly saveButton: Locator;
   readonly saveAndNewButton: Locator;
   readonly cancelButton: Locator;
@@ -37,6 +36,9 @@ export default class SalesforceDataUseLegalBasisPage {
 
   // Navigation Elements
   readonly dataUseLegalBasisCreatedMessage: Locator;
+
+  // Verification locators
+  readonly primaryFieldLocator: Locator;
 
   /**
    * Constructor - Initializes the SalesforceDataUseLegalBasis page object with all necessary locators
@@ -53,7 +55,6 @@ export default class SalesforceDataUseLegalBasisPage {
     this.testInfo = testInfo;
 
     // Primary controls - Main UI interaction elements
-    this.newButton = page.getByRole("button", { name: "New" });
     this.saveButton = page.getByRole("button", { name: "Save", exact: true });
     this.saveAndNewButton = page.getByRole("button", { name: "Save & New" });
     this.cancelButton = page.getByRole("button", { name: "Cancel" });
@@ -71,6 +72,7 @@ export default class SalesforceDataUseLegalBasisPage {
 
     // Success message locator
     this.dataUseLegalBasisCreatedMessage = page.locator(".toastMessage");
+    this.primaryFieldLocator = page.locator(`[slot="primaryField"]`);
 
     console.log(
       "✅ SalesforceDataUseLegalBasis page object initialized successfully with all locators"
@@ -106,8 +108,6 @@ export default class SalesforceDataUseLegalBasisPage {
       JSON.stringify(details, null, 2)
     );
 
-    await expect(this.newButton).toBeVisible({ timeout: 10000 });
-
     // Take start screenshot for verification
     await Helper.takeScreenshotToFile(
       this.page,
@@ -117,7 +117,6 @@ export default class SalesforceDataUseLegalBasisPage {
     );
 
     // Click New Data Use Legal Basis
-    await this.newButton.click({ timeout: 10000 });
     console.log("✅ Data Use Legal Basis creation form opened");
 
     // Wait for the form dialog to be fully loaded
@@ -128,7 +127,7 @@ export default class SalesforceDataUseLegalBasisPage {
 
     // Fill Name field (text input)
     if (details.Name) {
-      await this.nameInput.fill(details.Name, {
+      await this.nameInput.fill(Helper.generateUniqueValue(details.Name), {
         timeout: 10000,
       });
       console.log(`✅ Name filled: ${details.Name}`);
@@ -136,7 +135,7 @@ export default class SalesforceDataUseLegalBasisPage {
 
     // Fill Source field (text input)
     if (details.Source) {
-      await this.sourceInput.fill(details.Source, {
+      await this.sourceInput.fill(Helper.generateUniqueValue(details.Source), {
         timeout: 10000,
       });
       console.log(`✅ Source filled: ${details.Source}`);
@@ -144,7 +143,7 @@ export default class SalesforceDataUseLegalBasisPage {
 
     // Fill Description field (text input)
     if (details.Description) {
-      await this.descriptionInput.fill(details.Description, {
+      await this.descriptionInput.fill(Helper.generateUniqueValue(details.Description), {
         timeout: 10000,
       });
       console.log(`✅ Description filled: ${details.Description}`);
@@ -195,10 +194,7 @@ export default class SalesforceDataUseLegalBasisPage {
     );
 
     // Verify Name
-    await expect(this.page.locator(`[slot="primaryField"]`)).toContainText(
-      details.Name,
-      { timeout: 10000 }
-    );
+    await expect(this.primaryFieldLocator).toContainText(details.Name, { timeout: 10000 });
     console.log(`✅ Verified Name: ${details.Name}`);
 
     // Take verification screenshot

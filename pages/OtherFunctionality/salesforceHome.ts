@@ -1,6 +1,5 @@
 import { expect, type Locator, type Page, TestInfo } from "@playwright/test";
 import { Helper } from "../../utils/helper";
-import path from 'path'
 /**
  * SalesforceHome Page Object Model
  *
@@ -35,10 +34,17 @@ export class SalesforceHomePage {
   // Verification Elements
   readonly home_component: Locator;
 
-  // for new and save button
+  // Dialog and save button
   readonly newButton: Locator;
-  readonly dialog: Locator;
+  readonly newEventButton: Locator;
   readonly saveButton: Locator;
+
+  readonly newTaskButton: Locator;
+  readonly commandDropdown: Locator;
+
+  // Additional helper locators
+  readonly imgLocator: Locator;
+  readonly uploadFilesButton: Locator;
 
   /**
    * Constructor - Initializes the SalesforceHome page object with all necessary locators
@@ -70,14 +76,18 @@ export class SalesforceHomePage {
       " //b[contains(text(),'Campaigns')]"
     );
 
-    this.newButton = page.getByRole("button", { name: /New|Create/i });
-    this.dialog = page.getByRole('dialog');
-    this.saveButton = page.getByRole("button", { name: "Save", exact: true });
+    this.newButton = page.getByRole("button", { name: /^New/i });
+    this.uploadFilesButton = page.getByRole("button", { name: "Upload Files" });
+    this.newEventButton = page.getByRole("button", { name: /^New Event/i });
+    this.saveButton = page.getByRole("button", { name: /^Save$/, exact: true });
 
-    console.log(
-      "✅ SalesforceHome page object initialized successfully with all locators"
-    );
+    this.commandDropdown = page.getByRole("button", { name: "Show more actions" });
+    this.newTaskButton = page.getByRole("menuitem", { name: "New Task" });
+    this.imgLocator = page.locator("img");
+
+    console.log("✅ SalesforceHome page object initialized successfully with all locators");
   }
+
   /**
    * Searches for and navigates to a specific Salesforce application
    *
@@ -103,8 +113,7 @@ export class SalesforceHomePage {
    * await homePage.searchApp("Marketing");
    */
   async searchApp(appName: string) {
-    console.log("🔄 Starting app search and navigation...");
-    console.log(`📱 Searching for app: ${appName}`);
+    console.log(`🔄 Starting📱 Search for app: ${appName}`);
 
     // Wait for app launcher to be visible and click it
     await expect(this.app_launcher).toBeVisible({ timeout: 200000 });
@@ -119,7 +128,7 @@ export class SalesforceHomePage {
     );
 
     // Click App Launcher
-    await this.app_launcher.click({ timeout: 30000 });
+    await this.app_launcher.click({ timeout: 100000 });
     console.log("✅ App launcher opened");
 
     // Click View All to access full app directory
@@ -136,48 +145,105 @@ export class SalesforceHomePage {
     );
 
     // Search for the app and click it
-    await this.page
-      .locator(`a[data-label="${appName}"]`)
-      .filter({ hasNot: this.page.locator("img") })
-      .click({ timeout: 10000 });
+    await this.page.locator(`a[data-label="${appName}"]`)
+      .filter({ hasNot: this.imgLocator }).click({ timeout: 10000 });
     console.log(`✅ Successfully navigated to ${appName} app`);
-
     console.log("🎉 App navigation completed!");
   }
-
 
   async clickNewButton(buttonName: string, appName: string) {
     console.log(`🔄 Starting New Page creation process of ${appName}...`);
 
-    // Take start screenshot for verification
     await Helper.takeScreenshotToFile(
       this.page,
-      "1-start-opportunity",
+      "1-new button",
       this.testInfo,
       "OtherFunctionality/salesforce-home/"
     );
 
-    // Click New button and wait for dialog to appear
-    await this.newButton.click({ timeout: 10000 });
+    await this.newButton.first().click({ timeout: 10000 });
     await this.page.waitForTimeout(3000);
-    // await expect(this.dialog.getByText("New").first()).toBeVisible();
+
+    await Helper.takeScreenshotToFile(
+      this.page,
+      "2-dialog opened",
+      this.testInfo,
+      "OtherFunctionality/salesforce-home/"
+    );
+    console.log(`✅ ${appName} creation dialog opened`);
+  }
+
+  async clickHiddenNewButton(buttonName: string, appName: string) {
+    console.log(`🔄 Starting New Page creation process of ${appName}...`);
+
+    await Helper.takeScreenshotToFile(
+      this.page,
+      "1-new button",
+      this.testInfo,
+      "OtherFunctionality/salesforce-home/"
+    );
+
+    await this.commandDropdown.click({ timeout: 10000 });
+    await this.newTaskButton.click({ timeout: 10000 });
+    await this.page.waitForTimeout(3000);
+
+    await Helper.takeScreenshotToFile(
+      this.page,
+      "2-dialog opened",
+      this.testInfo,
+      "OtherFunctionality/salesforce-home/"
+    );
+    console.log(`✅ ${appName} creation dialog opened`);
+  }
+
+  async clickFileUploadButton(buttonName: string, appName: string) {
+    console.log(`🔄 Starting New Page creation process of ${appName}...`);
+    await Helper.takeScreenshotToFile(
+      this.page,
+      "1-file upload button",
+      this.testInfo,
+      "OtherFunctionality/salesforce-home/"
+    );
+
+    await this.page.waitForTimeout(2000);
+    await this.uploadFilesButton.click({ timeout: 10000 });
+    await this.page.waitForTimeout(3000);
+
+    await Helper.takeScreenshotToFile(
+      this.page,
+      "2-dialog opened",
+      this.testInfo,
+      "OtherFunctionality/salesforce-home/"
+    );
+    console.log(`✅ ${appName} creation dialog opened`);
+  }
+
+  async clickNewEventButton(buttonName: string, appName: string) {
+    console.log(`🔄 Starting New Event creation process of ${appName}...`);
+    await Helper.takeScreenshotToFile(
+      this.page,
+      "1-new event button",
+      this.testInfo,
+      "OtherFunctionality/salesforce-home/"
+    );
+
+    await this.page.waitForTimeout(2000);
+    await this.newEventButton.click({ timeout: 10000 });
+    await this.page.waitForTimeout(3000);
+
+    await Helper.takeScreenshotToFile(
+      this.page,
+      "2-dialog opened",
+      this.testInfo,
+      "OtherFunctionality/salesforce-home/"
+    );
     console.log(`✅ ${appName} creation dialog opened`);
   }
 
   async clickSaveButton(appName: string) {
     console.log("💾 Saving the order...");
-
-    // Save the order
     await this.saveButton.click({ timeout: 10000 });
-    console.log("✅ Order saved successfully");
-
-    // Wait for navigation after save
     await this.page.waitForTimeout(2000);
-  }
-
-  async verifyOTPbyMailosaur(username: string, password: string) {
-    await this.page.goto("https://mailosaur.com/app/login");
-    await this.page.getByRole('textbox', { name: "Email address" }).fill(username, { timeout: 10000 });
-    await this.page.getByRole('button', { name: "Continue" }).click({ timeout: 10000 });
+    console.log("✅ Order saved successfully");
   }
 }

@@ -24,7 +24,6 @@ export default class SalesforceAssetsPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newAssetButton: Locator;
   readonly dialog: Locator;
   readonly saveButton: Locator;
 
@@ -42,6 +41,7 @@ export default class SalesforceAssetsPage {
   readonly priceInput: Locator;
   readonly descriptionInput: Locator;
   readonly assetCreatedMessage: Locator;
+  readonly allOptionsLocator: Locator;
 
   /**
    * Constructor - Initializes the SalesforceAssets page object with all necessary locators
@@ -58,11 +58,8 @@ export default class SalesforceAssetsPage {
     this.testInfo = testInfo;
 
     // Primary controls - Main UI interaction elements
-    this.newAssetButton = page.getByRole("button", { name: /New/i }).first();
     this.dialog = page.getByRole("dialog").first();
-    this.saveButton = this.dialog
-      .getByRole("button", { name: /^Save$/i })
-      .first();
+    this.saveButton = this.dialog.getByRole("button", { name: /^Save$/i }).first();
 
     // Initialize form field locators
     this.assetNameInput = this.dialog.getByLabel("Asset Name");
@@ -80,6 +77,7 @@ export default class SalesforceAssetsPage {
 
     // Success message locator
     this.assetCreatedMessage = page.locator(".toastMessage");
+    this.allOptionsLocator = page.getByRole("option");
 
     console.log(
       "✅ SalesforceAssets page object initialized successfully with all locators"
@@ -114,8 +112,6 @@ export default class SalesforceAssetsPage {
     console.log("🔄 Starting asset creation process...");
     console.log("📝 Asset details:", JSON.stringify(details, null, 2));
 
-    await expect(this.newAssetButton).toBeVisible({ timeout: 10000 });
-
     // Take start screenshot for verification
     await Helper.takeScreenshotToFile(
       this.page,
@@ -124,10 +120,7 @@ export default class SalesforceAssetsPage {
       "Inventory/salesforce-assets/"
     );
 
-    // Click New Asset
-    await this.newAssetButton.click({ timeout: 10000 });
     console.log("✅ Asset creation dialog opened");
-
     console.log("📋 Filling form fields...");
 
     // Fill required fields
@@ -140,8 +133,7 @@ export default class SalesforceAssetsPage {
     if (details['Account Name']) {
       console.log("🔍 Handling Account lookup...");
       await this.accountLookup.click({ timeout: 10000 });
-      const accountlist = this.page.getByRole("listbox").locator("li");
-      await accountlist.filter({ hasText: details['Account Name'] }).first().click();
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
       console.log("✅ Account selected");
     }
 
@@ -149,14 +141,7 @@ export default class SalesforceAssetsPage {
     if (details.Contact) {
       console.log("🔍 Handling Contact lookup...");
       await this.contactLookup.click({ timeout: 10000 });
-      // Wait for the dropdown and select first available contact
-      try {
-        const contactsList = this.page.getByRole("listbox").locator("li");
-        await contactsList.filter({ hasText: details.Contact }).first().click();
-        console.log("✅ Contact selected");
-      } catch (error) {
-        console.log("No contacts available or error selecting contact:", error);
-      }
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
     }
 
     // Fill optional fields
@@ -187,9 +172,7 @@ export default class SalesforceAssetsPage {
 
     if (details.Status) {
       await this.statusCombobox.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: details.Status })
-        .click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: details.Status }).first().click({ timeout: 10000 });
     }
 
     if (details.UsageEndDate || details["Usage End Date"]) {
@@ -243,9 +226,7 @@ export default class SalesforceAssetsPage {
     // Verify asset creation message or asset details
     if (details.AssetName || details["Asset Name"]) {
       const assetName = details.AssetName || details["Asset Name"];
-      await expect(
-        this.page.locator(`[title*="${assetName}"]`).first()
-      ).toBeVisible({ timeout: 10000 });
+      await expect(this.page.locator(`[title*="${assetName}"]`).first()).toBeVisible({ timeout: 10000 });
       console.log(`✅ Asset name verification successful: ${assetName}`);
     }
 

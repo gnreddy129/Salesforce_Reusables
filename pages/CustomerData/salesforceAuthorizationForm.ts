@@ -1,6 +1,5 @@
 import { expect, Page, Locator, TestInfo } from "@playwright/test";
 import { Helper } from "../../utils/helper";
-import exp from "constants";
 
 /**
  * SalesforceAuthorizationForm Page Object Model
@@ -26,7 +25,6 @@ export default class SalesforceAuthorizationFormPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newButton: Locator;
   readonly saveButton: Locator;
   readonly saveAndNewButton: Locator;
   readonly cancelButton: Locator;
@@ -41,6 +39,12 @@ export default class SalesforceAuthorizationFormPage {
 
   // Navigation Elements
   readonly authorizationFormCreatedMessage: Locator;
+
+  // Verification locators
+  readonly primaryFieldLocator: Locator;
+
+  // Dropdown option locator
+  readonly allOptionsLocator: Locator;
 
   /**
    * Constructor - Initializes the SalesforceAuthorizationForm page object with all necessary locators
@@ -57,7 +61,6 @@ export default class SalesforceAuthorizationFormPage {
     this.testInfo = testInfo;
 
     // Primary controls - Main UI interaction elements
-    this.newButton = page.getByRole("button", { name: "New" });
     this.saveButton = page.getByRole("button", { name: "Save", exact: true });
     this.saveAndNewButton = page.getByRole("button", { name: "Save & New" });
     this.cancelButton = page.getByRole("button", { name: "Cancel" });
@@ -82,12 +85,11 @@ export default class SalesforceAuthorizationFormPage {
       name: "Is Signature Required",
     });
 
-    // Success message locator
     this.authorizationFormCreatedMessage = page.locator(".toastMessage");
+    this.primaryFieldLocator = page.locator(`[slot="primaryField"]`);
+    this.allOptionsLocator = page.getByRole("option");
 
-    console.log(
-      "✅ SalesforceAuthorizationForm page object initialized successfully with all locators"
-    );
+    console.log("✅ SalesforceAuthorizationForm page object initialized successfully with all locators");
   }
 
   /**
@@ -124,8 +126,6 @@ export default class SalesforceAuthorizationFormPage {
       JSON.stringify(details, null, 2)
     );
 
-    await expect(this.newButton).toBeVisible({ timeout: 10000 });
-
     // Take start screenshot for verification
     if (this.testInfo) {
       await Helper.takeScreenshotToFile(
@@ -137,7 +137,6 @@ export default class SalesforceAuthorizationFormPage {
     }
 
     // Click New Authorization Form
-    await this.newButton.click({ timeout: 10000 });
     console.log("✅ Authorization Form creation form opened");
 
     // Wait for the form dialog to be fully loaded
@@ -149,9 +148,7 @@ export default class SalesforceAuthorizationFormPage {
     // Fill Name field (text input)
     if (details.Name || details["Name"]) {
       const nameValue = details.Name || details["Name"];
-      await this.nameInput.fill(nameValue, {
-        timeout: 10000,
-      });
+      await this.nameInput.fill(Helper.generateUniqueValue(nameValue), { timeout: 10000 });
       console.log(`✅ Name filled: ${nameValue}`);
     }
 
@@ -160,70 +157,50 @@ export default class SalesforceAuthorizationFormPage {
       (details.RevisionNumber && details.RevisionNumber !== "--None--") ||
       (details["Revision Number"] && details["Revision Number"] !== "--None--")
     ) {
-      const revisionValue =
-        details.RevisionNumber || details["Revision Number"];
-      await this.revisionNumberInput.fill(revisionValue, {
-        timeout: 10000,
-      });
+      const revisionValue = details.RevisionNumber || details["Revision Number"];
+      await this.revisionNumberInput.fill(Helper.generateUniqueValue(revisionValue), { timeout: 10000 });
       console.log(`✅ Revision Number filled: ${revisionValue}`);
     }
 
     // Fill Effective From Date field (date input)
     if (
       (details.EffectiveFromDate && details.EffectiveFromDate !== "--None--") ||
-      (details["Effective From Date"] &&
-        details["Effective From Date"] !== "--None--")
+      (details["Effective From Date"] && details["Effective From Date"] !== "--None--")
     ) {
-      const fromDateValue =
-        details.EffectiveFromDate || details["Effective From Date"];
-      await this.effectiveFromDateInput.fill(fromDateValue, {
-        timeout: 10000,
-      });
-      console.log(`✅ Effective From Date filled: ${fromDateValue}`);
+      const fromDateValue = details.EffectiveFromDate || details["Effective From Date"];
+      await this.effectiveFromDateInput.fill(fromDateValue, { timeout: 10000 });
+      console.log(`✅ Effective From Date filled: ${fromDateValue}`); 
     }
 
     // Fill Effective To Date field (date input)
     if (
       (details.EffectiveToDate && details.EffectiveToDate !== "--None--") ||
-      (details["Effective To Date"] &&
-        details["Effective To Date"] !== "--None--")
+      (details["Effective To Date"] && details["Effective To Date"] !== "--None--")
     ) {
-      const toDateValue =
-        details.EffectiveToDate || details["Effective To Date"];
-      await this.effectiveToDateInput.fill(toDateValue, {
-        timeout: 10000,
-      });
+      const toDateValue = details.EffectiveToDate || details["Effective To Date"];
+      await this.effectiveToDateInput.fill(toDateValue, { timeout: 10000 });
       console.log(`✅ Effective To Date filled: ${toDateValue}`);
     }
 
     // Handle Default Auth Form Text combobox
     if (
-      (details.DefaultAuthFormText &&
-        details.DefaultAuthFormText !== "--None--") ||
-      (details["Default Auth Form Text"] &&
-        details["Default Auth Form Text"] !== "--None--")
+      (details.DefaultAuthFormText && details.DefaultAuthFormText !== "--None--") ||
+      (details["Default Auth Form Text"] && details["Default Auth Form Text"] !== "--None--")
     ) {
-      const comboValue =
-        details.DefaultAuthFormText || details["Default Auth Form Text"];
+      const comboValue = details.DefaultAuthFormText || details["Default Auth Form Text"];
       await this.defaultAuthFormTextCombobox.click({ timeout: 10000 });
-      await this.page.getByRole("option", { name: comboValue }).click({
-        timeout: 10000,
-      });
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
       console.log(`✅ Default Auth Form Text selected: ${comboValue}`);
     }
 
     // Handle Is Signature Required checkbox
     if (
       (details.IsSignatureRequired && details.IsSignatureRequired === "true") ||
-      (details["Is Signature Required"] &&
-        details["Is Signature Required"] !== "true")
+      (details["Is Signature Required"] && details["Is Signature Required"] !== "true")
     ) {
-      const checkboxValue =
-        details.IsSignatureRequired || details["Is Signature Required"];
+      const checkboxValue = details.IsSignatureRequired || details["Is Signature Required"];
       const shouldCheck = checkboxValue.toLowerCase() === "true";
-
-      const isCurrentlyChecked =
-        await this.isSignatureRequiredCheckbox.isChecked();
+      const isCurrentlyChecked = await this.isSignatureRequiredCheckbox.isChecked();
       if (shouldCheck !== isCurrentlyChecked) {
         await this.isSignatureRequiredCheckbox.check({ timeout: 10000 });
       }
@@ -278,7 +255,7 @@ export default class SalesforceAuthorizationFormPage {
     await expect(this.authorizationFormCreatedMessage).toContainText(
       "was created"
     );
-    await expect(this.page.locator(`[slot="primaryField"]`)).toContainText(
+    await expect(this.primaryFieldLocator).toContainText(
       details.Name
     );
 

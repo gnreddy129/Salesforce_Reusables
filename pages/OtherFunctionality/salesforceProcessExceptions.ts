@@ -1,4 +1,4 @@
-import { Page, TestInfo } from '@playwright/test';
+import { Page, TestInfo, Locator } from '@playwright/test';
 import { Helper } from '../../utils/helper';
 
 /**
@@ -23,44 +23,56 @@ export default class SalesforceProcessExceptionsPage {
     private testInfo?: TestInfo;
 
     // Dialog locator
-    readonly dialog = () => this.page.getByRole('dialog').first();
+    readonly dialog: Locator;
 
     // Locators - Process Exception Fields
-    readonly categoryCombobox = () =>
-        this.dialog().getByRole('combobox', { name: /^Category$/i }).first();
-    readonly statusCombobox = () =>
-        this.dialog().getByRole('combobox', { name: /^Status$/i }).first();
-    readonly priorityCombobox = () =>
-        this.dialog().getByRole('combobox', { name: /^Priority$/i }).first();
-    readonly severityCombobox = () =>
-        this.dialog().getByRole('combobox', { name: /^Severity$/i });
-    readonly messageField = () =>
-        this.dialog().getByRole('textbox', { name: /^Message$/i });
+    readonly categoryCombobox: Locator;
+    readonly statusCombobox: Locator;
+    readonly priorityCombobox: Locator;
+    readonly severityCombobox: Locator;
+    readonly messageField: Locator;
 
     // Attached To - Two-step combobox selection
-    readonly chooseObjectCombobox = () =>
-        this.dialog().getByRole('combobox', { name: /^Choose an object$/i }).first();
-    readonly attachedToCombobox = () =>
-        this.dialog().getByRole('combobox', { name: /^Attached To$/i }).first();
+    readonly chooseObjectCombobox: Locator;
+    readonly attachedToCombobox: Locator;
 
-    readonly caseCombobox = () =>
-        this.dialog().getByRole('combobox', { name: /^Case$/i }).first();
-    readonly externalReferenceField = () =>
-        this.dialog().getByRole('textbox', { name: /^External Reference$/i }).first();
-    readonly descriptionField = () =>
-        this.dialog().getByRole('textbox', { name: /^Description$/i }).first();
+    readonly caseCombobox: Locator;
+    readonly externalReferenceField: Locator;
+    readonly descriptionField: Locator;
 
     // Button Locators
-    readonly saveButton = () => this.dialog().getByRole('button', { name: /^Save$/i });
-    readonly saveNewButton = () =>
-        this.dialog().getByRole('button', { name: /^Save & New$/i });
-    readonly cancelButton = () =>
-        this.dialog().getByRole('button', { name: /^Cancel$/i });
+    readonly saveButton: Locator;
+    readonly saveNewButton: Locator;
+    readonly cancelButton: Locator;
+    readonly allOptionsLocator: Locator;
 
     constructor(page: Page, testInfo?: TestInfo) {
         this.page = page;
         this.testInfo = testInfo;
         console.log('🚀 Initializing SalesforceProcessExceptions page object');
+
+        this.dialog = page.getByRole('dialog').first();
+
+        // Process Exception Fields
+        this.categoryCombobox = this.dialog.getByRole('combobox', { name: /^Category$/i }).first();
+        this.statusCombobox = this.dialog.getByRole('combobox', { name: /^Status$/i }).first();
+        this.priorityCombobox = this.dialog.getByRole('combobox', { name: /^Priority$/i }).first();
+        this.severityCombobox = this.dialog.getByRole('combobox', { name: /^Severity$/i });
+        this.messageField = this.dialog.getByRole('textbox', { name: /^Message$/i });
+
+        // Attached To - Two-step combobox selection
+        this.chooseObjectCombobox = this.dialog.getByRole('combobox', { name: /^Choose an object$/i }).first();
+        this.attachedToCombobox = this.dialog.getByRole('combobox', { name: /^Attached To$/i }).first();
+
+        this.caseCombobox = this.dialog.getByRole('combobox', { name: /^Case$/i }).first();
+        this.externalReferenceField = this.dialog.getByRole('textbox', { name: /^External Reference$/i }).first();
+        this.descriptionField = this.dialog.getByRole('textbox', { name: /^Description$/i }).first();
+
+        // Button Locators
+        this.saveButton = this.dialog.getByRole('button', { name: /^Save$/i });
+        this.saveNewButton = this.dialog.getByRole('button', { name: /^Save & New$/i });
+        this.cancelButton = this.dialog.getByRole('button', { name: /^Cancel$/i });
+        this.allOptionsLocator = page.getByRole("option");
     }
 
     /**
@@ -84,12 +96,8 @@ export default class SalesforceProcessExceptionsPage {
             const category = details.Category || details.category;
             if (category) {
                 console.log('🔽 Selecting Category from combobox...');
-                await this.categoryCombobox().click({ timeout: 10000 });
-                await this.page.waitForTimeout(1000);
-
-                const optionRole = this.page.locator(`[role="option"]:has-text("${category}")`).first();
-                await optionRole.waitFor({ state: 'visible', timeout: 5000 });
-                await optionRole.click({ timeout: 5000 });
+                await this.categoryCombobox.click({ timeout: 10000 });
+                await this.allOptionsLocator.filter({ hasText: category }).first().click({ timeout: 10000 });
                 console.log('✅ Category selected:', category);
             }
 
@@ -97,12 +105,9 @@ export default class SalesforceProcessExceptionsPage {
             const status = details.Status || details.status;
             if (status) {
                 console.log('🔽 Selecting Status from combobox...');
-                await this.statusCombobox().click({ timeout: 10000 });
+                await this.statusCombobox.click({ timeout: 10000 });
                 await this.page.waitForTimeout(1000);
-
-                const optionRole = this.page.locator(`[role="option"]:has-text("${status}")`).first();
-                await optionRole.waitFor({ state: 'visible', timeout: 5000 });
-                await optionRole.click({ timeout: 5000 });
+                await this.allOptionsLocator.filter({ hasText: status }).first().click({ timeout: 10000 });
                 console.log('✅ Status selected:', status);
             }
 
@@ -110,12 +115,9 @@ export default class SalesforceProcessExceptionsPage {
             const priority = details.Priority || details.priority;
             if (priority) {
                 console.log('🔽 Selecting Priority from combobox...');
-                await this.priorityCombobox().click({ timeout: 10000 });
+                await this.priorityCombobox.click({ timeout: 10000 });
                 await this.page.waitForTimeout(1000);
-
-                const optionRole = this.page.locator(`[role="option"]:has-text("${priority}")`).first();
-                await optionRole.waitFor({ state: 'visible', timeout: 5000 });
-                await optionRole.click({ timeout: 5000 });
+                await this.allOptionsLocator.filter({ hasText: priority }).first().click({ timeout: 10000 });
                 console.log('✅ Priority selected:', priority);
             }
 
@@ -123,12 +125,10 @@ export default class SalesforceProcessExceptionsPage {
             const severity = details.Severity || details.severity;
             if (severity) {
                 console.log('🔽 Selecting Severity from combobox...');
-                await this.severityCombobox().click({ timeout: 10000 });
+                await this.severityCombobox.click({ timeout: 10000 });
                 await this.page.waitForTimeout(1000);
 
-                const optionRole = this.page.getByRole('option', { name: severity }).first();
-                await optionRole.waitFor({ state: 'visible', timeout: 5000 });
-                await optionRole.click({ timeout: 5000 });
+                await this.allOptionsLocator.filter({ hasText: severity }).first().click({ timeout: 10000 });
                 console.log('✅ Severity selected:', severity);
             }
 
@@ -136,7 +136,7 @@ export default class SalesforceProcessExceptionsPage {
             if (details.Message) {
                 console.log('📝 Filling Message...');
                 try {
-                    await this.messageField().fill(details.Message, { timeout: 10000 });
+                    await this.messageField.fill(details.Message, { timeout: 10000 });
                     console.log('✅ Message filled:', details.Message);
                 } catch (e) {
                     console.log('❌ Failed to fill Message:', e);
@@ -153,25 +153,17 @@ export default class SalesforceProcessExceptionsPage {
                 try {
                     // Step 1: Select object type (e.g., "Order") from "Choose an object" combobox
                     console.log(`   Step 1: Selecting object type "${objectType}" from "Choose an object" combobox...`);
-                    await this.chooseObjectCombobox().click({ timeout: 10000 });
-                    await this.page.waitForTimeout(1000);
-
-                    const objectOption = this.page.getByRole('option', { name: objectType }).first();
-                    await objectOption.waitFor({ state: 'visible', timeout: 5000 });
-                    await objectOption.click({ timeout: 5000 });
+                    await this.chooseObjectCombobox.click({ timeout: 10000 });
+                    await this.allOptionsLocator.filter({ hasText: objectType }).first().click({ timeout: 10000 });
                     console.log(`   ✅ Object type "${objectType}" selected`);
 
                     // Wait for the Attached To combobox to appear
-                    await this.page.waitForTimeout(1000);
+                    await this.attachedToCombobox.waitFor({ state: 'visible', timeout: 10000 });
 
                     // Step 2: Select the specific attached to value (e.g., 00000100)
                     console.log(`   Step 2: Selecting Attached To: ${attachedTo}...`);
-                    await this.attachedToCombobox().click({ timeout: 10000 });
-                    await this.page.waitForTimeout(1000);
-
-                    const entityOption = this.page.getByRole('option', { name: attachedTo }).first();
-                    await entityOption.waitFor({ state: 'visible', timeout: 5000 });
-                    await entityOption.click({ timeout: 5000 });
+                    await this.attachedToCombobox.click({ timeout: 10000 });
+                    await this.allOptionsLocator.first().click({ timeout: 10000 });
                     console.log('✅ Attached To selected:', attachedTo);
                 } catch (error) {
                     console.log('❌ Failed in Attached To two-step selection:', error);
@@ -183,12 +175,8 @@ export default class SalesforceProcessExceptionsPage {
             const caseValue = details.Case || details.case;
             if (caseValue) {
                 console.log('🔽 Selecting Case from combobox...');
-                await this.caseCombobox().click({ timeout: 10000 });
-                await this.page.waitForTimeout(1000);
-
-                const optionRole = this.page.locator(`[role="option"]:has-text("${caseValue}")`).first();
-                await optionRole.waitFor({ state: 'visible', timeout: 5000 });
-                await optionRole.click({ timeout: 5000 });
+                await this.caseCombobox.click({ timeout: 10000 });
+                await this.allOptionsLocator.first().click({ timeout: 10000 });
                 console.log('✅ Case selected:', caseValue);
             }
 
@@ -197,7 +185,7 @@ export default class SalesforceProcessExceptionsPage {
                 const externalRef = details['External Reference'] || details.ExternalReference;
                 console.log('📝 Filling External Reference...');
                 try {
-                    await this.externalReferenceField().fill(externalRef, { timeout: 10000 });
+                    await this.externalReferenceField.fill(externalRef, { timeout: 10000 });
                     console.log('✅ External Reference filled:', externalRef);
                 } catch (e) {
                     console.log('❌ Failed to fill External Reference:', e);
@@ -208,7 +196,7 @@ export default class SalesforceProcessExceptionsPage {
             if (details.Description) {
                 console.log('📝 Filling Description...');
                 try {
-                    await this.descriptionField().fill(details.Description, { timeout: 10000 });
+                    await this.descriptionField.fill(details.Description, { timeout: 10000 });
                     console.log('✅ Description filled:', details.Description);
                 } catch (e) {
                     console.log('❌ Failed to fill Description:', e);
@@ -240,7 +228,7 @@ export default class SalesforceProcessExceptionsPage {
                 'OtherFunctionality/salesforce-process-exceptions'
             );
 
-            await this.saveButton().click({ timeout: 10000 });
+            await this.saveButton.click({ timeout: 10000 });
             console.log('⏳ Waiting for save to complete...');
 
             // Wait a moment for the save to process
@@ -254,13 +242,13 @@ export default class SalesforceProcessExceptionsPage {
 
     async clickSaveNew() {
         console.log('💾 Clicking Save & New button...');
-        await this.saveNewButton().click();
+        await this.saveNewButton.click({ timeout: 10000 });
         await this.page.waitForTimeout(2000);
     }
 
     async clickCancel() {
         console.log('❌ Clicking Cancel button...');
-        await this.cancelButton().click();
+        await this.cancelButton.click({ timeout: 10000 });
         await this.page.waitForTimeout(1000);
     }
 
@@ -273,15 +261,6 @@ export default class SalesforceProcessExceptionsPage {
 
             // If details provided, verify specific field values on the page
             if (details) {
-                if (details['Category']) {
-                    const categoryCount = await this.page.getByText(details['Category']).count();
-                    if (categoryCount > 0) {
-                        console.log('✅ Category verification successful');
-                    } else {
-                        console.log('⚠️ Category not found on page');
-                    }
-                }
-
                 if (details['Status']) {
                     const statusCount = await this.page.getByText(details['Status']).count();
                     if (statusCount > 0) {

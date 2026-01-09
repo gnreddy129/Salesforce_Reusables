@@ -32,7 +32,6 @@ export default class SalesforceFinanceTransactionsPage {
   readonly listbox: Locator;
 
   // Controls
-  readonly newButton: Locator;
   readonly dialog: Locator;
   readonly transactionNameInput: Locator;
   readonly accountCombo: Locator;
@@ -57,15 +56,13 @@ export default class SalesforceFinanceTransactionsPage {
   readonly saveButton: Locator;
 
   readonly amountLocator: Locator;
+  readonly allOptionsLocator: Locator;
 
   constructor(page: Page, testInfo?: TestInfo) {
     this.page = page;
     this.testInfo = testInfo;
     this.listbox = page.getByRole("listbox");
-
-    this.newButton = this.page.getByRole('button', { name: /New/i }).first();
-    // the dialog/title may vary; attempt to find by role dialog with 'New' and entity text
-    this.dialog = this.page.getByRole('dialog', { name: /New Finance Transaction|New/i }).first();
+    this.dialog = page.getByRole('dialog', { name: /New Finance Transaction|New/i }).first();
 
     // fields: use tolerant locators by label / role
     this.transactionNameInput = this.dialog.getByRole('textbox', { name: /Transaction Name|Name|Subject/i }).first();
@@ -73,7 +70,7 @@ export default class SalesforceFinanceTransactionsPage {
     this.referenceEntityTypeCombo = this.dialog.getByRole('combobox', { name: 'Reference Entity Type' });
     this.eventActionCombo = this.dialog.getByRole('combobox', { name: 'Event Action' });
     this.eventTypeCombo = this.dialog.getByRole('combobox', { name: 'Event Type' });
-    this.totalAmountWithTaxInput = this.dialog.locator('input[name="TotalAmountWithTax"]'); 
+    this.totalAmountWithTaxInput = this.dialog.locator('input[name="TotalAmountWithTax"]');
     //this.totalAmountWithTaxInput = this.dialog.getByRole('spinbutton', { name: 'TotalAmountWithTax'});
     this.resultingBalanceInput = this.dialog.locator('input[name="ResultingBalance"]');
     this.chargeAmountInput = this.dialog.locator('input[name="ChargeAmount"]');
@@ -84,41 +81,27 @@ export default class SalesforceFinanceTransactionsPage {
     this.financeSystemNameInput = this.dialog.locator('input[name="FinanceSystemName"]').first();
     this.financeSystemTransactionNumberInput = this.dialog.locator('input[name="FinanceSystemTransactionNumber"]').first();
     this.financeSystemIntegrationModeInput = this.dialog.locator('input[name="FinanceSystemIntegrationMode"]').first();
-    this.financeSystemIntegrationStatusCombo = this.dialog.getByRole('combobox', { name: 'Finance System Integration Status' }).first(); 
+    this.financeSystemIntegrationStatusCombo = this.dialog.getByRole('combobox', { name: 'Finance System Integration Status' }).first();
     this.transactionDateInput = this.dialog.locator('input[name="TransactionDate"]').first();
     this.transactionTimeCombo = this.dialog.getByRole('combobox', { name: 'TransactionDate' }).first();
     this.effectiveDateInput = this.dialog.locator('input[name="EffectiveDate"]').first();
     this.effectiveTimeCombo = this.dialog.getByRole('combobox', { name: 'EffectiveDate' }).first();
-    
+
     // Save button
     this.saveButton = this.dialog.getByRole('button', { name: 'Save', exact: true });
 
-    this.amountLocator = this.page.locator('records-highlights2');
+    this.amountLocator = page.locator('records-highlights2');
+    this.allOptionsLocator = page.getByRole("option");
   }
 
   // Add a new Finance Transaction record
   async addNewFinanceTransaction(details: FinanceTransactionData) {
-    await expect(this.newButton).toBeVisible({ timeout: 10000 });
     await Helper.takeScreenshotToFile(this.page, 'ft-start', this.testInfo, 'Finance/finance-transactions/');
-
-    await this.newButton.click({ timeout: 10000 });
     await this.page.waitForTimeout(600);
 
     // Account (combobox)
     if (details.Account) {
-      //await this.selectFromList(this.accountCombo, details.Account);
-
-      console.log("🔍 Handling Account lookup...");
-      await this.accountCombo.click({ timeout: 10000 });
-      await this.accountCombo.fill(details.Account, { timeout: 10000 });
-      // Wait for the dropdown and select first available contact
-      try {
-        const contactsList = this.page.getByRole("listbox").locator("li");
-        await contactsList.filter({ hasText: details.Account }).click();
-        console.log("✅ Account selected");
-      } catch (error) {
-        console.log("No Account available or error selecting account:", error);
-      }
+      await this.selectFromCombo(this.accountCombo, details.Account);
     }
 
     // Reference Entity Type (required in many orgs)
@@ -138,61 +121,61 @@ export default class SalesforceFinanceTransactionsPage {
 
     // Total Amount With Tax
     if (details.TotalAmountWithTax) {
-      await this.totalAmountWithTaxInput.click();
+      await this.totalAmountWithTaxInput.click({ timeout: 10000 });
       await this.totalAmountWithTaxInput.fill(details.TotalAmountWithTax);
     }
 
     // Resulting Balance
     if (details.ResultingBalance) {
-      await this.resultingBalanceInput.click();
+      await this.resultingBalanceInput.click({ timeout: 10000 });
       await this.resultingBalanceInput.fill(details.ResultingBalance);
     }
 
     //Charge Amount
     if (details.ChargeAmount) {
-      await this.chargeAmountInput.click();
+      await this.chargeAmountInput.click({ timeout: 10000 });
       await this.chargeAmountInput.fill(details.ChargeAmount);
     }
 
     //Adjustment Amount
     if (details.AdjustmentAmount) {
-      await this.adjustmentAmountInput.click();
+      await this.adjustmentAmountInput.click({ timeout: 10000 });
       await this.adjustmentAmountInput.fill(details.AdjustmentAmount);
     }
 
     //Subtotal Amount
     if (details.Subtotal) {
-      await this.subtotalAmountInput.click();
+      await this.subtotalAmountInput.click({ timeout: 10000 });
       await this.subtotalAmountInput.fill(details.Subtotal);
     }
 
     //Tax Amount
     if (details.TaxAmount) {
-      await this.taxAmountInput.click();
+      await this.taxAmountInput.click({ timeout: 10000 });
       await this.taxAmountInput.fill(details.TaxAmount);
     }
 
     //Impact Amount
     if (details.ImpactAmount) {
-      await this.impactAmountInput.click();
+      await this.impactAmountInput.click({ timeout: 10000 });
       await this.impactAmountInput.fill(details.ImpactAmount);
     }
 
     // Transaction Date/Time
     if (details.TransactionDate && await this.transactionDateInput.isVisible()) {
-      await this.setDate(this.transactionDateInput, details.TransactionDate).catch(() => {});
+      await this.setDate(this.transactionDateInput, details.TransactionDate).catch(() => { });
     }
     if (details.TransactionTime && await this.transactionTimeCombo.isVisible()) {
       // time control is often a combobox
-        await this.setTime(this.transactionTimeCombo, details.TransactionTime).catch(() => {});
+      await this.setTime(this.transactionTimeCombo, details.TransactionTime).catch(() => { });
     }
 
     // Effective Date/Time
     if (details.EffectiveDate.length > 1) {
-      await this.setDate(this.effectiveDateInput, details.EffectiveDate).catch(() => {});
+      await this.setDate(this.effectiveDateInput, details.EffectiveDate).catch(() => { });
     }
     if (details.EffectiveTime.length > 1) {
-      await this.setTime(this.effectiveTimeCombo, details.EffectiveTime).catch(() => {});
+      await this.setTime(this.effectiveTimeCombo, details.EffectiveTime).catch(() => { });
     }
 
     //Finance System Name
@@ -232,7 +215,7 @@ export default class SalesforceFinanceTransactionsPage {
 
     // Wait a moment for page to load
     await this.page.waitForTimeout(2000);
-    
+
     // Get page content for text verification
     const pageContent = await this.page.content();
     const pageText = await this.page.innerText('body').catch(() => '');
@@ -320,51 +303,39 @@ export default class SalesforceFinanceTransactionsPage {
   }
 
   // Helper function to select from listbox / non-auto-complete dropdown
+  private async selectFromCombo(combo: Locator, value: string) {
+    // Helper function to handle dropdown/combobox selections
+    await combo.click({ timeout: 10000 });
+    await this.allOptionsLocator.first().click({ timeout: 10000 });
+  }
+
   private async selectFromList(combo: Locator, value: string) {
     // Helper function to handle dropdown/combobox selections
-      await combo.click({ timeout: 10000 });
-      await this.listbox
-        .getByRole("option", { name: value })
-        .first()
-        .click({ timeout: 10000 });
+    await combo.click({ timeout: 10000 });
+    await this.allOptionsLocator.filter({ hasText: value }).first().click({ timeout: 10000 });
   }
 
-  // Helper function to select from auto-complete combo box
-  private async selectFromAutoCompleteCombo(combo: Locator, value: string){
-      console.log(`🔍 Handling ${value} lookup...`);
-      await this.accountCombo.click({ timeout: 10000 });
-      await this.accountCombo.fill(value, { timeout: 10000 });
-      // Wait for the dropdown and select first available contact
-      try {
-        const contactsList = this.page.getByRole("listbox").locator("li");
-        await contactsList.filter({ hasText: value }).click();
-        console.log(`✅ ${value} combobox selected`);
-      } catch (error) {
-        console.log(`No ${value} available or error selecting ${value}:`, error);
-      }
-  }
-
-    // Additional methods for incident management can be added here
+  // Additional methods for incident management can be added here
   // Helper method to set date fields
   private async setDate(element: Locator, dateValue: string) {
-    if(dateValue.toLowerCase() === 'today') {
-        const now = new Date();
-        const mm = String(now.getMonth() + 1).padStart(2, '0');
-        const dd = String(now.getDate()).padStart(2, '0');
-        const yyyy = now.getFullYear();
-        dateValue = `${mm}/${dd}/${yyyy}`;
+    if (dateValue.toLowerCase() === 'today') {
+      const now = new Date();
+      const mm = String(now.getMonth() + 1).padStart(2, '0');
+      const dd = String(now.getDate()).padStart(2, '0');
+      const yyyy = now.getFullYear();
+      dateValue = `${mm}/${dd}/${yyyy}`;
 
-        await element.first().click({ force: true });
-        await element.first().fill(dateValue);
+      await element.first().click({ force: true });
+      await element.first().fill(dateValue);
     }
-    else {  
-        await element.first().click({ force: true });
-        await element.first().fill(dateValue);
+    else {
+      await element.first().click({ force: true });
+      await element.first().fill(dateValue);
     }
   }
 
   // Helper method to set time fields
   private async setTime(element: Locator, timeValue: string) {
-      await this.selectFromList(element, timeValue);
+    await this.selectFromList(element, timeValue);
   }
 }

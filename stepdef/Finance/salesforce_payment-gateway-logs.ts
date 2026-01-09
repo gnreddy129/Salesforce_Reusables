@@ -12,17 +12,9 @@ Then(
         const details = dataTable.rowsHash();
         console.log("📦 Received gateway log details:", JSON.stringify(details, null, 2));
         
-        // Click the New button to open the form
-        const newButton = page.getByRole('button', { name: /^New$/ }).first();
-        await newButton.click();
-        await page.waitForTimeout(2000);
-        
         // Fill the form
         await paymentGatewayLogsPage.addNewPaymentGatewayLog(details);
-        
-        // Save the form
         await paymentGatewayLogsPage.clickSave();
-        
         console.log("✅ Step completed: Payment Gateway Log added");
     }
 );

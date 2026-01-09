@@ -23,9 +23,7 @@ export default class SalesforceCategoriesPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newButton: Locator;
   readonly dialog: Locator;
-  readonly listbox: Locator;
 
   // Category Configuration Fields
   readonly nameTextbox: Locator;
@@ -39,6 +37,8 @@ export default class SalesforceCategoriesPage {
 
   // Action Buttons
   readonly saveButton: Locator;
+  readonly createdMessage: Locator;
+  readonly allOptionsLocator: Locator;
 
   /**
    * Constructor - Initializes the SalesforceCategories page object with all necessary locators
@@ -55,9 +55,7 @@ export default class SalesforceCategoriesPage {
     this.testInfo = testInfo;
 
     // Primary controls - Main UI interaction elements
-    this.newButton = this.page.getByRole("button", { name: /New/i }).first();
-    this.dialog = this.page.getByRole("dialog", { name: /New Category/i });
-    this.listbox = this.page.getByRole("listbox").first();
+    this.dialog = page.getByRole("dialog", { name: /New Category/i });
 
     // Category configuration fields - Handle category metadata
     this.nameTextbox = this.dialog.getByRole("textbox", { name: /Name/i });
@@ -81,6 +79,8 @@ export default class SalesforceCategoriesPage {
 
     // Action buttons - Save operations
     this.saveButton = this.dialog.getByRole("button", { name: "Save" }).first();
+    this.allOptionsLocator = page.getByRole("option");
+    this.createdMessage = page.locator(".toastMessage");
 
     console.log(
       "✅ SalesforceCategories page object initialized successfully with all locators"
@@ -118,7 +118,6 @@ export default class SalesforceCategoriesPage {
     console.log("📝 Category details:", JSON.stringify(details, null, 2));
 
     // Wait for the new button to be visible and take start screenshot
-    await expect(this.newButton).toBeVisible({ timeout: 10000 });
     await Helper.takeScreenshotToFile(
       this.page,
       "1-start-category",
@@ -127,23 +126,20 @@ export default class SalesforceCategoriesPage {
     );
 
     // Open the new category creation dialog
-    await this.newButton.click({ timeout: 10000 });
     console.log("✅ Category creation dialog opened");
 
     // Helper function to handle dropdown/combobox selections
     const selectFromList = async (combo: Locator, value: string) => {
       await combo.click({ timeout: 10000 });
-      await this.listbox
-        .getByRole("option", { name: value })
-        .first()
-        .click({ timeout: 10000 });
+      await combo.fill(value, { timeout: 10000 });
+      await this.allOptionsLocator.nth(1).click({ timeout: 10000 });
     };
 
     console.log("📋 Filling form fields...");
 
     // Category Name - Primary identifier for the category (required)
     if (details.Name) {
-      await this.nameTextbox.fill(details.Name, { timeout: 10000 });
+      await this.nameTextbox.fill(Helper.generateUniqueValue(details.Name), { timeout: 10000 });
     }
 
     // Parent Category dropdown - Sets category hierarchy
@@ -153,12 +149,13 @@ export default class SalesforceCategoriesPage {
 
     // Catalog dropdown - Associates category with catalog
     if (details.Catalog && details.Catalog !== "--None--") {
+
       await selectFromList(this.catalogCombo, details.Catalog);
     }
 
     // Category Description - Detailed explanation of category purpose
     if (details.Description) {
-      await this.descriptionTextbox.fill(details.Description, {
+      await this.descriptionTextbox.fill(Helper.generateUniqueValue(details.Description), {
         timeout: 10000,
       });
     }
@@ -212,10 +209,12 @@ export default class SalesforceCategoriesPage {
   async verifyCategory(details: { [field: string]: string }) {
     console.log("🔍 Starting category verification...");
 
+    await expect(this.createdMessage).toContainText("was created", { timeout: 10000 });
+    
     if (details.Name) {
-      await expect(
-        await this.page.getByText(details.Name, { exact: true }).count()
-      ).toBeGreaterThan(0);
+      if ((await this.page.getByText(details.Name).count()) === 0) {
+        throw new Error(`Category with name "${details.Name}" not found on the page.`);
+      }
       console.log("✅ Category name verification successful");
     } else {
       console.log("⚠️ No name provided for verification");

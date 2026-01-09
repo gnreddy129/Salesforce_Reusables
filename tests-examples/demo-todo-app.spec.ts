@@ -290,14 +290,14 @@ test.describe('Clear completed button', () => {
   test('should remove completed items when clicked', async ({ page }) => {
     const todoItems = page.getByTestId('todo-item');
     await todoItems.nth(1).getByRole('checkbox').check();
-    await page.getByRole('button', { name: 'Clear completed' }).click();
+    await page.getByRole('button', { name: 'Clear completed' }).click({ timeout: 10000 });
     await expect(todoItems).toHaveCount(2);
     await expect(todoItems).toHaveText([TODO_ITEMS[0], TODO_ITEMS[2]]);
   });
 
   test('should be hidden when there are no items that are completed', async ({ page }) => {
     await page.locator('.todo-list li .toggle').first().check();
-    await page.getByRole('button', { name: 'Clear completed' }).click();
+    await page.getByRole('button', { name: 'Clear completed' }).click({ timeout: 10000 });
     await expect(page.getByRole('button', { name: 'Clear completed' })).toBeHidden();
   });
 });
@@ -344,7 +344,7 @@ test.describe('Routing', () => {
     await page.getByTestId('todo-item').nth(1).getByRole('checkbox').check();
 
     await checkNumberOfCompletedTodosInLocalStorage(page, 1);
-    await page.getByRole('link', { name: 'Active' }).click();
+    await page.getByRole('link', { name: 'Active' }).click({ timeout: 10000 });
     await expect(todoItem).toHaveCount(2);
     await expect(todoItem).toHaveText([TODO_ITEMS[0], TODO_ITEMS[2]]);
   });
@@ -356,16 +356,16 @@ test.describe('Routing', () => {
     await checkNumberOfCompletedTodosInLocalStorage(page, 1);
 
     await test.step('Showing all items', async () => {
-      await page.getByRole('link', { name: 'All' }).click();
+      await page.getByRole('link', { name: 'All' }).click({ timeout: 10000 });
       await expect(todoItem).toHaveCount(3);
     });
 
     await test.step('Showing active items', async () => {
-      await page.getByRole('link', { name: 'Active' }).click();
+      await page.getByRole('link', { name: 'Active' }).click({ timeout: 10000 });
     });
 
     await test.step('Showing completed items', async () => {
-      await page.getByRole('link', { name: 'Completed' }).click();
+      await page.getByRole('link', { name: 'Completed' }).click({ timeout: 10000 });
     });
 
     await expect(todoItem).toHaveCount(1);
@@ -378,16 +378,16 @@ test.describe('Routing', () => {
   test('should allow me to display completed items', async ({ page }) => {
     await page.getByTestId('todo-item').nth(1).getByRole('checkbox').check();
     await checkNumberOfCompletedTodosInLocalStorage(page, 1);
-    await page.getByRole('link', { name: 'Completed' }).click();
+    await page.getByRole('link', { name: 'Completed' }).click({ timeout: 10000 });
     await expect(page.getByTestId('todo-item')).toHaveCount(1);
   });
 
   test('should allow me to display all items', async ({ page }) => {
     await page.getByTestId('todo-item').nth(1).getByRole('checkbox').check();
     await checkNumberOfCompletedTodosInLocalStorage(page, 1);
-    await page.getByRole('link', { name: 'Active' }).click();
-    await page.getByRole('link', { name: 'Completed' }).click();
-    await page.getByRole('link', { name: 'All' }).click();
+    await page.getByRole('link', { name: 'Active' }).click({ timeout: 10000 });
+    await page.getByRole('link', { name: 'Completed' }).click({ timeout: 10000 });
+    await page.getByRole('link', { name: 'All' }).click({ timeout: 10000 });
     await expect(page.getByTestId('todo-item')).toHaveCount(3);
   });
 
@@ -397,11 +397,11 @@ test.describe('Routing', () => {
     //create locators for active and completed links
     const activeLink = page.getByRole('link', { name: 'Active' });
     const completedLink = page.getByRole('link', { name: 'Completed' });
-    await activeLink.click();
+    await activeLink.click({ timeout: 10000 });
 
     // Page change - active items.
     await expect(activeLink).toHaveClass('selected');
-    await completedLink.click();
+    await completedLink.click({ timeout: 10000 });
 
     // Page change - completed items.
     await expect(completedLink).toHaveClass('selected');

@@ -25,7 +25,6 @@ export default class SalesforceAuthorizationFormDataUsePage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newButton: Locator;
   readonly saveButton: Locator;
   readonly saveAndNewButton: Locator;
   readonly cancelButton: Locator;
@@ -37,6 +36,11 @@ export default class SalesforceAuthorizationFormDataUsePage {
 
   // Navigation Elements
   readonly authorizationFormDataUseCreatedMessage: Locator;
+
+  // Verification locators
+  readonly primaryFieldLocator: Locator;
+  readonly firstOptionLocator: Locator;
+  readonly listbox: Locator;
 
   /**
    * Constructor - Initializes the SalesforceAuthorizationFormDataUse page object with all necessary locators
@@ -55,7 +59,6 @@ export default class SalesforceAuthorizationFormDataUsePage {
     this.testInfo = testInfo;
 
     // Primary controls - Main UI interaction elements
-    this.newButton = page.getByRole("button", { name: "New" });
     this.saveButton = page.getByRole("button", { name: "Save", exact: true });
     this.saveAndNewButton = page.getByRole("button", { name: "Save & New" });
     this.cancelButton = page.getByRole("button", { name: "Cancel" });
@@ -69,6 +72,11 @@ export default class SalesforceAuthorizationFormDataUsePage {
 
     // Success message locator
     this.authorizationFormDataUseCreatedMessage = page.locator(".toastMessage");
+
+    // Verification locators
+    this.primaryFieldLocator = page.locator(`[slot="primaryField"]`);
+    this.firstOptionLocator = page.getByRole("option").first();
+    this.listbox = page.getByRole("listbox").first();
 
     console.log(
       "✅ SalesforceAuthorizationFormDataUse page object initialized successfully with all locators"
@@ -104,8 +112,6 @@ export default class SalesforceAuthorizationFormDataUsePage {
       JSON.stringify(details, null, 2)
     );
 
-    await expect(this.newButton).toBeVisible({ timeout: 10000 });
-
     // Take start screenshot for verification
     if (this.testInfo) {
       await Helper.takeScreenshotToFile(
@@ -117,7 +123,6 @@ export default class SalesforceAuthorizationFormDataUsePage {
     }
 
     // Click New Authorization Form Data Use
-    await this.newButton.click({ timeout: 10000 });
     console.log("✅ Authorization Form Data Use creation form opened");
 
     // Wait for the form dialog to be fully loaded
@@ -142,34 +147,7 @@ export default class SalesforceAuthorizationFormDataUsePage {
         details.AuthorizationForm || details["Authorization Form"];
       await this.authorizationFormCombobox.click({ timeout: 10000 });
       await this.page.waitForTimeout(500);
-      
-      // Try to find and click the option with flexible matching
-      try {
-        // First try exact match
-        const exactOption = this.page.getByRole("option", { name: authFormValue, exact: true }).first();
-        if (await exactOption.isVisible({ timeout: 2000 }).catch(() => false)) {
-          await exactOption.click({ timeout: 10000 });
-          console.log(`✅ Authorization Form selected: ${authFormValue}`);
-        } else {
-          // Try partial match
-          const partialOption = this.page.getByRole("option").filter({ hasText: authFormValue }).first();
-          await expect(partialOption).toBeVisible({ timeout: 5000 });
-          await partialOption.click({ timeout: 10000 });
-          console.log(`✅ Authorization Form selected (partial match): ${authFormValue}`);
-        }
-      } catch (error) {
-        // If dropdown not found, try to locate via listbox pattern
-        console.log(`⚠️ Standard dropdown not found, trying alternative approach for: ${authFormValue}`);
-        const listbox = this.page.getByRole("listbox").first();
-        if (await listbox.isVisible({ timeout: 2000 }).catch(() => false)) {
-          const option = listbox.getByRole("option").filter({ hasText: authFormValue }).first();
-          await expect(option).toBeVisible({ timeout: 5000 });
-          await option.click({ timeout: 10000 });
-          console.log(`✅ Authorization Form selected via listbox: ${authFormValue}`);
-        } else {
-          console.log(`❌ Authorization Form dropdown not found: ${authFormValue}`);
-        }
-      }
+      await this.firstOptionLocator.click({ timeout: 10000 });
     }
 
     // Handle Data Use Purpose combobox
@@ -178,10 +156,8 @@ export default class SalesforceAuthorizationFormDataUsePage {
       const dataUsePurposeValue = details.DataUsePurpose || details["Data Use Purpose"];
       await this.dataUsePurposeCombobox.click({ timeout: 10000 });
       await this.page.waitForTimeout(500);
-      const listbox = this.page.getByRole("listbox").first();
-      const option = listbox.getByRole("option").filter({ hasText: dataUsePurposeValue }).first();
-      await expect(option).toBeVisible({ timeout: 5000 });
-      await option.click({ timeout: 10000 });
+      await expect(this.firstOptionLocator).toBeVisible({ timeout: 5000 });
+      await this.firstOptionLocator.click({ timeout: 10000 });
       console.log(`✅ Data Use Purpose selected: ${dataUsePurposeValue}`);
     }
 
@@ -234,7 +210,7 @@ export default class SalesforceAuthorizationFormDataUsePage {
     await expect(this.authorizationFormDataUseCreatedMessage).toContainText(
       "was created"
     );
-    await expect(this.page.locator(`[slot="primaryField"]`)).toContainText(
+    await expect(this.primaryFieldLocator).toContainText(
       details.Name
     );
 

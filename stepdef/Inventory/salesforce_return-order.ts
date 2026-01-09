@@ -8,11 +8,6 @@ Then(
     async ({ page, $testInfo }, dataTable: DataTable) => {
         const returnOrderPage = new SalesforceReturnOrder(page, $testInfo);
         const details = dataTable.rowsHash();
-        
-        // Click the New button to open the form
-        const newButton = page.getByRole('button', { name: /^New$/ }).first();
-        await newButton.click();
-        await page.waitForTimeout(2000);
         await returnOrderPage.createReturnOrder(details);
     }
 );

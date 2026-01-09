@@ -12,15 +12,8 @@ Then(
         const details = dataTable.rowsHash();
         console.log("📦 Received adjustment details:", JSON.stringify(details, null, 2));
         
-        // Click the New button to open the form
-        const newButton = page.getByRole('button', { name: /^New$/ }).first();
-        await newButton.click();
-        await page.waitForTimeout(2000);
-        
         // Fill the form
         await paymentAuthAdjustmentsPage.addNewPaymentAuthorizationAdjustment(details);
-        
-        // Save the form (this will wait for dialog to close)
         await paymentAuthAdjustmentsPage.clickSave();
         
         console.log("✅ Step completed: Payment Authorization Adjustment added");

@@ -23,7 +23,6 @@ export default class SalesforceAppointmentCategoryPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newButton: Locator;
   readonly dialog: Locator;
 
   // Category Configuration Fields
@@ -52,7 +51,6 @@ export default class SalesforceAppointmentCategoryPage {
     this.testInfo = testInfo;
 
     // Primary controls - Main UI interaction elements
-    this.newButton = page.getByRole("button", { name: /New|New Category/i });
     this.dialog = page.getByRole("dialog").first();
 
     // Category configuration fields - Handle category metadata
@@ -103,7 +101,6 @@ export default class SalesforceAppointmentCategoryPage {
     console.log("📝 Category details:", JSON.stringify(details, null, 2));
 
     // Wait for the new button to be visible and take start screenshot
-    await expect(this.newButton).toBeVisible({ timeout: 10000 });
     await Helper.takeScreenshotToFile(
       this.page,
       "1-start-category",
@@ -111,26 +108,15 @@ export default class SalesforceAppointmentCategoryPage {
       "OtherFunctionality/salesforce-appointment-categories/"
     );
 
-    // Open the new category creation dialog
-    await this.newButton.click({ timeout: 10000 });
     console.log("✅ Category creation dialog opened");
-
-    const dialog = this.page.getByRole("dialog", {
-      name: /New|New Appointment Category|New Category/i,
-    });
-
-    await dialog.waitFor({ state: "visible", timeout: 10000 });
-
+    await this.dialog.waitFor({ state: "visible", timeout: 10000 });
     console.log("📋 Filling form fields...");
 
     // Category Name - Primary identifier for the category (required)
     if (details.Name) {
-      await dialog
-        .getByRole("textbox", { name: /Name|Category Name/i })
-        .fill(details.Name, { timeout: 10000 });
+      await this.nameTextbox.fill(Helper.generateUniqueValue(details.Name), { timeout: 10000 });
     }
 
-    // Category types configuration
     if (details.Regular?.toLowerCase() === "yes") {
       await this.regularCheckbox.check({ timeout: 10000 });
     }
@@ -146,10 +132,7 @@ export default class SalesforceAppointmentCategoryPage {
     console.log("💾 Saving the category...");
 
     // Save the category
-    const dialogSave = dialog.getByRole("button", { name: /^Save$/i });
-    if ((await dialogSave.count()) > 0) {
-      await dialogSave.click({ timeout: 10000 });
-    } else {
+    if ((await this.saveButton.count()) > 0) {
       await this.saveButton.click({ timeout: 10000 });
     }
     console.log("✅ Category saved successfully");

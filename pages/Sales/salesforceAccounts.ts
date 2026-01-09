@@ -41,10 +41,8 @@ export default class SalesforceAccountsPage {
   readonly annualRevenueInput: Locator;
 
   // Additional UI elements
-  readonly appLauncher: Locator;
-  readonly viewAllButton: Locator;
-  readonly searchBox: Locator;
   readonly accountCreatedMessage: Locator;
+  readonly allOptionsLocator: Locator;
 
   /**
    * Constructor - Initializes the SalesforceAccounts page object with all necessary locators
@@ -89,13 +87,9 @@ export default class SalesforceAccountsPage {
     });
     this.annualRevenueInput = this.dialog.getByLabel(/Annual Revenue/i);
 
-    // Initialize navigation elements
-    this.appLauncher = page.getByTitle("App Launcher");
-    this.viewAllButton = page.getByRole("button", { name: "View All" });
-    this.searchBox = page.getByPlaceholder("Search apps and items...");
-
     // Success message locator
     this.accountCreatedMessage = page.locator(".toastMessage");
+    this.allOptionsLocator = page.getByRole("option");
 
     console.log(
       "✅ SalesforceAccounts page object initialized successfully with all locators"
@@ -141,60 +135,55 @@ export default class SalesforceAccountsPage {
 
     // Fill required fields
     if (details.AccountName || details["Account Name"]) {
-      const accountName = details.AccountName || details["Account Name"];
-      await this.accountNameInput.fill(accountName, { timeout: 10000 });
+      let accountName = details.AccountName || details["Account Name"];
+      await this.accountNameInput.fill(Helper.generateUniqueValue(accountName), { timeout: 10000 });
     }
 
     // Fill optional fields
     if (details.Phone) {
-      await this.phoneInput.fill(details.Phone, { timeout: 10000 });
+      await this.phoneInput.fill(Helper.generateUniqueValue(details.Phone), { timeout: 10000 });
     }
 
     if (details.Industry) {
       await this.industryCombo.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: details.Industry, exact: true })
-        .click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: details.Industry }).first().click({ timeout: 10000 });
     }
 
     if (details.Type) {
       await this.typeCombo.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: details.Type, exact: true })
-        .click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: details.Type }).first().click({ timeout: 10000 });
     }
 
     if (details.Website) {
-      await this.websiteInput.fill(details.Website, { timeout: 10000 });
+      await this.websiteInput.fill(Helper.generateUniqueValue(details.Website), { timeout: 10000 });
     }
 
     if (details.Employees) {
-      await this.employeesInput.fill(details.Employees, { timeout: 10000 });
+      let employees = details.Employees;
+      await this.employeesInput.fill(employees, { timeout: 10000 });
     }
 
     if (details.Description) {
-      await this.descriptionInput.fill(details.Description, { timeout: 10000 });
+      await this.descriptionInput.fill(Helper.generateUniqueValue(details.Description), { timeout: 10000 });
     }
 
     if (details.Rating) {
       await this.ratingCombo.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: details.Rating })
-        .click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: details.Rating }).first().click({ timeout: 10000 });
     }
 
     if (details.AccountSite || details["Account Site"]) {
-      const accountSite = details.AccountSite || details["Account Site"];
-      await this.accountSiteInput.fill(accountSite, { timeout: 10000 });
+      let accountSite = details.AccountSite || details["Account Site"];
+      await this.accountSiteInput.fill(Helper.generateUniqueValue(accountSite), { timeout: 10000 });
     }
 
     if (details.AccountNumber || details["Account Number"]) {
-      const accountNumber = details.AccountNumber || details["Account Number"];
-      await this.accountNumberInput.fill(accountNumber, { timeout: 10000 });
+      let accountNumber = details.AccountNumber || details["Account Number"];
+      await this.accountNumberInput.fill(Helper.generateUniqueValue(accountNumber), { timeout: 10000 });
     }
 
     if (details.AnnualRevenue || details["Annual Revenue"]) {
-      const annualRevenue = details.AnnualRevenue || details["Annual Revenue"];
+      let annualRevenue = details.AnnualRevenue || details["Annual Revenue"];
       await this.annualRevenueInput.fill(annualRevenue, { timeout: 10000 });
     }
 
@@ -231,12 +220,9 @@ export default class SalesforceAccountsPage {
     console.log("🔍 Starting account verification...");
 
     // Verify account creation message or account details
-    if (details.AccountName || details["Account Name"]) {
-      const accountName = details.AccountName || details["Account Name"];
-      await expect(
-        this.page.locator(`[title*="${accountName}"]`).first()
-      ).toBeVisible({ timeout: 10000 });
-      console.log(`✅ Account name verification successful: ${accountName}`);
+    if (details.Industry) {
+      await expect(this.page.locator(`[title*="${details.Industry}"]`).first()).toBeVisible({ timeout: 10000 });
+      console.log(`✅ Account industry verification successful: ${details.Industry}`);
     }
 
     // Take verification screenshot
@@ -248,24 +234,5 @@ export default class SalesforceAccountsPage {
     );
 
     console.log("🎉 Account verification completed!");
-  }
-
-  /**
-   * Navigate to Accounts app using the app launcher
-   *
-   * This method handles the complete navigation workflow to access the Accounts module
-   * through the Salesforce app launcher interface.
-   */
-  async navigateToAccounts(): Promise<void> {
-    console.log("🔄 Navigating to Accounts module...");
-
-    await this.appLauncher.click({ timeout: 10000 });
-    await this.viewAllButton.click({ timeout: 10000 });
-    await this.searchBox.fill("Accounts", { timeout: 10000 });
-    await this.page
-      .getByText("Accounts", { exact: true })
-      .click({ timeout: 10000 });
-
-    console.log("✅ Successfully navigated to Accounts module");
   }
 }

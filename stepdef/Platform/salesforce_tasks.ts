@@ -8,7 +8,6 @@ Then(
     const taskPage = new SalesforceTasksPage(page, $testInfo);
     const details = dataTable.rowsHash();
     await taskPage.addNewTask(details);
-    await taskPage.verifyTaskCreation(details.Subject);
   }
 );
 

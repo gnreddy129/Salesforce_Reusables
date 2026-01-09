@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="app.js" defer></script>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #111827;
+      --tile: #1f2937;
+      --muted: #9ca3af;
+      --accent: #3b82f6;
+      --pass: #10b981;
+      --fail: #ef4444;
+      --skip: #f59e0b;
+      --border: #334155;
+      --text: #e5e7eb;
+      --link: #93c5fd;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, sans-serif;
+    }
+
+    header {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .btn {
+      background: #0b1020;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      border-color: #556;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 18px;
+    }
+
+    h2 {
+      margin: 0 0 12px;
+      font-size: 18px;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .form-item {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    select {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 8px;
+      background: #0b1020;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid var(--border);
+      padding: 10px;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    th {
+      color: #cbd5e1;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .status-pass {
+      background: color-mix(in oklab, var(--pass) 30%, transparent);
+      color: var(--pass);
+      border: 1px solid var(--pass);
+    }
+
+    .status-fail {
+      background: color-mix(in oklab, var(--fail) 30%, transparent);
+      color: var(--fail);
+      border: 1px solid var(--fail);
+    }
+
+    .status-skip {
+      background: color-mix(in oklab, var(--skip) 30%, transparent);
+      color: var(--skip);
+      border: 1px solid var(--skip);
+    }
+
+    .link {
+      color: var(--link);
+      text-decoration: none;
+      border: 1px solid var(--border);
+      padding: 6px 10px;
+      border-radius: 8px;
+      background: #0b1020;
+    }
+
+    .error {
+      color: #fecaca;
+    }
+
+    code.inline {
+      background: #0b1020;
+      border: 1px solid var(--border);
+      padding: 0 6px;
+      border-radius: 6px;
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .feature-group {
+      background: var(--tile);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+    }
+
+    .feature-group h4 {
+      margin: 0 0 8px;
+      font-size: 13px;
+      color: var(--accent);
+    }
+
+    .feature-group ul {
+      margin: 0;
+      padding-left: 20px;
+      list-style: none;
+    }
+
+    .feature-group li {
+      padding: 4px 0;
+      font-size: 13px;
+      color: var(--text);
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Execution Dashboard</h1>
+    <button class="btn" id="pickDirBtn" for="folderInput">Select Report(s) Folder</button>
+    <input id="folderInput" class="hidden" type="file" webkitdirectory multiple accept=".html,.htm,.json" />
+  </header>
+  <main>
+    <!-- Section 1 -->
+    <section id="report-summary">
+      <h2>Execution Report Summary</h2>
+      <div style="overflow-x: auto;">
+        <table id="report-summary-table" style="width: 100%; border-collapse: collapse; font-size: 14px;">
+          <thead>
+            <tr style="background: var(--card);">
+              <th style="padding: 10px; text-align: left; border: 1px solid var(--border);">Report Name</th>
+              <th style="padding: 10px; text-align: center; border: 1px solid var(--border);">Total Scenarios</th>
+              <th style="padding: 10px; text-align: center; border: 1px solid var(--border);">Pass %</th>
+              <th style="padding: 10px; text-align: center; border: 1px solid var(--border);">Fail %</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div style="margin-top: 12px; text-align: center; display: flex; gap: 8px; justify-content: center;">
+        <button id="report-summary-prev"
+          style="padding: 8px 16px; background: var(--card); color: var(--text); border: 1px solid var(--border); border-radius: 4px; cursor: pointer;">←
+          Previous</button>
+        <button id="report-summary-next"
+          style="padding: 8px 16px; background: var(--card); color: var(--text); border: 1px solid var(--border); border-radius: 4px; cursor: pointer;">Next
+          →</button>
+      </div>
+    </section>
+
+
+    <!-- Section 2 -->
+    <section id="pass-fail-fullwidth" style="padding: 0;">
+      <h2 style="padding: 18px 18px 0 18px; margin: 0 0 12px 0;">Execution Trend</h2>
+      <div style="position: relative; height: 350px; padding: 0 18px 18px 18px; width: 100%;">
+        <canvas id="passFailFullWidthChart"></canvas>
+      </div>
+    </section>
+
+    <!-- Section 3 -->
+    <section id="flaky-tests">
+      <h2>Flaky Tests & Failing Steps Analysis</h2>
+      <div style="overflow-x: auto;">
+        <table id="flaky-tests-table" style="width: 100%; border-collapse: collapse; font-size: 13px;">
+          <thead>
+            <tr style="background: var(--card);">
+              <th style="padding: 10px; text-align: left; border: 1px solid var(--border);">Scenario & Feature</th>
+              <th style="padding: 10px; text-align: center; border: 1px solid var(--border);">Failures</th>
+              <th style="padding: 10px; text-align: left; border: 1px solid var(--border);">Error Reason</th>
+            </tr>
+          </thead>
+          <tbody id="flaky-tests-tbody">
+            <tr>
+              <td colspan="3" style="padding: 20px; text-align: center; color: var(--muted);">Loading...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 4 -->
+    <section id="compare">
+      <h2>Compare Executions</h2>
+      <div class="form-row">
+        <div class="form-item">
+          <label class="muted">Report 1</label>
+          <select id="report1"></select>
+        </div>
+        <div class="form-item">
+          <label class="muted">Report 2</label>
+          <select id="report2"></select>
+        </div>
+      </div>
+
+      <!-- Heatmap Section -->
+      <div id="same_report"
+        style="margin-top: 16px; padding: 12px; background: var(--tile); border-radius: 8px; border: 1px solid var(--border);">
+        <h3 style="margin: 0 0 12px; font-size: 14px;">Comparison</h3>
+        <div style="overflow-x: auto;">
+          <table id="compare-heatmap" style="width: 100%; border-collapse: collapse; font-size: 13px;">
+            <thead>
+              <tr style="background: var(--card);">
+                <th style="padding: 8px; text-align: left; border: 1px solid var(--border);">Feature / Scenario</th>
+                <th style="padding: 8px; text-align: center; border: 1px solid var(--border);" id="heatmap-r1-header">
+                  Report 1</th>
+                <th style="padding: 8px; text-align: center; border: 1px solid var(--border);" id="heatmap-r2-header">
+                  Report 2</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5 -->
+    <section id="history">
+      <h2>View Individual Report</h2>
+      <div class="form-row">
+        <div class="form-item">
+          <label class="muted">Select Report</label>
+          <select id="history-dropdown"></select>
+        </div>
+        <div class="form-item" style="min-width: auto; flex: 0 0 auto; display: flex; align-items: flex-end;">
+          <button id="history-view-btn" class="btn" style="width: 100%; cursor: pointer;" disabled>View Report</button>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+
+</html>

@@ -1,4 +1,4 @@
-import { Page, TestInfo } from '@playwright/test';
+import { Locator, Page, TestInfo } from '@playwright/test';
 import { Helper } from '../../utils/helper';
 
 export default class SalesforcePaymentAuthorizationAdjustmentsPage {
@@ -6,66 +6,110 @@ export default class SalesforcePaymentAuthorizationAdjustmentsPage {
     private testInfo?: TestInfo;
 
     // Dialog locator
-    readonly dialog = () => this.page.getByRole('dialog').first();
+    readonly dialog: Locator;
+    readonly accountCombobox: Locator;
 
     // Locators - Information Section
-    readonly accountCombobox = () =>
-        this.dialog().getByRole('combobox', { name: /^Account$/i });
-    readonly statusCombobox = () =>
-        this.dialog().getByRole('combobox', { name: /^Status$/i });
-    readonly amountField = () =>
-        this.dialog().getByRole('spinbutton', { name: /^Amount/i });
-    readonly paymentAuthorizationCombobox = () =>
-        this.dialog().getByRole('combobox', { name: /^Payment Authorization$/i });
-    readonly adjustmentTypeCombobox = () =>
-        this.dialog().getByRole('combobox', { name: /^Adjustment Type$/i });
-    readonly processingModeCombobox = () =>
-        this.dialog().getByRole('combobox', { name: /^Processing Mode$/i });
-    readonly effectiveDateField = () =>
-        this.dialog().getByRole('group', { name: 'Effective Date', exact: true }).getByLabel('Date');
-    readonly effectiveTimeCombobox = () =>
-        this.dialog().getByRole('group', { name: 'Effective Date', exact: true }).getByLabel('Time');
-    readonly dateField = () =>
-        this.dialog().getByRole('group', { name: 'Date', exact: true }).getByLabel('Date');
-    readonly dateTimeCombobox = () =>
-        this.dialog().getByRole('group', { name: 'Date', exact: true }).getByLabel('Time');
-    readonly commentsField = () =>
-        this.dialog().getByRole('textbox', { name: /^Comments$/i });
+    readonly statusCombobox: Locator;
+    readonly amountField: Locator;
+    readonly paymentAuthorizationCombobox: Locator;
+    readonly adjustmentTypeCombobox: Locator;
+    readonly processingModeCombobox: Locator;
+    readonly effectiveDateField: Locator;
+    readonly effectiveTimeCombobox: Locator;
+    readonly dateField: Locator;
+    readonly dateTimeCombobox: Locator;
+    readonly commentsField: Locator;
 
     // Locators - Gateway Details Section
-    readonly gatewayDateField = () =>
-        this.dialog().getByRole('group', { name: 'Gateway Date', exact: true }).getByLabel('Date');
-    readonly gatewayTimeCombobox = () =>
-        this.dialog().getByRole('group', { name: 'Gateway Date', exact: true }).getByLabel('Time');
-    readonly gatewayResultCodeDescriptionField = () =>
-        this.dialog().getByRole('textbox', { name: /^Gateway Result Code Description$/i });
-    readonly gatewayResultCodeField = () =>
-        this.dialog().getByRole('textbox', { name: /^Gateway Result Code$/i });
-    readonly gatewayReferenceDetailsField = () =>
-        this.dialog().getByRole('textbox', { name: /^Gateway Reference Details$/i });
-    readonly gatewayReferenceNumberField = () =>
-        this.dialog().getByRole('textbox', { name: /^Gateway Reference Number$/i });
+    readonly gatewayDateField: Locator;
+    readonly gatewayTimeCombobox: Locator;
+    readonly gatewayResultCodeDescriptionField: Locator;
+    readonly gatewayResultCodeField: Locator;
+    readonly gatewayReferenceDetailsField: Locator;
+    readonly gatewayReferenceNumberField: Locator;
 
     // Locators - System Information Section
-    readonly macAddressField = () =>
-        this.dialog().getByRole('textbox', { name: /^MAC Address$/i });
-    readonly ipAddressField = () =>
-        this.dialog().getByRole('textbox', { name: /^IP Address$/i });
-    readonly phoneField = () =>
-        this.dialog().getByRole('textbox', { name: /^Phone$/i });
-    readonly auditEmailField = () =>
-        this.dialog().getByRole('textbox', { name: /^Audit Email$/i });
+    readonly macAddressField: Locator;
+    readonly ipAddressField: Locator;
+    readonly phoneField: Locator;
+    readonly auditEmailField: Locator;
 
     // Button Locators
-    readonly saveButton = () => this.dialog().getByRole('button', { name: /^Save$/i });
-    readonly saveNewButton = () =>
-        this.dialog().getByRole('button', { name: /^Save & New$/i });
-    readonly cancelButton = () =>
-        this.dialog().getByRole('button', { name: /^Cancel$/i });
+    readonly saveButton: Locator;
+    readonly saveNewButton: Locator;
+    readonly cancelButton: Locator;
 
+    readonly allOptionsLocator: Locator;
+    
     constructor(page: Page, testInfo?: TestInfo) {
         this.page = page;
         this.testInfo = testInfo;
+        this.dialog = page.getByRole('dialog').first();
+        
+        // Account
+        this.accountCombobox = this.dialog.getByRole('combobox', { name: /^Account$/i });
+        
+        // Status
+        this.statusCombobox = this.dialog.getByRole('combobox', { name: /^Status$/i });
+        
+        // Amount
+        this.amountField = this.dialog.getByRole('spinbutton', { name: /^Amount/i });
+        
+        // Payment Authorization
+        this.paymentAuthorizationCombobox = this.dialog.getByRole('combobox', { name: /^Payment Authorization$/i });
+        
+        // Adjustment Type
+        this.adjustmentTypeCombobox = this.dialog.getByRole('combobox', { name: /^Adjustment Type$/i });
+        
+        // Processing Mode
+        this.processingModeCombobox = this.dialog.getByRole('combobox', { name: /^Processing Mode$/i });
+        
+        // Effective Date
+        this.effectiveDateField = this.dialog.getByRole('group', { name: 'Effective Date', exact: true }).getByLabel('Date');
+        this.effectiveTimeCombobox = this.dialog.getByRole('group', { name: 'Effective Date', exact: true }).getByLabel('Time');
+        
+        // Date
+        this.dateField = this.dialog.getByRole('group', { name: 'Date', exact: true }).getByLabel('Date');
+        this.dateTimeCombobox = this.dialog.getByRole('group', { name: 'Date', exact: true }).getByLabel('Time');
+        
+        // Comments
+        this.commentsField = this.dialog.getByRole('textbox', { name: /^Comments$/i });
+
+        // Gateway Date
+        this.gatewayDateField = this.dialog.getByRole('group', { name: 'Gateway Date', exact: true }).getByLabel('Date');
+        this.gatewayTimeCombobox = this.dialog.getByRole('group', { name: 'Gateway Date', exact: true }).getByLabel('Time');
+        
+        // Gateway Result Code Description
+        this.gatewayResultCodeDescriptionField = this.dialog.getByRole('textbox', { name: /^Gateway Result Code Description$/i });
+        
+        // Gateway Result Code
+        this.gatewayResultCodeField = this.dialog.getByRole('textbox', { name: /^Gateway Result Code$/i });
+        
+        // Gateway Reference Details
+        this.gatewayReferenceDetailsField = this.dialog.getByRole('textbox', { name: /^Gateway Reference Details$/i });
+        
+        // Gateway Reference Number
+        this.gatewayReferenceNumberField = this.dialog.getByRole('textbox', { name: /^Gateway Reference Number$/i });
+
+        // MAC Address
+        this.macAddressField = this.dialog.getByRole('textbox', { name: /^MAC Address$/i });
+        
+        // IP Address
+        this.ipAddressField = this.dialog.getByRole('textbox', { name: /^IP Address$/i });
+        
+        // Phone
+        this.phoneField = this.dialog.getByRole('textbox', { name: /^Phone$/i });
+        
+        // Audit Email
+        this.auditEmailField = this.dialog.getByRole('textbox', { name: /^Audit Email$/i });
+
+        // Button Locators
+        this.saveButton = this.dialog.getByRole('button', { name: /^Save$/i });
+        this.saveNewButton = this.dialog.getByRole('button', { name: /^Save & New$/i });
+        this.cancelButton = this.dialog.getByRole('button', { name: /^Cancel$/i });
+
+        this.allOptionsLocator = page.getByRole("option");
     }
 
     async addNewPaymentAuthorizationAdjustment(details: { [field: string]: string }) {
@@ -77,62 +121,18 @@ export default class SalesforcePaymentAuthorizationAdjustmentsPage {
             const account = details.Account || details.account;
             if (account) {
                 console.log('🔽 Selecting Account from combobox...');
-                await this.accountCombobox().click({ timeout: 10000 });
+                await this.accountCombobox.click({ timeout: 10000 });
                 await this.page.waitForTimeout(1000);
-
-                try {
-                    const optionRole = this.page.locator(`[role="option"]:has-text("${account}")`).first();
-                    await optionRole.click({ timeout: 5000, force: true });
-                    console.log('✅ Account selected:', account);
-                } catch (e) {
-                    try {
-                        const textOption = this.page.locator(`text=/\\b${account}\\b/`).first();
-                        await textOption.click({ timeout: 5000, force: true });
-                        console.log('✅ Account selected with force:', account);
-                    } catch (e2) {
-                        try {
-                            await this.accountCombobox().fill(account, { timeout: 5000 });
-                            await this.page.waitForTimeout(500);
-                            await this.page.keyboard.press('ArrowDown');
-                            await this.page.waitForTimeout(300);
-                            await this.page.keyboard.press('Enter');
-                            console.log('✅ Account selected via type and keyboard');
-                        } catch (e3) {
-                            console.log('❌ Failed to select Account:', e3);
-                        }
-                    }
-                }
+                await this.allOptionsLocator.first().click({ timeout: 10000 });
             }
 
             // Status (Dropdown)
             const status = details.Status || details.status;
             if (status) {
                 console.log('🔽 Selecting Status from dropdown...');
-                await this.statusCombobox().click({ timeout: 10000 });
+                await this.statusCombobox.click({ timeout: 10000 });
                 await this.page.waitForTimeout(1000);
-
-                try {
-                    const optionRole = this.page.locator(`[role="option"]:has-text("${status}")`).first();
-                    await optionRole.click({ timeout: 5000, force: true });
-                    console.log('✅ Status selected:', status);
-                } catch (e) {
-                    try {
-                        const textOption = this.page.locator(`text=/\\b${status}\\b/`).first();
-                        await textOption.click({ timeout: 5000, force: true });
-                        console.log('✅ Status selected with force:', status);
-                    } catch (e2) {
-                        try {
-                            await this.statusCombobox().fill(status, { timeout: 5000 });
-                            await this.page.waitForTimeout(500);
-                            await this.page.keyboard.press('ArrowDown');
-                            await this.page.waitForTimeout(300);
-                            await this.page.keyboard.press('Enter');
-                            console.log('✅ Status selected via type and keyboard');
-                        } catch (e3) {
-                            console.log('❌ Failed to select Status:', e3);
-                        }
-                    }
-                }
+                await this.allOptionsLocator.filter({ hasText: status }).first().click({ timeout: 10000 });
             }
 
             // Amount (Textbox)
@@ -140,12 +140,12 @@ export default class SalesforcePaymentAuthorizationAdjustmentsPage {
             if (amount) {
                 console.log('📝 Filling Amount...');
                 try {
-                    await this.amountField().click({ timeout: 5000 });
+                    await this.amountField.click({ timeout: 5000 });
                     await this.page.waitForTimeout(300);
-                    await this.amountField().clear();
+                    await this.amountField.clear();
                     await this.page.waitForTimeout(200);
                     const numericAmount = parseFloat(amount.toString()).toString();
-                    await this.amountField().fill(numericAmount, { timeout: 10000 });
+                    await this.amountField.fill(numericAmount, { timeout: 10000 });
                     console.log('✅ Amount filled:', numericAmount);
                 } catch (e) {
                     console.log('❌ Failed to fill Amount:', e);
@@ -156,75 +156,27 @@ export default class SalesforcePaymentAuthorizationAdjustmentsPage {
             const paymentAuth = details['Payment Authorization'] || details.PaymentAuthorization;
             if (paymentAuth) {
                 console.log('🔽 Selecting Payment Authorization from combobox...');
-                await this.paymentAuthorizationCombobox().click({ timeout: 10000 });
+                await this.paymentAuthorizationCombobox.click({ timeout: 10000 });
                 await this.page.waitForTimeout(1000);
-
-                try {
-                    const optionRole = this.page.locator(`[role="option"]:has-text("${paymentAuth}")`).first();
-                    await optionRole.click({ timeout: 5000, force: true });
-                    console.log('✅ Payment Authorization selected:', paymentAuth);
-                } catch (e) {
-                    try {
-                        await this.paymentAuthorizationCombobox().fill(paymentAuth, { timeout: 5000 });
-                        await this.page.waitForTimeout(500);
-                        await this.page.keyboard.press('ArrowDown');
-                        await this.page.waitForTimeout(300);
-                        await this.page.keyboard.press('Enter');
-                        console.log('✅ Payment Authorization selected via type and keyboard');
-                    } catch (e2) {
-                        console.log('❌ Failed to select Payment Authorization:', e2);
-                    }
-                }
+                await this.allOptionsLocator.first().click({ timeout: 10000 });
             }
 
             // Adjustment Type (Dropdown)
             const adjType = details['Adjustment Type'] || details.AdjustmentType;
             if (adjType) {
                 console.log('🔽 Selecting Adjustment Type from dropdown...');
-                await this.adjustmentTypeCombobox().click({ timeout: 10000 });
+                await this.adjustmentTypeCombobox.click({ timeout: 10000 });
                 await this.page.waitForTimeout(1000);
-
-                try {
-                    const optionRole = this.page.locator(`[role="option"]:has-text("${adjType}")`).first();
-                    await optionRole.click({ timeout: 5000, force: true });
-                    console.log('✅ Adjustment Type selected:', adjType);
-                } catch (e) {
-                    try {
-                        await this.adjustmentTypeCombobox().fill(adjType, { timeout: 5000 });
-                        await this.page.waitForTimeout(500);
-                        await this.page.keyboard.press('ArrowDown');
-                        await this.page.waitForTimeout(300);
-                        await this.page.keyboard.press('Enter');
-                        console.log('✅ Adjustment Type selected via type and keyboard');
-                    } catch (e2) {
-                        console.log('❌ Failed to select Adjustment Type:', e2);
-                    }
-                }
+                await this.allOptionsLocator.filter({ hasText: adjType }).first().click({ timeout: 10000 });
             }
 
             // Processing Mode (Dropdown)
             const procMode = details['Processing Mode'] || details.ProcessingMode;
             if (procMode) {
                 console.log('🔽 Selecting Processing Mode from dropdown...');
-                await this.processingModeCombobox().click({ timeout: 10000 });
+                await this.processingModeCombobox.click({ timeout: 10000 });
                 await this.page.waitForTimeout(1000);
-
-                try {
-                    const optionRole = this.page.locator(`[role="option"]:has-text("${procMode}")`).first();
-                    await optionRole.click({ timeout: 5000, force: true });
-                    console.log('✅ Processing Mode selected:', procMode);
-                } catch (e) {
-                    try {
-                        await this.processingModeCombobox().fill(procMode, { timeout: 5000 });
-                        await this.page.waitForTimeout(500);
-                        await this.page.keyboard.press('ArrowDown');
-                        await this.page.waitForTimeout(300);
-                        await this.page.keyboard.press('Enter');
-                        console.log('✅ Processing Mode selected via type and keyboard');
-                    } catch (e2) {
-                        console.log('❌ Failed to select Processing Mode:', e2);
-                    }
-                }
+                await this.allOptionsLocator.filter({ hasText: procMode }).first().click({ timeout: 10000 });
             }
 
             // Effective Date (Date field)
@@ -232,9 +184,9 @@ export default class SalesforcePaymentAuthorizationAdjustmentsPage {
             if (effectiveDate) {
                 console.log('📝 Filling Effective Date...');
                 try {
-                    await this.effectiveDateField().clear();
+                    await this.effectiveDateField.clear();
                     await this.page.waitForTimeout(200);
-                    await this.effectiveDateField().fill(effectiveDate, { timeout: 10000 });
+                    await this.effectiveDateField.fill(effectiveDate, { timeout: 10000 });
                     console.log('✅ Effective Date filled:', effectiveDate);
                 } catch (e) {
                     console.log('❌ Failed to fill Effective Date:', e);
@@ -246,9 +198,9 @@ export default class SalesforcePaymentAuthorizationAdjustmentsPage {
             if (effectiveTime) {
                 console.log('📝 Filling Effective Time...');
                 try {
-                    await this.effectiveTimeCombobox().clear();
+                    await this.effectiveTimeCombobox.clear();
                     await this.page.waitForTimeout(200);
-                    await this.effectiveTimeCombobox().fill(effectiveTime, { timeout: 10000 });
+                    await this.effectiveTimeCombobox.fill(effectiveTime, { timeout: 10000 });
                     console.log('✅ Effective Time filled:', effectiveTime);
                 } catch (e) {
                     console.log('❌ Failed to fill Effective Time:', e);
@@ -260,9 +212,9 @@ export default class SalesforcePaymentAuthorizationAdjustmentsPage {
             if (dateVal) {
                 console.log('📝 Filling Date...');
                 try {
-                    await this.dateField().clear();
+                    await this.dateField.clear();
                     await this.page.waitForTimeout(200);
-                    await this.dateField().fill(dateVal, { timeout: 10000 });
+                    await this.dateField.fill(dateVal, { timeout: 10000 });
                     console.log('✅ Date filled:', dateVal);
                 } catch (e) {
                     console.log('❌ Failed to fill Date:', e);
@@ -274,9 +226,9 @@ export default class SalesforcePaymentAuthorizationAdjustmentsPage {
             if (dateTime) {
                 console.log('📝 Filling Date Time...');
                 try {
-                    await this.dateTimeCombobox().clear();
+                    await this.dateTimeCombobox.clear();
                     await this.page.waitForTimeout(200);
-                    await this.dateTimeCombobox().fill(dateTime, { timeout: 10000 });
+                    await this.dateTimeCombobox.fill(dateTime, { timeout: 10000 });
                     console.log('✅ Date Time filled:', dateTime);
                 } catch (e) {
                     console.log('❌ Failed to fill Date Time:', e);
@@ -287,7 +239,7 @@ export default class SalesforcePaymentAuthorizationAdjustmentsPage {
             if (details.Comments) {
                 console.log('📝 Filling Comments...');
                 try {
-                    await this.commentsField().fill(details.Comments, { timeout: 10000 });
+                    await this.commentsField.fill(details.Comments, { timeout: 10000 });
                     console.log('✅ Comments filled:', details.Comments);
                 } catch (e) {
                     console.log('❌ Failed to fill Comments:', e);
@@ -299,9 +251,9 @@ export default class SalesforcePaymentAuthorizationAdjustmentsPage {
             if (gatewayDate) {
                 console.log('📝 Filling Gateway Date...');
                 try {
-                    await this.gatewayDateField().clear();
+                    await this.gatewayDateField.clear();
                     await this.page.waitForTimeout(200);
-                    await this.gatewayDateField().fill(gatewayDate, { timeout: 10000 });
+                    await this.gatewayDateField.fill(gatewayDate, { timeout: 10000 });
                     console.log('✅ Gateway Date filled:', gatewayDate);
                 } catch (e) {
                     console.log('❌ Failed to fill Gateway Date:', e);
@@ -313,9 +265,9 @@ export default class SalesforcePaymentAuthorizationAdjustmentsPage {
             if (gatewayTime) {
                 console.log('📝 Filling Gateway Time...');
                 try {
-                    await this.gatewayTimeCombobox().clear();
+                    await this.gatewayTimeCombobox.clear();
                     await this.page.waitForTimeout(200);
-                    await this.gatewayTimeCombobox().fill(gatewayTime, { timeout: 10000 });
+                    await this.gatewayTimeCombobox.fill(gatewayTime, { timeout: 10000 });
                     console.log('✅ Gateway Time filled:', gatewayTime);
                 } catch (e) {
                     console.log('❌ Failed to fill Gateway Time:', e);
@@ -327,7 +279,7 @@ export default class SalesforcePaymentAuthorizationAdjustmentsPage {
             if (gatewayResultCodeDesc) {
                 console.log('📝 Filling Gateway Result Code Description...');
                 try {
-                    await this.gatewayResultCodeDescriptionField().fill(gatewayResultCodeDesc, { timeout: 10000 });
+                    await this.gatewayResultCodeDescriptionField.fill(gatewayResultCodeDesc, { timeout: 10000 });
                     console.log('✅ Gateway Result Code Description filled:', gatewayResultCodeDesc);
                 } catch (e) {
                     console.log('❌ Failed to fill Gateway Result Code Description:', e);
@@ -339,7 +291,7 @@ export default class SalesforcePaymentAuthorizationAdjustmentsPage {
             if (gatewayResultCode) {
                 console.log('📝 Filling Gateway Result Code...');
                 try {
-                    await this.gatewayResultCodeField().fill(gatewayResultCode, { timeout: 10000 });
+                    await this.gatewayResultCodeField.fill(gatewayResultCode, { timeout: 10000 });
                     console.log('✅ Gateway Result Code filled:', gatewayResultCode);
                 } catch (e) {
                     console.log('❌ Failed to fill Gateway Result Code:', e);
@@ -351,7 +303,7 @@ export default class SalesforcePaymentAuthorizationAdjustmentsPage {
             if (gatewayRefDetails) {
                 console.log('📝 Filling Gateway Reference Details...');
                 try {
-                    await this.gatewayReferenceDetailsField().fill(gatewayRefDetails, { timeout: 10000 });
+                    await this.gatewayReferenceDetailsField.fill(gatewayRefDetails, { timeout: 10000 });
                     console.log('✅ Gateway Reference Details filled:', gatewayRefDetails);
                 } catch (e) {
                     console.log('❌ Failed to fill Gateway Reference Details:', e);
@@ -363,7 +315,7 @@ export default class SalesforcePaymentAuthorizationAdjustmentsPage {
             if (gatewayRefNumber) {
                 console.log('📝 Filling Gateway Reference Number...');
                 try {
-                    await this.gatewayReferenceNumberField().fill(gatewayRefNumber, { timeout: 10000 });
+                    await this.gatewayReferenceNumberField.fill(gatewayRefNumber, { timeout: 10000 });
                     console.log('✅ Gateway Reference Number filled:', gatewayRefNumber);
                 } catch (e) {
                     console.log('❌ Failed to fill Gateway Reference Number:', e);
@@ -375,7 +327,7 @@ export default class SalesforcePaymentAuthorizationAdjustmentsPage {
             if (macAddr) {
                 console.log('📝 Filling MAC Address...');
                 try {
-                    await this.macAddressField().fill(macAddr, { timeout: 10000 });
+                    await this.macAddressField.fill(macAddr, { timeout: 10000 });
                     console.log('✅ MAC Address filled:', macAddr);
                 } catch (e) {
                     console.log('❌ Failed to fill MAC Address:', e);
@@ -387,7 +339,7 @@ export default class SalesforcePaymentAuthorizationAdjustmentsPage {
             if (ipAddr) {
                 console.log('📝 Filling IP Address...');
                 try {
-                    await this.ipAddressField().fill(ipAddr, { timeout: 10000 });
+                    await this.ipAddressField.fill(ipAddr, { timeout: 10000 });
                     console.log('✅ IP Address filled:', ipAddr);
                 } catch (e) {
                     console.log('❌ Failed to fill IP Address:', e);
@@ -398,7 +350,7 @@ export default class SalesforcePaymentAuthorizationAdjustmentsPage {
             if (details.Phone) {
                 console.log('📝 Filling Phone...');
                 try {
-                    await this.phoneField().fill(details.Phone, { timeout: 10000 });
+                    await this.phoneField.fill(details.Phone, { timeout: 10000 });
                     console.log('✅ Phone filled:', details.Phone);
                 } catch (e) {
                     console.log('❌ Failed to fill Phone:', e);
@@ -410,7 +362,7 @@ export default class SalesforcePaymentAuthorizationAdjustmentsPage {
             if (auditEmail) {
                 console.log('📝 Filling Audit Email...');
                 try {
-                    await this.auditEmailField().fill(auditEmail, { timeout: 10000 });
+                    await this.auditEmailField.fill(auditEmail, { timeout: 10000 });
                     console.log('✅ Audit Email filled:', auditEmail);
                 } catch (e) {
                     console.log('❌ Failed to fill Audit Email:', e);
@@ -434,7 +386,7 @@ export default class SalesforcePaymentAuthorizationAdjustmentsPage {
     async clickSave() {
         console.log('💾 Clicking Save button...');
         try {
-            await this.saveButton().click({ timeout: 10000 });
+            await this.saveButton.click({ timeout: 10000 });
             console.log('⏳ Waiting for save to complete...');
 
             await this.page.waitForTimeout(3000);
@@ -454,13 +406,13 @@ export default class SalesforcePaymentAuthorizationAdjustmentsPage {
 
     async clickSaveNew() {
         console.log('💾 Clicking Save & New button...');
-        await this.saveNewButton().click();
+        await this.saveNewButton.click({ timeout: 10000 });
         await this.page.waitForTimeout(2000);
     }
 
     async clickCancel() {
         console.log('❌ Clicking Cancel button...');
-        await this.cancelButton().click();
+        await this.cancelButton.click({ timeout: 10000 });
         await this.page.waitForTimeout(1000);
     }
 

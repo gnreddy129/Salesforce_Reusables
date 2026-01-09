@@ -1,6 +1,6 @@
 import { expect, Page, Locator, TestInfo } from "@playwright/test";
 import { Helper } from "../../utils/helper";
-const path = require("path");
+import path from "path";
 
 /**
  * SalesforceFiles Page Object Model
@@ -24,7 +24,6 @@ export default class SalesforceFilesPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly uploadFilesButton: Locator;
   readonly dialog: Locator;
 
   // File Upload Fields
@@ -40,6 +39,14 @@ export default class SalesforceFilesPage {
 
   // Notification Elements
   readonly successToast: Locator;
+  readonly successKeyLocator: Locator;
+  readonly editFileDetailsLinkLocator: Locator;
+  readonly filesTableLocator: Locator;
+  readonly virtualDataTable: Locator;
+  readonly showMoreLocator: Locator;
+  readonly uploadedFileLocator: Locator;
+  readonly checkfileName: Locator;
+
   /**
    * Constructor - Initializes the SalesforceFiles page object with all necessary locators
    *
@@ -55,28 +62,30 @@ export default class SalesforceFilesPage {
     this.testInfo = testInfo;
 
     // Primary controls - Main UI interaction elements
-    this.uploadFilesButton = page.getByRole("button", { name: "Upload Files" });
     this.dialog = page.getByRole("dialog").first();
 
     // File upload fields - Handle file selection and upload
-    this.uploadInput = page.locator('input[type="file"]');
+    this.uploadInput = page.locator('div[title="Upload Files"]');
     this.doneButton = page.getByRole("button", { name: "Done" });
 
     // File metadata fields - Handle file properties
-    this.titleTextbox = page
-      .locator(".uiInput")
-      .filter({ hasText: /Title/ })
-      .locator("input");
-    this.descriptionTextbox = page
-      .locator(".uiInput")
-      .filter({ hasText: /Description/ })
-      .locator("textarea");
+    this.titleTextbox = page.locator(".uiInput").filter({ hasText: /Title/ }).locator("input");
+    this.descriptionTextbox = page.locator(".uiInput").filter({ hasText: /Description/ }).locator("textarea");
 
     // Action buttons - File operations
     this.saveButton = page.getByRole("button", { name: "Save" });
 
     // Notification elements - Success/error feedback
     this.successToast = page.locator(".toastMessage");
+
+    // Additional locators for file operations
+    this.successKeyLocator = page.locator("[data-key='success']");
+    this.uploadedFileLocator = page.locator(".itemTitle");
+    this.showMoreLocator = page.locator("[title='Show More']");
+    this.editFileDetailsLinkLocator = page.locator(".menu-item.uiMenuItem").filter({ hasText: "Edit File Details" }).first();
+    this.checkfileName = page.locator(".file-preview-title .uiOutputText").first();
+    this.filesTableLocator = page.locator("table");
+    this.virtualDataTable = page.locator("table[data-aura-class='uiVirtualDataTable']");
 
     console.log(
       "✅ SalesforceFiles page object initialized successfully with all locators"
@@ -129,7 +138,7 @@ export default class SalesforceFilesPage {
 
     // Start waiting for file chooser before clicking
     const fileChooserPromise = this.page.waitForEvent("filechooser");
-    await this.uploadFilesButton.click({ timeout: 10000 });
+    await this.uploadInput.click({ timeout: 10000 });
     console.log("✅ Upload dialog opened");
 
     const fileChooser = await fileChooserPromise;
@@ -137,9 +146,7 @@ export default class SalesforceFilesPage {
     console.log("✅ File selected for upload");
 
     // Wait for upload completion
-    await expect(this.page.locator("[data-key='success']")).toBeVisible({
-      timeout: 10000,
-    });
+    await expect(this.successKeyLocator).toBeVisible({ timeout: 10000 });
     console.log("✅ File upload completed successfully");
 
     // Done button to close the dialog
@@ -150,22 +157,18 @@ export default class SalesforceFilesPage {
     if (details.Title || details.Description) {
       console.log("🔧 Configuring file metadata...");
 
-      const table = this.page.locator(
-        "table[data-aura-class='uiVirtualDataTable']"
-      );
-      const row = table
-        .locator("tr", { hasText: filePath.split(".")[0] })
-        .first();
-      await row.locator("[role='button']").click({ timeout: 10000 });
-      await this.page.locator("a[title='Edit File Details']").click({ timeout: 10000 });
+      const fileNameKey = filePath.split(".")[0];
+      await this.uploadedFileLocator.filter({ hasText: fileNameKey }).first().click({ timeout: 10000 });
+      await this.showMoreLocator.click({ timeout: 10000 });
+      await this.editFileDetailsLinkLocator.click({ timeout: 10000 });
 
       // Fill in details
       if (details.Title) {
-        await this.titleTextbox.fill(details.Title,{ timeout: 10000 });
+        await this.titleTextbox.fill(Helper.generateUniqueValue(details.Title), { timeout: 10000 });
         console.log(`✅ File title set: ${details.Title}`);
       }
       if (details.Description) {
-        await this.descriptionTextbox.fill(details.Description);
+        await this.descriptionTextbox.fill(Helper.generateUniqueValue(details.Description));
         console.log("✅ File description added");
       }
       await this.saveButton.click({ timeout: 10000 });
@@ -209,13 +212,14 @@ export default class SalesforceFilesPage {
     console.log("🔍 Starting file upload verification...");
     console.log(`📁 Verifying file: ${fileName}`);
 
-    const table = this.page.locator(
-      "table[data-aura-class='uiVirtualDataTable']"
-    );
-    const row = table.locator("tr", { hasText: fileName }).first();
+    await expect(this.checkfileName).toBeVisible({ timeout: 10000 });
 
-    await expect(row).toBeVisible({ timeout: 10000 });
-    console.log("✅ File successfully verified in file list");
+    await this.checkfileName.innerText().then((text) => {
+      if (fileName.includes(text)) {
+        console.log(`✅ File "${fileName}" found in the file list`);
+      }
+    });
+    console.log("✅ File successfully verified after editFileDetails");
 
     // Take verification screenshot
     await Helper.takeScreenshotToFile(

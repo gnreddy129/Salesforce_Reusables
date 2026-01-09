@@ -25,7 +25,6 @@ export default class SalesforceStreamingChannelsPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newButton: Locator;
   readonly saveButton: Locator;
   readonly saveAndNewButton: Locator;
   readonly cancelButton: Locator;
@@ -36,6 +35,7 @@ export default class SalesforceStreamingChannelsPage {
 
   // Navigation Elements
   readonly streamingChannelCreatedMessage: Locator;
+  readonly primaryField: Locator;
 
   /**
    * Constructor - Initializes the SalesforceStreamingChannels page object with all necessary locators
@@ -52,7 +52,6 @@ export default class SalesforceStreamingChannelsPage {
     this.testInfo = testInfo;
 
     // Primary UI Controls
-    this.newButton = page.getByRole("button", { name: "New" });
     this.saveButton = page.getByRole("button", { name: "Save", exact: true });
     this.saveAndNewButton = page.getByRole("button", {
       name: "Save & New",
@@ -75,6 +74,7 @@ export default class SalesforceStreamingChannelsPage {
 
     // Navigation Elements
     this.streamingChannelCreatedMessage = page.locator(".toastMessage");
+    this.primaryField = page.locator(`[slot="primaryField"]`);
 
     console.log(
       "✅ SalesforceStreamingChannels page object initialized successfully with all locators"
@@ -108,8 +108,6 @@ export default class SalesforceStreamingChannelsPage {
       JSON.stringify(details, null, 2)
     );
 
-    await expect(this.newButton).toBeVisible({ timeout: 10000 });
-
     // Take start screenshot for verification
     if (this.testInfo) {
       await Helper.takeScreenshotToFile(
@@ -119,9 +117,6 @@ export default class SalesforceStreamingChannelsPage {
         "OtherFunctionality/salesforce-streaming-channels/"
       );
     }
-
-    // Click New Streaming Channel
-    await this.newButton.click({ timeout: 10000 });
     console.log("✅ Streaming Channel creation form opened");
 
     // Wait for the form dialog to be fully loaded
@@ -211,9 +206,7 @@ export default class SalesforceStreamingChannelsPage {
       await this.page.waitForTimeout(3000);
 
       // Look for the streaming channel name in the page
-      const streamingChannelLocator = this.page
-        .locator(`[slot="primaryField"]`).filter({ hasText: streamingChannelName })
-        .first();
+      const streamingChannelLocator = this.primaryField.filter({ hasText: streamingChannelName }).first();
       await expect(streamingChannelLocator).toBeVisible({ timeout: 10000 });
       console.log(
         `✅ Streaming Channel name verification successful: ${streamingChannelName}`

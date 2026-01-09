@@ -25,7 +25,6 @@ export default class SalesforceAlternativePaymentPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newPaymentMethodButton: Locator;
   readonly dialog: Locator;
   readonly saveButton: Locator;
 
@@ -60,9 +59,10 @@ export default class SalesforceAlternativePaymentPage {
   readonly auditEmailInput: Locator;
 
   // Additional UI elements
-  readonly appLauncher: Locator;
-  readonly searchBox: Locator;
   readonly paymentMethodCreatedMessage: Locator;
+
+  readonly allOptionsLocator: Locator;
+  readonly outputText: Locator;
 
   /**
    * Constructor - Initializes the SalesforceAlternativePayment page object with all necessary locators
@@ -79,9 +79,6 @@ export default class SalesforceAlternativePaymentPage {
     this.testInfo = testInfo;
 
     // Primary controls - Main UI interaction elements
-    this.newPaymentMethodButton = page
-      .getByRole("button", { name: /New/i })
-      .first();
     this.dialog = page.getByRole("dialog").first();
     this.saveButton = this.dialog
       .getByRole("button", { name: /^Save$/i })
@@ -116,13 +113,11 @@ export default class SalesforceAlternativePaymentPage {
     this.ipAddressInput = this.dialog.getByLabel("IP Address");
     this.phoneInput = this.dialog.getByLabel("Phone");
     this.auditEmailInput = this.dialog.getByLabel("Audit Email");
-
-    // Additional UI elements
-    this.appLauncher = page.getByTitle("App Launcher");
-    this.searchBox = page.getByPlaceholder("Search apps and items...");
-
+    
     // Success message locator
     this.paymentMethodCreatedMessage = page.locator(".toastMessage");
+    this.allOptionsLocator = page.getByRole("option");
+    this.outputText = page.locator(".uiOutputText");
 
     console.log(
       "✅ SalesforceAlternativePayment page object initialized successfully with all locators"
@@ -165,8 +160,6 @@ export default class SalesforceAlternativePaymentPage {
     console.log("🔄 Starting alternative payment method creation process...");
     console.log("📝 Payment method details:", JSON.stringify(details, null, 2));
 
-    await expect(this.newPaymentMethodButton).toBeVisible({ timeout: 10000 });
-
     // Take start screenshot for verification
     await Helper.takeScreenshotToFile(
       this.page,
@@ -176,14 +169,13 @@ export default class SalesforceAlternativePaymentPage {
     );
 
     // Click New Payment Method
-    await this.newPaymentMethodButton.click({ timeout: 10000 });
     console.log("✅ Payment method creation dialog opened");
 
     console.log("📋 Filling form fields...");
 
     // Fill required fields
     if (details.Nickname) {
-      await this.nicknameInput.fill(details.Nickname, { timeout: 10000 });
+      await this.nicknameInput.fill(Helper.generateUniqueValue(details.Nickname), { timeout: 10000 });
     }
 
     if (details.RegisteredEmail || details["Registered Email"]) {
@@ -194,18 +186,14 @@ export default class SalesforceAlternativePaymentPage {
 
     if (details.Status) {
       await this.statusCombo.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: details.Status, exact: true })
-        .click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: details.Status }).first().click({ timeout: 10000 });
     }
 
     if (details.ProcessingMode || details["Processing Mode"]) {
       const processingMode =
         details.ProcessingMode || details["Processing Mode"];
       await this.processingModeCombo.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: processingMode, exact: true })
-        .click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: processingMode }).first().click({ timeout: 10000 });
     }
 
     if (details.AutoPay || details["Auto Pay"]) {
@@ -219,46 +207,40 @@ export default class SalesforceAlternativePaymentPage {
     if (details.Account) {
       console.log("🔍 Handling Account lookup...");
       await this.accountCombo.click({ timeout: 10000 });
-      try {
-        const accountsList = this.page.getByRole("listbox").locator("li");
-        await accountsList.first().waitFor({ state: "visible", timeout: 5000 });
-        await accountsList.last().click({ timeout: 10000 });
-        console.log("✅ Account selected");
-      } catch (error) {
-        console.log("No accounts available or error selecting account:", error);
-      }
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
     }
 
     // Fill optional gateway fields
     if (details.PaymentGateway || details["Payment Gateway"]) {
       const paymentGateway =
         details.PaymentGateway || details["Payment Gateway"];
-      await this.paymentGatewayInput.fill(paymentGateway, { timeout: 10000 });
+      await this.paymentGatewayInput.click({ timeout: 10000 });
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
     }
 
     if (details.GatewayToken || details["Gateway Token"]) {
       const gatewayToken = details.GatewayToken || details["Gateway Token"];
-      await this.gatewayTokenInput.fill(gatewayToken, { timeout: 10000 });
+      await this.gatewayTokenInput.fill(Helper.generateUniqueValue(gatewayToken), { timeout: 10000 });
     }
 
     if (details.GatewayDetails || details["Gateway Details"]) {
       const gatewayDetails =
         details.GatewayDetails || details["Gateway Details"];
-      await this.gatewayDetailsInput.fill(gatewayDetails, { timeout: 10000 });
+      await this.gatewayDetailsInput.fill(Helper.generateUniqueValue(gatewayDetails), { timeout: 10000 });
     }
 
     // Fill address fields
     if (details.CompanyName || details["Company Name"]) {
       const companyName = details.CompanyName || details["Company Name"];
-      await this.companyNameInput.fill(companyName, { timeout: 10000 });
+      await this.companyNameInput.fill(Helper.generateUniqueValue(companyName), { timeout: 10000 });
     }
 
     if (details.Street) {
-      await this.streetInput.fill(details.Street, { timeout: 10000 });
+      await this.streetInput.fill(Helper.generateUniqueValue(details.Street), { timeout: 10000 });
     }
 
     if (details.City) {
-      await this.cityInput.fill(details.City, { timeout: 10000 });
+      await this.cityInput.fill(Helper.generateUniqueValue(details.City), { timeout: 10000 });
     }
 
     // Fill Country FIRST (must be done before State)
@@ -292,7 +274,7 @@ export default class SalesforceAlternativePaymentPage {
 
     // Fill additional fields
     if (details.Comments) {
-      await this.commentsInput.fill(details.Comments, { timeout: 10000 });
+      await this.commentsInput.fill(Helper.generateUniqueValue(details.Comments), { timeout: 10000 });
     }
 
     if (details.MACAddress || details["MAC Address"]) {
@@ -349,12 +331,8 @@ export default class SalesforceAlternativePaymentPage {
 
     // Verify payment method creation message or payment method details
     if (details.Nickname) {
-      await expect(
-        this.page.locator(".uiOutputText").filter({ hasText: details.Nickname })
-      ).toBeVisible({ timeout: 10000 });
-      console.log(
-        `✅ Payment method nickname verification successful: ${details.Nickname}`
-      );
+      await expect(this.outputText.filter({ hasText: details.Nickname })).toBeVisible({ timeout: 10000 });
+      console.log(`✅ Payment method nickname verification successful: ${details.Nickname}`);
     }
 
     // Take verification screenshot

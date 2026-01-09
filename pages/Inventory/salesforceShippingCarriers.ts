@@ -25,7 +25,6 @@ export default class SalesforceShippingCarriersPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newButton: Locator;
   readonly saveButton: Locator;
   readonly saveAndNewButton: Locator;
   readonly cancelButton: Locator;
@@ -36,6 +35,9 @@ export default class SalesforceShippingCarriersPage {
 
   // Navigation Elements
   readonly shippingCarrierCreatedMessage: Locator;
+
+  // Verification locators
+  readonly primaryFieldLocator: Locator;
 
   /**
    * Constructor - Initializes the SalesforceShippingCarriers page object with all necessary locators
@@ -52,7 +54,6 @@ export default class SalesforceShippingCarriersPage {
     this.testInfo = testInfo;
 
     // Primary controls - Main UI interaction elements
-    this.newButton = page.getByRole("button", { name: "New" });
     this.saveButton = page.getByRole("button", { name: "Save", exact: true });
     this.saveAndNewButton = page.getByRole("button", { name: "Save & New" });
     this.cancelButton = page.getByRole("button", { name: "Cancel" });
@@ -67,6 +68,9 @@ export default class SalesforceShippingCarriersPage {
 
     // Success message locator
     this.shippingCarrierCreatedMessage = page.locator(".toastMessage");
+
+    // Verification locators
+    this.primaryFieldLocator = page.locator(`[slot="primaryField"]`);
 
     console.log(
       "✅ SalesforceShippingCarriers page object initialized successfully with all locators"
@@ -100,8 +104,6 @@ export default class SalesforceShippingCarriersPage {
       JSON.stringify(details, null, 2)
     );
 
-    await expect(this.newButton).toBeVisible({ timeout: 10000 });
-
     // Take start screenshot for verification
     if (this.testInfo) {
       await Helper.takeScreenshotToFile(
@@ -113,7 +115,6 @@ export default class SalesforceShippingCarriersPage {
     }
 
     // Click New Shipping Carrier
-    await this.newButton.click({ timeout: 10000 });
     console.log("✅ Shipping Carrier creation form opened");
 
     // Wait for the form dialog to be fully loaded
@@ -124,7 +125,7 @@ export default class SalesforceShippingCarriersPage {
 
     // Fill Name field (text input)
     if (details.Name) {
-      await this.nameInput.fill(details.Name, {
+      await this.nameInput.fill(Helper.generateUniqueValue(details.Name), {
         timeout: 10000,
       });
       console.log(`✅ Name filled: ${details.Name}`);
@@ -132,7 +133,7 @@ export default class SalesforceShippingCarriersPage {
 
     // Fill External Reference field (text input)
     if (details.ExternalReference && details.ExternalReference !== "--None--") {
-      await this.externalReferenceInput.fill(details.ExternalReference, {
+      await this.externalReferenceInput.fill(Helper.generateUniqueValue(details.ExternalReference), {
         timeout: 10000,
       });
       console.log(`✅ External Reference filled: ${details.ExternalReference}`);
@@ -183,7 +184,7 @@ export default class SalesforceShippingCarriersPage {
     await expect(this.shippingCarrierCreatedMessage).toContainText(
       "was created"
     );
-    await expect(this.page.locator(`[slot="primaryField"]`)).toContainText(
+    await expect(this.primaryFieldLocator).toContainText(
       nameValue
     );
 

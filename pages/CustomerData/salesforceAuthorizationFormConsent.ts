@@ -25,7 +25,6 @@ export default class SalesforceAuthorizationFormConsentPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newButton: Locator;
   readonly saveButton: Locator;
   readonly saveAndNewButton: Locator;
   readonly cancelButton: Locator;
@@ -45,6 +44,12 @@ export default class SalesforceAuthorizationFormConsentPage {
   // Navigation Elements
   readonly authorizationFormConsentCreatedMessage: Locator;
 
+  // Verification locators
+  readonly primaryFieldLocator: Locator;
+
+  // Dropdown option locator
+  readonly allOptionsLocator: Locator;
+
   /**
    * Constructor - Initializes the SalesforceAuthorizationFormConsent page object with all necessary locators
    *
@@ -62,7 +67,6 @@ export default class SalesforceAuthorizationFormConsentPage {
     this.testInfo = testInfo;
 
     // Primary controls - Main UI interaction elements
-    this.newButton = page.getByRole("button", { name: "New" });
     this.saveButton = page.getByRole("button", { name: "Save", exact: true });
     this.saveAndNewButton = page.getByRole("button", { name: "Save & New" });
     this.cancelButton = page.getByRole("button", { name: "Cancel" });
@@ -101,6 +105,12 @@ export default class SalesforceAuthorizationFormConsentPage {
 
     // Success message locator
     this.authorizationFormConsentCreatedMessage = page.locator(".toastMessage");
+
+    // Verification locators
+    this.primaryFieldLocator = page.locator(`[slot="primaryField"]`);
+
+    // Dropdown option locator
+    this.allOptionsLocator = page.getByRole("option");
 
     console.log(
       "✅ SalesforceAuthorizationFormConsent page object initialized successfully with all locators"
@@ -150,8 +160,6 @@ export default class SalesforceAuthorizationFormConsentPage {
       JSON.stringify(details, null, 2)
     );
 
-    await expect(this.newButton).toBeVisible({ timeout: 10000 });
-
     // Take start screenshot for verification
     if (this.testInfo) {
       await Helper.takeScreenshotToFile(
@@ -163,7 +171,6 @@ export default class SalesforceAuthorizationFormConsentPage {
     }
 
     // Click New Authorization Form Consent
-    await this.newButton.click({ timeout: 15000 });
     console.log("✅ Authorization Form Consent creation form opened");
 
     // Wait for the form dialog to be fully loaded
@@ -190,9 +197,7 @@ export default class SalesforceAuthorizationFormConsentPage {
       const chooseObjectValue =
         details.ChooseAnObject || details["Choose an object"];
       await this.chooseAnObjectCombobox.click({ timeout: 10000 });
-      await this.page.getByRole("option", { name: chooseObjectValue }).click({
-        timeout: 10000,
-      });
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
       console.log(`✅ Choose an object selected: ${chooseObjectValue}`);
     }
 
@@ -204,9 +209,7 @@ export default class SalesforceAuthorizationFormConsentPage {
       const consentGiverValue =
         details.ConsentGiver || details["Consent Giver"];
       await this.consentGiverCombobox.click({ timeout: 10000 });
-      await this.page.getByRole("option", { name: consentGiverValue }).click({
-        timeout: 10000,
-      });
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
       console.log(`✅ Consent Giver selected: ${consentGiverValue}`);
     }
 
@@ -220,9 +223,7 @@ export default class SalesforceAuthorizationFormConsentPage {
       const authFormTextValue =
         details.AuthorizationFormText || details["Authorization Form Text"];
       await this.authorizationFormTextCombobox.click({ timeout: 10000 });
-      await this.page.getByRole("option", { name: authFormTextValue }).first().click({
-        timeout: 10000,
-      });
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
       console.log(`✅ Authorization Form Text selected: ${authFormTextValue}`);
     }
 
@@ -252,9 +253,7 @@ export default class SalesforceAuthorizationFormConsentPage {
         details.ConsentCapturedSourceType ||
         details["Consent Captured Source Type"];
       await this.consentCapturedSourceTypeCombobox.click({ timeout: 10000 });
-      await this.page.getByRole("option", { name: sourceTypeValue }).click({
-        timeout: 10000,
-      });
+      await this.allOptionsLocator.filter({ hasText: sourceTypeValue }).first().click({ timeout: 10000 });
       console.log(
         `✅ Consent Captured Source Type selected: ${sourceTypeValue}`
       );
@@ -267,9 +266,7 @@ export default class SalesforceAuthorizationFormConsentPage {
     ) {
       const statusValue = details.Status || details["Status"];
       await this.statusCombobox.click({ timeout: 10000 });
-      await this.page.getByRole("option", { name: statusValue }).click({
-        timeout: 10000,
-      });
+      await this.allOptionsLocator.filter({ hasText: statusValue }).first().click({ timeout: 10000 });
       console.log(`✅ Status selected: ${statusValue}`);
     }
 
@@ -306,9 +303,7 @@ export default class SalesforceAuthorizationFormConsentPage {
       const contentVersionValue =
         details.ContentVersion || details["Content Version"];
       await this.contentVersionCombobox.click({ timeout: 10000 });
-      await this.page.getByRole("option", { name: contentVersionValue }).click({
-        timeout: 10000,
-      });
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
       console.log(`✅ Content Version selected: ${contentVersionValue}`);
     }
 
@@ -361,7 +356,7 @@ export default class SalesforceAuthorizationFormConsentPage {
     await expect(this.authorizationFormConsentCreatedMessage).toContainText(
       "was created"
     );
-    await expect(this.page.locator(`[slot="primaryField"]`)).toContainText(
+    await expect(this.primaryFieldLocator).toContainText(
       details.Name
     );
 

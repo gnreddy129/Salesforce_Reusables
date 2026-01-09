@@ -23,7 +23,6 @@ export default class SalesforceServiceContractsPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newButton: Locator;
   readonly dialog: Locator;
 
   // Contract Information Fields
@@ -72,6 +71,7 @@ export default class SalesforceServiceContractsPage {
 
   // Action Buttons
   readonly saveButton: Locator;
+    readonly allOptionsLocator: Locator;
 
   /**
    * Constructor - Initializes the SalesforceServiceContracts page object with all necessary locators
@@ -88,7 +88,7 @@ export default class SalesforceServiceContractsPage {
     this.testInfo = testInfo;
 
     // Primary controls
-    this.newButton = page.getByRole("button", { name: /New/i }).first();
+    this.allOptionsLocator = page.getByRole("option");
     this.dialog = page.getByRole("dialog").first();
 
     // Contract Information Fields - Dialog scoped textboxes and textareas
@@ -206,17 +206,12 @@ export default class SalesforceServiceContractsPage {
     console.log("🔄 Starting service contract creation process...");
     console.log("📋 Service contract details:", JSON.stringify(details, null, 2));
 
-    // Wait for the new button to be visible and take start screenshot
-    await expect(this.newButton).toBeVisible({ timeout: 10000 });
     await Helper.takeScreenshotToFile(
       this.page,
       "1-start-service-contract",
       this.testInfo,
       "Service/salesforce-service-contracts/"
     );
-
-    // Open the new service contract creation dialog
-    await this.newButton.click({ timeout: 10000 });
     console.log("✅ Service contract creation dialog opened");
 
     await this.dialog.waitFor({ state: "visible", timeout: 10000 });
@@ -263,14 +258,14 @@ export default class SalesforceServiceContractsPage {
 
     // Description
     if (details.Description) {
-      await this.descriptionTextarea.fill(details.Description, { timeout: 10000 });
+      await this.descriptionTextarea.fill(Helper.generateUniqueValue(details.Description), { timeout: 10000 });
       console.log("✅ Description filled:", details.Description);
     }
 
     // Special Terms
     if (details.SpecialTerms || details["Special Terms"]) {
       const specialTerms = details.SpecialTerms || details["Special Terms"];
-      await this.specialTermsTextarea.fill(specialTerms, { timeout: 10000 });
+      await this.specialTermsTextarea.fill(Helper.generateUniqueValue(specialTerms), { timeout: 10000 });
       console.log("✅ Special Terms filled:", specialTerms);
     }
 
@@ -280,32 +275,7 @@ export default class SalesforceServiceContractsPage {
       console.log("🔽 Selecting Account Name from combobox...");
       await this.accountNameCombobox.click({ timeout: 10000 });
       await this.page.waitForTimeout(1000);
-
-      try {
-        // Strategy 1: Look for the option using role
-        const optionRole = this.page.locator(`[role="option"]:has-text("${accountName}")`).first();
-        await optionRole.click({ timeout: 5000, force: true });
-        console.log("✅ Account Name selected:", accountName);
-      } catch (e) {
-        try {
-          // Strategy 2: Click with force using text
-          const textOption = this.page.locator(`text=/\\b${accountName}\\b/`).first();
-          await textOption.click({ timeout: 5000, force: true });
-          console.log("✅ Account Name selected with force:", accountName);
-        } catch (e2) {
-          try {
-            // Strategy 3: Type the account name and press Enter
-            await this.accountNameCombobox.fill(accountName, { timeout: 5000 });
-            await this.page.waitForTimeout(500);
-            await this.page.keyboard.press("ArrowDown");
-            await this.page.waitForTimeout(300);
-            await this.page.keyboard.press("Enter");
-            console.log("✅ Account Name selected via type and keyboard");
-          } catch (e3) {
-            console.log("❌ Failed to select Account Name:", e3);
-          }
-        }
-      }
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
     }
 
     // Contact Name - Combobox (Optional)
@@ -314,32 +284,7 @@ export default class SalesforceServiceContractsPage {
       console.log("🔽 Selecting Contact Name from combobox...");
       await this.contactNameCombobox.click({ timeout: 10000 });
       await this.page.waitForTimeout(1000);
-
-      try {
-        // Strategy 1: Look for the option using role
-        const optionRole = this.page.locator(`[role="option"]:has-text("${contactName}")`).first();
-        await optionRole.click({ timeout: 5000, force: true });
-        console.log("✅ Contact Name selected:", contactName);
-      } catch (e) {
-        try {
-          // Strategy 2: Click with force using text
-          const textOption = this.page.locator(`text=/\\b${contactName}\\b/`).first();
-          await textOption.click({ timeout: 5000, force: true });
-          console.log("✅ Contact Name selected with force:", contactName);
-        } catch (e2) {
-          try {
-            // Strategy 3: Type the contact name and press Enter
-            await this.contactNameCombobox.fill(contactName, { timeout: 5000 });
-            await this.page.waitForTimeout(500);
-            await this.page.keyboard.press("ArrowDown");
-            await this.page.waitForTimeout(300);
-            await this.page.keyboard.press("Enter");
-            console.log("✅ Contact Name selected via type and keyboard");
-          } catch (e3) {
-            console.log("❌ Failed to select Contact Name:", e3);
-          }
-        }
-      }
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
     }
 
     // Shipping and Handling

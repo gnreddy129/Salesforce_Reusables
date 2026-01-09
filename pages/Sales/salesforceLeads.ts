@@ -44,12 +44,10 @@ export default class SalesforceLeadsPage {
   readonly stateCombobox: Locator;
 
   // Additional UI elements
-  readonly appLauncher: Locator;
-  readonly viewAllButton: Locator;
-  readonly searchBox: Locator;
   readonly leadCreatedMessage: Locator;
   readonly userMenu: Locator;
   readonly logoutButton: Locator;
+  readonly allOptionsLocator: Locator;
 
   /**
    * Constructor - Initializes the SalesforceLeads page object with all necessary locators
@@ -85,6 +83,7 @@ export default class SalesforceLeadsPage {
 
     // Success message locator
     this.leadCreatedMessage = page.locator(".toastMessage");
+    this.allOptionsLocator = page.getByRole("option");
 
     console.log(
       "✅ SalesforceLeads page object initialized successfully with all locators"
@@ -126,41 +125,37 @@ export default class SalesforceLeadsPage {
 
     // Fill required fields
     if (details.FirstName || details["First Name"]) {
-      const firstName = details.FirstName || details["First Name"];
-      await this.firstNameInput.fill(firstName, { timeout: 10000 });
+      let firstName = details.FirstName || details["First Name"];
+      await this.firstNameInput.fill(Helper.generateUniqueValue(firstName), { timeout: 10000 });
     }
 
     if (details.LastName || details["Last Name"]) {
-      const lastName = details.LastName || details["Last Name"];
-      await this.lastNameInput.fill(lastName, { timeout: 10000 });
+      let lastName = details.LastName || details["Last Name"];
+      await this.lastNameInput.fill(Helper.generateUniqueValue(lastName), { timeout: 10000 });
     }
 
     if (details.Company) {
-      await this.companyInput.fill(details.Company, { timeout: 10000 });
+      await this.companyInput.fill(Helper.generateUniqueValue(details.Company), { timeout: 10000 });
     }
 
     // Fill optional fields
     if (details.Email) {
-      await this.emailInput.fill(details.Email, { timeout: 10000 });
+      await this.emailInput.fill(Helper.generateUniqueEmail(details.Email), { timeout: 10000 });
     }
 
     if (details.Phone) {
-      await this.phoneInput.fill(details.Phone, { timeout: 10000 });
+      await this.phoneInput.fill(Helper.generateUniqueValue(details.Phone), { timeout: 10000 });
     }
 
     if (details.LeadStatus || details["Lead Status"]) {
       const leadStatus = details.LeadStatus || details["Lead Status"];
       await this.statusCombo.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: leadStatus, exact: true })
-        .click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: leadStatus }).first().click({ timeout: 10000 });
     }
 
     if (details.Industry) {
       await this.industryCombo.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: details.Industry, exact: true })
-        .click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: details.Industry }).first().click({ timeout: 10000 });
     }
 
     // Fill Country FIRST (must be done before State)
@@ -222,18 +217,9 @@ export default class SalesforceLeadsPage {
     console.log("🔍 Starting lead verification...");
 
     // Verify lead creation message or lead details
-    if (details.FirstName && details.LastName) {
-      const fullName = `${details.FirstName} ${details.LastName}`;
-      await expect(
-        this.page.locator(`[title*="${fullName}"]`).first()
-      ).toBeVisible({ timeout: 10000 });
-      console.log(`✅ Lead name verification successful: ${fullName}`);
-    } else if (details["First Name"] && details["Last Name"]) {
-      const fullName = `${details["First Name"]} ${details["Last Name"]}`;
-      await expect(
-        this.page.locator(`[title*="${fullName}"]`).first()
-      ).toBeVisible({ timeout: 10000 });
-      console.log(`✅ Lead name verification successful: ${fullName}`);
+    if (details.FirstName || details["First Name"]) {
+      await expect(this.page.locator(`[title*="${details.FirstName || details["First Name"]}"]`).first()).toBeVisible({ timeout: 10000 });
+      console.log(`✅ Lead name verification successful: ${details.FirstName || details["First Name"]}`);
     }
 
     // Take verification screenshot

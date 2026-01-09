@@ -1,14 +1,13 @@
 import { Page, expect, Locator, TestInfo } from '@playwright/test';
 import { Helper } from '../../utils/helper';
+import { time } from 'console';
 
 export default class SalesforceInventoryReservationsPage {
 
     readonly page: Page;
     private testInfo?: TestInfo;
-    readonly listbox: Locator;
 
     // Primary UI Controls
-    readonly newButton: Locator;
     readonly dialog: Locator;
     readonly reservationIdentifierInput: Locator;
     readonly reservationDurationInput: Locator;
@@ -20,6 +19,7 @@ export default class SalesforceInventoryReservationsPage {
     // Controls - Detail Page
     readonly reservationHeading: Locator;
     readonly successNotification: Locator;
+    readonly allOptionsLocator: Locator;
 
     // Action Buttons
     readonly saveButton: Locator;
@@ -30,25 +30,22 @@ export default class SalesforceInventoryReservationsPage {
         this.testInfo = testInfo;
 
         // Primary controls - Main UI interaction elements
-        this.newButton = this.page.getByRole("button", { name: /New/i }).first();
-        this.dialog = this.page.getByRole("dialog", { name: /New Inventory Reservation|New/i });
-        this.listbox = this.page.getByRole("listbox").first();
-
+        this.dialog = page.getByRole("dialog", { name: /New Inventory Reservation|New/i });
         // Form fields
-
         this.reservationIdentifierInput = this.dialog.getByRole('textbox', { name: /^Reservation Identifier/i, exact: true });
         this.reservationDurationInput = this.dialog.getByRole("spinbutton", { name: /^Reservation Duration in/i });
-        this.reservationDateInput = this.page.getByRole("textbox", { name: /date/i });
-        this.reservationTimeInput = this.page.getByRole('combobox', { name: /time/i });
-        this.asyncOperationInput = this.page.getByRole('checkbox', { name: /async operation/i });
-        this.latestOperationInput = this.page.getByRole('checkbox', { name: /latest operation/i });
+        this.reservationDateInput = this.dialog.getByRole("textbox", { name: /date/i });
+        this.reservationTimeInput = this.dialog.getByRole('combobox', { name: /time/i });
+        this.asyncOperationInput = this.dialog.getByRole('checkbox', { name: /async operation/i });
+        this.latestOperationInput = this.dialog.getByRole('checkbox', { name: /latest operation/i });
 
         // Detail Page
-        this.reservationHeading = this.page.locator('heading:has-text("Inventory Reservation")').first();
-        this.successNotification = this.page.locator('[class*="success"]');
+        this.reservationHeading = page.locator('heading:has-text("Inventory Reservation")').first();
+        this.successNotification = page.locator('[class*="success"]');
 
         // Action buttons - Save operations
         this.saveButton = this.dialog.getByRole("button", { name: 'Save', exact: true });
+        this.allOptionsLocator = page.getByRole("option");
 
         console.log("✅ SalesforceInventoryReservations page object initialized successfully with all locators");
     }
@@ -64,14 +61,14 @@ export default class SalesforceInventoryReservationsPage {
         // Fill Reservation Identifier
         if (data.ReservationIdentifier) {
             await expect(this.reservationIdentifierInput).toBeVisible({ timeout: 10000 });
-            await this.reservationIdentifierInput.fill(data.ReservationIdentifier);
+            await this.reservationIdentifierInput.fill(Helper.generateUniqueValue(data.ReservationIdentifier), { timeout: 10000 });
             console.log(`Reservation Identifier: ${data.ReservationIdentifier}`);
         }
 
         // Fill Reservation Duration
         if (data.ReservationDuration) {
             await expect(this.reservationDurationInput).toBeVisible({ timeout: 10000 });
-            await this.reservationDurationInput.fill(data.ReservationDuration);
+            await this.reservationDurationInput.fill(data.ReservationDuration, { timeout: 10000 });
             console.log(`Reservation Duration: ${data.ReservationDuration}`);
         }
 
@@ -79,7 +76,7 @@ export default class SalesforceInventoryReservationsPage {
         if (data.ReservationDate) {
             await expect(this.reservationDateInput).toBeVisible({ timeout: 10000 });
             await this.reservationDateInput.clear();
-            await this.reservationDateInput.fill(data.ReservationDate);
+            await this.reservationDateInput.fill(data.ReservationDate, { timeout: 10000 });
             await this.page.waitForTimeout(500);
             console.log(`Reservation Date: ${data.ReservationDate}`);
         }
@@ -87,25 +84,25 @@ export default class SalesforceInventoryReservationsPage {
         // Select Time
         if (data.ReservationTime) {
             await expect(this.reservationTimeInput).toBeVisible({ timeout: 10000 });
-            await this.reservationTimeInput.click();
+            await this.reservationTimeInput.click({ timeout: 10000 });
             await this.page.waitForTimeout(500);
-            const timeOption = this.page.getByRole('option', { name: new RegExp(data.ReservationTime, 'i') });
+            const timeOption = this.allOptionsLocator.filter({ hasText: data.ReservationTime }).first();
             await expect(timeOption).toBeVisible({ timeout: 5000 });
-            await timeOption.click();
+            await timeOption.click({ timeout: 10000 });
             console.log(`Reservation Time: ${data.ReservationTime}`);
         }
 
         // Async Operation in Progress
         if (data.AsyncOperation && (data.AsyncOperation.toLowerCase() === 'true' || data.AsyncOperation === 'True')) {
             await expect(this.asyncOperationInput).toBeVisible({ timeout: 10000 });
-            await this.asyncOperationInput.check();
+            await this.asyncOperationInput.check({ timeout: 10000 });
             console.log(`Async Operation in Progress: ${data.AsyncOperation}`);
         }
 
         // Latest Operation Succeeded
         if (data.LatestOperation && (data.LatestOperation.toLowerCase() === 'true' || data.LatestOperation === 'True')) {
             await expect(this.latestOperationInput).toBeVisible({ timeout: 10000 });
-            await this.latestOperationInput.check();
+            await this.latestOperationInput.check({ timeout: 10000 });
             console.log(`Latest Operation Succeeded: ${data.LatestOperation}`);
         }
 
@@ -116,7 +113,7 @@ export default class SalesforceInventoryReservationsPage {
 
         // Save the form
         await expect(this.saveButton).toBeVisible({ timeout: 10000 });
-        await this.saveButton.click();
+        await this.saveButton.click({ timeout: 10000 });
         await this.page.waitForTimeout(2000);
 
         // Take screenshot for verification

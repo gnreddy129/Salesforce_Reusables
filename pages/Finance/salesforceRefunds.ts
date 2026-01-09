@@ -1,4 +1,4 @@
-import { expect, Page, Locator, TestInfo } from "@playwright/test";
+import { Page, Locator, TestInfo } from "@playwright/test";
 import { Helper } from "../../utils/helper";
 
 /**
@@ -23,7 +23,6 @@ export default class SalesforceRefundsPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newButton: Locator;
   readonly dialog: Locator;
 
   // Refund Information Fields - Comboboxes
@@ -65,6 +64,7 @@ export default class SalesforceRefundsPage {
   readonly saveButton: Locator;
   readonly saveNewButton: Locator;
   readonly cancelButton: Locator;
+  readonly allOptionsLocator: Locator;
 
   /**
    * Constructor - Initializes the SalesforceRefunds page object with all necessary locators
@@ -117,7 +117,7 @@ export default class SalesforceRefundsPage {
     });
 
     this.cancellationSalesforceResultCodeCombobox = this.dialog.getByRole(
-      "combobox",
+      "textbox",
       { name: /^Cancellation Salesforce Result Code$/i }
     );
 
@@ -207,6 +207,7 @@ export default class SalesforceRefundsPage {
     this.cancelButton = this.dialog.getByRole("button", {
       name: /^Cancel$/i,
     });
+    this.allOptionsLocator = page.getByRole("option");
 
     console.log("✅ SalesforceRefunds page object initialized successfully");
   }
@@ -239,20 +240,16 @@ export default class SalesforceRefundsPage {
       // Fill Account combobox if provided
       if (refundDetails["Account"]) {
         console.log(`🔍 Filling Account: ${refundDetails["Account"]}`);
-        await this.accountCombobox.click();
-        await this.page
-          .getByRole("option", { name: new RegExp(refundDetails["Account"], "i") }).first()
-          .click();
+        await this.accountCombobox.click({ timeout: 10000 });
+        await this.allOptionsLocator.first().click({ timeout: 10000 });
         console.log("✅ Account filled");
       }
 
       // Fill Status combobox (required)
       if (refundDetails["Status"]) {
         console.log(`🔍 Filling Status: ${refundDetails["Status"]}`);
-        await this.statusCombobox.click();
-        await this.page
-          .getByRole("option", { name: new RegExp(refundDetails["Status"], "i") }).first()
-          .click();
+        await this.statusCombobox.click({ timeout: 10000 });
+        await this.allOptionsLocator.filter({ hasText: new RegExp(refundDetails["Status"], "i") }).first().click({ timeout: 10000 });
         console.log("✅ Status filled");
       }
 
@@ -266,302 +263,275 @@ export default class SalesforceRefundsPage {
       // Fill Type combobox (required)
       if (refundDetails["Type"]) {
         console.log(`🔍 Filling Type: ${refundDetails["Type"]}`);
-        await this.typeCombobox.click();
-        await this.page
-          .getByRole("option", { name: new RegExp(refundDetails["Type"], "i") }).first()
-          .click();
-        console.log("✅ Type filled");
-      }
+        await this.typeCombobox.click({ timeout: 10000 });
+        await this.allOptionsLocator.filter({ hasText: new RegExp(refundDetails["Type"], "i") }).first().click({ timeout: 10000 });
+      console.log("✅ Type filled");
+    }
 
       // Fill Payment Group if provided
       if (refundDetails["Payment Group"]) {
-        console.log(
-          `🔍 Filling Payment Group: ${refundDetails["Payment Group"]}`
-        );
-        await this.paymentGroupCombobox.click();
-        await this.page
-          .getByRole("option", {
-            name: new RegExp(refundDetails["Payment Group"], "i"),
-          })
-          .click();
-        console.log("✅ Payment Group filled");
-      }
-
-      // Fill Payment Method if provided
-      if (refundDetails["Payment Method"]) {
-        console.log(
-          `🔍 Filling Payment Method: ${refundDetails["Payment Method"]}`
-        );
-        await this.paymentMethodCombobox.click();
-        await this.page
-          .getByRole("option", {
-            name: new RegExp(refundDetails["Payment Method"], "i"),
-          })
-          .click();
-        console.log("✅ Payment Method filled");
-      }
-
-      // Fill Processing Mode combobox (required)
-      if (refundDetails["Processing Mode"]) {
-        console.log(
-          `🔍 Filling Processing Mode: ${refundDetails["Processing Mode"]}`
-        );
-        await this.processingModeCombobox.click();
-        await this.page
-          .getByRole("option", {
-            name: new RegExp(refundDetails["Processing Mode"], "i"),
-          })
-          .click();
-        console.log("✅ Processing Mode filled");
-      }
-
-      // Fill Effective Date if provided
-      if (refundDetails["Effective Date"]) {
-        console.log(
-          `🔍 Filling Effective Date: ${refundDetails["Effective Date"]}`
-        );
-        await this.effectiveDateTextbox.fill(refundDetails["Effective Date"]);
-        console.log("✅ Effective Date filled");
-      }
-
-      // Fill Date if provided
-      if (refundDetails["Date"]) {
-        console.log(`🔍 Filling Date: ${refundDetails["Date"]}`);
-        await this.dateTextbox.fill(refundDetails["Date"]);
-        console.log("✅ Date filled");
-      }
-
-      // Fill Comments if provided
-      if (refundDetails["Comments"]) {
-        console.log(`🔍 Filling Comments: ${refundDetails["Comments"]}`);
-        await this.commentsTextbox.fill(refundDetails["Comments"]);
-        console.log("✅ Comments filled");
-      }
-
-      // Fill Cancellation Date if provided
-      if (refundDetails["Cancellation Date"]) {
-        console.log(
-          `🔍 Filling Cancellation Date: ${refundDetails["Cancellation Date"]}`
-        );
-        await this.cancellationDateTextbox.fill(
-          refundDetails["Cancellation Date"]
-        );
-        console.log("✅ Cancellation Date filled");
-      }
-
-      // Fill Cancellation Effective Date if provided
-      if (refundDetails["Cancellation Effective Date"]) {
-        console.log(
-          `🔍 Filling Cancellation Effective Date: ${refundDetails["Cancellation Effective Date"]}`
-        );
-        await this.cancellationEffectiveDateTextbox.fill(
-          refundDetails["Cancellation Effective Date"]
-        );
-        console.log("✅ Cancellation Effective Date filled");
-      }
-
-      // Fill Salesforce Result Code if provided
-      if (refundDetails["Salesforce Result Code"]) {
-        console.log(
-          `🔍 Filling Salesforce Result Code: ${refundDetails["Salesforce Result Code"]}`
-        );
-        await this.salesforceResultCodeCombobox.click();
-        await this.page
-          .getByRole("option", {
-            name: new RegExp(refundDetails["Salesforce Result Code"], "i"),
-          })
-          .click();
-        console.log("✅ Salesforce Result Code filled");
-      }
-
-      // Fill Cancellation Salesforce Result Code if provided
-      if (refundDetails["Cancellation Salesforce Result Code"]) {
-        console.log(
-          `🔍 Filling Cancellation Salesforce Result Code: ${refundDetails["Cancellation Salesforce Result Code"]}`
-        );
-        await this.cancellationSalesforceResultCodeCombobox.click();
-        await this.page
-          .getByRole("option", {
-            name: new RegExp(
-              refundDetails["Cancellation Salesforce Result Code"],
-              "i"
-            ),
-          })
-          .click();
-        console.log("✅ Cancellation Salesforce Result Code filled");
-      }
-
-      // Fill Payment Gateway if provided
-      if (refundDetails["Payment Gateway"]) {
-        console.log(
-          `🔍 Filling Payment Gateway: ${refundDetails["Payment Gateway"]}`
-        );
-        await this.paymentGatewayCombobox.click();
-        await this.page
-          .getByRole("option", {
-            name: new RegExp(refundDetails["Payment Gateway"], "i"),
-          })
-          .click();
-        console.log("✅ Payment Gateway filled");
-      }
-
-      // Fill Gateway Date if provided
-      if (refundDetails["Gateway Date"]) {
-        console.log(`🔍 Filling Gateway Date: ${refundDetails["Gateway Date"]}`);
-        // Note: May need to adjust locator if Gateway Date has a separate date field
-        console.log("⚠️ Gateway Date field locator may need adjustment");
-      }
-
-      // Fill Gateway Result Code if provided
-      if (refundDetails["Gateway Result Code"]) {
-        console.log(
-          `🔍 Filling Gateway Result Code: ${refundDetails["Gateway Result Code"]}`
-        );
-        await this.gatewayResultCodeTextbox.fill(
-          refundDetails["Gateway Result Code"]
-        );
-        console.log("✅ Gateway Result Code filled");
-      }
-
-      // Fill Gateway Result Code Description if provided
-      if (refundDetails["Gateway Result Code Description"]) {
-        console.log(
-          `🔍 Filling Gateway Result Code Description: ${refundDetails["Gateway Result Code Description"]}`
-        );
-        await this.gatewayResultCodeDescriptionTextbox.fill(
-          refundDetails["Gateway Result Code Description"]
-        );
-        console.log("✅ Gateway Result Code Description filled");
-      }
-
-      // Fill Gateway Reference Number if provided
-      if (refundDetails["Gateway Reference Number"]) {
-        console.log(
-          `🔍 Filling Gateway Reference Number: ${refundDetails["Gateway Reference Number"]}`
-        );
-        await this.gatewayReferenceNumberTextbox.fill(
-          refundDetails["Gateway Reference Number"]
-        );
-        console.log("✅ Gateway Reference Number filled");
-      }
-
-      // Fill Cancellation Gateway Result Code if provided
-      if (refundDetails["Cancellation Gateway Result Code"]) {
-        console.log(
-          `🔍 Filling Cancellation Gateway Result Code: ${refundDetails["Cancellation Gateway Result Code"]}`
-        );
-        await this.cancellationGatewayResultCodeTextbox.fill(
-          refundDetails["Cancellation Gateway Result Code"]
-        );
-        console.log("✅ Cancellation Gateway Result Code filled");
-      }
-
-      // Fill Cancellation Gateway Date if provided
-      if (refundDetails["Cancellation Gateway Date"]) {
-        console.log(
-          `🔍 Filling Cancellation Gateway Date: ${refundDetails["Cancellation Gateway Date"]}`
-        );
-        await this.cancellationGatewayDateTextbox.fill(
-          refundDetails["Cancellation Gateway Date"]
-        );
-        console.log("✅ Cancellation Gateway Date filled");
-      }
-
-      // Fill Cancellation Gateway Reference Number if provided
-      if (refundDetails["Cancellation Gateway Reference Number"]) {
-        console.log(
-          `🔍 Filling Cancellation Gateway Reference Number: ${refundDetails["Cancellation Gateway Reference Number"]}`
-        );
-        await this.cancellationGatewayReferenceNumberTextbox.fill(
-          refundDetails["Cancellation Gateway Reference Number"]
-        );
-        console.log("✅ Cancellation Gateway Reference Number filled");
-      }
-
-      // Fill MAC Address if provided
-      if (refundDetails["MAC Address"]) {
-        console.log(`🔍 Filling MAC Address: ${refundDetails["MAC Address"]}`);
-        await this.macAddressTextbox.fill(refundDetails["MAC Address"]);
-        console.log("✅ MAC Address filled");
-      }
-
-      // Fill IP Address if provided
-      if (refundDetails["IP Address"]) {
-        console.log(`🔍 Filling IP Address: ${refundDetails["IP Address"]}`);
-        await this.ipAddressTextbox.fill(refundDetails["IP Address"]);
-        console.log("✅ IP Address filled");
-      }
-
-      // Fill Phone if provided
-      if (refundDetails["Phone"]) {
-        console.log(`🔍 Filling Phone: ${refundDetails["Phone"]}`);
-        await this.phoneTextbox.fill(refundDetails["Phone"]);
-        console.log("✅ Phone filled");
-      }
-
-      // Fill Audit Email if provided
-      if (refundDetails["Audit Email"]) {
-        console.log(
-          `🔍 Filling Audit Email: ${refundDetails["Audit Email"]}`
-        );
-        await this.auditEmailTextbox.fill(refundDetails["Audit Email"]);
-        console.log("✅ Audit Email filled");
-      }
-
-      // Take screenshot before saving
-      await Helper.takeScreenshotToFile(
-        this.page,
-        "02-refund-form-filled",
-        this.testInfo,
-        "Finance/salesforce-refunds/"
+      console.log(
+        `🔍 Filling Payment Group: ${refundDetails["Payment Group"]}`
       );
-
-      // Save the refund
-      console.log("💾 Clicking Save button...");
-      await this.saveButton.click();
-
-      await this.page.waitForTimeout(2000);
-      // Take final screenshot
-      await Helper.takeScreenshotToFile(
-        this.page,
-        "03-refund-saved",
-        this.testInfo,
-        "Finance/salesforce-refunds/"
-      );
-
-      console.log("✅ Refund created successfully");
-    } catch (error) {
-      console.error("❌ Error creating refund:", error);
-      await Helper.takeScreenshotToFile(
-        this.page,
-        "error-refund-creation",
-        this.testInfo
-      );
-      throw error;
+      await this.paymentGroupCombobox.click({ timeout: 10000 });
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
+      console.log("✅ Payment Group filled");
     }
+
+    // Fill Payment Method if provided
+    if (refundDetails["Payment Method"]) {
+      console.log(
+        `🔍 Filling Payment Method: ${refundDetails["Payment Method"]}`
+      );
+      await this.paymentMethodCombobox.click({ timeout: 10000 });
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
+      console.log("✅ Payment Method filled");
+    }
+
+    // Fill Processing Mode combobox (required)
+    if (refundDetails["Processing Mode"]) {
+      console.log(
+        `🔍 Filling Processing Mode: ${refundDetails["Processing Mode"]}`
+      );
+      await this.processingModeCombobox.click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: new RegExp(refundDetails["Processing Mode"], "i") }).first().click({ timeout: 10000 });
+      console.log("✅ Processing Mode filled");
+    }
+
+    // Fill Effective Date if provided
+    if (refundDetails["Effective Date"]) {
+      console.log(
+        `🔍 Filling Effective Date: ${refundDetails["Effective Date"]}`
+      );
+      await this.effectiveDateTextbox.fill(refundDetails["Effective Date"]);
+      console.log("✅ Effective Date filled");
+    }
+
+    // Fill Date if provided
+    if (refundDetails["Date"]) {
+      console.log(`🔍 Filling Date: ${refundDetails["Date"]}`);
+      await this.dateTextbox.fill(refundDetails["Date"]);
+      console.log("✅ Date filled");
+    }
+
+    // Fill Comments if provided
+    if (refundDetails["Comments"]) {
+      console.log(`🔍 Filling Comments: ${refundDetails["Comments"]}`);
+      await this.commentsTextbox.fill(refundDetails["Comments"]);
+      console.log("✅ Comments filled");
+    }
+
+    // Fill Cancellation Date if provided
+    if (refundDetails["Cancellation Date"]) {
+      console.log(
+        `🔍 Filling Cancellation Date: ${refundDetails["Cancellation Date"]}`
+      );
+      await this.cancellationDateTextbox.fill(
+        refundDetails["Cancellation Date"]
+      );
+      console.log("✅ Cancellation Date filled");
+    }
+
+    // Fill Cancellation Effective Date if provided
+    if (refundDetails["Cancellation Effective Date"]) {
+      console.log(
+        `🔍 Filling Cancellation Effective Date: ${refundDetails["Cancellation Effective Date"]}`
+      );
+      await this.cancellationEffectiveDateTextbox.fill(
+        refundDetails["Cancellation Effective Date"]
+      );
+      console.log("✅ Cancellation Effective Date filled");
+    }
+
+    // Fill Salesforce Result Code if provided
+    if (refundDetails["Salesforce Result Code"]) {
+      console.log(
+        `🔍 Filling Salesforce Result Code: ${refundDetails["Salesforce Result Code"]}`
+      );
+      await this.salesforceResultCodeCombobox.click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: new RegExp(refundDetails["Salesforce Result Code"], "i") }).first().click({ timeout: 10000 });
+      console.log("✅ Salesforce Result Code filled");
+    }
+
+    // Fill Cancellation Salesforce Result Code if provided
+    if (refundDetails["Cancellation Salesforce Result Code"]) {
+      console.log(
+        `🔍 Filling Cancellation Salesforce Result Code: ${refundDetails["Cancellation Salesforce Result Code"]}`
+      );
+      await this.cancellationSalesforceResultCodeCombobox.click({ timeout: 10000 });
+      await this.cancellationSalesforceResultCodeCombobox.fill(
+        refundDetails["Cancellation Salesforce Result Code"]
+      );
+      console.log("✅ Cancellation Salesforce Result Code filled");
+    }
+
+    // Fill Payment Gateway if provided
+    if (refundDetails["Payment Gateway"]) {
+      console.log(
+        `🔍 Filling Payment Gateway: ${refundDetails["Payment Gateway"]}`
+      );
+      await this.paymentGatewayCombobox.click({ timeout: 10000 });
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
+      console.log("✅ Payment Gateway filled");
+    }
+
+    // Fill Gateway Date if provided
+    if (refundDetails["Gateway Date"]) {
+      console.log(`🔍 Filling Gateway Date: ${refundDetails["Gateway Date"]}`);
+      // Note: May need to adjust locator if Gateway Date has a separate date field
+      console.log("⚠️ Gateway Date field locator may need adjustment");
+    }
+
+    // Fill Gateway Result Code if provided
+    if (refundDetails["Gateway Result Code"]) {
+      console.log(
+        `🔍 Filling Gateway Result Code: ${refundDetails["Gateway Result Code"]}`
+      );
+      await this.gatewayResultCodeTextbox.fill(
+        refundDetails["Gateway Result Code"]
+      );
+      console.log("✅ Gateway Result Code filled");
+    }
+
+    // Fill Gateway Result Code Description if provided
+    if (refundDetails["Gateway Result Code Description"]) {
+      console.log(
+        `🔍 Filling Gateway Result Code Description: ${refundDetails["Gateway Result Code Description"]}`
+      );
+      await this.gatewayResultCodeDescriptionTextbox.fill(
+        refundDetails["Gateway Result Code Description"]
+      );
+      console.log("✅ Gateway Result Code Description filled");
+    }
+
+    // Fill Gateway Reference Number if provided
+    if (refundDetails["Gateway Reference Number"]) {
+      console.log(
+        `🔍 Filling Gateway Reference Number: ${refundDetails["Gateway Reference Number"]}`
+      );
+      await this.gatewayReferenceNumberTextbox.fill(
+        refundDetails["Gateway Reference Number"]
+      );
+      console.log("✅ Gateway Reference Number filled");
+    }
+
+    // Fill Cancellation Gateway Result Code if provided
+    if (refundDetails["Cancellation Gateway Result Code"]) {
+      console.log(
+        `🔍 Filling Cancellation Gateway Result Code: ${refundDetails["Cancellation Gateway Result Code"]}`
+      );
+      await this.cancellationGatewayResultCodeTextbox.fill(
+        refundDetails["Cancellation Gateway Result Code"]
+      );
+      console.log("✅ Cancellation Gateway Result Code filled");
+    }
+
+    // Fill Cancellation Gateway Date if provided
+    if (refundDetails["Cancellation Gateway Date"]) {
+      console.log(
+        `🔍 Filling Cancellation Gateway Date: ${refundDetails["Cancellation Gateway Date"]}`
+      );
+      await this.cancellationGatewayDateTextbox.fill(
+        refundDetails["Cancellation Gateway Date"]
+      );
+      console.log("✅ Cancellation Gateway Date filled");
+    }
+
+    // Fill Cancellation Gateway Reference Number if provided
+    if (refundDetails["Cancellation Gateway Reference Number"]) {
+      console.log(
+        `🔍 Filling Cancellation Gateway Reference Number: ${refundDetails["Cancellation Gateway Reference Number"]}`
+      );
+      await this.cancellationGatewayReferenceNumberTextbox.fill(
+        refundDetails["Cancellation Gateway Reference Number"]
+      );
+      console.log("✅ Cancellation Gateway Reference Number filled");
+    }
+
+    // Fill MAC Address if provided
+    if (refundDetails["MAC Address"]) {
+      console.log(`🔍 Filling MAC Address: ${refundDetails["MAC Address"]}`);
+      await this.macAddressTextbox.fill(refundDetails["MAC Address"]);
+      console.log("✅ MAC Address filled");
+    }
+
+    // Fill IP Address if provided
+    if (refundDetails["IP Address"]) {
+      console.log(`🔍 Filling IP Address: ${refundDetails["IP Address"]}`);
+      await this.ipAddressTextbox.fill(refundDetails["IP Address"]);
+      console.log("✅ IP Address filled");
+    }
+
+    // Fill Phone if provided
+    if (refundDetails["Phone"]) {
+      console.log(`🔍 Filling Phone: ${refundDetails["Phone"]}`);
+      await this.phoneTextbox.fill(refundDetails["Phone"]);
+      console.log("✅ Phone filled");
+    }
+
+    // Fill Audit Email if provided
+    if (refundDetails["Audit Email"]) {
+      console.log(
+        `🔍 Filling Audit Email: ${refundDetails["Audit Email"]}`
+      );
+      await this.auditEmailTextbox.fill(refundDetails["Audit Email"]);
+      console.log("✅ Audit Email filled");
+    }
+
+    // Take screenshot before saving
+    await Helper.takeScreenshotToFile(
+      this.page,
+      "02-refund-form-filled",
+      this.testInfo,
+      "Finance/salesforce-refunds/"
+    );
+
+    // Save the refund
+    console.log("💾 Clicking Save button...");
+    await this.saveButton.click({ timeout: 10000 });
+
+    await this.page.waitForTimeout(2000);
+    // Take final screenshot
+    await Helper.takeScreenshotToFile(
+      this.page,
+      "03-refund-saved",
+      this.testInfo,
+      "Finance/salesforce-refunds/"
+    );
+
+    console.log("✅ Refund created successfully");
+  } catch(error) {
+    console.error("❌ Error creating refund:", error);
+    await Helper.takeScreenshotToFile(
+      this.page,
+      "error-refund-creation",
+      this.testInfo
+    );
+    throw error;
   }
+}
 
   /**
    * Verifies that a refund was successfully created by checking the list view
 */
   async verifyRefundsSuccess() {
-    console.log("🔍 Verifying refund creation success...");
+  console.log("🔍 Verifying refund creation success...");
 
-    // Check that the dialog is no longer visible (indicates save was successful)
-    const dialogVisible = await this.dialog.isVisible().catch(() => false);
-    if (!dialogVisible) {
-      console.log("✅ Dialog closed - payment created successfully");
-    } else {
-      console.log("❌ Dialog still visible - creation may have failed");
-    }
-
-    await Helper.takeScreenshotToFile(
-      this.page,
-      "04-final-verification",
-      this.testInfo,
-      "Finance/salesforce-refunds/"
-    );
-
-    console.log("🎉 Verification completed!");
+  // Check that the dialog is no longer visible (indicates save was successful)
+  const dialogVisible = await this.dialog.isVisible().catch(() => false);
+  if (!dialogVisible) {
+    console.log("✅ Dialog closed - payment created successfully");
+  } else {
+    console.log("❌ Dialog still visible - creation may have failed");
   }
+
+  await Helper.takeScreenshotToFile(
+    this.page,
+    "04-final-verification",
+    this.testInfo,
+    "Finance/salesforce-refunds/"
+  );
+
+  console.log("🎉 Verification completed!");
+}
 }

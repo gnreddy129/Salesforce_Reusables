@@ -23,7 +23,6 @@ export default class SalesforceEnhancedLetterheadsPage {
     private testInfo?: TestInfo;
 
     // Primary UI Controls
-    readonly newButton: Locator;
     readonly dialog: Locator;
 
     // Enhanced Letterhead Configuration Fields
@@ -49,11 +48,8 @@ export default class SalesforceEnhancedLetterheadsPage {
         this.page = page;
         this.testInfo = testInfo;
 
-        // Primary controls - Main UI interaction elements
-        this.newButton = page.getByRole("button", { name: /New|Create/i }).first();
-
         // Dialog elements - Handle enhanced letterhead creation
-        this.dialog = this.page.getByRole("dialog").first();
+        this.dialog = page.getByRole("dialog").first();
 
         // Enhanced Letterhead Configuration Fields
         this.nameTextbox = this.dialog.getByRole("textbox", {
@@ -65,13 +61,13 @@ export default class SalesforceEnhancedLetterheadsPage {
         });
 
         // Header field - Located in iframe with nested iframe structure
-        this.headerTextbox = this.page
+        this.headerTextbox = page
             .frameLocator('[title="CK Editor Container"]').nth(0)
             .frameLocator('.cke_wysiwyg_frame.cke_reset')
             .locator('#editor_rta_body');
 
         // Footer field - Located in iframe with nested iframe structure
-        this.footerTextbox = this.page
+        this.footerTextbox = page
             .frameLocator('[title="CK Editor Container"]').nth(1)
             .frameLocator('.cke_wysiwyg_frame.cke_reset')
             .locator('#editor_rta_body');
@@ -102,8 +98,6 @@ export default class SalesforceEnhancedLetterheadsPage {
         console.log("🔄 Starting enhanced letterhead creation process...");
         console.log("📋 Enhanced letterhead details:", JSON.stringify(details, null, 2));
 
-        // Wait for the new button to be visible and take start screenshot
-        await expect(this.newButton).toBeVisible({ timeout: 10000 });
         await Helper.takeScreenshotToFile(
             this.page,
             "1-start-enhanced-letterhead",
@@ -112,7 +106,6 @@ export default class SalesforceEnhancedLetterheadsPage {
         );
 
         // Open the new enhanced letterhead creation dialog
-        await this.newButton.click({ timeout: 10000 });
         console.log("✅ Enhanced letterhead creation dialog opened");
 
         await this.dialog.waitFor({ state: "visible", timeout: 10000 });
@@ -125,7 +118,7 @@ export default class SalesforceEnhancedLetterheadsPage {
             try {
                 await this.nameTextbox.fill("", { timeout: 5000 });
                 await this.page.waitForTimeout(200);
-                await this.nameTextbox.fill(details.Name, { timeout: 10000 });
+                await this.nameTextbox.fill(Helper.generateUniqueValue(details.Name), { timeout: 10000 });
                 console.log("✅ Name filled:", details.Name);
             } catch (e) {
                 console.log("❌ Failed to fill Name:", e);
@@ -138,7 +131,7 @@ export default class SalesforceEnhancedLetterheadsPage {
             try {
                 await this.descriptionTextbox.fill("", { timeout: 5000 });
                 await this.page.waitForTimeout(200);
-                await this.descriptionTextbox.fill(details.Description, { timeout: 10000 });
+                await this.descriptionTextbox.fill(Helper.generateUniqueValue(details.Description), { timeout: 10000 });
                 console.log("✅ Description filled:", details.Description);
             } catch (e) {
                 console.log("❌ Failed to fill Description:", e);

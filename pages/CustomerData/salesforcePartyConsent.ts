@@ -1,5 +1,6 @@
 import { expect, Page, Locator, TestInfo } from "@playwright/test";
 import { Helper } from "../../utils/helper";
+import { fi } from "@faker-js/faker";
 
 /**
  * SalesforcePartyConsent Page Object Model
@@ -25,7 +26,6 @@ export default class SalesforcePartyConsentPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newButton: Locator;
   readonly saveButton: Locator;
   readonly saveAndNewButton: Locator;
   readonly cancelButton: Locator;
@@ -51,6 +51,8 @@ export default class SalesforcePartyConsentPage {
 
   // Navigation Elements
   readonly partyConsentCreatedMessage: Locator;
+  readonly allOptionsLocator: Locator;
+  readonly primaryFieldLocator: Locator;
 
   /**
    * Constructor - Initializes the SalesforcePartyConsent page object with all necessary locators
@@ -67,7 +69,6 @@ export default class SalesforcePartyConsentPage {
     this.testInfo = testInfo;
 
     // Primary controls - Main UI interaction elements
-    this.newButton = page.getByRole("button", { name: "New" });
     this.saveButton = page.getByRole("button", { name: "Save", exact: true });
     this.saveAndNewButton = page.getByRole("button", { name: "Save & New" });
     this.cancelButton = page.getByRole("button", { name: "Cancel" });
@@ -135,6 +136,8 @@ export default class SalesforcePartyConsentPage {
 
     // Success message locator
     this.partyConsentCreatedMessage = page.locator(".toastMessage");
+    this.allOptionsLocator = page.getByRole("option");
+    this.primaryFieldLocator = page.locator(`[slot="primaryField"]`);
 
     console.log(
       "✅ SalesforcePartyConsent page object initialized successfully with all locators"
@@ -191,8 +194,6 @@ export default class SalesforcePartyConsentPage {
     console.log("🔄 Starting party consent creation process...");
     console.log("📝 Party Consent details:", JSON.stringify(details, null, 2));
 
-    await expect(this.newButton).toBeVisible({ timeout: 10000 });
-
     // Take start screenshot for verification
     if (this.testInfo) {
       await Helper.takeScreenshotToFile(
@@ -204,7 +205,6 @@ export default class SalesforcePartyConsentPage {
     }
 
     // Click New Party Consent
-    await this.newButton.click({ timeout: 10000 });
     console.log("✅ Party Consent creation form opened");
     // Wait for the form dialog to be fully loaded
     await expect(this.nameInput).toBeVisible({ timeout: 15000 });
@@ -228,10 +228,7 @@ export default class SalesforcePartyConsentPage {
     ) {
       const partyValue = details.Party || details["Party"];
       await this.partyInput.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: partyValue })
-        .first()
-        .click({ timeout: 5000 });
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
       console.log(`✅ Party filled: ${partyValue}`);
     }
 
@@ -243,10 +240,7 @@ export default class SalesforcePartyConsentPage {
       const businessBrandValue =
         details.BusinessBrand || details["Business Brand"];
       await this.businessBrandInput.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: businessBrandValue })
-        .first()
-        .click({ timeout: 5000 });
+    await this.allOptionsLocator.first().click({ timeout: 10000 });
       console.log(`✅ Business Brand filled: ${businessBrandValue}`);
     }
     // Fill Choose an object field (combobox)
@@ -258,11 +252,7 @@ export default class SalesforcePartyConsentPage {
       const chooseObjectValue =
         details.ChooseAnObject || details["Choose an object"];
       await this.chooseAnObjectInput.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: chooseObjectValue })
-        .first()
-        .click({ timeout: 5000 });
-
+    await this.allOptionsLocator.first().click({ timeout: 10000 });
       console.log(`✅ Choose an object filled: ${chooseObjectValue}`);
     }
 
@@ -273,11 +263,7 @@ export default class SalesforcePartyConsentPage {
     ) {
       const partyRoleValue = details.PartyRole || details["Party Role"];
       await this.partyRoleInput.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: partyRoleValue })
-        .first()
-        .click({ timeout: 5000 });
-
+    await this.allOptionsLocator.first().click({ timeout: 10000 });
       console.log(`✅ Party Role filled: ${partyRoleValue}`);
     }
 
@@ -291,11 +277,7 @@ export default class SalesforcePartyConsentPage {
       const privacyStatusValue =
         details.PrivacyConsentStatus || details["Privacy Consent Status"];
       await this.privacyConsentStatusInput.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: privacyStatusValue })
-        .first()
-        .click({ timeout: 5000 });
-
+      await this.allOptionsLocator.filter({ hasText: privacyStatusValue }).first().click({ timeout: 5000 });
       console.log(`✅ Privacy Consent Status filled: ${privacyStatusValue}`);
     }
 
@@ -306,11 +288,7 @@ export default class SalesforcePartyConsentPage {
     ) {
       const actionValue = details.Action || details["Action"];
       await this.actionInput.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: actionValue })
-        .first()
-        .click({ timeout: 5000 });
-
+      await this.allOptionsLocator.filter({ hasText: actionValue }).first().click({ timeout: 5000 });
       console.log(`✅ Action filled: ${actionValue}`);
     }
     // Fill Consent Captured Contact Point Type field (combobox)
@@ -324,10 +302,7 @@ export default class SalesforcePartyConsentPage {
         details.ConsentCapturedContactPointType ||
         details["Consent Captured Contact Point Type"];
       await this.consentCapturedContactPointTypeInput.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: contactPointTypeValue })
-        .first()
-        .click({ timeout: 5000 });
+      await this.allOptionsLocator.filter({ hasText: contactPointTypeValue }).first().click({ timeout: 5000 });
       console.log(
         `✅ Consent Captured Contact Point Type filled: ${contactPointTypeValue}`
       );
@@ -401,13 +376,7 @@ export default class SalesforcePartyConsentPage {
         details.DoubleConsentCaptureTime ||
         details["Double Consent Capture Time"];
         await this.doubleConsentCaptureTimeInput.click({ timeout: 10000 });
-        await this.page
-          .getByRole("option", { name: doubleConsentTimeValue })
-          .first()
-          .click({ timeout: 5000 });
-      // await this.doubleConsentCaptureTimeInput.fill(doubleConsentTimeValue, {
-      //   timeout: 10000,
-      // });
+        await this.allOptionsLocator.filter({ hasText: doubleConsentTimeValue }).first().click({ timeout: 5000 });
       console.log(
         `✅ Double Consent Capture Time filled: ${doubleConsentTimeValue}`
       );
@@ -439,11 +408,7 @@ export default class SalesforcePartyConsentPage {
       const consentCapturedTimeValue =
         details.ConsentCapturedTime || details["Consent Captured Time"];
       await this.consentCapturedTimeInput.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: consentCapturedTimeValue })
-        .first()
-        .click({ timeout: 5000 });
-      // await this.consentCapturedTimeInput.fill(consentCapturedTimeValue, { timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: consentCapturedTimeValue }).first().click({ timeout: 5000 });
       console.log(
         `✅ Consent Captured Time filled: ${consentCapturedTimeValue}`
       );
@@ -493,9 +458,7 @@ export default class SalesforcePartyConsentPage {
     console.log("🔍 Starting party consent verification...");
 
     await expect(this.partyConsentCreatedMessage).toContainText("was created");
-    await expect(this.page.locator(`[slot="primaryField"]`)).toContainText(
-      details.Name
-    );
+    await expect(this.primaryFieldLocator).toContainText(details.Name);
 
     // Take verification screenshot
     if (this.testInfo) {

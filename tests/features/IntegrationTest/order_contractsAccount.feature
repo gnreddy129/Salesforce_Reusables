@@ -24,7 +24,7 @@ Feature: Salesforce Orders Management
       | Billing Country        | <BillingCountry>       |
       | Description            | <Description>          |
     #   | Contract Number        | <ContractNumber>       |
-    #   | Account Name           | <AccountName_0>        |
+    #   | Account Name           | <AccountName_0>       |
     Then Click on Add new Account in order page
     And Fill Accounts fields with following details:
       | Field Name     | Value           |

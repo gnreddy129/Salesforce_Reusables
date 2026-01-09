@@ -29,6 +29,8 @@ export default class MailosaurPage {
   readonly inboxButton: Locator;
   readonly resetInboxButton: Locator;
   readonly returnToInboxButton: Locator;
+  readonly continueButton: Locator;
+  readonly allButtons: Locator;
 
   /**
    * Constructor - Initializes the Mailosaur page object with all necessary locators
@@ -53,6 +55,8 @@ export default class MailosaurPage {
     this.returnToInboxButton = page.getByRole("button", {
       name: "Return to inbox",
     });
+    this.continueButton = page.getByRole("button", { name: "Continue" });
+    this.allButtons = page.getByRole("button");
 
     console.log("✅ Mailosaur page object initialized successfully");
   }
@@ -87,10 +91,7 @@ export default class MailosaurPage {
 
     try {
       // Check if already logged in by looking for inbox elements
-      const inboxCheck = this.page.getByRole("link", {
-        name: "salesforcecode",
-      });
-      await inboxCheck.waitFor({ state: "visible", timeout: 3000 });
+      await this.inboxButton.waitFor({ state: "visible", timeout: 3000 });
       console.log("✅ Already logged into Mailosaur");
       return;
     } catch (error) {
@@ -99,7 +100,7 @@ export default class MailosaurPage {
 
     // Fill login credentials
     await this.emailInput.fill(email);
-    await this.page.getByRole("button", { name: "Continue" }).click();
+    await this.continueButton.click({ timeout: 10000 });
     await this.passwordInput.fill(password);
 
     // Take screenshot before login
@@ -110,7 +111,7 @@ export default class MailosaurPage {
       "OtherFunctionality/mailosaur/"
     );
 
-    await this.loginButton.click();
+    await this.loginButton.click({ timeout: 10000 });
 
     // Wait for redirect and dashboard to load
     await this.page.waitForTimeout(3000);
@@ -126,7 +127,7 @@ export default class MailosaurPage {
 
     // Click on the salesforcecode inbox
     await this.inboxButton.waitFor({ state: "visible", timeout: 10000 });
-    await this.inboxButton.click();
+    await this.inboxButton.click({ timeout: 10000 });
 
     // Take screenshot of inbox
     await Helper.takeScreenshotToFile(
@@ -149,11 +150,8 @@ export default class MailosaurPage {
 
     // Click on the latest email in the inbox
     console.log("📧 Clicking on the latest email...");
-    const latestEmailButton = this.page
-      .getByRole("button")
-      .filter({ hasText: "Verify your identity in Salesforce" })
-      .first();
-    await latestEmailButton.click();
+    const latestEmailButton = this.allButtons.filter({ hasText: "Verify your identity in Salesforce" }).first();
+    await latestEmailButton.click({ timeout: 10000 });
 
     // Take screenshot of opened email
     await Helper.takeScreenshotToFile(
@@ -187,8 +185,7 @@ export default class MailosaurPage {
 
     if (codeMatches && codeMatches.length > 0) {
       console.log(
-        `� Found ${
-          codeMatches.length
+        `� Found ${codeMatches.length
         } 6-digit codes in email: [${codeMatches.join(", ")}]`
       );
 
@@ -238,7 +235,7 @@ export default class MailosaurPage {
         state: "visible",
         timeout: 3000,
       });
-      await this.returnToInboxButton.click();
+      await this.returnToInboxButton.click({ timeout: 10000 });
       console.log("✅ Used 'Return to inbox' button");
     } catch (error) {
       // Fallback to browser back button
@@ -271,8 +268,8 @@ export default class MailosaurPage {
     try {
       // Look for "Empty inbox" button
       await this.resetInboxButton.waitFor({ state: "visible", timeout: 5000 });
-      await this.resetInboxButton.click();
-      await this.page.getByRole("button", { name: "Delete" }).click();
+      await this.resetInboxButton.click({ timeout: 10000 });
+      await this.allButtons.filter({ hasText: "Delete" }).click({ timeout: 10000 });
 
       // Wait for confirmation or page update
       await this.page.waitForTimeout(2000);

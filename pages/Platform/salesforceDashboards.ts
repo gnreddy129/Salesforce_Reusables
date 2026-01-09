@@ -22,10 +22,6 @@ export default class SalesforceDashboardsPage {
   readonly page: Page;
   private testInfo?: TestInfo;
 
-  // Primary UI Controls
-  readonly newDashboardButton: Locator;
-  readonly searchDashboardInput: Locator;
-
   // Dashboard Configuration Fields
   readonly dashboardNameInput: Locator;
   readonly dashboardDescriptionInput: Locator;
@@ -55,6 +51,7 @@ export default class SalesforceDashboardsPage {
   readonly saveButton: Locator;
   readonly createButton: Locator;
   readonly doneButton: Locator;
+  readonly allLinks: Locator;
 
   /** Static property to store current dashboard name for verification */
   static dashboardName: string;
@@ -71,12 +68,6 @@ export default class SalesforceDashboardsPage {
     console.log("🚀 Initializing SalesforceDashboards page object");
     this.page = page;
     this.testInfo = testInfo;
-
-    // Primary controls - Main UI interaction elements
-    this.newDashboardButton = page.getByRole("button", {
-      name: "New Dashboard",
-    });
-    this.searchDashboardInput = page.getByPlaceholder("Search dashboards...");
 
     // Dashboard configuration fields - Handle dashboard metadata within iframe
     // Use attribute selector to target the specific dashboard iframe (sfxdash-*)
@@ -131,7 +122,7 @@ export default class SalesforceDashboardsPage {
     this.saveButton = frameLocator.getByRole("button", { name: "Save" });
     this.createButton = frameLocator.locator("#submitBtn");
     this.doneButton = frameLocator.getByRole("button", { name: "Done" });
-
+    this.allLinks = page.getByRole("link");
     console.log(
       "✅ SalesforceDashboards page object initialized successfully with all locators"
     );
@@ -162,7 +153,6 @@ export default class SalesforceDashboardsPage {
     console.log("📝 Dashboard details:", JSON.stringify(details, null, 2));
 
     // Wait for the new dashboard button to be visible and take start screenshot
-    await expect(this.newDashboardButton).toBeVisible({ timeout: 10000 });
     await Helper.takeScreenshotToFile(
       this.page,
       "1-start-dashboard",
@@ -170,39 +160,26 @@ export default class SalesforceDashboardsPage {
       "Platform/salesforce-dashboards/"
     );
 
-    // Open the new dashboard creation dialog
-    await this.newDashboardButton.click({ timeout: 10000 });
     console.log("✅ Dashboard creation dialog opened");
 
     // Set dashboard name for verification
     SalesforceDashboardsPage.dashboardName = details.DashboardName;
 
     // Wait for the dashboard iframe to be ready (use attribute selector to target correct iframe)
-    const frameLocator = this.page.frameLocator('iframe[name*="sfxdash"]');
-    await frameLocator
-      .getByRole("textbox", { name: "*Name" })
-      .waitFor({ timeout: 30000 });
-
+    await this.dashboardNameInput.waitFor({ timeout: 30000 });
     console.log("📋 Filling form fields...");
 
     // Dashboard Name - Primary identifier for the dashboard (required)
-    await this.dashboardNameInput.fill(details.DashboardName, {
+    await this.dashboardNameInput.fill(Helper.generateUniqueValue(details.DashboardName), {
       timeout: 10000,
     });
 
     // Dashboard Description - Detailed explanation of dashboard purpose
     if (details.Description) {
-      await this.dashboardDescriptionInput.fill(details.Description, {
+      await this.dashboardDescriptionInput.fill(Helper.generateUniqueValue(details.Description), {
         timeout: 10000,
       });
     }
-
-    // if (details.Folder) {
-    //   // Select Folder - Choose the folder to save the dashboard in
-    //   await this.selectFolder.click({ timeout: 10000 });
-    //   await this.page.getByText(details.Folder).first().click({ timeout: 10000 });
-    //   await this.page.getByRole('button', { name: 'Select Folder' }).click({ timeout: 10000 });
-    // }
 
     await this.page.waitForTimeout(2000);
     console.log("💾 Saving the dashboard...");
@@ -252,14 +229,10 @@ export default class SalesforceDashboardsPage {
       "Platform/salesforce-dashboards/"
     );
 
-    console.log(
-      `📊 Verifying dashboard: ${SalesforceDashboardsPage.dashboardName}`
-    );
+    console.log(`📊 Verifying dashboard: ${SalesforceDashboardsPage.dashboardName}`);
 
     // Wait for the dashboard to be created and loaded
-    expect(
-      await this.page.getByText(SalesforceDashboardsPage.dashboardName).count()
-    ).toBeGreaterThan(0);
+    expect(await this.page.getByText(SalesforceDashboardsPage.dashboardName).count()).toBeGreaterThan(0);
 
     console.log("✅ Dashboard successfully verified in interface");
     console.log("🎉 Verification completed!");
@@ -282,7 +255,7 @@ export default class SalesforceDashboardsPage {
     console.log(`🔍 Selecting dashboard: ${dashboardName}`);
 
     // Search and select the dashboard from the list view
-    await this.page.getByRole("link", { name: dashboardName }).click();
+    await this.allLinks.filter({ hasText: dashboardName }).first().click({ timeout: 10000 });
 
     console.log(`✅ Successfully navigated to dashboard: ${dashboardName}`);
   }

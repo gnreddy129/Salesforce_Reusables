@@ -23,9 +23,7 @@ export default class SalesforceAppointmentInvitationPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newButton: Locator;
   readonly dialog: Locator;
-  readonly listbox: Locator;
 
   // Date Configuration Fields
   readonly startDateTextbox: Locator;
@@ -36,6 +34,7 @@ export default class SalesforceAppointmentInvitationPage {
   readonly activeCheckbox: Locator;
   readonly appointmentTopicCombo: Locator;
   readonly serviceTerritoryCombo: Locator;
+  readonly allOptionsLocator: Locator;
 
   // Action Buttons
   readonly saveButton: Locator;
@@ -55,48 +54,23 @@ export default class SalesforceAppointmentInvitationPage {
     this.testInfo = testInfo;
 
     // Primary controls - Main UI interaction elements
-    this.listbox = page.getByRole("listbox").first();
-    this.newButton = page.getByRole("button", {
-      name: /New|New Appointment Invitation|New Invitation/i,
-    });
     this.dialog = page.getByRole("dialog").first();
 
     // Date configuration fields - Handle invitation date settings
-    this.startDateTextbox = this.dialog
-      .getByRole("textbox", {
-        name: /Booking Start Date|Booking Start|Start Date/i,
-      })
-      .first();
-    this.endDateTextbox = this.dialog
-      .getByRole("textbox", {
-        name: /Booking End Date|Booking End|End Date/i,
-      })
-      .first();
-    this.urlExpirationDateTextbox = this.dialog
-      .getByRole("textbox", {
-        name: /URL Expiration Date|URL Expiration|Expiration Date/i,
-      })
-      .first();
+    this.startDateTextbox = this.dialog.getByRole("textbox", { name: /Booking Start Date|Booking Start|Start Date/i }).first();
+    this.endDateTextbox = this.dialog.getByRole("textbox", { name: /Booking End Date|Booking End|End Date/i }).first();
+    this.urlExpirationDateTextbox = this.dialog.getByRole("textbox", { name: /URL Expiration Date|URL Expiration|Expiration Date/i }).first();
 
     // Invitation settings - Handle invitation configuration
-    this.activeCheckbox = this.dialog
-      .getByRole("checkbox", { name: /Active/i })
-      .first();
-    this.appointmentTopicCombo = this.dialog
-      .getByRole("combobox", { name: /Appointment Topic|Appointment Topic/i })
-      .first();
-    this.serviceTerritoryCombo = this.dialog
-      .getByRole("combobox", { name: /Service Territory|Service Territory/i })
-      .first();
+    this.activeCheckbox = this.dialog.getByRole("checkbox", { name: /Active/i }).first();
+    this.appointmentTopicCombo = this.dialog.getByRole("combobox", { name: /Appointment Topic|Appointment Topic/i }).first();
+    this.serviceTerritoryCombo = this.dialog.getByRole("combobox", { name: /Service Territory|Service Territory/i }).first();
 
     // Action buttons - Save operations
-    this.saveButton = this.dialog
-      .getByRole("button", { name: /Save/i })
-      .first();
+    this.saveButton = this.dialog.getByRole("button", { name: /^Save$/, exact: true }).first();
+    this.allOptionsLocator = page.getByRole("option");
 
-    console.log(
-      "✅ SalesforceAppointmentInvitation page object initialized successfully with all locators"
-    );
+    console.log("✅ SalesforceAppointmentInvitation page object initialized successfully with all locators");
   }
 
   /**
@@ -131,7 +105,6 @@ export default class SalesforceAppointmentInvitationPage {
     console.log("📝 Invitation details:", JSON.stringify(details, null, 2));
 
     // Wait for the new button to be visible and take start screenshot
-    await expect(this.newButton).toBeVisible({ timeout: 10000 });
     await Helper.takeScreenshotToFile(
       this.page,
       "1-start-invitation",
@@ -139,14 +112,7 @@ export default class SalesforceAppointmentInvitationPage {
       "OtherFunctionality/salesforce-appointment-invitations/"
     );
 
-    // Helper function to handle dropdown/combobox selections
-    const selectFromList = async (combo: Locator, value: string) => {
-      await combo.click({ timeout: 10000 });
-      await this.page.getByText(value).click({ timeout: 10000 });
-    };
-
     // Open the new invitation creation dialog
-    await this.newButton.click({ timeout: 10000 });
     console.log("✅ Invitation creation dialog opened");
 
     console.log("📋 Filling form fields...");
@@ -189,18 +155,14 @@ export default class SalesforceAppointmentInvitationPage {
 
     // Appointment Topic dropdown configuration
     if (details.AppointmentTopic) {
-      await selectFromList(
-        this.appointmentTopicCombo,
-        details.AppointmentTopic
-      );
+      await this.appointmentTopicCombo.click({ timeout: 10000 });
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
     }
 
     // Service Territory dropdown configuration
     if (details.ServiceTerritory) {
-      await selectFromList(
-        this.serviceTerritoryCombo,
-        details.ServiceTerritory
-      );
+      await this.serviceTerritoryCombo.click({ timeout: 10000 });
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
     }
 
     console.log("💾 Saving the invitation...");
@@ -240,9 +202,7 @@ export default class SalesforceAppointmentInvitationPage {
     await this.page.waitForTimeout(1000);
 
     if (details.AppointmentTopic) {
-      expect(
-        this.page.getByText(details.AppointmentTopic, { exact: true }).count()
-      ).toBeGreaterThan(0);
+      expect(this.page.getByText(details.AppointmentTopic, { exact: true }).count()).toBeGreaterThan(0);
       console.log("✅ Appointment topic verification successful");
     } else {
       console.log("⚠️ No appointment topic provided for verification");

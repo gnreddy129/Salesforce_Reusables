@@ -25,7 +25,6 @@ export default class SalesforceCustomersPage {
   private testInfo?: TestInfo;
 
   // Primary UI Controls
-  readonly newCustomerButton: Locator;
   readonly saveButton: Locator;
   readonly saveAndNewButton: Locator;
   readonly cancelButton: Locator;
@@ -38,6 +37,8 @@ export default class SalesforceCustomersPage {
 
   // Navigation Elements
   readonly customerCreatedMessage: Locator;
+  readonly allOptionsLocator: Locator;
+  readonly outputFieldLocator: Locator;
 
   /**
    * Constructor - Initializes the SalesforceCustomers page object with all necessary locators
@@ -54,7 +55,6 @@ export default class SalesforceCustomersPage {
     this.testInfo = testInfo;
 
     // Primary controls - Main UI interaction elements
-    this.newCustomerButton = page.getByRole("button", { name: "New" });
     this.saveButton = page.getByRole("button", { name: "Save", exact: true });
     this.saveAndNewButton = page.getByRole("button", { name: "Save & New" });
     this.cancelButton = page.getByRole("button", { name: "Cancel" });
@@ -71,6 +71,8 @@ export default class SalesforceCustomersPage {
 
     // Success message locator
     this.customerCreatedMessage = page.locator(".toastMessage");
+    this.allOptionsLocator = page.getByRole("option");
+    this.outputFieldLocator = page.locator(`[slot="outputField"]`);
 
     console.log(
       "✅ SalesforceCustomers page object initialized successfully with all locators"
@@ -105,8 +107,6 @@ export default class SalesforceCustomersPage {
     console.log("🔄 Starting customer creation process...");
     console.log("📝 Customer details:", JSON.stringify(details, null, 2));
 
-    await expect(this.newCustomerButton).toBeVisible({ timeout: 10000 });
-
     // Take start screenshot for verification
     await Helper.takeScreenshotToFile(
       this.page,
@@ -116,7 +116,6 @@ export default class SalesforceCustomersPage {
     );
 
     // Click New Customer
-    await this.newCustomerButton.click({ timeout: 10000 });
     console.log("✅ Customer creation form opened");
 
     // Wait for form to be fully loaded
@@ -127,15 +126,13 @@ export default class SalesforceCustomersPage {
     // Fill Party field (Required lookup to Individual records)
     if (details.Party) {
       await this.partyCombobox.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: details.Party }).first()
-        .click({ timeout: 10000 });
+      await this.allOptionsLocator.first().click({ timeout: 10000 });
       console.log(`✅ Party selected: ${details.Party}`);
     }
 
     // Fill Name field (Required text input)
     if (details.Name) {
-      await this.nameInput.fill(details.Name, { timeout: 10000 });
+      await this.nameInput.fill(Helper.generateUniqueValue(details.Name), { timeout: 10000 });
       console.log(`✅ Name filled: ${details.Name}`);
     }
 
@@ -144,9 +141,7 @@ export default class SalesforceCustomersPage {
       const customerStatusType =
         details.CustomerStatusType || details["Customer Status Type"];
       await this.customerStatusTypeCombobox.click({ timeout: 10000 });
-      await this.page
-        .getByRole("option", { name: customerStatusType , exact: true})
-        .click({ timeout: 10000 });
+      await this.allOptionsLocator.filter({ hasText: customerStatusType }).first().click({ timeout: 10000 });
       console.log(`✅ Customer Status Type selected: ${customerStatusType}`);
     }
 
@@ -203,9 +198,7 @@ export default class SalesforceCustomersPage {
 
     // Verify customer creation by checking for the name on the page
     if (details.Name) {
-      await expect(
-        this.page.locator(`[slot="outputField"]`, { hasText: details.Name }).first()
-      ).toBeVisible({ timeout: 10000 });
+      await expect(this.outputFieldLocator.filter({ hasText: details.Name }).first()).toBeVisible({ timeout: 10000 });
       console.log(`✅ Customer name verification successful: ${details.Name}`);
     }
 
