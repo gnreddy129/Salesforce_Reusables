@@ -145,6 +145,7 @@ export class Helper {
 
   static generateUniqueEmail(baseEmail: string): string {
     const timestamp = new Date().toISOString();
-    return `test${timestamp}${baseEmail}`;
+    const emailFormatted = timestamp.split(":").join("-");
+    return `test${emailFormatted}${baseEmail}`;
   }
 }
